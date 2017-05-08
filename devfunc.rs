@@ -16,7 +16,7 @@ return
 	Send {Ctrl}
 	sleep 50
 	Send {Ctrl}
-	sleep 120
+	WinWaitActive, ahk_exe Listary.exe, , 2
 	Send {g}{Space}
 return
 
