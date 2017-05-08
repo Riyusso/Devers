@@ -38,7 +38,7 @@ return
 RAlt::
 	zfont=12
 	amultiplier=1
-	guiw:=720*amultiplier
+	guiw:=704*amultiplier
 	guih:=45
 	buth:=(guih)/2-15
 	butw:=(guiw)/4
@@ -59,18 +59,22 @@ RAlt::
 
 	Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
 
-	Gui, Add, Edit, % "x0 y17 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
+	Gui, Add, Edit, % "x0 y17 w" guiw-47 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
 
-	Gui, Add, Button, % "x+0 h25 w45 gFastGoogleSearch hwndSearchBut1 +Default", Go
+	Gui, Add, Button, % "x+0 h25 w47 gFastGoogleSearch hwndSearchBut1 +Default", Go
 	Opt1 := [6, 0x333333, 0x333333, 0x008383]
 	Opt2 := [ , 0x333333, 0x333333, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
-	WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %FastGoogle%
 	WinSet, Transparent, 0
-	Gui, Show, y-15 h%guih% w%guiw%, .devRS Google Search
+	Gui, Show, y-14 h%guih% w%guiw%, .devRS Google Search
 
-	WinSet, Transparent, 245
+	wanimation=0
+	animationhalf=330	
+	counttimer=0
+	transvalue=45
+	SetTimer, animationtest, 0
+
 	SetTimer, CheckGoogleSearch, 50
 return
 
@@ -80,6 +84,8 @@ return
 	return
 #If
 
+	
+return
 SC045:: 	; pause/break button deletes the previous word 
 	Send ^{Left}
 	Send ^{Delete}
@@ -96,7 +102,6 @@ return
 return
 
 ; ------------------------------------------------------------------ Temporary ------------------------------------------------------------------------
-
 
 ; ------------------------------------------------------------------- LABELS --------------------------------------------------------------------------
 
@@ -124,4 +129,19 @@ CheckGoogleSearch:
 	SetTimer, CheckGoogleSearch, Off
 	sleep 10
 	}
+return
+
+animationtest:
+	wanimation:=wanimation+44
+	if transvalue<230
+	transvalue:=transvalue+22
+	if (animationhalf-22)>0
+		animationhalf:=animationhalf-22
+	else
+		animationhalf=0
+	WinSet, Region, %animationhalf%-0 w%wanimation% h%guih% r18-18, ahk_id %FastGoogle%
+	WinSet, Transparent, %transvalue%, ahk_id %FastGoogle%
+	counttimer:=counttimer+1
+	if counttimer=16
+	SetTimer, animationtest, Off
 return
