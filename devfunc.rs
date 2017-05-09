@@ -7,7 +7,7 @@ F22::
 	GoSub LockNow
 return
 
-!S::
+!SC01F::
 	Suspend, Permit
 	GoSub SuspendScriptToggle
 return
