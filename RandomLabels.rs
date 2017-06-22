@@ -343,10 +343,6 @@ LabelTriggerOn4:
 LoginAvailable=1
 Return
 
-LabelTriggerOn5:
-Gosub Checkleag
-return
-
 LabelTriggerOn6:
 	sURL := GetActiveBrowserURL()
 	If Facebookloop=1
@@ -358,123 +354,13 @@ LabelTriggerOn6:
 	}
 return 
 
-Checkleag:
-If leaglogin=2
-IfWinActive, ahk_class ApolloRuntimeContentWindow
-If LoginAvailable=1
-If AlreadyLogged=0
-	{
-		Gui, Accounts:New, +hwndLoginHWND
-		Gui, Color, 1F2326
-		Gui, +LastFound +AlwaysOnTop +ToolWindow -Caption -Border +E0x08000000
-		Gui, Font, w560 s9, Arial
-		widthofacc=211
-		Opt1 := [6, 0x008383, 0x008383, "White"]
-		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]	
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		If !lolacc1
-		If !lolacc2
-		{
-			return
-		}
-		if lolacc1=zombieZftw
-		{
-			Gui, Add, Button, x0 y-5 w89 h28 hwndbtn1 griyusso, Riyusso
-			ImageButton.Create(btn1, Opt1, Opt2, "", Opt4)
-		}
-		if lolacc1!=zombieZftw
-		{
-			Gui, Add, Button, x0 y-5 w89 h28 hwndbtn2 griyusso, %lolacc1%
-			ImageButton.Create(btn2, Opt1, Opt2, "", Opt4)
-		}
-		if (lolacc2="riyusso")
-		{
-			Gui, Add, Button, x91 y-5 w90 h28 hwndbtn3 griyussoII, Riyusso II
-			ImageButton.Create(btn3, Opt1, Opt2, "", Opt4)
-		}
-		else if (lolacc2!="riyusso" && lolacc2!="" && lolacc2!="ERROR")
-		{
-			Gui, Add, Button, x91 y-5 w90 h28 hwndbtn4 griyussoII, %lolacc2%
-			ImageButton.Create(btn4, Opt1, Opt2, "", Opt4)
-		}
-		else
-		{
-			widthofacc=118
-		}
-		Gui, Add, Button, x+2 y-5 w28 h28 hwndbtn4 gexitlogin, ✕ 
-		ImageButton.Create(btn4, Opt1, Opt2, "", Opt4)
-		WinSet, Region, 0-0 w179 h22 r3-3, ahk_id %InterfaceWnd%
-		Gui, Show, % "y0 w" widthofacc " h22 NoActivate"
-	}
-return
+
 
 GoSubSafe(mySub)
 {
   if IsLabel(mySub)
     GoSub %mySub%
 }
-
-LabelTriggerOff5:
-	Gui, Accounts:Destroy
-	SetTimer, Checkleagproc, 2500
-return
-
-exitlogin:
-		AlreadyLogged=1
-		FadeOut(LoginHWND)
-return
-
-riyusso:
-	IfWinActive, ahk_class ahk_class ApolloRuntimeContentWindow
-		{
-			CoordMode, Mouse, Relative
-			Send {Click 100,7}
-			sleep, 100
-			Send {Tab 3}
-			sleep, 20
-			Send ^{A}
-			sleep, 20
-			SendInput {Raw}%lolacc1%
-			sleep, 100
-			Send {Tab}
-			sleep, 100
-			SendInput {Raw}%lolacc1pw%
-			Sleep, 300
-			Send {Enter}
-			AlreadyLogged=1
-			FadeOut(LoginHWND)
-			return
-		}
-		Return
-	
-riyussoII:
-	IfWinActive, ahk_class ahk_class ApolloRuntimeContentWindow
-		{
-			CoordMode, Mouse, Relative
-			Send {Click 100,7}
-			sleep, 100
-			Send {Tab 3}
-			sleep, 20
-			Send ^{A}
-			sleep, 20
-			SendInput {Raw}%lolacc2%
-			sleep, 100
-			Send {Tab}
-			sleep, 100
-			SendInput {Raw}%lolacc2pw%
-			Sleep, 300
-			Send {Enter}
-			AlreadyLogged=1
-			FadeOut(LoginHWND)
-			return
-		}
-Return
-
-Checkleagproc:
-	Process, Exist, LolClient.exe
-	If errorlevel=0
-	AlreadyLogged=0
-return
 
 
 KeepTrans:
