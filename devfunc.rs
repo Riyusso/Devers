@@ -1,7 +1,6 @@
 ; -----------AutoExecute------------
 IfExist, C:\Program Files\Rainmeter\Rainmeter.exe
 Run, C:\Program Files\Rainmeter\Rainmeter.exe
-CodeMode:=true
 return
 
 F22::
@@ -91,6 +90,13 @@ SC045:: 	; pause/break button deletes the previous word
 	Send {Delete}
 return
 
+RCtrl::
+CodeMode:=!CodeMode
+If CodeMode
+	RSNotify("Coding mode")
+else
+	RSNotify("Normal mode")
+return
 
 #If CodeMode=1
 	Left::
