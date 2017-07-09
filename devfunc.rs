@@ -7,6 +7,11 @@ F22::
 	GoSub LockNow
 return
 
+SC045:: 	; pause/break button deletes the previous word 
+	Send ^+{Left}
+	Send {Delete}
+return
+
 ~SC00E & SC00D::
 	Send ^+{Left}
 	Send {Delete}
@@ -29,14 +34,6 @@ return
 	F3::
 	Send {Browser_back}
 	return
-
-#If
-
-#If WinActive( "ahk_exe Messenger for Desktop.exe")
-
-LAlt::
-	GoSub WinMin
-return
 
 #If
 
@@ -81,29 +78,6 @@ return
 #If	WinActive( "ahk_id" . FastGoogle )
 	ESC::
 	FadeOut(FastGoogle)
-	return
-#If
-
-
-SC045:: 	; pause/break button deletes the previous word 
-	Send ^+{Left}
-	Send {Delete}
-return
-
-RCtrl::
-CodeMode:=!CodeMode
-If CodeMode
-	RSNotify("Coding mode")
-else
-	RSNotify("Normal mode")
-return
-
-#If CodeMode=1
-	Left::
-	Send ^{Left}
-	return
-	Right::
-	Send ^{Right}
 	return
 #If
 
