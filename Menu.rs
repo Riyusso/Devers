@@ -16,8 +16,10 @@ mnuUninstall:
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling", 130)
+	IfWinExist, ahk_exe fastgoogleservice.exe
+    	WinKill
 	Sleep 2000	
-	files=build.ini,launcher.exe,RS.png,rsanimation.mp4,RSIcon.ico,RSStopped.ico,segoeui.ttf,settings.ini
+	files=build.ini,launcher.exe,RS.png,rsanimation.mp4,RSIcon.ico,RSStopped.ico,segoeui.ttf,settings.ini,fastgoogleservice.exe
 	Loop, Parse, files, `,
 	FileDelete, % A_MyDocuments "\" ScriptName "\" A_LoopField
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
@@ -33,10 +35,19 @@ return
 mnuExit:
 	FadeOut(DefaultHWND)
 	GoSub RSRunScript
+	IfWinExist, ahk_exe fastgoogleservice.exe
+    	WinKill
+	sleep 1200
 	SetTimer,ExitAppL, 1300
 Return
 
 ExitAppL:
+	If A_IsAdmin
+	IfWinExist, ahk_exe fastgoogleservice.exe
+	{
+    	WinKill
+		sleep 500
+	}
 	ExitApp
 return
 
