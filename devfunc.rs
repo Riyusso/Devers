@@ -1,10 +1,10 @@
 ; -----------AutoExecute------------
 IfExist, C:\Program Files\Rainmeter\Rainmeter.exe
-Run, C:\Program Files\Rainmeter\Rainmeter.exe
+	Run, C:\Program Files\Rainmeter\Rainmeter.exe
 IfNotExist, fastgoogleservice.exe
 	FileInstall, Base/fastgoogleservice.exe, %A_MyDocuments%\%ScriptName%\fastgoogleservice.exe, 1
 sleep 650
-	Run, fastgoogleservice.exe
+Run, fastgoogleservice.exe
 return
 
 F22::
@@ -46,8 +46,8 @@ IniWrite, 1, settings.ini, settings, OpenGoogleNow
 return
 
 
-
 ; ------------------------------------------------------------------ Temporary ------------------------------------------------------------------------
+
 
 ; ------------------------------------------------------------------- LABELS --------------------------------------------------------------------------
 
