@@ -115,16 +115,6 @@ Pause, Off
 }
 return
 
-SwitchFacebookTitle:
-	ProgWinTitle6 = Google Chrome
-	SetTImer, SwitchBackTitle, -180
-	return
-	
-SwitchBackTitle:
-	ProgWinTitle6 = Why so many difficulties?
-	SetTimer, SwitchFacebookTitle, -180
-return
-
 playpause:
 	Send {Media_Play_Pause}
 	RSNotify("Play/Pause", 115, 13)
@@ -289,71 +279,12 @@ return
 ;=====------======------=====------======------=====------======------TRIGGERS-----======------======------=====------======------=====----
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 
-LabelCheckTrigger:
-  While ( ProgWinTitle%A_Index% != "" && WinTrigger := WinTrigger%A_Index% )
-    if ( !ProgRunning%A_Index% != !Win%WinTrigger%( ProgWinTitle := ProgWinTitle%A_Index% ) )
-      GoSubSafe( "LabelTriggerO" ( (ProgRunning%A_Index% := !ProgRunning%A_Index%) ? "n" : "ff" ) A_Index )
-Return
-
-LabelTriggerOn1:
-	If BreakLoop=1
-	If SkypeLoop=1
-	If SkypeWasOn=0
-	{
-		If !DontDoItTwice
-		GoSub RSGuard
-	}
-	SkypeWasOn=1
-	SetTimer, SkypeActivity, Off
-Return
-
-LabelTriggerOff1:
-	SetTimer, SkypeActivity, -8000
-	Return
-	SkypeActivity:
-	SkypeWasOn=0
-	Return
-
-LabelTriggerOn2:
-If BreakLoop=1
-If FacebookLoop=1
-{
-	sURL := GetActiveBrowserURL()
-	IfInString, sURL, www.facebook.com
-	{
-		If FacebookWasOn=0
-		{
-			If !DontDoItTwice
-			GoSub RSGuard
-		}
-	}
-}
-FacebookWasOn=1
-SetTimer, FacebookActivity, Off
-Return
-
-LabelTriggerOff2:
-	SetTimer, FacebookActivity, -8000
-	Return
-	FacebookActivity:
-	FacebookWasOn=0
-Return
-
-LabelTriggerOn4:
-LoginAvailable=1
-Return
-
-LabelTriggerOn6:
-	sURL := GetActiveBrowserURL()
-	If Facebookloop=1
-	IfInString, sURL, facebook.com
-	{
-	WinGetTitle,FBTITLE,A
-	IfNotInString, FBTITLE, Protected
-	WinSetTitle,A,, %FBTITLE% - Protected Against Zombies
-	}
-return 
-
+; LabelCheckTrigger: 			; if needed to recognise when particular windows are active (set a timer and create labels named LabelTriggerOn[number]/LabelTriggerOff[number] - it will go through all of them)
+;
+;  While ( ProgWinTitle%A_Index% != "" && WinTrigger := WinTrigger%A_Index% )
+;    if ( !ProgRunning%A_Index% != !Win%WinTrigger%( ProgWinTitle := ProgWinTitle%A_Index% ) )
+;      GoSubSafe( "LabelTriggerO" ( (ProgRunning%A_Index% := !ProgRunning%A_Index%) ? "n" : "ff" ) A_Index )
+; Return
 
 
 GoSubSafe(mySub)
