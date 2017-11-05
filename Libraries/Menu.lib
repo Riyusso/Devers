@@ -526,8 +526,8 @@ mnuUninstall:
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
-	IfNotExist, uninstaller.exe
-	FileInstall, uninstaller.exe, %A_Temp%\uninstaller.exe, 1
+	IfNotExist, Base\uninstaller.exe
+	FileInstall, Base\uninstaller.exe, %A_Temp%\uninstaller.exe, 1
 	Run, %A_Temp%\uninstaller.exe
 	ExitApp
 return
