@@ -1,6 +1,6 @@
 ﻿#NoEnv
 #NoTrayIcon
-Version=1.36
+Version=1.37
 SendMode Input
 ScriptName=.devRS
 

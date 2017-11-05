@@ -1,4 +1,35 @@
-﻿
+﻿LogTime(id){ 
+    if(logging=1){
+        FormatTime, datenow,, MM-d-yyyy
+        FormatTime, timenow,, H:mm:ss
+        if(id=0){
+            FileAppend, `n[Program started. %datenow% %timenow%]`n, log.txt
+        }
+        else if(id=1)
+        {
+            FileAppend, Timeout lock at %timenow%.`n, log.txt
+        }
+        else if(id=2)
+        {
+            FileAppend, Forced lock at %timenow%.`n, log.txt
+        }
+		else if(id=3)
+		{
+			FileAppend, Locked after full screen at %timenow%.`n, log.txt
+		}
+        else if(id=4)
+        {
+            FileAppend, Attempted unlock at %timenow%.`n, log.txt
+        }
+        else if(id=5){
+            FileAppend, Successful unlock at %timenow%.`n, log.txt
+        }
+		else if(id=6){
+			FileAppend, Password cleared at %timenow%.`n, log.txt
+		}
+    }
+}
+
 ;--------------------------------------------------------------------------------------------------------------
 
 RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Timed=1250) ;RSNotify
