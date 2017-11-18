@@ -1,0 +1,82 @@
+VolTr:
+Volume_Delay:=750
+BG_color=222222
+Text_color=009393
+Bar_color=008383
+Volume_OSD_Center:=1
+over_tray:=1
+vol_up = WheelUp
+vol_down = WheelDown
+
+#If % (over_tray) ? MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"):"(1)"
+Hotkey, If, %  (over_tray) ? MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"):"(1)"
+
+	Hotkey,%vol_up%,vol_up
+	Hotkey,%vol_down%,vol_down
+return
+
+Volume_Show_OSD:
+If (ItsLocked!=1){
+	if (Volume_OSD_Center) 
+	{
+		mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165
+	}
+	else
+	{
+		SysGet m, MonitorWorkArea, 1
+		mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165
+	}
+	SoundGet, Volume
+	if (!Volume_OSD_c)
+	{
+		Volume_ProgressbarOpts=CW%BG_color% CT%Text_color% CB%Bar_color% x%mX% y%mY% w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11 B
+		Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress, Tahoma
+		Volume_OSD_c:=!Volume_OSD_c
+	}
+	WinSet, Transparent, 225, vol_Progress
+	if !A_IsPaused
+	Progress Show
+	DontPause=1
+	Progress % Volume := Round(Volume), %Volume% `%
+	WinSet, AlwaysOnTop, On, vol_Progress
+	WinSet, Region, 0-0 w330 h52 r3-3, vol_Progress
+	SetTimer, Remove_Show_OSD, %Volume_Delay%
+}
+return
+
+Remove_Show_OSD:
+	Volume_OSD_c2:=!Volume_OSD_c2
+	SetTimer, Remove_Show_OSD, Off
+	WinSet, Transparent, 225, vol_Progress
+	sleep 10
+	WinSet, Transparent, 210, vol_Progress
+	sleep 10
+	WinSet, Transparent, 200, vol_Progress
+	sleep 10
+	WinSet, Transparent, 190, vol_Progress
+	sleep 10
+	WinSet, Transparent, 180, vol_Progress
+	sleep 10
+	WinSet, Transparent, 170, vol_Progress
+	sleep 10
+	WinSet, Transparent, 160, vol_Progress
+	sleep 10
+	WinSet, Transparent, 150, vol_Progress
+	sleep 10
+	WinSet, Transparent, 130, vol_Progress
+	sleep 10
+	WinSet, Transparent, 110, vol_Progress
+	sleep 10
+	WinSet, Transparent, 80, vol_Progress
+	sleep 10
+	WinSet, Transparent, 50, vol_Progress
+	sleep 10
+	WinSet, Transparent, 25, vol_Progress
+	sleep 10
+	WinSet, Transparent, 10, vol_Progress
+	sleep 10
+	Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress,Tahoma
+	If TryPause
+		Pause, On
+	DontPause=0
+return
