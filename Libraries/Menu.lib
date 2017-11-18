@@ -270,6 +270,13 @@ return
 
 protectionbutton:
 	Gui, Submit, NoHide
+
+	If LockPw is not digit
+	{
+	GoSub WarningGUI
+	return
+	}
+
 	IniWrite, %KeysVar%, settings.ini, settings, lockkey
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
