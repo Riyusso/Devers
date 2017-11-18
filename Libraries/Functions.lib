@@ -1,4 +1,17 @@
-﻿LogTime(id){ 
+﻿DPIFactor()
+{ 
+RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI 
+; the reg key was not found - it means default settings 
+; 96 is the default font size setting 
+if (errorlevel=1) OR (DPI_value=96 )
+	return 1
+else
+	Return  DPI_Value/96
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+LogTime(id){ 
     if(logging=1){
         FormatTime, datenow,, MM-d-yyyy
         FormatTime, timenow,, H:mm:ss
@@ -48,7 +61,7 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	If controlwidth=0
 	{
 	widthcontrolled:=false
-	controlwidth=105
+	controlwidth=110
 	}
 	Else
 	widthcontrolled:=true
@@ -56,7 +69,7 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	If (StrLen(Text)>9) && !widthcontrolled
 	controlwidth:=controlwidth+((StrLen(Text)-9)*10)+10
 	
-	vhc:=A_ScreenHeight-100
+	vhc:=A_ScreenHeight-100*dpi
 	
 	If TitleSpace
 	{
@@ -67,10 +80,12 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y1 w" controlwidth " r1 BackgroundTrans Center 0x200 gGuiMove c248a96", %Title%
 	}
-	averagex:=A_ScreenWidth-130-(controlwidth/2)
+	averagex:=A_ScreenWidth-130*dpi-(controlwidth/2)
 	Gui, Font, s%fontsize% w720, Verdana
 	Gui, -Border -Caption +AlwaysOnTop +ToolWindow +E0x20
 	Gui, Add, Text,cffffff x0 w%controlwidth% y%NewY% +Center, %Text%
+	controlwidth:=controlwidth*dpi
+	whc:=whc*dpi
 	WinSet, Region, 0-0 w%controlwidth% h%whc% r3-3
 	Gui, Show, x%averagex% y%vhc% h%whc% w%controlwidth% NoActivate
 	GoSub SmartAppear

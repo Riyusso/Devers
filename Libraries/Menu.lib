@@ -75,6 +75,8 @@
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width , Script Options
@@ -158,6 +160,8 @@ MoreSettingsLabel:
 	Gui, Add, Text, % "x+1 h35 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, w280, More Settings
@@ -252,6 +256,8 @@ ProtectionSettings:
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w295" , RS-Guard Settings
@@ -369,6 +375,8 @@ ScriptFunctions:
 		Gui, Add, Text, % "x7 y+2 w" (Width-14) "h2 vP"
 		GuiControlGet, P, Pos
 		H := PY + PH
+		H:=H*dpi
+		Width:=Width*dpi
 		Gui, -Caption
 		WinSet, Region, 0-0 w%Width% h%H% r6-6
 		Gui, Show, % "w" Width " NA", Functions
@@ -450,6 +458,8 @@ SettingsWndFirst:
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width , Menu
@@ -607,8 +617,11 @@ DefaultMenu:
 	
 	Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut4 ", ×
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-	
+	guiw:=guiw*dpi
+	guih:=guih*dpi
 	WinSet, Region, 0-0 w%guiw% h%guih% r50-50, ahk_id %DefaultHWND%
+	guiw:=guiw/dpi
+	guih:=guih/dpi
 	Gui, Show, h%guih% w%guiw% y%guipos%, Menu
 	FadeIn(DefaultHWND)
 	DefaultFader:=true
@@ -661,6 +674,8 @@ Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , Security Logs
@@ -687,6 +702,8 @@ WarningGUI:
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , Warning
@@ -755,6 +772,8 @@ PrInfo:
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , RS-Guard Settings
