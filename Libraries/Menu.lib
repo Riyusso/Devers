@@ -88,8 +88,8 @@ button:
 	
 	If LockPw is not digit
 	{
-	GoSub WarningGUI
-	return
+		GoSub WarningGUI
+		return
 	}
 	
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
@@ -105,16 +105,19 @@ button:
 	Gosub Protection
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
 	If StartWithWindows=2
 	{
-	IfNotExist, %LinkFile% 
-	FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
-	Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe
+		IfNotExist, %LinkFile% 
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
+		IfNotExist, %StartMenuFile%
+		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile% 
+		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe
 	}
 	If StartWithWindows=1
 	{
-	FileDelete, %LinkFile%
-	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
+		FileDelete, %LinkFile%
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
 	}
 return
 
@@ -269,12 +272,13 @@ FadeOut(ProtectionSettings)
 return
 
 protectionbutton:
+
 	Gui, Submit, NoHide
 
 	If LockPw is not digit
 	{
-	GoSub WarningGUI
-	return
+		GoSub WarningGUI
+		return
 	}
 
 	IniWrite, %KeysVar%, settings.ini, settings, lockkey
@@ -287,19 +291,19 @@ protectionbutton:
 	FadeOut(ProtectionSettings)
 	if seconds is number
 	{
-	RSNotify("Settings Applied",105,,,,1)
-	IniWrite, %seconds%, settings.ini, settings, seconds
+		RSNotify("Settings Applied",105,,,,1)
+		IniWrite, %seconds%, settings.ini, settings, seconds
 	}
 	else
 	{
-	RSNotify("Invalid period")
-	seconds=0
-	IniWrite, %seconds%, settings.ini, settings, seconds
+		RSNotify("Invalid period")
+		seconds=0
+		IniWrite, %seconds%, settings.ini, settings, seconds
 	}
 	If BreakLoop=1
-	Gosub Protection
+		Gosub Protection
 	If (lockkey!="None" && lockkey!="" and lockkey!=keysvar)
-	Hotkey, %lockkey%, Off
+		Hotkey, %lockkey%, Off
 	GoSub LockLabel
 return
 
@@ -478,23 +482,26 @@ buttonfirst:
 	
 	If LockPw is not digit
 	{
-	GoSub WarningGUI
-	return
+		GoSub WarningGUI
+		return
 	}
 	
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
-	
+	StartMenuFile=%A_StartMenu%\devRS\%ScriptName%.lnk
 	If StartWithWindows=2
 	{
-	IfNotExist, %LinkFile% 
-	FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
-	IniWrite, 1, settings.ini, settings, CreateATask
+		IfNotExist, %LinkFile% 
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
+		IfNotExist, %StartMenuFile%
+		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile% 
+		IniWrite, 1, settings.ini, settings, CreateATask
 	}
 	If StartWithWindows=1
 	{
-	FileDelete, %LinkFile%
+		FileDelete, %LinkFile%
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
 	}
 	
 	IniWrite, %seconds%, settings.ini, settings, seconds
@@ -540,7 +547,9 @@ mnuUninstall:
 	Loop, Parse, files, `,
 	FileDelete, % A_MyDocuments "\" ScriptName "\" A_LoopField
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
-	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
+	StartMenuFile=%A_StartMenu%\devRS\%ScriptName%.lnk
+	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
 	IfNotExist, Base\uninstaller.exe
@@ -569,23 +578,28 @@ DefaultMenu:
 	Gui, Font,  cFFFFFF Bold, Segoe UI
 	Gui, Color, 232323
 	
-	If (A_ScreenWidth<2000){
+	If (A_ScreenWidth<2000)
+	{
 		amultiplier=1
 		zfont=13
 	}
-	If (A_ScreenWidth<1800){
+	If (A_ScreenWidth<1800)
+	{
 		amultiplier=1
 		zfont=12
 	}
-	If (A_ScreenWidth<1600){
+	If (A_ScreenWidth<1600)
+	{
 		amultiplier=0.92
 		zfont=11
 	}
-	If (A_ScreenWidth<1400){
+	If (A_ScreenWidth<1400)
+	{
 		amultiplier=0.87
 		zfont=11
 	}
-	If (A_ScreenWidth<1050){
+	If (A_ScreenWidth<1050)
+	{
 		amultiplier=0.80
 		zfont=10
 	}
@@ -643,23 +657,23 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 SecurityLoggingLabel:
-Array := Object()
-Loop, Read, log.txt ; This loop retrieves each line from the file, one at a time.
-{
-    Array.Insert(A_LoopReadLine) 
-}
-elcount:=Array.MaxIndex() ; get the count of the lines in the log file
-calccount:=elcount-20 ; get the index of the last 20
+	Array := Object()
+	Loop, Read, log.txt ; This loop retrieves each line from the file, one at a time.
+	{
+		Array.Insert(A_LoopReadLine) 
+	}
+	elcount:=Array.MaxIndex() ; get the count of the lines in the log file
+	calccount:=elcount-20 ; get the index of the last 20
 
-Width :=330
-Gui, SecLogs:New, +hwndSecLogs
-Gui, +LastFound +ToolWindow
-WinSet, Transparent, 0
-Gui, Color, 2e2e2e
-Gui, Margin, 0, 0
-Gui, Font, s11 cFFFFFF Bold, Tahoma
-Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
-Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Width :=330
+	Gui, SecLogs:New, +hwndSecLogs
+	Gui, +LastFound +ToolWindow
+	WinSet, Transparent, 0
+	Gui, Color, 2e2e2e
+	Gui, Margin, 0, 0
+	Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 
 	Loop, 20 
 	{

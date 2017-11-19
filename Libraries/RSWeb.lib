@@ -13,32 +13,37 @@ RSWeb:
 	
 	If WebLT=0	
 	{
-	ChoosingWebsite:=false
-	FadeOut(WebL)
-	Gui, WebL:Destroy
-	return
+		ChoosingWebsite:=false
+		FadeOut(WebL)
+		Gui, WebL:Destroy
+		return
 	}
 	If WebLT=1
 	{
 		ChoosingWebsite:=true
 		
-		If (A_ScreenWidth<2000){
+		If (A_ScreenWidth<2000)
+		{
 			zfont=12
 			amultiplier=1
 		}
-		If (A_ScreenWidth<1800){
+		If (A_ScreenWidth<1800)
+		{
 			zfont=11
 			amultiplier=1
 		}
-		If (A_ScreenWidth<1600){
+		If (A_ScreenWidth<1600)
+		{
 			zfont=10
 			amultiplier=0.92
 		}
-		If (A_ScreenWidth<1400){
+		If (A_ScreenWidth<1400)
+		{
 			zfont=10
 			amultiplier=0.87
 		}
-		If (A_ScreenWidth<1050){
+		If (A_ScreenWidth<1050)
+		{
 			zfont=9
 			amultiplier=0.80
 		}
@@ -160,8 +165,8 @@ EditWebsites:
 	IniWrite, %WebNames%, settings.ini, Web, WebNames
 	If ChoosingWebsite=1
 	{
-	WebLT:=WebLT ? false : true
-	GoSub RSWeb
+		WebLT:=WebLT ? false : true
+		GoSub RSWeb
 	}
 	FadeOut(WebEdit)
  return
@@ -169,13 +174,15 @@ EditWebsites:
 StartSearch:
 	Gui, Submit, NoHide 
 	Loop, Parse, websearchvar
-	If (A_LoopField=.) {
+	If (A_LoopField=.) 
+	{
 		Run, http:%websearchvar%
 		websearchvar=
 		GoSub RSWeb
 		return
 	}
-	If (LaunchWebsite){
+	If (LaunchWebsite)
+	{
 		Run, %websearchvar%
 		websearchvar=
 		GoSub RSWeb

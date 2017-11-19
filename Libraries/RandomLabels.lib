@@ -29,17 +29,19 @@ return
 
 SuspendScriptToggle:
 Suspend, Toggle
-If A_IsSuspended{
-Menu, TRAY, Icon, RSStopped.ico,,1
-RSNotify("Suspended", 126, 13)
-If A_IsPaused
-Pause, Off
+If A_IsSuspended
+{
+	Menu, TRAY, Icon, RSStopped.ico,,1
+	RSNotify("Suspended", 126, 13)
+	If A_IsPaused
+		Pause, Off
 }
-If !A_IsSuspended{
-Menu, TRAY, Icon, RSIcon.ico,,1
-RSNotify("Released", 126, 13)
-If A_IsPaused
-Pause, Off
+If !A_IsSuspended
+{
+	Menu, TRAY, Icon, RSIcon.ico,,1
+	RSNotify("Released", 126, 13)
+	If A_IsPaused
+	Pause, Off
 }
 return
 
@@ -158,7 +160,8 @@ GoSub PasswordCover
 Gosub UnlockPC
 return
 
-MouseIsOver(WinTitle) {
+MouseIsOver(WinTitle) 
+{
 	MouseGetPos,,, Win
 	return WinExist(WinTitle . " ahk_id " . Win)
 }
@@ -217,8 +220,8 @@ return
 
 GoSubSafe(mySub)
 {
-  if IsLabel(mySub)
-    GoSub %mySub%
+	if IsLabel(mySub)
+		GoSub %mySub%
 }
 
 ;-------------------------------------------------------------------------------------------------------------
@@ -236,9 +239,10 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 GuiSize:
-   If (A_EventInfo != 1) {
-      Gui, %A_Gui%:+LastFound
-      WinSet, ReDraw
+   If (A_EventInfo != 1) 
+   {
+	  Gui, %A_Gui%:+LastFound
+	  WinSet, ReDraw
    }
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
@@ -255,32 +259,34 @@ STDCB1:
 ; ----------------------------------------------------------------------------------------------------------------------
 RBG:
    RBG := SubStr(A_GuiControl, 3)
-   If (RBG != RBGA) {
-      CtlColors.Detach(RTID%RBGA%)
-      CtlColors.Attach(RTID%RBG%, "Yellow", "Blue")
-      GuiControl, , RB%RBG%, 1
-      RBGA := RBG
+   If (RBG != RBGA) 
+   {
+	  CtlColors.Detach(RTID%RBGA%)
+	  CtlColors.Attach(RTID%RBG%, "Yellow", "Blue")
+	  GuiControl, , RB%RBG%, 1
+	  RBGA := RBG
    }
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
 LB1:
    GuiControlGet, LB1
    StringSplit, LC, LB1, %A_Space%
-   If (%LC2%) {
-      BG := %LC2%, TX := "White"
-      CtlColors.Change(LBID1, BG, TX)
-      SendMessage, LB_SETCURSEL, -1, 0, , ahk_id %LBID1%
+   If (%LC2%) 
+   {
+	  BG := %LC2%, TX := "White"
+	  CtlColors.Change(LBID1, BG, TX)
+	  SendMessage, LB_SETCURSEL, -1, 0, , ahk_id %LBID1%
    }
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
 CB1:
    GuiControlGet, CB1
    If (A_GuiControl = "CT1")
-      CB1 ^= True
+	  CB1 ^= True
    If (CB1)
-      CtlColors.Change(CTID1, "Lime", "406060")
+	  CtlColors.Change(CTID1, "Lime", "406060")
    Else
-      CtlColors.Change(CTID1, "", "Green")
+	  CtlColors.Change(CTID1, "", "Green")
    GuiControl, , CB1, %CB1%
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
