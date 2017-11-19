@@ -7,10 +7,11 @@ GoogleOpener:
 	butw:=(guiw)/4
 	WSTog := !WSTog
 	websearchvar=
-	If !WSTog{
-	SetTimer, CheckGoogleSearch, Off
-	sleep 10
-	FadeOut(FastGoogle)
+	If !WSTog
+	{
+		SetTimer, CheckGoogleSearch, Off
+		sleep 10
+		FadeOut(FastGoogle)
 		Gui, FastGoogle:Destroy
 		return
 	}
@@ -70,10 +71,10 @@ return
 CheckGoogleSearch:
 	IfWinNotActive, ahk_id %FastGoogle%
 	{
-	WSTog:=!WSTog
-	FadeOut(FastGoogle)
-	Gui, FastGoogle:Destroy
-	SetTimer, CheckGoogleSearch, Off
-	sleep 10
+		WSTog:=!WSTog
+		FadeOut(FastGoogle)
+		Gui, FastGoogle:Destroy
+		SetTimer, CheckGoogleSearch, Off
+		sleep 10
 	}
 return

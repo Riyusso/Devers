@@ -11,11 +11,14 @@ else
 
 ;--------------------------------------------------------------------------------------------------------------
 
-LogTime(id){ 
-    if(logging=1){
+LogTime(id)
+{ 
+    if(logging=1)
+	{
         FormatTime, datenow,, MM-d-yyyy
         FormatTime, timenow,, H:mm:ss
-        if(id=0){
+        if(id=0)
+		{
             FileAppend, `n[Program started. %datenow% %timenow%]`n, log.txt
         }
         else if(id=1)
@@ -34,10 +37,12 @@ LogTime(id){
         {
             FileAppend, Attempted unlock at %timenow%.`n, log.txt
         }
-        else if(id=5){
+        else if(id=5)
+		{
             FileAppend, Successful unlock at %timenow%.`n, log.txt
         }
-		else if(id=6){
+		else if(id=6)
+		{
 			FileAppend, Password cleared at %timenow%.`n, log.txt
 		}
     }
@@ -60,8 +65,8 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	
 	If controlwidth=0
 	{
-	widthcontrolled:=false
-	controlwidth=110
+		widthcontrolled:=false
+		controlwidth=110
 	}
 	Else
 	widthcontrolled:=true
@@ -73,12 +78,12 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	
 	If TitleSpace
 	{
-	whc=48
-	NewY=19
-	controlwidth+=6
-	Gui, Add, Progress, % "x-1 y-1 w" controlwidth " h22 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y1 w" controlwidth " r1 BackgroundTrans Center 0x200 gGuiMove c248a96", %Title%
+		whc=48
+		NewY=19
+		controlwidth+=6
+		Gui, Add, Progress, % "x-1 y-1 w" controlwidth " h22 Background1F2326 Disabled hwndHPROG"
+		Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+		Gui, Add, Text, % "x0 y1 w" controlwidth " r1 BackgroundTrans Center 0x200 gGuiMove c248a96", %Title%
 	}
 	averagex:=A_ScreenWidth-130*dpi-(controlwidth/2)
 	Gui, Font, s%fontsize% w720, Verdana
@@ -90,7 +95,7 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	Gui, Show, x%averagex% y%vhc% h%whc% w%controlwidth% NoActivate
 	GoSub SmartAppear
 	SetTimer, SmartFade, -%Timed%
-return
+	return
 }
 
 SmartAppear:
@@ -105,7 +110,8 @@ SmartFade:
 		SmartFade:=SmartFade-8
 		WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
 		SetTimer, SmartFade, -8
-		If (SmartFade<8){
+		If (SmartFade<8)
+		{
 			SetTimer, SmartFade, Off
 			Gui, RSNotify:Destroy
 			If TryPause
@@ -173,14 +179,16 @@ RapidHotkey(keystroke, times="2", delay=0.2, IsLabel=0)
 		Gosub, %keystr%
 	Return
 }	
-Morse(timeout = 400) { ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?t=16951 (Modified to return: KeyWait %key%, T%tout%)
+Morse(timeout = 400) ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?t=16951 (Modified to return: KeyWait %key%, T%tout%)
+{ 
    tout := timeout/1000
    key := RegExReplace(A_ThisHotKey,"[\*\~\$\#\+\!\^]")
    IfInString, key, %A_Space%
 		StringTrimLeft, key, key,% InStr(key,A_Space,1,0)
 	If Key in Shift,Win,Ctrl,Alt
 		key1:="{L" key "}{R" key "}"
-   Loop {
+   Loop 
+   {
       t := A_TickCount
       KeyWait %key%, T%tout%
 		Pattern .= A_TickCount-t > timeout
@@ -201,14 +209,16 @@ Morse(timeout = 400) { ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.ph
 
 ;--------------------------------------------------------------------------------------------------------------
 
-winfade(w:="",t:=128,i:=1,d:=10) { ; by joedf  -  http://ahkscript.org/boards/viewtopic.php?f=6&t=512
+winfade(w:="",t:=128,i:=1,d:=10) 
+{ ; by joedf  -  http://ahkscript.org/boards/viewtopic.php?f=6&t=512
 	w:=(w="")?("ahk_id " WinActive("A")):w
 	t:=(t>255)?255:(t<0)?0:t
 	WinGet,s,Transparent,%w%
 	s:=(s="")?255:s ;prevent trans unset bug
 	WinSet,Transparent,%s%,%w% 
 	i:=(s<t)?abs(i):-1*abs(i)
-	while(k:=(i<0)?(s>t):(s<t)&&WinExist(w)) {
+	while(k:=(i<0)?(s>t):(s<t)&&WinExist(w)) 
+	{
 		WinGet,s,Transparent,%w%
 		s+=i
 		WinSet,Transparent,%s%,%w%
@@ -219,7 +229,8 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-ProcessExist(Name){
+ProcessExist(Name)
+{
 	Process,Exist,%Name%
 	return Errorlevel
 }
@@ -248,12 +259,13 @@ PutUni(DataIn)
 
 ;--------------------------------------------------------------------------------------------------------------
 
-RunAsAdmin() {
+RunAsAdmin() 
+{
 	Loop, %0%  ; For each parameter:
-		{
+	{
 		param := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
 		params .= A_Space . param
-		}
+	}
 	ShellExecute := A_IsUnicode ? "shell32\ShellExecute":"shell32\ShellExecuteA"
 		
 	if not A_IsAdmin
@@ -263,12 +275,13 @@ RunAsAdmin() {
 		Else
 			DllCall(ShellExecute, uint, 0, str, "RunAs", str, A_AhkPath, str, """" . A_ScriptFullPath . """" . A_Space . params, str, A_WorkingDir, int, 1)
 		ExitApp
-  }
+  	}
 }
 
 ;--------------------------------------------------------------------------------------------------------------
 
-isWindowFullScreen( winTitle ) {
+isWindowFullScreen( winTitle ) 
+{
 	;checks if the specified window is full screen
 	
 	winID := WinExist( winTitle )
@@ -288,38 +301,38 @@ isWindowFullScreen( winTitle ) {
 
 BlockKeyboardInputs(state = "On")
 {
-   static keys
-   keys=Space,Enter,Tab,Esc,BackSpace,Del,Ins,Home,Up,Down,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock
-,Pause,AppsKey,NumLock,Numpad0,Numpad1,Numpad2,Numpad3,Numpad4,Numpad5,Numpad6,Numpad7,Numpad8,Numpad9,NumpadDot
-,NumpadDiv,NumpadMult,NumpadAdd,NumpadSub,NumpadEnter,NumpadIns,NumpadEnd,NumpadDown,NumpadPgDn,NumpadLeft,NumpadClear
-,NumpadRight,NumpadHome,NumpadUp,NumpadPgUp,NumpadDel,Media_Next,Media_Play_Pause,Media_Prev,Media_Stop,Volume_Down,Volume_Up
-,Volume_Mute,Browser_Back,Browser_Favorites,Browser_Home,Browser_Refresh,Browser_Search,Browser_Stop,Launch_App1,Launch_App2
-,Launch_Mail,Launch_Media,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22
-,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,x,y,z
-,²,&,é,",',(,-,è,_,ç,à,),=,$,£,ù,*,~,#,{,[,|,``,\,^,@,],},;,:,!,?,.,/,§,<,>,vkBC
-   Loop,Parse,keys, `,
-      Hotkey, *%A_LoopField%, KeyboardDummyLabel, %state% UseErrorLevel
-   Return
-KeyboardDummyLabel:
-Return
+	static keys
+	keys=Space,Enter,Tab,Esc,BackSpace,Del,Ins,Home,Up,Down,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock
+	,Pause,AppsKey,NumLock,Numpad0,Numpad1,Numpad2,Numpad3,Numpad4,Numpad5,Numpad6,Numpad7,Numpad8,Numpad9,NumpadDot
+	,NumpadDiv,NumpadMult,NumpadAdd,NumpadSub,NumpadEnter,NumpadIns,NumpadEnd,NumpadDown,NumpadPgDn,NumpadLeft,NumpadClear
+	,NumpadRight,NumpadHome,NumpadUp,NumpadPgUp,NumpadDel,Media_Next,Media_Play_Pause,Media_Prev,Media_Stop,Volume_Down,Volume_Up
+	,Volume_Mute,Browser_Back,Browser_Favorites,Browser_Home,Browser_Refresh,Browser_Search,Browser_Stop,Launch_App1,Launch_App2
+	,Launch_Mail,Launch_Media,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22
+	,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,x,y,z
+	,²,&,é,",',(,-,è,_,ç,à,),=,$,£,ù,*,~,#,{,[,|,``,\,^,@,],},;,:,!,?,.,/,§,<,>,vkBC
+	Loop,Parse,keys, `,
+		Hotkey, *%A_LoopField%, KeyboardDummyLabel, %state% UseErrorLevel
+	Return
+	KeyboardDummyLabel:
+	Return
 }
 
 ;--------------------------------------------------------------------------------------------------------------
 
 FadeOut(id)
 {
-IfWinExist, ahk_id %id%
-{
-	localvar=255
-	Loop, 14
-		{
-			localvar:=localvar-18
-			WinSet, Transparent, %localvar%, ahk_id %id%
-			sleep 10
-			
-		}
 	IfWinExist, ahk_id %id%
-	Gui %id%:Destroy
+	{
+		localvar=255
+		Loop, 14
+			{
+				localvar:=localvar-18
+				WinSet, Transparent, %localvar%, ahk_id %id%
+				sleep 10
+				
+			}
+		IfWinExist, ahk_id %id%
+			Gui %id%:Destroy
 	}	
 }
 
@@ -338,6 +351,7 @@ FadeIn(id)
 
 ;--------------------------------------------------------------------------------------------------------------
 
-GetOSVersion() {
+GetOSVersion() 
+{
     Return ((r := DllCall("GetVersion") & 0xFFFF) & 0xFF) "." (r >> 8)
 }

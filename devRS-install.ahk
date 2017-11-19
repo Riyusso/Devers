@@ -1,6 +1,6 @@
 ﻿#NoEnv
 #NoTrayIcon
-Version=1.41
+Version=1.42
 SendMode Input
 ScriptName=.devRS
 
@@ -10,8 +10,9 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 	IniRead, CurrentVersion, build.ini, build, Version
 	IfNotExist, %A_MyDocuments%\%ScriptName%\build.ini
 	CurrentVersion=1.0
-	If (Version>CurrentVersion){
-	GoSub UpdateIt
+	If (Version>CurrentVersion)
+	{
+		GoSub UpdateIt
 	}
 	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
 	Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
@@ -55,8 +56,8 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 
 	If controlwidth=0
 	{
-	widthcontrolled:=false
-	controlwidth=105
+		widthcontrolled:=false
+		controlwidth=105
 	}
 	Else
 	widthcontrolled:=true
@@ -68,12 +69,12 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 
 	If TitleSpace
 	{
-	whc=48
-	NewY=19
-	controlwidth+=6
-	Gui, Add, Progress, % "x-1 y-1 w" controlwidth " h22 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y1 w" controlwidth " r1 BackgroundTrans Center 0x200 gGuiMove c248a96", %Title%
+		whc=48
+		NewY=19
+		controlwidth+=6
+		Gui, Add, Progress, % "x-1 y-1 w" controlwidth " h22 Background1F2326 Disabled hwndHPROG"
+		Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+		Gui, Add, Text, % "x0 y1 w" controlwidth " r1 BackgroundTrans Center 0x200 gGuiMove c248a96", %Title%
 	}
 	averagex:=A_ScreenWidth-130-(controlwidth/2)
 	Gui, Font, s%fontsize% w720, Verdana
@@ -83,7 +84,7 @@ RSNotify(Text, controlwidth=0, fontsize=13, TitleSpace=0, Title="", NewY=9, Time
 	Gui, Show, x%averagex% y%vhc% h%whc% w%controlwidth% NoActivate
 	GoSub SmartAppear
 	SetTimer, SmartFade, -%Timed%
-return
+	return
 }
 
 SmartAppear:
@@ -98,7 +99,8 @@ SmartFade:
 		SmartFade:=SmartFade-8
 		WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
 		SetTimer, SmartFade, -8
-		If (SmartFade<8){
+		If (SmartFade<8)
+		{
 			SetTimer, SmartFade, Off
 			Gui, RSNotify:Destroy
 			If TryPause

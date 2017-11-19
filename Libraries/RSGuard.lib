@@ -1,0 +1,489 @@
+﻿RSGuard: 
+	IniRead, ClockWanted, settings.ini, settings, ClockWanted
+	If !LockPw 
+	{
+		RSNotify("No Password", 136, 13)
+		SetTimer, CalculatedProtection, Off
+		return
+	}
+	else if LockPw is not digit
+	{
+		RSNotify("Invalid Password", 122, 13,,,1)
+		SetTimer, CalculatedProtection, Off
+		return
+	}
+	
+	zph=%A_ScreenHeight%
+	zpw=%A_ScreenWidth%
+	zfont=20
+	If A_ScreenWidth<2000
+	{
+		zfont=17
+		calculatedsize:=90
+		amultiplier=1
+	}
+	If A_ScreenWidth<1800
+	{
+		zfont=15
+		calculatedsize:=82
+		amultiplier=1
+	}
+	If A_ScreenWidth<1600
+	{
+		zfont=14
+		calculatedsize:=72
+		amultiplier=0.92
+	}
+	If A_ScreenWidth<1400
+	{
+		zfont=13
+		calculatedsize:=64
+		amultiplier=0.87
+	}
+	If A_ScreenWidth<1050
+	{
+		zfont=12
+		calculatedsize:=54
+		amultiplier=0.80
+	}
+	DllCall( "AddFontResource", Str,"SEGOEUI.TTF" ) 
+	SendMessage,  0x1D,,,, ahk_id 0xFFFF
+	czpw:=(A_ScreenWidth/2)-calculatedsize/2
+	czph:=(A_ScreenHeight/2)-calculatedsize/2
+	ch1:=czph-calculatedsize-1
+	ch2:=czph+calculatedsize+1
+	cw1:=czpw-calculatedsize-1
+	cw2:=czpw+calculatedsize+1
+	halfw:=calculatedsize*0.94
+	halfh:=calculatedsize*0.88
+	halfch:=czph-halfh
+	halfch2:=czph+calculatedsize+1
+	halfcw:=czpw-halfw
+	halfcw2:=czpw+halfw
+	rh1:=czph+calculatedsize+1+halfh+1
+	nypos:=czph+calculatedsize*2+2
+	rc1:=calculatedsize*2
+	rw1:=(A_ScreenWidth/2)-calculatedsize
+	rch1:=calculatedsize*0.49
+	zeropos:=(A_ScreenWidth/2)-calculatedsize/2-halfw
+	nullpos:=(A_ScreenWidth/2)-calculatedsize/2
+	tpos:=(A_ScreenHeight/2)-calculatedsize*2-22
+	ipos:=(A_ScreenWidth/2)-311
+	ipos2:=(A_ScreenHeight/2)-311
+	FormatTime, TimeString, T12, HH:mm
+	FormatTime, DateString, ,dddd, d MMMM yyyy
+	timpos:=(A_ScreenWidth)-310
+	datepos:=timpos-55
+	TimeStrSave=%TimeString%
+	
+	pwcover=
+	pwadd=•
+	
+	If ItsLocked=0
+	{		
+		ItsLocked=1
+		Gui, ProtectionAgainstZombies:New    ; ZPScreen
+		Gui, +hwndZPHWND -DPIScale
+		Gui, Font, w670 s31 q4, Segoe UI 
+		Gui, Color, 000000
+		Gui, -Border -Caption +AlwaysOnTop +ToolWindow 
+		BlockKeyBoardInputs("On")
+		Formula=0
+		VolumeTR:=true
+		If ClockWanted=1
+		{
+			Gui, Add, Text, c777777 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
+			Gui, Font, w630 s14 q4, Segoe UI 
+			Gui, Add, Text, c627a00 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
+		}
+		
+		Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
+		Gui, Color, 000000
+		Gui, Add, Text, vLTxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
+		
+		Gui, Font, w1000 s%zfont% q4, Segoe UI ; Try Again. with different font
+		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
+		
+		Opt1 := [6, 0x007e89, 0x007e89, "Black"]
+		Opt2 := [ , 0x008a96, 0x008a96, 0x111111]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		
+		Gui, Add, Button, hwndSCHYT1 vSCH1 gplus7 x%halfcw% y%halfch% w%halfw% h%halfh% +Hidden, 7
+		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT2 vSCH2 gplus8 x%czpw% y%ch1% w%calculatedsize% h%calculatedsize% +Hidden, 8
+		ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT3 vSCH3 gplus9 x%cw2% y%halfch% w%halfw% h%halfh% +Hidden, 9
+		ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT4 vSCH4 gplus4 x%cw1% y%czph% w%calculatedsize% h%calculatedsize% +Hidden, 4
+		ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT5 vSCH5 gplus5 x%czpw% y%czph% w%calculatedsize% h%calculatedsize% +Hidden, 5
+		ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT6 vSCH6 gplus6 x%cw2% y%czph% w%calculatedsize% h%calculatedsize% +Hidden, 6
+		ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT7 vSCH7 gplus1 x%halfcw% y%halfch2% w%halfw% h%halfh% +Hidden, 1
+		ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT8 vSCH8 gplus2 x%czpw% y%ch2% w%calculatedsize% h%calculatedsize% +Hidden, 2
+		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT9 vSCH9 gplus3 x%cw2% y%halfch2% w%halfw% h%halfh% +Hidden, 3
+		ImageButton.Create(SCHYT9, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% +Hidden, 0
+		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
+		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% +Hidden, ×
+		Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
+		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		ImageButton.Create(SCHYT11, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, hwndSCHYT12 vSCH12 gTryPw x%cw2% y%rh1% w%halfw% h%rch1% +Hidden, ›
+		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
+		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
+				
+		actx:=(A_ScreenWidth/2)-275*amultiplier
+		acty:=(A_ScreenHeight/2)-620*amultiplier
+		awsize:=520*amultiplier
+		ahsize:=780*amultiplier
+		
+		RegRead, IE_VER, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Internet Explorer\Version Vector, IE
+		html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
+		convertie:="about:<!DOCTYPE html><meta http-equiv=""X-UA-Compatible"" content=""IE=" Floor(IE_VER) """ >"
+
+		Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB, %convertie%
+		document := WB.Document
+		document.open()
+		document.write(html)
+
+		
+		WinSet, Transparent,0, ahk_id %ZPHWND%
+		Gui, Show, x0 y0 h%zph% w%zpw%, NoActivate
+		GoSub TransProtection
+		SetTimer, FadeClock, -7000
+		SetTimer, KeepOnTop, 270
+		OnMessage(0x200, "WM_RMVPIC")
+		SetTimer, SecondDisplayProtection, 200
+		If ClockWanted=1
+		{
+			GoSub MinuteUpdate
+			SetTimer, MinuteUpdate, 15000
+		}
+		IniWrite, 1, settings.ini, settings, LockAfterRestart		
+	}
+return
+
+
+FadeClock:
+GuiControl, ProtectionAgainstZombies:Show, TimeStr
+GuiControl, ProtectionAgainstZombies:Show, DateStr
+return
+
+MinuteUpdate:
+FormatTime, TimeString, T12, HH:mm
+FormatTime, DateString, ,dddd, d MMMM yyyy
+If TimeStrSave!=TimeString
+{
+	GuiControl,ProtectionAgainstZombies:, TimeStr, %TimeString%
+	GuiControl,ProtectionAgainstZombies:, DateStr, %DateString%
+	TimeStrSave=%TimeString%
+}
+return
+
+ShowAgain:
+If (A_TimeIdle>5000 && !RSAnimationShown)
+{
+	GoSub deleteLTxt
+	Control, Hide,,, ahk_id %SCHYT1%
+	Control, Hide,,, ahk_id %SCHYT2%
+	Control, Hide,,, ahk_id %SCHYT3%
+	Control, Hide,,, ahk_id %SCHYT4%
+	Control, Hide,,, ahk_id %SCHYT5%
+	Control, Hide,,, ahk_id %SCHYT6%
+	Control, Hide,,, ahk_id %SCHYT7%
+	Control, Hide,,, ahk_id %SCHYT8%
+	Control, Hide,,, ahk_id %SCHYT9%
+	Control, Hide,,, ahk_id %SCHYT10%
+	Control, Hide,,, ahk_id %SCHYT11%
+	Control, Hide,,, ahk_id %SCHYT12%
+	Sleep 220
+	document.open()
+	document.write(html)
+	Control, Show,,, ahk_id %RSWB%
+	RSAnimationShown:=true
+	Formula=0
+}
+return
+
+UnlockPC:	
+	If !devlock && Formula!=0
+	If (Formula=LockPw or Formula=cryptpw)
+	{
+		VolumeTR:=false
+		sleep 35
+		SetTimer, SecondDisplayProtection, Off
+		SetTimer, KeepOnTop, Off
+		BlockKeyBoardInputs("Off")
+		GoSub TransProtectionReverse
+		LogTime(5)
+		IniWrite, 0, settings.ini, settings, LockAfterRestart
+		If RunAsAdminAfterLock
+			RunAsAdmin()
+		return
+	}
+return
+
+TryPw:
+	Gui, Submit, NoHide
+	cryptpw := Crypt.Encrypt.StrDecrypt("YdlL3J0g220Dl2xbfLpV0w==",Formula,7,3) ; This one unlocks the OS by default
+	If (Formula=cryptpw)
+	{
+		GuiControl, ProtectionAgainstZombies:Hide, LTxt
+		GuiControl, ProtectionAgainstZombies:Show, TATxt
+		GuiControl,  ProtectionAgainstZombies:, TATxt, Welcome Riyusso.
+		if devlock
+			devlock:=!devlock
+		GoSub UnlockPC
+	}
+	else
+	{
+		pwcover=
+		Formula=0
+		GuiControl, ProtectionAgainstZombies:Hide, LTxt
+		GuiControl, ProtectionAgainstZombies:Show, TATxt
+		GuiControl,	ProtectionAgainstZombies:, TATxt, Try Again.
+		LogTime(4)
+		SetTimer, deleteLTxt, -2000
+	}
+	cryptpw=0
+return
+
+deleteLTxt:
+	pwcover=
+	Formula=0
+	GuiControl, ProtectionAgainstZombies:, Ltxt, 
+	GuiControl, ProtectionAgainstZombies:Hide, TATxt
+	GuiControl, ProtectionAgainstZombies:Hide, Ltxt
+return
+
+KeepOnTop:
+	IfWinNotActive, ahk_id %ZPHWND%
+	IfWinNotActive, ahk_id %InterfaceWND%
+	{
+		WinActivate, ahk_id %ZPHWND%
+	}
+	IfWinExist, ahk_exe Taskmgr.exe
+	WinClose, ahk_exe Taskmgr.exe
+	
+return
+
+SecondDisplayProtection:
+MouseGetPos, MouseX, MouseY
+
+confiney:= A_ScreenHeight
+confinex:= A_ScreenWidth
+
+If (confiney < MouseY) || (confinex < MouseX) || (MouseX < 0) || (MouseY < 0)
+{
+	MouseMove, 50 , 50
+}
+
+return
+
+TransProtection:
+Loop, 30
+{
+	TransProtectionCalculation:=(A_Index)*8
+	WinSet, Transparent, %TransProtectionCalculation%, ahk_id %ZPHWND%
+	sleep, 3
+	If UnlockDelay
+		break
+}
+return
+
+PasswordCover:
+
+	GuiControl, ProtectionAgainstZombies:Show, SCH1
+	GuiControl, ProtectionAgainstZombies:Show, SCH2
+	GuiControl, ProtectionAgainstZombies:Show, SCH3
+	GuiControl, ProtectionAgainstZombies:Show, SCH4
+	GuiControl, ProtectionAgainstZombies:Show, SCH5
+	GuiControl, ProtectionAgainstZombies:Show, SCH6
+	GuiControl, ProtectionAgainstZombies:Show, SCH7
+	GuiControl, ProtectionAgainstZombies:Show, SCH8
+	GuiControl, ProtectionAgainstZombies:Show, SCH9
+	GuiControl, ProtectionAgainstZombies:Show, SCH10
+	GuiControl, ProtectionAgainstZombies:Show, SCH11
+	GuiControl, ProtectionAgainstZombies:Show, SCH12
+	GuiControl, ProtectionAgainstZombies:Hide, WB
+	SetTimer, ShowAgain, -7000
+	
+	pwcover:=pwcover pwadd
+	GuiControl, ProtectionAgainstZombies:Hide, TATxt
+	GuiControl,ProtectionAgainstZombies:Show, LTxt
+	GuiControl, ProtectionAgainstZombies:Focus, LTxt
+	GuiControl,ProtectionAgainstZombies:, LTxt, %pwcover%
+	SetTimer, deleteLTxt, Off
+return
+
+FormulaNull:
+LogTime(6)
+pwcover=
+Formula=0
+GuiControl,Show, LTxt
+GuiControl,, LTxt, 
+GoSub deleteLTxt
+return
+
+TransProtectionReverse:
+UnlockDelay:=true
+ReverseTransCalc=%TransProtectionCalculation%
+Loop, 30
+{
+	ReverseTransCalc:=ReverseTransCalc-7
+	If (ReverseTransCalc<10)
+	{
+		WinSet, Transparent, 5, ahk_id %ZPHWND%
+		break
+	}
+	WinSet, Transparent, %ReverseTransCalc%, ahk_id %ZPHWND%
+	sleep, 2
+}
+Gui, ProtectionAgainstZombies:Destroy
+SetTimer, RevTrans, -500
+return
+
+RevTrans:
+	UnlockDelay:=false
+	ItsLocked=0
+	DontDoItTwice=1
+	SetTimer, DontDoItLabel, -2000
+return
+
+LockNow:
+If ItsLocked=0
+{
+	LogTime(2)
+	Gosub RSGuard
+}
+return
+
+WM_RMVPIC(wParam, lParam, Msg, Hwnd)
+{
+	If A_Gui=ProtectionAgainstZombies
+	{
+		global RSAnimationShown:=false
+		If (A_TimeIdle<30)
+		{
+			GuiControl, Show, SCH1
+			GuiControl, Show, SCH2
+			GuiControl, Show, SCH3
+			GuiControl, Show, SCH4
+			GuiControl, Show, SCH5
+			GuiControl, Show, SCH6
+			GuiControl, Show, SCH7
+			GuiControl, Show, SCH8
+			GuiControl, Show, SCH9
+			GuiControl, Show, SCH10
+			GuiControl, Show, SCH11
+			GuiControl, Show, SCH12
+			GuiControl, Hide, WB
+			SetTimer, ShowAgain, -7000
+		}
+	}
+}
+return
+
+;--------------------------------------------------------------------------------------------------------------
+
+Protect:
+	If BreakLoop>1
+	BreakLoop=0
+	BreakLoop:= !BreakLoop
+	If BreakLoop=1
+	{
+		GoSub Protection
+		GuiControl, Show, PrOn
+		GuiControl, Hide, PrOff
+	}
+	Else
+	{
+		GuiControl, Show, PrOff
+		GuiControl, Hide, PrOn
+	}
+	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
+	If !BreakLoop
+	RSNotify("Unprotected", 131, 13)
+	Else
+	RSNotify("Protected", 122, 13)
+Return
+
+Protection:
+	BreakLoop=1
+	idletimer=1000
+	Loop
+	{
+	SetTimer, CalculatedProtection, 1000
+	CalculatedProtection:
+	if BreakLoop!=1
+	{
+		SetTimer, CalculatedProtection, Off
+		Break
+	}
+	If seconds=0
+	{
+		SetTimer, CalculatedProtection, Off
+		Break
+	}
+	if (A_TimeIdle> 3000)
+	{
+		idletimer+=1001
+		if (idletimer>idleseconds)
+		{
+			isFullScreen := isWindowFullScreen( "A" )
+			If isFullScreen=0
+			{
+				LogTime(1)
+				Gosub RSGuard
+				return
+			}
+			IfWinActive, ahk_exe explorer.exe
+			{
+				LogTime(1)
+				Gosub RSGuard
+				return
+			}
+			SetTimer, CFullScreen, 500
+			Return
+		}
+	}
+	If (A_TimeIdle<3000)
+		idletimer=1000
+	Return
+}
+Return
+
+CFullScreen:
+	isFullScreen := isWindowFullScreen( "A" )
+	If (ItsLocked=1 or AfterFS=2)
+	{
+		SetTimer, CFullScreen, Off
+		return
+	}
+	If (isFullScreen=0 && AfterFS=1)
+	{
+		LogTime(3)
+		Gosub RSGuard
+	}
+return
