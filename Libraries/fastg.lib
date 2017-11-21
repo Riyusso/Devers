@@ -1,22 +1,16 @@
 ﻿GoogleOpener:
-	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250) ; if you double tap RAlt it searches Google for whatever you have selected
-	{
-		if(clipboard!=lastcopied)
-		{
-			websearchvar:=lastcopied
-			GuiControl, FastGoogle:, websearchvar, %lastcopied%
-			Send {End}
-			websearchvar:="https://www.google.bg/search?q=" websearchvar
-			Run, %websearchvar%,, UseErrorLevel
-			websearchvar=
-			return
-		}
+	; limitation : Double tap search what's already in the clipboard. Example : You have "dog" selected by already copied in your clipboard. Double tapping the Alt button will not search "dog".
+
+	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250 && clipboard!=lastcopied && StrLen(lastcopied)>0) ; if you double tap RAlt it searches Google for whatever you have selected
+	{ 		
+		websearchvar:=lastcopied
+		GuiControl, FastGoogle:, websearchvar, %lastcopied%
+		Send {End}
+		websearchvar:="https://www.google.bg/search?q=" websearchvar
+		Run, %websearchvar%,, UseErrorLevel
+		websearchvar=
+		return
 	}
-	oCB := ClipboardAll  ; save clipboard contents
-	Send, ^c
-	sleep 20
-	lastcopied:=clipboard
-	ClipBoard := oCB         ; return original Clipboard contents
 
 	zfont=12
 	amultiplier=1
@@ -32,8 +26,15 @@
 		sleep 10
 		FadeOut(FastGoogle)
 		Gui, FastGoogle:Destroy
+		lastcopied=
 		return
 	}
+	oCB := ClipboardAll		; save clipboard contents
+	Send, ^c
+	clipboard:=RTrim(clipboard, " `t`r`n")		; trim left/right whitespaces
+	clipboard:=LTrim(clipboard, " `t`r`n")
+	lastcopied:=clipboard
+	ClipBoard := oCB		; return original Clipboard contents
 
 	Gui, FastGoogle:New, +hwndFastGoogle
 	Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
@@ -61,6 +62,7 @@ return
 #If	WinActive( "ahk_id" . FastGoogle )
 	ESC::
 	FadeOut(FastGoogle)
+	lastcopied=
 	return
 #If
 
@@ -75,6 +77,7 @@ FastGoogleSearch:
 			SetTimer, CheckGoogleSearch, Off
 			Run, http:%websearchvar%
 			websearchvar=
+			lastcopied=
 			FadeOut(FastGoogle)
 			Gui, FastGoogle:Destroy
 			return
@@ -85,6 +88,7 @@ FastGoogleSearch:
 		Run, %websearchvar%,, UseErrorLevel
 		websearchvar=
 	}
+	lastcopied=
 	FadeOut(FastGoogle)
 	Gui, FastGoogle:Destroy
 return
@@ -92,9 +96,10 @@ return
 CheckGoogleSearch:
 	IfWinNotActive, ahk_id %FastGoogle%
 	{
-		sleep 80
+		sleep 40
 		WSTog:=!WSTog
 		FadeOut(FastGoogle)
+		lastcopied=
 		Gui, FastGoogle:Destroy
 		SetTimer, CheckGoogleSearch, Off
 		sleep 10
