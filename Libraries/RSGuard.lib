@@ -92,8 +92,9 @@
 		VolumeTR:=true
 		If ClockWanted=1
 		{
+			Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
 			Gui, Add, Text, c777777 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
-			Gui, Font, w630 s14 q4, Segoe UI 
+			Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
 			Gui, Add, Text, c627a00 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
 		}
 		
@@ -235,6 +236,7 @@ UnlockPC:
 		SetTimer, SecondDisplayProtection, Off
 		SetTimer, KeepOnTop, Off
 		BlockKeyBoardInputs("Off")
+		SetTimer, FadeClock, Off
 		GoSub TransProtectionReverse
 		LogTime(5)
 		IniWrite, 0, settings.ini, settings, LockAfterRestart

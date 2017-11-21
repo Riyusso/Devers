@@ -1,4 +1,23 @@
-GoogleOpener:
+﻿GoogleOpener:
+	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250) ; if you double tap RAlt it searches Google for whatever you have selected
+	{
+		if(clipboard!=lastcopied)
+		{
+			websearchvar:=lastcopied
+			GuiControl, FastGoogle:, websearchvar, %lastcopied%
+			Send {End}
+			websearchvar:="https://www.google.bg/search?q=" websearchvar
+			Run, %websearchvar%,, UseErrorLevel
+			websearchvar=
+			return
+		}
+	}
+	oCB := ClipboardAll  ; save clipboard contents
+	Send, ^c
+	sleep 20
+	lastcopied:=clipboard
+	ClipBoard := oCB         ; return original Clipboard contents
+
 	zfont=12
 	amultiplier=1
 	guiw:=695*amultiplier
@@ -22,15 +41,16 @@ GoogleOpener:
 	Gui, Font, w700 s%zfont% cD0D0D0, Segoe UI Black
 
 	Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
-
+	
 	Gui, Add, Edit, % "x0 y17 w" guiw-47 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
-
+	SHAutoComplete(WebSearch)
 	Gui, Add, Button, % "x+0 h25 w47 gFastGoogleSearch hwndSearchBut1 +Default", Go
 	Opt1 := [6, 0x333333, 0x333333, 0x008383]
 	Opt2 := [ , 0x333333, 0x333333, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
-
+	guiw:=guiw*dpi
+	guih:=guih*dpi
 	WinSet, Region, 0-0 w%guiw% h%guih% r18-18
 	WinSet, Transparent, 243
 	Gui, Show, y-14 h%guih% w%guiw%, .devRS Google Search
@@ -43,6 +63,7 @@ return
 	FadeOut(FastGoogle)
 	return
 #If
+
 FastGoogleSearch:
 	Gui, Submit, NoHide
 	if(websearchvar!="")
@@ -71,6 +92,7 @@ return
 CheckGoogleSearch:
 	IfWinNotActive, ahk_id %FastGoogle%
 	{
+		sleep 80
 		WSTog:=!WSTog
 		FadeOut(FastGoogle)
 		Gui, FastGoogle:Destroy
@@ -78,3 +100,10 @@ CheckGoogleSearch:
 		sleep 10
 	}
 return
+
+SHAutoComplete(hEdit)	; adds the ability to insert control characters from the Ascii table (such as ctrl + backspace)
+{
+	DllCall("ole32\CoInitialize", "Uint", 0)
+	DllCall("shlwapi\SHAutoComplete", "Uint", hEdit, "Uint",0x80000000|0x20000000)
+	DllCall("ole32\CoUninitialize")
+}

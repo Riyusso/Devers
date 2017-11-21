@@ -40,7 +40,9 @@ If (ItsLocked!=1)
 	DontPause=1
 	Progress % Volume := Round(Volume), %Volume% `%
 	WinSet, AlwaysOnTop, On, vol_Progress
-	WinSet, Region, 0-0 w330 h52 r3-3, vol_Progress
+	scaledw:=330*dpi
+	scaledh:=52*dpi
+	WinSet, Region, 0-0 w%scaledw% h%scaledh% r3-3, vol_Progress
 	SetTimer, Remove_Show_OSD, %Volume_Delay%
 }
 return

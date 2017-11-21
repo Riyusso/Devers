@@ -333,6 +333,12 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
 
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Google Search Bar:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Search selected text:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt x 2
+
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 2
 		
@@ -344,6 +350,9 @@ ScriptFunctions:
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website 
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F8
@@ -525,10 +534,20 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MenuInit:
-IfExist RSIcon.ico
-Menu, TRAY, Icon, RSIcon.ico
+IfExist tray_icon.ico
+Menu, TRAY, Icon, tray_icon.ico
+Else
+{
+	FileInstall, Base/tray_icon.ico, %A_MyDocuments%\%ScriptName%\tray_icon.ico, 1
+	Menu, TRAY, Icon, tray_icon.ico
+}
+If A_IsCompiled
+Menu, Tray, Tip, .devRS 
+Else
+Menu, Tray, Tip, .devRS Uncompiled
 Menu, Tray, NoStandard
-Menu, Tray, ADD, Menu , DefaultMenu
+Menu, Tray, ADD, Menu, DefaultMenu
+Menu, Tray, ADD, Reload, mnuScriptReload
 Menu, Tray, Default, Menu
 Menu Tray, Click, 1           ; Enable single click action on tray
 Return 
@@ -543,7 +562,7 @@ mnuUninstall:
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling", 130)
 	Sleep 2000	
-	files=build.ini,launcher.exe,RS.png,rsanimation.mp4,RSIcon.ico,RSStopped.ico,segoeui.ttf,settings.ini,log.txt
+	files=build.ini,launcher.exe,RS.png,rsanimation.mp4,RSIcon.ico,RSStopped.ico,segoeui.ttf,settings.ini,log.txt,tray_icon.ico
 	Loop, Parse, files, `,
 	FileDelete, % A_MyDocuments "\" ScriptName "\" A_LoopField
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
@@ -809,6 +828,8 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 AdminPrompt:
+	width=135
+	height=66
 	Gui, AdminPrompt:New, +hwndAdminPrompt
 	Gui, +LastFound 
 	WinSet, Transparent, 0
@@ -819,17 +840,19 @@ AdminPrompt:
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	Gui, Add, Progress, % "x-1 y-1 w135 h26 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, x0 y4 w135 Center BackgroundTrans +0x200 c228a96, Are you an admin?
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Are you an admin?
 	Gui, Add, Button, x8 y30 w55 +default gRunAsAdmin hwndBut1 +Center, Yeah
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	
 	Gui, Add, Button, x71 y30 w55 gNotAnAdmin hwndButt2 +Center,Nope
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 	
-	WinSet, Region, 0-0 w135 h66 r3-3, ahk_id %AdminPrompt%
-	Gui, Show, w135 h66 , Are you an admin?
+	width:=width*dpi
+	height:=height*dpi
+	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %AdminPrompt%
+	Gui, Show, w%width% h%height% , Are you an admin?
 	FadeIn(AdminPrompt)
 return
 
