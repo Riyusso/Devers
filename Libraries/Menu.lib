@@ -105,7 +105,7 @@ button:
 	Gosub Protection
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
-	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	If StartWithWindows=2
 	{
 		IfNotExist, %LinkFile% 
@@ -193,7 +193,7 @@ ProtectionSettings:
 	IniRead, lockkey, settings.ini, settings, lockkey
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, seconds, settings.ini, settings, seconds
-	IniRead, ClockWanted, settings.ini, settings, ClockWanted
+	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 0
 	IniRead, AfterFS, settings.ini, settings, AfterFS
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
@@ -287,6 +287,7 @@ protectionbutton:
 	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
+	GuiControl,settings:, LockPw, %LockPw%
 	idleseconds:=1000*(seconds)
 	FadeOut(ProtectionSettings)
 	if seconds is number
@@ -498,7 +499,7 @@ buttonfirst:
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
-	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	If StartWithWindows=2
 	{
 		IfNotExist, %LinkFile% 
@@ -567,7 +568,7 @@ mnuUninstall:
 	FileDelete, % A_MyDocuments "\" ScriptName "\" A_LoopField
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript

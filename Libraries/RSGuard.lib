@@ -93,9 +93,10 @@
 		If ClockWanted=1
 		{
 			Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
-			Gui, Add, Text, c777777 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
+			Gui, Add, Text, c000000 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
 			Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
-			Gui, Add, Text, c627a00 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
+			Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
+			SetTimer, changeclr, -5000
 		}
 		
 		Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
@@ -172,7 +173,7 @@
 		WinSet, Transparent,0, ahk_id %ZPHWND%
 		Gui, Show, x0 y0 h%zph% w%zpw%, NoActivate
 		GoSub TransProtection
-		SetTimer, FadeClock, -7000
+		SetTimer, FadeClock, -3000
 		SetTimer, KeepOnTop, 270
 		OnMessage(0x200, "WM_RMVPIC")
 		SetTimer, SecondDisplayProtection, 200
@@ -185,6 +186,65 @@
 	}
 return
 
+changeclr:
+SetFormat, IntegerFast, hex
+Var += 0  ; Sets Var (which previously contained 11) to be 0xb.
+Var .= ""  ; Necessary due to the "fast" mode.
+clrr=1
+clrg=1
+clrb=1
+clr2r=1
+clr2g=1
+Loop, 85
+{
+	clrr+=1
+	clrg+=1
+	clrb+=1
+	clr:= % rgb(clrr, clrg, clrb)
+	Gui ProtectionAgainstZombies:Font, % "w670 s" 31/dpi "c" clr " q4", Segoe UI
+	GuiControl ProtectionAgainstZombies:Font, TimeStr
+	clr2r+=1
+	clr2g+=1
+	clr2:= % rgb(clr2r, clr2g, 0)
+	Gui ProtectionAgainstZombies:Font, % "w670 s" 14/dpi "c" clr2 " q4", Segoe UI
+	GuiControl ProtectionAgainstZombies:Font, DateStr
+	sleep 30
+}
+return
+
+
+
+RGB(Red, Green, Blue) ; Fading the clock in 
+{
+    ;store previous setting
+    oldIntFormat := A_FormatInteger
+
+    ;ensures values are in hex
+    SetFormat, IntegerFast, hex
+
+    ;subStr(value, 3) removes the leading "0x"
+	If(Red < 16 && Green < 16 && Blue < 16 )
+	RGB := 0 . subStr(Red & 255, 3) . 0 . subStr(Green & 255, 3) . 0 . subStr(Blue & 255, 3)
+	Else if(Red < 16 && Green < 16)
+	RGB := 0 . subStr(Red & 255, 3) . 0 . subStr(Green & 255, 3) . subStr(Blue & 255, 3)
+	Else if(Red < 16 && Blue < 16)
+	RGB := 0 . subStr(Red & 255, 3) . subStr(Green & 255, 3) . 0 . subStr(Blue & 255, 3)
+	Else if(Green < 16 && Blue < 16)
+	RGB := subStr(Red & 255, 3) . 0 . subStr(Green & 255, 3) . 0 . subStr(Blue & 255, 3)
+	Else If(Red < 16)
+	RGB := 0 . subStr(Red & 255, 3) . subStr(Green & 255, 3) . subStr(Blue & 255, 3)
+	Else if(Green < 16)
+	RGB := subStr(Red & 255, 3) . 0 . subStr(Green & 255, 3) . subStr(Blue & 255, 3)
+	Else if(Blue < 16)
+	RGB := subStr(Red & 255, 3) . subStr(Green & 255, 3) . 0 . subStr(Blue & 255, 3)
+	else
+    RGB := subStr(Red & 255, 3) . subStr(Green & 255, 3) . subStr(Blue & 255, 3)
+
+    ;restore previous setting
+    SetFormat, IntegerFast, %oldIntFormat%
+
+    return RGB
+}
 
 FadeClock:
 GuiControl, ProtectionAgainstZombies:Show, TimeStr

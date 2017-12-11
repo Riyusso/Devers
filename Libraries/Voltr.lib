@@ -4,12 +4,11 @@ BG_color=222222
 Text_color=009393
 Bar_color=008383
 Volume_OSD_Center:=1
-over_tray:=1
 vol_up = WheelUp
 vol_down = WheelDown
 
-#If % (over_tray) ? MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"):"(1)"
-Hotkey, If, %  (over_tray) ? MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"):"(1)"
+#If % MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
+Hotkey, If, % MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
 
 	Hotkey,%vol_up%,vol_up
 	Hotkey,%vol_down%,vol_down
@@ -40,7 +39,7 @@ If (ItsLocked!=1)
 	DontPause=1
 	Progress % Volume := Round(Volume), %Volume% `%
 	WinSet, AlwaysOnTop, On, vol_Progress
-	scaledw:=330*dpi
+	scaledw:=330*dpi+1
 	scaledh:=52*dpi
 	WinSet, Region, 0-0 w%scaledw% h%scaledh% r3-3, vol_Progress
 	SetTimer, Remove_Show_OSD, %Volume_Delay%
