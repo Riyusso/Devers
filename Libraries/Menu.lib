@@ -558,19 +558,15 @@ mnuUninstall:
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling", 130)
-	Sleep 2000	
-	files=build.ini,launcher.exe,RS.png,rsanimation.mp4,RSIcon.ico,RSStopped.ico,segoeui.ttf,settings.ini,log.txt,tray_icon.ico
-	Loop, Parse, files, `,
-	FileDelete, % A_MyDocuments "\" ScriptName "\" A_LoopField
+	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
-	IfNotExist, Base\uninstaller.exe
 	FileInstall, Base\uninstaller.exe, %A_Temp%\uninstaller.exe, 1
-	Run, %A_Temp%\uninstaller.exe
+	Run, %A_Temp%\uninstaller.exe,, HIDE
 	ExitApp
 return
 
