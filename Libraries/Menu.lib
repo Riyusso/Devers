@@ -8,15 +8,9 @@
 	
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, seconds, settings.ini, settings, seconds
-	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, email, settings.ini, settings, email
 	IniRead, passwordhash, settings.ini, settings, passwordhash
 	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3)
-
-	If BreakLoop=1
-	ChooseBL=1
-	Else
-	ChooseBL=2
 	
 	Gui, settings:New, +hwndScriptOptions
 	Gui, +LastFound 
@@ -27,38 +21,41 @@
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 	
-		Gui, Color, 008383, 333333
+		Gui, Color, 008383, 252525
 		Gui, Font, s9 
 		Gui, Font, normal		
 
 	Gui, Add, Text, % "x" labelsx " y+18", Start with Windows
 	Gui, Add, DropDownList, % "x" Width-105 " w75 y40 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
-	
-	Gui, Add, Text, % "x" labelsx " y+13", RS-Guard
-	Gui, Add, DropDownList, % "x" Width-105 " w75 y71 Center 0x200 vBreakLoop Choose" ChooseBL " AltSubmit" , Enabled|Disabled
-	
-	Gui, Add, Text, % "x" labelsx " y+17", Email:
+
+	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
+	Gui, Font, s9 cDFDFDF
+	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
+	Gui, Font, s9 cFFFFFF
+
+
+	Gui, Add, Text, % "x" labelsx " y+12", Email:
 	Gui, Add, Edit, % "x+38 w" inputw " h15 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
-		
-	Gui, Add, Text, % "x" labelsx " y+8", Password:
+	SetEditCueBanner(Edit6, "CapsLock x2")
+	Gui, Add, Text, % "x" labelsx " y+10", Password:
 	Gui, Add, Edit, % "x+17 w" inputw " h15 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
+	SetEditCueBanner(Edit7, "Win + CapsLock x2")
 	
-	Gui, Add, Text, % "x" labelsx " y+8", Lock Password:
-	Gui, Add, Edit, % "x+" lpwpos+7 " w" lpwwidth " h15 hwndEdit8 vLockPw +password -E0x200 +Center -VScroll", %LockPw%
-	
-	
+
 	Gui, Font, s10 w600
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	
-	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+14 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", RS-Guard 
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings 
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", More Settings
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
@@ -94,15 +91,12 @@ button:
 	
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
-	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
 	RSNotify("Settings Applied",105,,,,1)
-	If BreakLoop=1
-	Gosub Protection
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
@@ -112,12 +106,12 @@ button:
 		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
 		IfNotExist, %StartMenuFile%
 		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile% 
-		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe
+		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 	}
 	If StartWithWindows=1
 	{
 		FileDelete, %LinkFile%
-		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	}
 return
 
@@ -229,6 +223,9 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+13 w147 Center", Lock Password › 
 	Gui, Add, Edit, % "x+8 w87 h15 vLockPw hwndEdit8 +password -E0x200 +Center -VScroll", %LockPw%
 
+	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
+	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll", %seconds%
+
 	Gui, Add, Text, % "x8 y+14 w147 Center", Lock After Full Screen ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
 
@@ -323,12 +320,12 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y0 w" Width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Functions
 		Gui, Font, s8 c228a96, Tahoma
 		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", The Lock key is configurable
-		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check RS-Guard Options
+		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check Protection Settings
 		Gui, Font, s10 cD0D0D0, Tahoma
 		Gui, Add, Text, % "x-2 y+10 w" (Width-(Width*0.47)) " Center BackgroundTrans", Function
 		Gui, Add, Text, % "x+52 w30 Center BackgroundTrans", Keys
 		Gui, Font, s8 cD0D0D0, Tahoma
-		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock:
+		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
@@ -346,7 +343,7 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Show Desktop:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 3
 		
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", RS-Guard Toggle:
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Protection Toggle:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F1
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
@@ -418,10 +415,6 @@ SettingsWndFirst:
 	inputw := (Width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18	
-	If BreakLoop=1
-	ChooseBL=1
-	Else
-	ChooseBL=2
 	
 	Gui, SettingsWndFirst:New, +hwndScriptOptionsFirst
 	Gui, +LastFound 
@@ -431,7 +424,7 @@ SettingsWndFirst:
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w188 r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 	
 		Gui, Color, 008383, 333333
 		Gui, Font, s9 
@@ -439,30 +432,34 @@ SettingsWndFirst:
 		
 	Gui, Add, Text, % "x" labelsx " y+18", Start with Windows
 	Gui, Add, DropDownList, % "x" Width-105 " w75 y40 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
-	
-	Gui, Add, Text, % "x" labelsx " y+13", RS-Guard
-	Gui, Add, DropDownList, % "x" Width-105 " w75 y71 Center 0x200 Choose" ChooseBL " AltSubmit" , Enabled|Disabled
-	
-	Gui, Add, Text, % "x" labelsx " y+17", Email:
+
+	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
+	Gui, Font, s9 cDFDFDF
+	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
+	Gui, Font, s9 cFFFFFF
+
+
+	Gui, Add, Text, % "x" labelsx " y+12", Email:
 	Gui, Add, Edit, % "x+38 w" inputw " h15 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
-		
-	Gui, Add, Text, % "x" labelsx " y+8", Password:
+	SetEditCueBanner(Edit6, "CapsLock x2")
+	Gui, Add, Text, % "x" labelsx " y+10", Password:
 	Gui, Add, Edit, % "x+17 w" inputw " h15 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
-	
-	Gui, Add, Text, % "x" labelsx " y+8", Lock Password:
-	Gui, Add, Edit, % "x+" lpwpos+7 " w" lpwwidth " h15 hwndEdit8 vLockPw +password -E0x200 +Center -VScroll", %LockPw%
-	
+	SetEditCueBanner(Edit7, "Win + CapsLock x2")
+
 	Gui, Font, s10 w600
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+14 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", RS-Guard
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings 
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", More Settings
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	
@@ -511,11 +508,10 @@ buttonfirst:
 	If StartWithWindows=1
 	{
 		FileDelete, %LinkFile%
-		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	}
 	
 	IniWrite, %seconds%, settings.ini, settings, seconds
-	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %LockPw%, settings.ini, settings, LockPw
@@ -571,7 +567,7 @@ mnuUninstall:
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
-	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript
+	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	IfNotExist, Base\uninstaller.exe
 	FileInstall, Base\uninstaller.exe, %A_Temp%\uninstaller.exe, 1
 	Run, %A_Temp%\uninstaller.exe
@@ -635,7 +631,7 @@ DefaultMenu:
 	Opt2 := [ , 0x272727, 0x262626, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	
-	Gui, Add, Button, % "x0 y-2 h" buth " w" butw+9 " gProtect hwndBut1 +Center", RS-Guard
+	Gui, Add, Button, % "x0 y-2 h" buth " w" butw+9 " gProtect hwndBut1 +Center", Protection
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	
 	Gui, Add, Button, % "x+0 h" buth " w" butw " gSuspendScriptToggle hwndBut2 +Center", Suspend
