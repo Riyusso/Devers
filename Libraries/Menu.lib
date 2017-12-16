@@ -558,6 +558,7 @@ mnuUninstall:
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling", 130)
+	WinKill, ahk_pid %PluginPID%
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
@@ -578,6 +579,7 @@ mnuExit:
 Return
 
 ExitAppL:
+	WinKill, ahk_pid %PluginPID%
 	ExitApp
 return
 

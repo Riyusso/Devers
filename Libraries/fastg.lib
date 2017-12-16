@@ -1,7 +1,5 @@
 ﻿GoogleOpener:
-	; limitation : Double tap search what's already in the clipboard. Example : You have "dog" selected by already copied in your clipboard. Double tapping the Alt button will not search "dog".
-
-	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250 && clipboard!=lastcopied && StrLen(lastcopied)>0) ; if you double tap RAlt it searches Google for whatever you have selected
+	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250 && StrLen(lastcopied)>0) ; if you double tap RAlt it searches Google for whatever you have selected(or have in your clipboard)
 	{ 		
 		websearchvar:=lastcopied
 		GuiControl, FastGoogle:, websearchvar, %lastcopied%
