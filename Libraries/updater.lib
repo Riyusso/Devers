@@ -1,0 +1,16 @@
+Updater:
+	UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
+	IniRead, UpdateVersion, build_update.ini, build, Version
+	IniRead, CurrentVersion, build.ini, build, Version
+	If (UpdateVersion>CurrentVersion)
+	{
+		RSNotify("Downloading")
+		Sleep 2000
+		UrlDownloadToFile, 	https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe, %A_Temp%\devRS-install.exe
+		Run, %A_Temp%\devRS-install.exe
+	}
+    Else
+    {
+        RSNotify("No new versions")
+    }
+return

@@ -32,14 +32,14 @@ Suspend, Toggle
 If A_IsSuspended
 {
 	Menu, TRAY, Icon, RSStopped.ico,,1
-	RSNotify("Suspended", 126, 13)
+	RSNotify("Suspended")
 	If A_IsPaused
 		Pause, Off
 }
 If !A_IsSuspended
 {
 	Menu, TRAY, Icon, tray_icon.ico,,1
-	RSNotify("Released", 126, 13)
+	RSNotify("Released")
 	If A_IsPaused
 	Pause, Off
 }
@@ -47,12 +47,12 @@ return
 
 playpause:
 	Send {Media_Play_Pause}
-	RSNotify("Play/Pause", 115, 13)
+	RSNotify("Play/Pause")
 return
 
 stopbutton:
 	Send {Media_Stop}
-	RSNotify("Stopped", 100, 13)
+	RSNotify("Stopped")
 return
 
 CheckBreakLoop:
@@ -179,12 +179,12 @@ return
 
 NextSong:
 	Send {Media_Next}
-	RSNotify("Next", 95, 13)
+	RSNotify("Next", 100)
 return
 
 PrevSong:
 	Send {Media_Prev}
-	RSNotify("Previous", 102, 13)
+	RSNotify("Previous")
 return
 
 DontDoItLabel:

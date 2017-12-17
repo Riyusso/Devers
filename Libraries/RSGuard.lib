@@ -2,13 +2,13 @@
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	If !LockPw 
 	{
-		RSNotify("No Password", 136, 13)
+		RSNotify("No Password")
 		SetTimer, CalculatedProtection, Off
 		return
 	}
 	else if LockPw is not digit
 	{
-		RSNotify("Invalid Password", 122, 13,,,1)
+		RSNotify("Invalid Password")
 		SetTimer, CalculatedProtection, Off
 		return
 	}
@@ -486,9 +486,9 @@ Protect:
 	}
 	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
 	If !BreakLoop
-	RSNotify("Unprotected", 131, 13)
+	RSNotify("Unprotected")
 	Else
-	RSNotify("Protected", 122, 13)
+	RSNotify("Protected")
 Return
 
 Protection:
