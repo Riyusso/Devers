@@ -118,7 +118,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MoreSettingsLabel:
-	Width := 280
+	Width := 255
 	labelsx := (Width/7)+30
 	inputw := (Width/2)
 	lpwwidth:=56
@@ -137,30 +137,28 @@ MoreSettingsLabel:
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", More Settings	
 
-	IfExist, Plugin.ahk
-	{
-		Gui, Font, s9 cFFFFFF Tahoma
-		Gui, Font, Normal
-		Gui, Add, Text, % "x8 y+25 w147 Center", Plugins ›
-		Gui, Add, DropDownList, % "x+8 w87 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off
-	}
-
 	Gui, Color, 008383, 333333
-	Gui, Font, s9, Tahoma
+	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 		
-	Gui, Add, Text, % "x85 y+20", Taskbar Transparency: 
-	Gui, Add, Slider, % "x55 w180 h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
-	
+	IfExist, Plugin.ahk
+	{
+		Gui, Add, Text, % "x8 y+30 w120 Center", Plugins ›
+		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off|Delete
+	}
+
+	Gui, Add, Text, % "x0 w" Width " y+25 Center", Taskbar Transparency: 
+	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
+
 	Gui, Font, s10 cFFFFFF Bold
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x88 y+8 w55 gmorebutton hwndBut1 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(((Width*0.30)*2)/2)-2 " y+15 w" (Width*0.30) " gmorebutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	
-	Gui, Add, Button, % "x+5 w55 gmoreclose hwndButt2 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gmoreclose hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Text, % "x+1 h35 vP"
@@ -170,7 +168,7 @@ MoreSettingsLabel:
 	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w280, More Settings
+	Gui, Show, w%Width%, More Settings
 	FadeIn(MoreHWND)
 return
 
@@ -183,10 +181,14 @@ morebutton:
 	{
 		If(PluginSwitch=1)
 			Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_MyDocuments%\%ScriptName%\Plugin.ahk,,, PluginPID ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
-		Else
+		Else If(PluginSwitch=2)
 		{
 			IfWinExist, ahk_pid %PluginPID%
 				WinKill, ahk_pid %PluginPID%
+		}
+		Else
+		{
+			GoSub PluginDelete
 		}
 	}
 	FadeOut(MoreHWND)
@@ -198,6 +200,15 @@ FadeOut(MoreHWND)
 return
 destroy:
 	FadeOut(ScriptOptions)
+return
+
+PluginDelete:
+	IniWrite, 1, settings.ini, settings, PluginSwitch
+	IfWinExist, ahk_pid %PluginPID%
+		WinKill, ahk_pid %PluginPID%
+	FileDelete, Plugin.ahk
+	FileDelete, Runner.exe
+	RSNotify("Plugins Deleted")
 return
 
 ;--------------------------------------------------------------------------------------------------------------
