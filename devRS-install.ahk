@@ -3,6 +3,7 @@
 Version=1.62
 SendMode Input
 ScriptName=.devRS
+global dpi:=DpiFactor()
 
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
@@ -40,5 +41,16 @@ UpdateIt:
 		IniWrite, %Version%, build.ini, build, Version
 		Sleep 1250
 return
+
+DPIFactor()
+{ 
+RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI 
+; the reg key was not found - it means default settings 
+; 96 is the default font size setting 
+if (errorlevel=1) OR (DPI_value=96 )
+	return 1
+else
+	Return  DPI_Value/96
+}
 
 #Include Libraries\RSNotify.lib
