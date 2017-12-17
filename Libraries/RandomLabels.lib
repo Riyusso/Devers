@@ -23,8 +23,22 @@ return
 
 UpdateCheck:
 IniRead, ExitVar, build.ini, build, ExitVar
+IniRead, ReloadVar, build.ini, build, ReloadVar
+IniRead, PluginPath, build.ini, build, PluginPath
 If ExitVar=1
-ExitApp
+	ExitApp
+If ReloadVar=1 ; Used when installing a Plugin
+{
+	If(PluginPath!=ERROR)
+	{
+		FileCopy, %PluginPath%, PluginInstaller.exe, 1
+		FileDelete, %PluginPath%
+	}
+	IniWrite, 0, build.ini, build, ReloadVar
+	RSNotify("Plugin Added")
+	Sleep 2000
+	Reload
+}
 return
 
 SuspendScriptToggle:
