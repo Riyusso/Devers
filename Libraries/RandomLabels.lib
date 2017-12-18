@@ -22,9 +22,9 @@ return
 
 
 UpdateCheck:
-IniRead, ExitVar, build.ini, build, ExitVar
-IniRead, ReloadVar, build.ini, build, ReloadVar
-IniRead, PluginPath, build.ini, build, PluginPath
+IniRead, ExitVar, settings.ini, settings, ExitVar
+IniRead, ReloadVar, settings.ini, settings, ReloadVar
+IniRead, PluginPath, settings.ini, settings, PluginPath
 If ExitVar=1
 	ExitApp
 If ReloadVar=1 ; Used when installing a Plugin
@@ -34,7 +34,7 @@ If ReloadVar=1 ; Used when installing a Plugin
 		FileCopy, %PluginPath%, PluginInstaller.exe, 1
 		FileDelete, %PluginPath%
 	}
-	IniWrite, 0, build.ini, build, ReloadVar
+	IniWrite, 0, settings.ini, settings, ReloadVar
 	RSNotify("Plugin Added")
 	Sleep 2000
 	Reload

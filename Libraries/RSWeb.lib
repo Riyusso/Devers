@@ -15,7 +15,6 @@ RSWeb:
 	{
 		ChoosingWebsite:=false
 		FadeOut(WebL)
-		Gui, WebL:Destroy
 		return
 	}
 	If WebLT=1
@@ -73,7 +72,6 @@ RSWeb:
 		Opt2 := [ , 0x252525, 0x252525, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		
-		
 		Gui, Add, Button, hwndSCHYT gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
 		ImageButton.Create(SCHYT, Opt1, Opt2, "", Opt4)
 
@@ -98,8 +96,11 @@ RSWeb:
 		Gui, Add, Button, hwndSCHYT8 vwebname8 gws8 x+0 w%butw% h%buth% , %WebName8%
 		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
 
+		guih:=guih*dpi
+		guiw:=guiw*dpi
 		WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %WebL%
-		
+		guiw:=guiw/dpi
+		guih:=guih/dpi
 		Gui, Show, h%guih% w%guiw% NoActivate, .devRS Speed Dial
 
 		FadeIn(WebL)
@@ -110,7 +111,6 @@ return
  WebLGuiEscape:
  	WebLT := WebLT ? false : true
 	FadeOut(WebL)
-	Gui, WebL:Destroy
 	ChoosingWebsite:=false
 return
  
