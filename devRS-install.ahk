@@ -33,11 +33,11 @@ ExitApp
 return
 
 UpdateIt:
-		IniWrite, 1, settings.ini, settings, ExitVar
+		IniWrite, 1, build.ini, build, ExitVar
 		RSNotify("Updating")
 		Sleep 750
 		FileInstall, .devRS.exe, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe, 1
-		IniWrite, 0, settings.ini, settings, ExitVar
+		IniWrite, 0, build.ini, build, ExitVar
 		IniWrite, %Version%, build.ini, build, Version
 		Sleep 1250
 return
