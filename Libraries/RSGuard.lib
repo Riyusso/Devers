@@ -2,14 +2,19 @@
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	If !LockPw 
 	{
-		RSNotify("No Password")
 		SetTimer, CalculatedProtection, Off
+		SetTimer, CFullScreen, Off
+		RSNotify("No Password")
+		Sleep 2000
+		GoSub Protect
 		return
 	}
 	else if LockPw is not digit
 	{
 		RSNotify("Invalid Password")
 		SetTimer, CalculatedProtection, Off
+		Sleep 2000
+		GoSub Protect
 		return
 	}
 	
@@ -474,16 +479,8 @@ Protect:
 	BreakLoop=0
 	BreakLoop:= !BreakLoop
 	If BreakLoop=1
-	{
 		GoSub Protection
-		GuiControl, Show, PrOn
-		GuiControl, Hide, PrOff
-	}
-	Else
-	{
-		GuiControl, Show, PrOff
-		GuiControl, Hide, PrOn
-	}
+
 	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
 	If !BreakLoop
 	RSNotify("Unprotected")

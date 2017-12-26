@@ -18,9 +18,7 @@ RSWeb:
 		return
 	}
 	If WebLT=1
-	{
-		ChoosingWebsite:=true
-		
+	{		
 		If (A_ScreenWidth<2000)
 		{
 			zfont=12
@@ -52,6 +50,7 @@ RSWeb:
 		buth:=(guih)/2-15
 		butw:=(guiw)/4
 		
+		Gui, WeBL:Destroy
 		Gui, WebL:New, +hwndWebL
 		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
 		Gui, Color,1e1e1e, 333333
@@ -104,12 +103,12 @@ RSWeb:
 		Gui, Show, h%guih% w%guiw% NoActivate, .devRS Speed Dial
 
 		FadeIn(WebL)
-
+		ChoosingWebsite:=true
 	}
 return
  
  WebLGuiEscape:
- 	WebLT := WebLT ? false : true
+ 	WebLT := false
 	FadeOut(WebL)
 	ChoosingWebsite:=false
 return
