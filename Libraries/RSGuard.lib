@@ -6,7 +6,7 @@
 		SetTimer, CFullScreen, Off
 		RSNotify("No Password")
 		Sleep 2000
-		GoSub Protect
+		GoSub ProtectSwitch
 		return
 	}
 	else if LockPw is not digit
@@ -14,7 +14,7 @@
 		RSNotify("Invalid Password")
 		SetTimer, CalculatedProtection, Off
 		Sleep 2000
-		GoSub Protect
+		GoSub ProtectSwitch
 		return
 	}
 	
@@ -474,7 +474,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-Protect:
+ProtectSwitch:
 	If BreakLoop>1
 	BreakLoop=0
 	BreakLoop:= !BreakLoop
