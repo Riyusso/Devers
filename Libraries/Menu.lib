@@ -384,16 +384,16 @@ ScriptFunctions:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F8
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Stop:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F8 x 2
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
 
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Stop:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9 x 2
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
+
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F10
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
