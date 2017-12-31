@@ -16,7 +16,11 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 		GoSub UpdateIt
 	}
 	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
-	Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
+	{
+		Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
+		RSNotify("Updated")
+		Sleep 1250
+	}
 }
 else
 {
