@@ -1,4 +1,6 @@
-﻿GoogleOpener:
+﻿; Warning - Spaghetti code
+
+GoogleOpener:
 	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250 && StrLen(lastcopied)>0) ; if you double tap RAlt it searches Google for whatever you have selected(or have in your clipboard)
 	{ 		
 		websearchvar:=lastcopied
@@ -14,7 +16,7 @@
 	global suggestionnumber=0
 	amultiplier=1
 	guiw:=695*amultiplier
-	guih:=45
+	guih:=43
 	buth:=(guih)/2-15
 	butw:=(guiw)/4
 	WSTog := !WSTog
@@ -37,7 +39,7 @@
 	ClipBoard := oCB		; return original Clipboard contents
 
 	; Part of Google AutoComplete with SuggestQuery API
-	NormalKeyList := "a`nb`nc`nd`ne`nf`ng`nh`ni`nj`nk`nl`nm`nn`no`np`nq`nr`ns`nt`nu`nv`nw`nx`ny`nz`nBackspace" ;list of key names separated by `n that make up words in upper and lower case variants
+	NormalKeyList := "a`nb`nc`nd`ne`nf`ng`nh`ni`nj`nk`nl`nm`nn`no`np`nq`nr`ns`nt`nu`nv`nw`nx`ny`nz`n" ;list of key names separated by `n that make up words in upper and lower case variants
 	NumberKeyList := "1`n2`n3`n4`n5`n6`n7`n8`n9`n0" ;list of key names separated by `n that make up words as well as their numpad equivalents
 	SetHotkeys(NormalKeyList,NumberKeyList)
 
@@ -48,9 +50,9 @@
 
 	Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
 	
-	Gui, Add, Edit, % "x0 y17 w" guiw-47 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
+	Gui, Add, Edit, % "x0 y16 w" guiw-47 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
 	SHAutoComplete(WebSearch)
-	Gui, Add, Button, % "x+0 h25 w47 gFastGoogleSearch hwndSearchBut1 +Default", Go
+	Gui, Add, Button, % "x+0 y16 h25 w47 gFastGoogleSearch hwndSearchBut1 +Default", Go
 	Opt1 := [6, 0x333333, 0x333333, 0x008383]
 	Opt2 := [ , 0x333333, 0x333333, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -71,6 +73,7 @@ return
 	lastcopied=
 	return
 
+	; Part of Google AutoComplete with SuggestQuery API
 	Up::
 	Gui Suggestion:Font, cFFFFFF
 	GuiControl Suggestion:Font, opt%suggestionnumber%
@@ -83,6 +86,7 @@ return
 	Send {End}
 	return
 
+	; Part of Google AutoComplete with SuggestQuery API
 	Down::
 	Gui Suggestion:Font, cFFFFFF
 	GuiControl Suggestion:Font, opt%suggestionnumber%
@@ -94,13 +98,17 @@ return
 	GuiControl FastGoogle:Text, websearchvar, % suggestions_array[suggestionnumber]
 	Send {End}
 	return
+
+	Enter::
+	sleep 20
+	GoSub FastGoogleSearch
+	return
 	
 #If
 
 ; Part of Google AutoComplete with SuggestQuery API
 SuggestionsLabel:
-
-	sleep 30
+	sleep 50
 	suggestionnumber=0
 	Gui, FastGoogle:Submit, NoHide
 	suggestions := GoogleSuggest(websearchvar)
@@ -109,27 +117,29 @@ SuggestionsLabel:
 
 	guiw:=430
 	fakecenter:=A_ScreenWidth/2-guiw/2-19
-	guih:=173
+	guih:=165
 	IfWinNotExist, ahk_id %SuggestionsHWND%
 	{
-
+		IfWinActive, ahk_id %FastGoogle%
+		{
 		Gui, Suggestion:New, +hwndSuggestionsHWND
 		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
-		Gui, Color, 555555
+		Gui, Color, 333333
 		Gui, Font, w700 s11 cFFFFFF, Segoe UI Black
 		OnMessage(0x200, "WM_CHANGETXTCOLOR")
-		Gui, Add, Progress, % "x-1 y-1 w" guiw " h10 Background555555 Disabled hwndHPROG"
-		Gui, Add, Text, % "x0 y7 w" guiw " h25 hwndSearchBut1 vopt1 gSuggestActionBtn1 -E0x200 +Center -VScroll", % suggestions_array[1]
-		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut2 vopt2 gSuggestActionBtn2 -E0x200 +Center -VScroll", % suggestions_array[2]
-		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut3 vopt3 gSuggestActionBtn3 -E0x200 +Center -VScroll", % suggestions_array[3]
-		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut4 vopt4 gSuggestActionBtn4 -E0x200 +Center -VScroll", % suggestions_array[4]
-		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut5 vopt5 gSuggestActionBtn5 -E0x200 +Center -VScroll", % suggestions_array[5]
-		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut6 vopt6 gSuggestActionBtn6 -E0x200 +Center -VScroll", % suggestions_array[6]
+		Gui, Add, Progress, % "x-1 y-1 w" guiw " h10 Background333333 Disabled hwndHPROG"
+		Gui, Add, Text, % "x0 y7 w" guiw " h23 hwndSearchBut1 vopt1 gSuggestActionBtn1 -E0x200 +Center -VScroll", % suggestions_array[1]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h23 hwndSearchBut2 vopt2 gSuggestActionBtn2 -E0x200 +Center -VScroll", % suggestions_array[2]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h23 hwndSearchBut3 vopt3 gSuggestActionBtn3 -E0x200 +Center -VScroll", % suggestions_array[3]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h23 hwndSearchBut4 vopt4 gSuggestActionBtn4 -E0x200 +Center -VScroll", % suggestions_array[4]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h23 hwndSearchBut5 vopt5 gSuggestActionBtn5 -E0x200 +Center -VScroll", % suggestions_array[5]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h23 hwndSearchBut6 vopt6 gSuggestActionBtn6 -E0x200 +Center -VScroll", % suggestions_array[6]
 		guiw:=guiw*dpi
 		guih:=guih*dpi
-		WinSet, Region, 0-0 w%guiw% h%guih% r18-18
+		WinSet, Region, 0-0 w%guiw% h%guih% r10-10
 		WinSet, Transparent, 190
-		Gui, Show, NoActivate x%fakecenter% y40 h%guih% w%guiw%
+		Gui, Show, NoActivate x%fakecenter% y36 h%guih% w%guiw%
+		}
 	}
 	else
 	{
@@ -219,8 +229,6 @@ SHAutoComplete(hEdit)	; adds the ability to insert control characters from the A
 	DllCall("ole32\CoUninitialize")
 }
 
-
-
 GoogleSuggest(query) 	; Part of Google AutoComplete with SuggestQuery API
 {
 	
@@ -263,6 +271,8 @@ GoogleSuggest(query) 	; Part of Google AutoComplete with SuggestQuery API
 	; delete first "`r`n" which is left after deleting query.
 	suggestions := StrReplace(suggestions, "`r`n",,, 1)
 	;MsgBox % suggestions ; Testing only!!!
+
+	suggestions := StrReplace(suggestions, ",")
 
 	return suggestions
 

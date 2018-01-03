@@ -2,19 +2,14 @@
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	If !LockPw 
 	{
-		SetTimer, CalculatedProtection, Off
-		SetTimer, CFullScreen, Off
 		RSNotify("No Password")
-		Sleep 2000
-		GoSub ProtectSwitch
+		SetTimer, CalculatedProtection, Off
 		return
 	}
 	else if LockPw is not digit
 	{
 		RSNotify("Invalid Password")
 		SetTimer, CalculatedProtection, Off
-		Sleep 2000
-		GoSub ProtectSwitch
 		return
 	}
 	
