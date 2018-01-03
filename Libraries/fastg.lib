@@ -11,6 +11,7 @@
 	}
 
 	zfont=12
+	global suggestionnumber=0
 	amultiplier=1
 	guiw:=695*amultiplier
 	guih:=45
@@ -22,6 +23,7 @@
 	{
 		SetTimer, CheckGoogleSearch, Off
 		sleep 10
+		Gui, Suggestion:Destroy
 		FadeOut(FastGoogle)
 		Gui, FastGoogle:Destroy
 		lastcopied=
@@ -33,6 +35,11 @@
 	clipboard:=LTrim(clipboard, " `t`r`n")
 	lastcopied:=clipboard
 	ClipBoard := oCB		; return original Clipboard contents
+
+	; Part of Google AutoComplete with SuggestQuery API
+	NormalKeyList := "a`nb`nc`nd`ne`nf`ng`nh`ni`nj`nk`nl`nm`nn`no`np`nq`nr`ns`nt`nu`nv`nw`nx`ny`nz`nBackspace" ;list of key names separated by `n that make up words in upper and lower case variants
+	NumberKeyList := "1`n2`n3`n4`n5`n6`n7`n8`n9`n0" ;list of key names separated by `n that make up words as well as their numpad equivalents
+	SetHotkeys(NormalKeyList,NumberKeyList)
 
 	Gui, FastGoogle:New, +hwndFastGoogle
 	Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
@@ -59,10 +66,106 @@ return
 
 #If	WinActive( "ahk_id" . FastGoogle )
 	ESC::
+	Gui, Suggestion:Destroy
 	FadeOut(FastGoogle)
 	lastcopied=
 	return
+
+	Up::
+	Gui Suggestion:Font, cFFFFFF
+	GuiControl Suggestion:Font, opt%suggestionnumber%
+	suggestionnumber:=suggestionnumber-1
+	if(suggestionnumber<1)
+		suggestionnumber=6
+	Gui Suggestion:Font, c008383
+	GuiControl Suggestion:Font, opt%suggestionnumber%
+	GuiControl FastGoogle:Text, websearchvar, % suggestions_array[suggestionnumber]
+	Send {End}
+	return
+
+	Down::
+	Gui Suggestion:Font, cFFFFFF
+	GuiControl Suggestion:Font, opt%suggestionnumber%
+	suggestionnumber:=suggestionnumber+1
+	if(suggestionnumber>6)
+		suggestionnumber=1
+	Gui Suggestion:Font, c008383
+	GuiControl Suggestion:Font, opt%suggestionnumber% 
+	GuiControl FastGoogle:Text, websearchvar, % suggestions_array[suggestionnumber]
+	Send {End}
+	return
+	
 #If
+
+; Part of Google AutoComplete with SuggestQuery API
+SuggestionsLabel:
+
+	sleep 30
+	suggestionnumber=0
+	Gui, FastGoogle:Submit, NoHide
+	suggestions := GoogleSuggest(websearchvar)
+	suggestions := JavaEscapedToUnicode(suggestions) ; Needed to replace \u***** characters ; credit to Lexikos - taken from https://autohotkey.com/board/topic/63263-unicode-escaped-string-convert-u00/
+	suggestions_array := StrSplit(suggestions, "`n")
+
+	guiw:=430
+	guih:=173
+	IfWinNotExist, ahk_id %SuggestionsHWND%
+	{
+
+		Gui, Suggestion:New, +hwndSuggestionsHWND
+		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
+		Gui, Color, 555555
+		Gui, Font, w700 s11 cFFFFFF, Segoe UI Black
+		OnMessage(0x200, "WM_CHANGETXTCOLOR")
+		Gui, Add, Progress, % "x-1 y-1 w" guiw " h10 Background555555 Disabled hwndHPROG"
+		Gui, Add, Text, % "x0 y7 w" guiw " h25 hwndSearchBut1 vopt1 gSuggestActionBtn1 -E0x200 +Center -VScroll", % suggestions_array[1]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut2 vopt2 gSuggestActionBtn2 -E0x200 +Center -VScroll", % suggestions_array[2]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut3 vopt3 gSuggestActionBtn3 -E0x200 +Center -VScroll", % suggestions_array[3]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut4 vopt4 gSuggestActionBtn4 -E0x200 +Center -VScroll", % suggestions_array[4]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut5 vopt5 gSuggestActionBtn5 -E0x200 +Center -VScroll", % suggestions_array[5]
+		Gui, Add, Text, % "x0 y+3 w" guiw " h25 hwndSearchBut6 vopt6 gSuggestActionBtn6 -E0x200 +Center -VScroll", % suggestions_array[6]
+		guiw:=guiw*dpi
+		guih:=guih*dpi
+		WinSet, Region, 0-0 w%guiw% h%guih% r18-18
+		WinSet, Transparent, 200
+		Gui, Show, NoActivate y38 h%guih% w%guiw%
+	}
+	else
+	{
+		GuiControl Suggestion:Text, opt1, % suggestions_array[1]
+		GuiControl Suggestion:Text, opt2, % suggestions_array[2]
+		GuiControl Suggestion:Text, opt3, % suggestions_array[3]
+		GuiControl Suggestion:Text, opt4, % suggestions_array[4]
+		GuiControl Suggestion:Text, opt5, % suggestions_array[5]
+		GuiControl Suggestion:Text, opt6, % suggestions_array[6]
+	}
+
+return
+
+SuggestActionBtn1:
+websearchvar:=suggestions_array[1]
+GoSub FastGoogleSearch
+return
+SuggestActionBtn2:
+websearchvar:=suggestions_array[2]
+GoSub FastGoogleSearch
+return
+SuggestActionBtn3:
+websearchvar:=suggestions_array[3]
+GoSub FastGoogleSearch
+return
+SuggestActionBtn4:
+websearchvar:=suggestions_array[4]
+GoSub FastGoogleSearch
+return
+SuggestActionBtn5:
+websearchvar:=suggestions_array[5]
+GoSub FastGoogleSearch
+return
+SuggestActionBtn6:
+websearchvar:=suggestions_array[6]
+GoSub FastGoogleSearch
+return
 
 FastGoogleSearch:
 	Gui, Submit, NoHide
@@ -76,6 +179,7 @@ FastGoogleSearch:
 			Run, http:%websearchvar%
 			websearchvar=
 			lastcopied=
+			Gui, Suggestion:Destroy
 			FadeOut(FastGoogle)
 			Gui, FastGoogle:Destroy
 			return
@@ -87,6 +191,7 @@ FastGoogleSearch:
 		websearchvar=
 	}
 	lastcopied=
+	Gui, Suggestion:Destroy
 	FadeOut(FastGoogle)
 	Gui, FastGoogle:Destroy
 return
@@ -96,9 +201,11 @@ CheckGoogleSearch:
 	{
 		sleep 40
 		WSTog:=!WSTog
+		Gui, Suggestion:Destroy
 		FadeOut(FastGoogle)
 		lastcopied=
 		Gui, FastGoogle:Destroy
+
 		SetTimer, CheckGoogleSearch, Off
 		sleep 10
 	}
@@ -109,4 +216,97 @@ SHAutoComplete(hEdit)	; adds the ability to insert control characters from the A
 	DllCall("ole32\CoInitialize", "Uint", 0)
 	DllCall("shlwapi\SHAutoComplete", "Uint", hEdit, "Uint",0x80000000|0x20000000)
 	DllCall("ole32\CoUninitialize")
+}
+
+
+
+GoogleSuggest(query) 	; Part of Google AutoComplete with SuggestQuery API
+{
+	
+	suggestURL := "http://suggestqueries.google.com/complete/search?output=firefox&q="
+	currentSuggestURL = %suggestURL%%query%
+	;MsgBox, %currentsuggestURL% ; Testing only!!!
+
+
+	; Download text to a variable:
+	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	whr.Open("GET", currentSuggestURL, true)
+	whr.Send()
+	; Using 'true' above and the call below allows the script to remain responsive.
+	whr.WaitForResponse()
+	suggestions := whr.ResponseText
+	;MsgBox % suggestions ; Testing only!!!
+
+	quoteVar = `",[`"
+	suggestions := StrReplace(suggestions, quoteVar, "`r`n")
+	;MsgBox % suggestions ; Testing only!!!
+
+	quoteVar = `",`"
+	suggestions := StrReplace(suggestions, quoteVar, "`r`n")
+	;MsgBox % suggestions ; Testing only!!!
+
+	quoteVar = `"
+	suggestions := StrReplace(suggestions, quoteVar)
+	;MsgBox % suggestions ; Testing only!!!
+
+	suggestions := StrReplace(suggestions, "[")
+	;MsgBox % suggestions ; Testing only!!!
+
+	suggestions := StrReplace(suggestions, "]")
+	;MsgBox % suggestions ; Testing only!!!
+
+	; delete query. In the begginning there is always exact query.
+	suggestions := StrReplace(suggestions, query,,, 1)
+	;MsgBox % suggestions ; Testing only!!!
+
+	; delete first "`r`n" which is left after deleting query.
+	suggestions := StrReplace(suggestions, "`r`n",,, 1)
+	;MsgBox % suggestions ; Testing only!!!
+
+	return suggestions
+
+}
+
+SetHotkeys(NormalKeyList,NumberKeyList) 	; Part of Google AutoComplete with SuggestQuery API
+{
+    Loop, Parse, NormalKeyList, `n
+    {
+		#If WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+		Hotkey, If, WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+        Hotkey, ~%A_LoopField%, SuggestionsLabel, UseErrorLevel
+        Hotkey, ~+%A_LoopField%, SuggestionsLabel, UseErrorLevel
+    }
+
+    Loop, Parse, NumberKeyList, `n
+    {
+		#If WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+		Hotkey, If, WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+        Hotkey, ~%A_LoopField%, SuggestionsLabel, UseErrorLevel
+        Hotkey, ~Numpad%A_LoopField%, SuggestionsLabel, UseErrorLevel
+    }
+}
+
+; Needed to replace \u***** characters ; credit to Lexikos - taken from https://autohotkey.com/board/topic/63263-unicode-escaped-string-convert-u00/
+JavaEscapedToUnicode(s) { 
+    i := 1
+    while j := RegExMatch(s, "\\u[A-Fa-f0-9]{1,4}", m, i)
+        e .= SubStr(s, i, j-i) Chr("0x" SubStr(m, 3)), i := j + StrLen(m)
+    return e . SubStr(s, i)
+}
+
+WM_CHANGETXTCOLOR(wParam, lParam, Msg, Hwnd)
+{
+	If A_Gui=Suggestion
+	{
+		global VarNameSave
+		Gui, Suggestion:Font, cFFFFFF
+		GuiControl, Suggestion:Font, opt%suggestionnumber%
+		GuiControl, Suggestion:Font, %VarNameSave%
+		MouseGetPos, , , HWIN, HCTRL, 2
+		GuiControlGet, VarName, %HWIN%:Name, %HCTRL%
+		VarNameSave:=VarName
+		suggestionnumber:=SubStr(VarName, 0)
+		Gui, Suggestion:Font, c008383
+		GuiControl, Suggestion:Font, %VarName%
+	}
 }
