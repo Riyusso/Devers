@@ -1,4 +1,5 @@
 ﻿; Warning - Spaghetti code
+; Known Bug: Suggestion Query - If query includes the character ['] the query begins with that query.
 
 GoogleOpener:
 	If(A_ThisHotkey = A_PriorHotkey && A_TimeSincePriorHotkey < 250 && StrLen(lastcopied)>0) ; if you double tap RAlt it searches Google for whatever you have selected(or have in your clipboard)
@@ -108,7 +109,12 @@ return
 
 ; Part of Google AutoComplete with SuggestQuery API
 SuggestionsLabel:
-	sleep 50
+	Gui Suggestion:Font, cFFFFFF
+	GuiControl Suggestion:Font, opt%suggestionnumber%
+	SetTimer, DelayedSuggest, -50
+return
+
+DelayedSuggest:
 	suggestionnumber=0
 	Gui, FastGoogle:Submit, NoHide
 	suggestions := GoogleSuggest(websearchvar)
@@ -179,7 +185,7 @@ GoSub FastGoogleSearch
 return
 
 FastGoogleSearch:
-	Gui, Submit, NoHide
+	Gui, FastGoogle:Submit, NoHide
 	if(websearchvar!="")
 	{	
 		Loop, Parse, websearchvar
@@ -232,7 +238,7 @@ SHAutoComplete(hEdit)	; adds the ability to insert control characters from the A
 GoogleSuggest(query) 	; Part of Google AutoComplete with SuggestQuery API
 {
 	
-	suggestURL := "http://suggestqueries.google.com/complete/search?output=firefox&q="
+	suggestURL := "http://suggestqueries.google.com/complete/search?output=firefox&hl=en&q="
 	currentSuggestURL = %suggestURL%%query%
 	;MsgBox, %currentsuggestURL% ; Testing only!!!
 
@@ -282,16 +288,16 @@ SetHotkeys(NormalKeyList,NumberKeyList) 	; Part of Google AutoComplete with Sugg
 {
     Loop, Parse, NormalKeyList, `n
     {
-		#If WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
-		Hotkey, If, WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+		#If WinActive("ahk_id" . FastGoogle)
+		Hotkey, If, WinActive("ahk_id" . FastGoogle)
         Hotkey, ~%A_LoopField%, SuggestionsLabel, UseErrorLevel
         Hotkey, ~+%A_LoopField%, SuggestionsLabel, UseErrorLevel
     }
 
     Loop, Parse, NumberKeyList, `n
     {
-		#If WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
-		Hotkey, If, WinActive("ahk_id" . FastGoogle) || WinActive("ahk_id" . SuggestionsHWND)
+		#If WinActive("ahk_id" . FastGoogle)
+		Hotkey, If, WinActive("ahk_id" . FastGoogle) 
         Hotkey, ~%A_LoopField%, SuggestionsLabel, UseErrorLevel
         Hotkey, ~Numpad%A_LoopField%, SuggestionsLabel, UseErrorLevel
     }
