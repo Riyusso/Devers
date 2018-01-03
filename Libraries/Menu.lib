@@ -356,27 +356,8 @@ ScriptFunctions:
 		Gui, Add, Text, % "x-2 y+10 w" (Width-(Width*0.47)) " Center BackgroundTrans", Function
 		Gui, Add, Text, % "x+52 w30 Center BackgroundTrans", Keys
 		Gui, Font, s8 cD0D0D0, Tahoma
-		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
 
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Google Search Bar:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Search selected text:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt x 2
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 2
-		
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Show Desktop:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 3
-		
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Protection Toggle:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F1
-
+		Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ", 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4
 
@@ -386,20 +367,43 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
 
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Stop:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9 x 2
-
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
+		Gui, Add, Text, % "x0 y+0 w" Width " h9 Center ", 
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Google Search Bar:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Search selected text:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt x 2
+
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 2
+		
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Show Desktop:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 3
+
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
+
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
+
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+
+		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
@@ -576,6 +580,7 @@ Menu, Tray, Tip, .devRS Uncompiled
 Menu, Tray, NoStandard
 Menu, Tray, ADD, Menu, DefaultMenu
 Menu, Tray, ADD, Reload, mnuScriptReload
+Menu, Tray, ADD, Quit, mnuExit
 Menu, Tray, Default, Menu
 Menu Tray, Click, 1           ; Enable single click action on tray
 Return 

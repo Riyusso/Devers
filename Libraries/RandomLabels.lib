@@ -64,11 +64,6 @@ playpause:
 	RSNotify("Play/Pause")
 return
 
-stopbutton:
-	Send {Media_Stop}
-	RSNotify("Stopped")
-return
-
 CheckBreakLoop:
 If BreakLoop=1
 GoSub Protection

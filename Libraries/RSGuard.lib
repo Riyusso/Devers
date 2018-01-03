@@ -480,9 +480,15 @@ ProtectSwitch:
 
 	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
 	If !BreakLoop
-	RSNotify("Unprotected")
+	{
+		RSNotify("Unprotected")
+		GuiControl, ProtectionMenu:Choose, BreakLoop, 2
+	}
 	Else
-	RSNotify("Protected")
+	{
+		GuiControl, ProtectionMenu:Choose, BreakLoop, 1
+		RSNotify("Protected")
+	}
 Return
 
 Protection:
