@@ -208,6 +208,8 @@ Loop, 85
 	clr2:= % rgb(clr2r, clr2g, 0)
 	Gui ProtectionAgainstZombies:Font, % "w670 s" 14/dpi "c" clr2 " q4", Segoe UI
 	GuiControl ProtectionAgainstZombies:Font, DateStr
+	If(Formula=LockPw or Formula=cryptpw) ; Prevents the Fade In loop from continuing after unlock
+		break
 	sleep 30
 }
 return
