@@ -83,12 +83,6 @@ return
 button:
 	Gui, Submit, NoHide
 	
-	If LockPw is not digit
-	{
-		GoSub WarningGUI
-		return
-	}
-	
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
@@ -303,10 +297,45 @@ protectionbutton:
 
 	Gui, Submit, NoHide
 
-	If LockPw is not digit
+	MetRequirements:=True
+	If BreakLoop=1
 	{
-		GoSub WarningGUI
-		return
+		If !LockPw
+		{
+			Warning:="A password is needed."
+			GoSub WarningGUI
+			MetRequirements:=False
+		}
+		Else If LockPw is not digit
+		{
+			Warning:="Password needs to be a number." 
+			GoSub WarningGUI
+			MetRequirements:=False
+		}
+		Else If seconds=0
+		{
+			Warning:="Seconds need to be higher than 0."
+			GoSub WarningGUI
+			MetRequirements:=False
+		}
+		Else If seconds=""
+		{
+			Warning:="Please input seconds."
+			GoSub WarningGUI
+			MetRequirements:=False
+		}
+		Else If seconds is not number
+		{
+			Warning:="Seconds need to be a number."
+			GoSub WarningGUI
+			MetRequirements:=False
+		}
+		If(MetRequirements=0)
+		{
+			BreakLoop=0 
+			SetTimer, CalculatedProtection, Off
+			return
+		}
 	}
 
 	IniWrite, %KeysVar%, settings.ini, settings, lockkey
@@ -315,20 +344,11 @@ protectionbutton:
 	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
-	GuiControl,settings:, LockPw, %LockPw%
+
 	idleseconds:=1000*(seconds)
 	FadeOut(ProtectionSettings)
-	if seconds is number
-	{
-		RSNotify("Settings Applied")
-		IniWrite, %seconds%, settings.ini, settings, seconds
-	}
-	else
-	{
-		RSNotify("Invalid period")
-		seconds=0
-		IniWrite, %seconds%, settings.ini, settings, seconds
-	}
+	RSNotify("Settings Applied")
+	IniWrite, %seconds%, settings.ini, settings, seconds
 	If BreakLoop=1
 		Gosub Protection
 	If (lockkey!="None" && lockkey!="" and lockkey!=keysvar)
@@ -521,12 +541,6 @@ return
 
 buttonfirst:
 	Gui, Submit, NoHide
-	
-	If LockPw is not digit
-	{
-		GoSub WarningGUI
-		return
-	}
 	
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	SplitPath, A_Scriptname, , , , OutNameNoExt 
@@ -766,16 +780,36 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 WarningGUI:
-	Width :=210
+	Width :=220
 	Gui, WarningGUI:New, +hwndWarningGUI
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
 	Gui, Color, 2e2e2e
 	Gui, Margin, 0, 0
-	Gui, Font, s8 cFFFFFF Bold, Tahoma
+	Gui, Font, s11 cRed Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y28 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", Password needs to be a number.
+
+	If(ProtectionWarning) 
+	{
+		Gui, Add, Text, % "x0 y15 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade", Protection : Error
+		Gui, Font, s8 cFFFFFF Bold, Tahoma
+		Gui, Add, Text, % "x0 y+20 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", For the Protection to work:
+		Gui, Add, Text, % "x0 y+0 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0 h5",
+		ProtectionWarning=0
+	}
+	Gui, Font, s8 cFFFFFF Bold, Tahoma
+
+	If(Warning) 
+		Gui, Add, Text, % "x0 y+5 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", %Warning%
+
+	Loop, 10
+	If(Warning%A_Index%)
+	{
+		Gui, Add, Text, % "x0 y+6 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", % Warning%A_Index%
+		Warning%A_Index%=
+	}
+	
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -785,7 +819,14 @@ WarningGUI:
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , Warning
 	FadeIn(WarningGUI)
-	SetTimer, FadeOutWarning, -1800
+	If(Warning) ; If it's just a simple warning (Warning variable is used)
+	{
+		SetTimer, FadeOutWarning, -1800
+		Warning=
+	}
+	else ; If it's an important warning (Warning1-10 variables are used)
+		SetTimer, FadeOutWarning, -8500
+
 return
  
 FadeOutWarning:

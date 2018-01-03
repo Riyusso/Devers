@@ -3,6 +3,7 @@
 	If !LockPw 
 	{
 		RSNotify("No Password")
+		SetTimer, CFullScreen, Off
 		SetTimer, CalculatedProtection, Off
 		return
 	}
@@ -171,7 +172,7 @@
 
 		
 		WinSet, Transparent,0, ahk_id %ZPHWND%
-		Gui, Show, x0 y0 h%zph% w%zpw%, NoActivate
+		Gui, Show, x0 y0 h%zph% w%zpw%
 		GoSub TransProtection
 		SetTimer, FadeClock, -3000
 		SetTimer, KeepOnTop, 270
@@ -475,8 +476,52 @@ ProtectSwitch:
 	If BreakLoop>1
 	BreakLoop=0
 	BreakLoop:= !BreakLoop
+
+	MetRequirements:=True
 	If BreakLoop=1
-		GoSub Protection
+	{
+		If !LockPw
+		{
+			Warning1:="A password is needed."
+			MetRequirements:=False
+		}
+		If LockPw is not digit
+		{
+			Warning2:="Password needs to be a number."
+			MetRequirements:=False
+		}
+		If !seconds
+		{
+			Warning3:="Seconds are required."
+			MetRequirements:=False
+		}
+		If seconds is not number
+		{
+			Warning4:="Seconds need to be a number."
+			MetRequirements:=False
+		}
+		If seconds=0
+		{
+			Warning5:="Seconds need to be higher than 0."
+			MetRequirements:=False
+		}
+		If(MetRequirements=0)
+		{
+			ProtectionWarning=1
+			BreakLoop=0 
+			SetTimer, CalculatedProtection, Off
+			
+			Warning6:=" "
+			Warning7:="Please input everything correctly."
+			GoSub WarningGUI
+			
+			return
+		}
+		else
+		{
+			GoSub Protection
+		}
+	}
 
 	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
 	If !BreakLoop
@@ -489,24 +534,27 @@ ProtectSwitch:
 		GuiControl, ProtectionMenu:Choose, BreakLoop, 1
 		RSNotify("Protected")
 	}
+	
 Return
+
+CheckBreakLoop:
+IniRead, BreakLoop, settings.ini, settings, BreakLoop
+If BreakLoop=1
+GoSub Protection
+return
 
 Protection:
 	BreakLoop=1
 	idletimer=1000
-	Loop
-	{
 	SetTimer, CalculatedProtection, 1000
-	CalculatedProtection:
+return
+
+CalculatedProtection:
+
 	if BreakLoop!=1
 	{
 		SetTimer, CalculatedProtection, Off
-		Break
-	}
-	If seconds=0
-	{
-		SetTimer, CalculatedProtection, Off
-		Break
+		return
 	}
 	if (A_TimeIdle> 3000)
 	{
@@ -532,8 +580,6 @@ Protection:
 	}
 	If (A_TimeIdle<3000)
 		idletimer=1000
-	Return
-}
 Return
 
 CFullScreen:

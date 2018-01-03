@@ -64,11 +64,6 @@ playpause:
 	RSNotify("Play/Pause")
 return
 
-CheckBreakLoop:
-If BreakLoop=1
-GoSub Protection
-return
-
 ws1:
 Run, %ws1%
 SetTimer, WebLGuiEscape, -100
