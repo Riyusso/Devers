@@ -571,12 +571,12 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MenuInit:
-IfExist tray_icon.ico
-Menu, TRAY, Icon, tray_icon.ico
+IfExist RSIcon.ico
+Menu, TRAY, Icon, RSIcon.ico
 Else
 {
-	FileInstall, Base/tray_icon.ico, %A_MyDocuments%\%ScriptName%\tray_icon.ico, 1
-	Menu, TRAY, Icon, tray_icon.ico
+	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	Menu, TRAY, Icon, RSIcon.ico
 }
 If A_IsCompiled
 Menu, Tray, Tip, .devRS 
@@ -610,6 +610,24 @@ mnuUninstall:
 	FileInstall, Base\uninstaller.exe, %A_Temp%\uninstaller.exe, 1
 	Run, %A_Temp%\uninstaller.exe,, HIDE
 	ExitApp
+return
+
+SuspendScriptToggle:
+Suspend, Toggle
+If A_IsSuspended
+{
+	Menu, TRAY, Icon, RSStopped.ico,,1
+	RSNotify("Suspended")
+	If A_IsPaused
+		Pause, Off
+}
+If !A_IsSuspended
+{
+	Menu, TRAY, Icon, RSIcon.ico,,1
+	RSNotify("Released")
+	If A_IsPaused
+	Pause, Off
+}
 return
 
 mnuExit:
