@@ -76,7 +76,7 @@
 	timpos:=(A_ScreenWidth)-310
 	datepos:=timpos-55
 	TimeStrSave=%TimeString%
-	
+	Disablekeys:=true
 	pwcover=
 	pwadd=•
 	
@@ -209,7 +209,7 @@ Loop, 85
 	clr2:= % rgb(clr2r, clr2g, 0)
 	Gui ProtectionAgainstZombies:Font, % "w670 s" 14/dpi "c" clr2 " q4", Segoe UI
 	GuiControl ProtectionAgainstZombies:Font, DateStr
-	If(Formula=LockPw or Formula=cryptpw) ; Prevents the Fade In loop from continuing after unlock
+	If(!ItsLocked) ; Prevents the Fade In loop from continuing after unlock
 		break
 	sleep 30
 }
@@ -286,6 +286,7 @@ If (A_TimeIdle>5000 && !RSAnimationShown)
 	document.write(html)
 	Control, Show,,, ahk_id %RSWB%
 	RSAnimationShown:=true
+	Disablekeys:=true
 	Formula=0
 }
 return
@@ -451,6 +452,7 @@ WM_RMVPIC(wParam, lParam, Msg, Hwnd)
 		global RSAnimationShown:=false
 		If (A_TimeIdle<30)
 		{
+			global Disablekeys:=false
 			GuiControl, Show, SCH1
 			GuiControl, Show, SCH2
 			GuiControl, Show, SCH3
@@ -559,7 +561,7 @@ CalculatedProtection:
 	if (A_TimeIdle> 3000)
 	{
 		idletimer+=1001
-		if (idletimer>idleseconds)
+		if (idletimer>idleseconds || (A_TickCount - StartTime > idleseconds) )
 		{
 			isFullScreen := isWindowFullScreen( "A" )
 			If isFullScreen=0
@@ -580,6 +582,8 @@ CalculatedProtection:
 	}
 	If (A_TimeIdle<3000)
 		idletimer=1000
+
+	StartTime:=A_TickCount
 Return
 
 CFullScreen:

@@ -1,6 +1,6 @@
 ﻿#NoEnv
 #NoTrayIcon
-Version=1.65
+Version=1.70
 SendMode Input
 ScriptName=.devRS
 global dpi:=DpiFactor()

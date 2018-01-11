@@ -216,12 +216,6 @@ ProtectionSettings:
 	IniRead, AfterFS, settings.ini, settings, AfterFS
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
-	keys=None|Esc|Del|Ins|Home|Up|Down|Left|Right|ScrollLock|PrintScreen|Pause|AppsKey|NumLock|Numpad0|Numpad1|Numpad2|Numpad3|Numpad4|Numpad5|Numpad6|Numpad7|Numpad8|Numpad9|NumpadDot|NumpadDiv|NumpadMult|NumpadAdd|NumpadSub|NumpadEnter|NumpadIns|NumpadEnd|NumpadDown|NumpadPgDn|NumpadLeft|NumpadClear|NumpadRight|NumpadHome|NumpadUp|NumpadPgUp|NumpadDel|Media_Next|Media_Play_Pause|Media_Prev|Media_Stop|Volume_Down|Volume_Up|Volume_Mute|Browser_Back|Browser_Favorites|Browser_Home|Browser_Refresh|Browser_Search|Browser_Stop|Launch_App1|Launch_App2|Launch_Mail|Launch_Media|F2|F3|F4|F5|F6|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|x|y|z
-	Loop,Parse,keys, `|
-	{
-		if lockkey=%A_LoopField%
-		selectkey=%A_Index%
-	}
 	
 	If BreakLoop=1
 	ChooseBL=1
@@ -260,7 +254,7 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+18 w147 Center", Clock › 
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vKeysVar Choose" selectkey "" , None|Esc|Del|Ins|Home|Up|Down|Left|Right|ScrollLock|PrintScreen|Pause|AppsKey|NumLock|Numpad0|Numpad1|Numpad2|Numpad3|Numpad4|Numpad5|Numpad6|Numpad7|Numpad8|Numpad9|NumpadDot|NumpadDiv|NumpadMult|NumpadAdd|NumpadSub|NumpadEnter|NumpadIns|NumpadEnd|NumpadDown|NumpadPgDn|NumpadLeft|NumpadClear|NumpadRight|NumpadHome|NumpadUp|NumpadPgUp|NumpadDel|Media_Next|Media_Play_Pause|Media_Prev|Media_Stop|Volume_Down|Volume_Up|Volume_Mute|Browser_Back|Browser_Favorites|Browser_Home|Browser_Refresh|Browser_Search|Browser_Stop|Launch_App1|Launch_App2|Launch_Mail|Launch_Media|F2|F3|F4|F5|F6|F11|F12|F13|F14|F15|F16|F17|F18|F19|F20|F21|F22|1|2|3|4|5|6|7|8|9|0|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|x|y|z
+	Gui, Add, Hotkey, % "x+8 w87 Center vKeysVar" , %lockkey%
 	Gui, Font, s10 cFFFFFF Bold
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
@@ -393,14 +387,6 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h9 Center ", 
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Google Search Bar:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Search selected text:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Right Alt x 2
-
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
@@ -430,9 +416,14 @@ ScriptFunctions:
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2		
+		
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win+ Alt + R
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
+
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
 
 		Gui, Font, s10 cFFFFFF Bold
 		Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]

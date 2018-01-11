@@ -180,19 +180,8 @@ StartSearch:
 		GoSub RSWeb
 		return
 	}
-	If (LaunchWebsite)
-	{
-		Run, %websearchvar%
-		websearchvar=
-		GoSub RSWeb
-		return
-	}
-	else
-	{
-		websearchvar:="https://www.google.bg/search?q=" websearchvar
-		Run, %websearchvar%,, UseErrorLevel
-		websearchvar=
-		GoSub RSWeb
-		return
-	}
+	websearchvar:="https://www.google.bg/search?q=" websearchvar
+	Run, %websearchvar%,, UseErrorLevel
+	websearchvar=
+	GoSub RSWeb
 return
