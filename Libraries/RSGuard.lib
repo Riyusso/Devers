@@ -548,6 +548,7 @@ return
 Protection:
 	BreakLoop=1
 	idletimer=1000
+	StartTime:=A_TickCount
 	SetTimer, CalculatedProtection, 1000
 return
 
@@ -558,10 +559,21 @@ CalculatedProtection:
 		SetTimer, CalculatedProtection, Off
 		return
 	}
+
+	; IMPORTANT
+	if ((A_TickCount - StartTime > 3500) && AfterWU=1) or (A_TickCount - StartTime > idleseconds)
+	{
+		LogTime(1)
+		GoSub RSGuard
+	}
+
+	; IMPORTANT
+	StartTime:=A_TickCount 
+
 	if (A_TimeIdle> 3000)
 	{
 		idletimer+=1001
-		if (idletimer>idleseconds || (A_TickCount - StartTime > idleseconds) )
+		if (idletimer>idleseconds)
 		{
 			isFullScreen := isWindowFullScreen( "A" )
 			If isFullScreen=0
@@ -580,11 +592,10 @@ CalculatedProtection:
 			Return
 		}
 	}
-	If (A_TimeIdle<3000)
+	if (A_TimeIdle<3000)
 		idletimer=1000
 
-	StartTime:=A_TickCount
-Return
+return
 
 CFullScreen:
 	isFullScreen := isWindowFullScreen( "A" )
