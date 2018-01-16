@@ -48,7 +48,7 @@ SmartAppear:
 	If (SmartFade>204)
 		SetTimer, SmartAppear, Off
 return
-	
+
 SmartFade:
 		SmartFade:=SmartFade-8
 		WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%

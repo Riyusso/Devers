@@ -146,7 +146,7 @@ GoSub PasswordCover
 Gosub UnlockPC
 return
 
-MouseIsOver(WinTitle) 
+MouseIsOver(WinTitle)
 {
 	MouseGetPos,,, Win
 	return WinExist(WinTitle . " ahk_id " . Win)
@@ -225,7 +225,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 GuiSize:
-   If (A_EventInfo != 1) 
+   If (A_EventInfo != 1)
    {
 	  Gui, %A_Gui%:+LastFound
 	  WinSet, ReDraw
@@ -245,7 +245,7 @@ STDCB1:
 ; ----------------------------------------------------------------------------------------------------------------------
 RBG:
    RBG := SubStr(A_GuiControl, 3)
-   If (RBG != RBGA) 
+   If (RBG != RBGA)
    {
 	  CtlColors.Detach(RTID%RBGA%)
 	  CtlColors.Attach(RTID%RBG%, "Yellow", "Blue")
@@ -257,7 +257,7 @@ Return
 LB1:
    GuiControlGet, LB1
    StringSplit, LC, LB1, %A_Space%
-   If (%LC2%) 
+   If (%LC2%)
    {
 	  BG := %LC2%, TX := "White"
 	  CtlColors.Change(LBID1, BG, TX)

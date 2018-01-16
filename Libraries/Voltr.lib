@@ -17,7 +17,7 @@ return
 Volume_Show_OSD:
 If (ItsLocked!=1)
 {
-	if (Volume_OSD_Center) 
+	if (Volume_OSD_Center)
 	{
 		mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165
 	}

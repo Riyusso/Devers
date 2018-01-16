@@ -1,6 +1,6 @@
 ﻿#NoEnv
 #NoTrayIcon
-Version=1.72
+Version=1.73
 SendMode Input
 ScriptName=.devRS
 global dpi:=DpiFactor()
@@ -18,6 +18,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
 	{
 		Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
+		If(IsUpdated)
 		RSNotify("Updated")
 		Sleep 1250
 	}
@@ -39,18 +40,19 @@ return
 UpdateIt:
 		IniWrite, 1, build.ini, build, ExitVar
 		RSNotify("Updating")
-		Sleep 750
+		Sleep 1250
 		FileInstall, .devRS.exe, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe, 1
 		IniWrite, 0, build.ini, build, ExitVar
 		IniWrite, %Version%, build.ini, build, Version
+		IsUpdated:=true
 		Sleep 1250
 return
 
 DPIFactor()
-{ 
-RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI 
-; the reg key was not found - it means default settings 
-; 96 is the default font size setting 
+{
+RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
+; the reg key was not found - it means default settings
+; 96 is the default font size setting
 if (errorlevel=1) OR (DPI_value=96 )
 	return 1
 else

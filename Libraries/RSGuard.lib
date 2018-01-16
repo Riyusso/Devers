@@ -1,6 +1,6 @@
-﻿RSGuard: 
+﻿RSGuard:
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
-	If !LockPw 
+	If !LockPw
 	{
 		RSNotify("No Password")
 		SetTimer, CFullScreen, Off
@@ -13,7 +13,7 @@
 		SetTimer, CalculatedProtection, Off
 		return
 	}
-	
+
 	zph=%A_ScreenHeight%
 	zpw=%A_ScreenWidth%
 	zfont=20
@@ -47,7 +47,7 @@
 		calculatedsize:=54
 		amultiplier=0.80
 	}
-	DllCall( "AddFontResource", Str,"SEGOEUI.TTF" ) 
+	DllCall( "AddFontResource", Str,"SEGOEUI.TTF" )
 	SendMessage,  0x1D,,,, ahk_id 0xFFFF
 	czpw:=(A_ScreenWidth/2)-calculatedsize/2
 	czph:=(A_ScreenHeight/2)-calculatedsize/2
@@ -79,15 +79,15 @@
 	Disablekeys:=true
 	pwcover=
 	pwadd=•
-	
+
 	If ItsLocked=0
-	{		
+	{
 		ItsLocked=1
 		Gui, ProtectionAgainstZombies:New    ; ZPScreen
 		Gui, +hwndZPHWND -DPIScale
-		Gui, Font, w670 s31 q4, Segoe UI 
+		Gui, Font, w670 s31 q4, Segoe UI
 		Gui, Color, 000000
-		Gui, -Border -Caption +AlwaysOnTop +ToolWindow 
+		Gui, -Border -Caption +AlwaysOnTop +ToolWindow
 		BlockKeyBoardInputs("On")
 		Formula=0
 		VolumeTR:=true
@@ -99,18 +99,18 @@
 			Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
 			SetTimer, changeclr, -5000
 		}
-		
+
 		Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
 		Gui, Color, 000000
 		Gui, Add, Text, vLTxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
-		
+
 		Gui, Font, w1000 s%zfont% q4, Segoe UI ; Try Again. with different font
 		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
-		
+
 		Opt1 := [6, 0x007e89, 0x007e89, "Black"]
 		Opt2 := [ , 0x008a96, 0x008a96, 0x111111]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		
+
 		Gui, Add, Button, hwndSCHYT1 vSCH1 gplus7 x%halfcw% y%halfch% w%halfw% h%halfh% +Hidden, 7
 		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
 
@@ -155,12 +155,12 @@
 		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
-				
+
 		actx:=(A_ScreenWidth/2)-275*amultiplier
 		acty:=(A_ScreenHeight/2)-620*amultiplier
 		awsize:=520*amultiplier
 		ahsize:=780*amultiplier
-		
+
 		RegRead, IE_VER, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Internet Explorer\Version Vector, IE
 		html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
 		convertie:="about:<!DOCTYPE html><meta http-equiv=""X-UA-Compatible"" content=""IE=" Floor(IE_VER) """ >"
@@ -170,7 +170,7 @@
 		document.open()
 		document.write(html)
 
-		
+
 		WinSet, Transparent,0, ahk_id %ZPHWND%
 		Gui, Show, x0 y0 h%zph% w%zpw%
 		GoSub TransProtection
@@ -183,7 +183,7 @@
 			GoSub MinuteUpdate
 			SetTimer, MinuteUpdate, 15000
 		}
-		IniWrite, 1, settings.ini, settings, LockAfterRestart		
+		IniWrite, 1, settings.ini, settings, LockAfterRestart
 	}
 return
 
@@ -217,7 +217,7 @@ return
 
 
 
-RGB(Red, Green, Blue) ; Fading the clock in 
+RGB(Red, Green, Blue) ; Fading the clock in
 {
     ;store previous setting
     oldIntFormat := A_FormatInteger
@@ -291,7 +291,7 @@ If (A_TimeIdle>5000 && !RSAnimationShown)
 }
 return
 
-UnlockPC:	
+UnlockPC:
 	If !devlock && Formula!=0
 	If (Formula=LockPw or Formula=cryptpw)
 	{
@@ -338,7 +338,7 @@ return
 deleteLTxt:
 	pwcover=
 	Formula=0
-	GuiControl, ProtectionAgainstZombies:, Ltxt, 
+	GuiControl, ProtectionAgainstZombies:, Ltxt,
 	GuiControl, ProtectionAgainstZombies:Hide, TATxt
 	GuiControl, ProtectionAgainstZombies:Hide, Ltxt
 return
@@ -351,7 +351,7 @@ KeepOnTop:
 	}
 	IfWinExist, ahk_exe Taskmgr.exe
 	WinClose, ahk_exe Taskmgr.exe
-	
+
 return
 
 SecondDisplayProtection:
@@ -394,7 +394,7 @@ PasswordCover:
 	GuiControl, ProtectionAgainstZombies:Show, SCH12
 	GuiControl, ProtectionAgainstZombies:Hide, WB
 	SetTimer, ShowAgain, -7000
-	
+
 	pwcover:=pwcover pwadd
 	GuiControl, ProtectionAgainstZombies:Hide, TATxt
 	GuiControl,ProtectionAgainstZombies:Show, LTxt
@@ -408,7 +408,7 @@ LogTime(6)
 pwcover=
 Formula=0
 GuiControl,Show, LTxt
-GuiControl,, LTxt, 
+GuiControl,, LTxt,
 GoSub deleteLTxt
 return
 
@@ -510,13 +510,13 @@ ProtectSwitch:
 		If(MetRequirements=0)
 		{
 			ProtectionWarning=1
-			BreakLoop=0 
+			BreakLoop=0
 			SetTimer, CalculatedProtection, Off
-			
+
 			Warning6:=" "
 			Warning7:="Please input everything correctly."
 			GoSub WarningGUI
-			
+
 			return
 		}
 		else
@@ -525,7 +525,7 @@ ProtectSwitch:
 		}
 	}
 
-	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop	
+	IniWrite, %BreakLoop%, settings.ini, settings, BreakLoop
 	If !BreakLoop
 	{
 		RSNotify("Unprotected")
@@ -536,7 +536,7 @@ ProtectSwitch:
 		GuiControl, ProtectionMenu:Choose, BreakLoop, 1
 		RSNotify("Protected")
 	}
-	
+
 Return
 
 CheckBreakLoop:
@@ -554,47 +554,51 @@ return
 
 CalculatedProtection:
 
-	if BreakLoop!=1
+	If(ItsLocked=0)
 	{
-		SetTimer, CalculatedProtection, Off
-		return
-	}
-
-	; IMPORTANT
-	if ((A_TickCount - StartTime > 3500) && AfterWU=1) or (A_TickCount - StartTime > idleseconds)
-	{
-		LogTime(1)
-		GoSub RSGuard
-	}
-
-	; IMPORTANT
-	StartTime:=A_TickCount 
-
-	if (A_TimeIdle> 3000)
-	{
-		idletimer+=1001
-		if (idletimer>idleseconds)
+		if BreakLoop!=1
 		{
-			isFullScreen := isWindowFullScreen( "A" )
-			If isFullScreen=0
-			{
-				LogTime(1)
-				Gosub RSGuard
-				return
-			}
-			IfWinActive, ahk_exe explorer.exe
-			{
-				LogTime(1)
-				Gosub RSGuard
-				return
-			}
-			SetTimer, CFullScreen, 500
-			Return
+			SetTimer, CalculatedProtection, Off
+			return
 		}
-	}
-	if (A_TimeIdle<3000)
-		idletimer=1000
 
+		; IMPORTANT
+		if ((A_TickCount - StartTime > 3500) && AfterWU=1) or (A_TickCount - StartTime > idleseconds)
+		{
+			LogTime(1)
+			GoSub RSGuard
+		}
+
+		; IMPORTANT
+		StartTime:=A_TickCount
+
+		if (A_TimeIdle> 3000)
+		{
+			idletimer+=1001
+			if (idletimer>idleseconds)
+			{
+				isFullScreen := isWindowFullScreen( "A" )
+				If isFullScreen=0
+				{
+					LogTime(1)
+					Gosub RSGuard
+					return
+				}
+				IfWinActive, ahk_exe explorer.exe
+				{
+					LogTime(1)
+					Gosub RSGuard
+					return
+				}
+				SetTimer, CFullScreen, 150
+				Return
+			}
+		}
+		if (A_TimeIdle<3000)
+			idletimer=1000
+	}
+
+	StartTime:=A_TickCount
 return
 
 CFullScreen:

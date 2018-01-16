@@ -5,25 +5,25 @@
 	inputw := (Width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
-	
+
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, email, settings.ini, settings, email
 	IniRead, passwordhash, settings.ini, settings, passwordhash
 	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3)
-	
+
 	Gui, settings:New, +hwndScriptOptions
-	Gui, +LastFound 
+	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
-	
+
 		Gui, Color, 008383, 252525
-		Gui, Font, s9 
-		Gui, Font, normal		
+		Gui, Font, s9
+		Gui, Font, normal
 
 	Gui, Add, Text, % "x" labelsx " y+18", Start with Windows
 	Gui, Add, DropDownList, % "x" Width-105 " w75 y40 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
@@ -40,35 +40,35 @@
 	Gui, Add, Text, % "x" labelsx " y+10", Password:
 	Gui, Add, Edit, % "x+17 w" inputw " h15 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
 	SetEditCueBanner(Edit7, "Win + CapsLock x2")
-	
+
 
 	Gui, Font, s10 w600
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings 
+
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Font, s9
 	Gui, Font, normal
-	
+
 	Gui, Font, s10 cFFFFFF Bold
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gbutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroy hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -82,7 +82,7 @@ return
 
 button:
 	Gui, Submit, NoHide
-	
+
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
@@ -91,15 +91,15 @@ button:
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
 	RSNotify("Settings Applied")
-	SplitPath, A_Scriptname, , , , OutNameNoExt 
-	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+	SplitPath, A_Scriptname, , , , OutNameNoExt
+	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	If StartWithWindows=2
 	{
-		IfNotExist, %LinkFile% 
-		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
+		IfNotExist, %LinkFile%
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 		IfNotExist, %StartMenuFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile% 
+		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
 		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 	}
 	If StartWithWindows=1
@@ -117,7 +117,7 @@ MoreSettingsLabel:
 	inputw := (Width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
-	
+
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
 	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
 	taskbarsave=%TransparentStartMenu%
@@ -129,19 +129,19 @@ MoreSettingsLabel:
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", More Settings	
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", More Settings
 
 	Gui, Color, 008383, 333333
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
-		
+
 	IfExist, Plugin.ahk
 	{
 		Gui, Add, Text, % "x8 y+30 w120 Center", Plugins ›
 		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off|Delete
 	}
 
-	Gui, Add, Text, % "x0 w" Width " y+25 Center", Taskbar Transparency: 
+	Gui, Add, Text, % "x0 w" Width " y+25 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
 
 	Gui, Font, s10 cFFFFFF Bold
@@ -151,7 +151,7 @@ MoreSettingsLabel:
 
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gmorebutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x+5 w" (Width*0.30) " gmoreclose hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
@@ -170,7 +170,7 @@ morebutton:
 	Gui, Submit, NoHide
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %PluginSwitch%, settings.ini, settings, PluginSwitch
-	
+
 	IfExist, Plugin.ahk
 	{
 		If(PluginSwitch=1)
@@ -217,12 +217,12 @@ ProtectionSettings:
 	IniRead, AfterWU, settings.ini, settings, AfterWU
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
-	
+
 	If BreakLoop=1
 	ChooseBL=1
 	Else
 	ChooseBL=2
-	
+
 	Width := 295
 	Gui, ProtectionMenu:New, +hwndProtectionSettings
 	Gui, +LastFound
@@ -237,10 +237,10 @@ ProtectionSettings:
 		Gui, Font, s8, Tahoma
 		Gui, Font, normal
 	Gui, Add, Text, % "x8 y+25 w147 Center", Computer ›
-	
+
 	Gui, Add, DropDownList, % "x+8 w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
 
-	Gui, Add, Text, % "x8 y+22 w147 Center", Lock Password › 
+	Gui, Add, Text, % "x8 y+22 w147 Center", Lock Password ›
 	Gui, Add, Edit, % "x+8 w87 h15 vLockPw hwndEdit8 +password -E0x200 +Center -VScroll", %LockPw%
 
 	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
@@ -255,7 +255,7 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+14 w147 Center", Security Logs ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vlogging Choose" logging " AltSubmit" , On|Off
 
-	Gui, Add, Text, % "x8 y+14 w147 Center", Clock › 
+	Gui, Add, Text, % "x8 y+14 w147 Center", Clock ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
 	Gui, Add, Hotkey, % "x+8 w87 Center vKeysVar" , %lockkey%
@@ -263,7 +263,7 @@ ProtectionSettings:
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", Info
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
@@ -272,13 +272,13 @@ ProtectionSettings:
 		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+9 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut3 +Center", Show Logs
 		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	}
-	
+
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gprotectionbutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyprot hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -309,7 +309,7 @@ protectionbutton:
 		}
 		Else If LockPw is not digit
 		{
-			Warning:="Password needs to be a number." 
+			Warning:="Password needs to be a number."
 			GoSub WarningGUI
 			MetRequirements:=False
 		}
@@ -333,7 +333,7 @@ protectionbutton:
 		}
 		If(MetRequirements=0)
 		{
-			BreakLoop=0 
+			BreakLoop=0
 			SetTimer, CalculatedProtection, Off
 			return
 		}
@@ -379,11 +379,11 @@ ScriptFunctions:
 		Gui, Add, Text, % "x+52 w30 Center BackgroundTrans", Keys
 		Gui, Font, s8 cD0D0D0, Tahoma
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ", 
+		Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ",
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4
 
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website 
+		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
@@ -395,15 +395,15 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 2
-		
+
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Show Desktop:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 3
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
@@ -414,7 +414,7 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
@@ -423,9 +423,9 @@ ScriptFunctions:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2		
-		
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ", 
+		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2
+
+		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
@@ -437,13 +437,13 @@ ScriptFunctions:
 		Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
 		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-			
+
 		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+12 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", RS-Guard Info
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x" (Width/2)-((Width*0.35)/2) " w" (Width*0.35) " y+12 gsubit +hwndButton2 +Default", Exit
 		ImageButton.Create(Button2, Opt1, Opt2, "", Opt4)
-			
+
 		Gui, Add, Text, % "x7 y+2 w" (Width-14) "h2 vP"
 		GuiControlGet, P, Pos
 		H := PY + PH
@@ -463,15 +463,15 @@ return
 
 SettingsWndFirst:
 	GoSub Initiation
-	
+
 	Width := 280
 	labelsx := (Width/7)
 	inputw := (Width/2)
 	lpwwidth:=56
-	lpwpos:=(inputw/2)-(lpwwidth/2)+18	
-	
+	lpwpos:=(inputw/2)-(lpwwidth/2)+18
+
 	Gui, SettingsWndFirst:New, +hwndScriptOptionsFirst
-	Gui, +LastFound 
+	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Color, 808080
 	Gui, Margin, 0, 0
@@ -479,11 +479,11 @@ SettingsWndFirst:
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
-	
+
 		Gui, Color, 008383, 333333
-		Gui, Font, s9 
-		Gui, Font, normal		
-		
+		Gui, Font, s9
+		Gui, Font, normal
+
 	Gui, Add, Text, % "x" labelsx " y+18", Start with Windows
 	Gui, Add, DropDownList, % "x" Width-105 " w75 y40 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
 
@@ -504,26 +504,26 @@ SettingsWndFirst:
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings 
+
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Font, s9
 	Gui, Font, normal
-	
+
 	Gui, Font, s10 cFFFFFF Bold
 	Gui, Add, Button, % "x" (Width/2)-(((Width*0.30)*2)/2)-2 " y+15 w" (Width*0.30) " gbuttonfirst hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyfirst hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
@@ -540,17 +540,17 @@ return
 
 buttonfirst:
 	Gui, Submit, NoHide
-	
+
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
-	SplitPath, A_Scriptname, , , , OutNameNoExt 
-	LinkFile=%A_Startup%\%OutNameNoExt%.lnk 
+	SplitPath, A_Scriptname, , , , OutNameNoExt
+	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	If StartWithWindows=2
 	{
-		IfNotExist, %LinkFile% 
-		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile% 
+		IfNotExist, %LinkFile%
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 		IfNotExist, %StartMenuFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile% 
+		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
 		IniWrite, 1, settings.ini, settings, CreateATask
 	}
 	If StartWithWindows=1
@@ -558,7 +558,7 @@ buttonfirst:
 		FileDelete, %LinkFile%
 		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	}
-	
+
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
@@ -587,7 +587,7 @@ Else
 	Menu, TRAY, Icon, RSIcon.ico
 }
 If A_IsCompiled
-Menu, Tray, Tip, .devRS 
+Menu, Tray, Tip, .devRS
 Else
 Menu, Tray, Tip, .devRS Uncompiled
 Menu, Tray, NoStandard
@@ -596,7 +596,7 @@ Menu, Tray, ADD, Reload, mnuScriptReload
 Menu, Tray, ADD, Quit, mnuExit
 Menu, Tray, Default, Menu
 Menu Tray, Click, 1           ; Enable single click action on tray
-Return 
+Return
 
 mnuScriptReload:
 	Reload
@@ -609,7 +609,7 @@ mnuUninstall:
 	RSNotify("Uninstalling")
 	WinKill, ahk_pid %PluginPID%
 	Sleep 2000
-	SplitPath, A_Scriptname, , , , OutNameNoExt 
+	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
 	FileDelete, %StartMenuFile%
@@ -660,7 +660,7 @@ DefaultMenu:
 		Gui, Margin, 0, 0
 		Gui, Font,  cFFFFFF Bold, Segoe UI
 		Gui, Color, 232323
-		
+
 		If (A_ScreenWidth<2000)
 		{
 			amultiplier=1
@@ -686,42 +686,42 @@ DefaultMenu:
 			amultiplier=0.80
 			zfont=10
 		}
-		
+
 		Gui, Font, s%zfont% cFFFFFF Bold q5
 			guiw:=880*amultiplier
 			guih:=56*amultiplier
 			buth:=(guih)+2
 			butw:=((guiw-30)/8)
 			guipos:=A_ScreenHeight-164
-		
+
 		Opt1 := [6, 0x232323, 0x232323, "White"]
 		Opt2 := [ , 0x272727, 0x262626, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		
+
 		Gui, Add, Button, % "x0 y-2 h" buth " w" butw+9 " gProtectSwitch hwndBut1 +Center", Protection
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gSuspendScriptToggle hwndBut2 +Center", Suspend
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gmnuScriptReload hwndBut4 +Center", Reload
 		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut3 +Center",  Lock
-		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)	
+		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdater hwndBut1 +Center", Update
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut4 +Center", Controls
 		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut4 +Center", Settings
 		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut3 +Center",  Quit
 		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-		
+
 		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut4 ", ×
 		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 		guiw:=guiw*dpi
@@ -747,7 +747,7 @@ SecurityLoggingLabel:
 	Array := Object()
 	Loop, Read, log.txt ; This loop retrieves each line from the file, one at a time.
 	{
-		Array.Insert(A_LoopReadLine) 
+		Array.Insert(A_LoopReadLine)
 	}
 	elcount:=Array.MaxIndex() ; get the count of the lines in the log file
 	calccount:=elcount-20 ; get the index of the last 20
@@ -762,7 +762,7 @@ SecurityLoggingLabel:
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 
-	Loop, 20 
+	Loop, 20
 	{
 		element:=Array[calccount+A_Index]
 		if(A_Index=1 and element="")
@@ -778,7 +778,7 @@ SecurityLoggingLabel:
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -807,7 +807,7 @@ WarningGUI:
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 
-	If(ProtectionWarning) 
+	If(ProtectionWarning)
 	{
 		Gui, Add, Text, % "x0 y15 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade", Protection : Error
 		Gui, Font, s8 cFFFFFF Bold, Tahoma
@@ -817,7 +817,7 @@ WarningGUI:
 	}
 	Gui, Font, s8 cFFFFFF Bold, Tahoma
 
-	If(Warning) 
+	If(Warning)
 		Gui, Add, Text, % "x0 y+5 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", %Warning%
 
 	Loop, 10
@@ -826,7 +826,7 @@ WarningGUI:
 		Gui, Add, Text, % "x0 y+6 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", % Warning%A_Index%
 		Warning%A_Index%=
 	}
-	
+
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -845,7 +845,7 @@ WarningGUI:
 		SetTimer, FadeOutWarning, -8500
 
 return
- 
+
 FadeOutWarning:
 	FadeOut(WarningGUI)
 return
@@ -863,7 +863,7 @@ PrInfo:
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y16 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", RS-Guard is designed to protect your PC.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", It is going to lock the computer after 
+	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", It is going to lock the computer after
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", the amount of time you have set.
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- How to use it ---
@@ -872,8 +872,8 @@ PrInfo:
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Wait or press the lock button.
 			Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", --- Requirements ---
-		Gui, Font, s9 cFFFFFF Bold, Tahoma		
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", The password needs to be a number. 
+		Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", The password needs to be a number.
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You MUST set seconds and a password.
 			Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- What some settings do ---
@@ -887,13 +887,13 @@ PrInfo:
 	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Full Screen -
 			Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This option controls whether the PC
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", will lock itself after you exit full screen. 
+	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", will lock itself after you exit full screen.
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This is useful when you are watching a movie.
 			Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Clock -
 			Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", Controls whether a clock is displayed
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", on the lock screen. 
+	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", on the lock screen.
 
 		Gui, Color, 2e2e2e
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
@@ -903,7 +903,7 @@ PrInfo:
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
@@ -913,7 +913,7 @@ PrInfo:
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , RS-Guard Settings
 	FadeIn(PrInfo)
-	
+
 return
 
 destroyPrInfo:
@@ -926,7 +926,7 @@ AdminPrompt:
 	width=135
 	height=66
 	Gui, AdminPrompt:New, +hwndAdminPrompt
-	Gui, +LastFound 
+	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
@@ -940,10 +940,10 @@ AdminPrompt:
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Are you an admin?
 	Gui, Add, Button, x8 y30 w55 +default gRunAsAdmin hwndBut1 +Center, Yeah
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, x71 y30 w55 gNotAnAdmin hwndButt2 +Center,Nope
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
-	
+
 	width:=width*dpi
 	height:=height*dpi
 	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %AdminPrompt%

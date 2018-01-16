@@ -6,10 +6,10 @@
 ;--------------------------------------------------------------------------------------------------------------
 
 DPIFactor()
-{ 
-RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI 
-; the reg key was not found - it means default settings 
-; 96 is the default font size setting 
+{
+RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
+; the reg key was not found - it means default settings
+; 96 is the default font size setting
 if (errorlevel=1) OR (DPI_value=96 )
 	return 1
 else
@@ -19,7 +19,7 @@ else
 ;--------------------------------------------------------------------------------------------------------------
 
 LogTime(id)
-{ 
+{
     if(logging=1)
 	{
         FormatTime, datenow,, MM-d-yyyy
@@ -64,7 +64,7 @@ RapidHotkey(keystroke, times="2", delay=0.2, IsLabel=0)
 		Return
 	If (times = "" and InStr(keystroke, """"))
 	{
-		Loop, Parse, keystroke,""	
+		Loop, Parse, keystroke,""
 			If (StrLen(Pattern) = A_Index+1)
 				continue := A_Index, times := StrLen(Pattern)
 	}
@@ -113,16 +113,16 @@ RapidHotkey(keystroke, times="2", delay=0.2, IsLabel=0)
 	else if IsLabel(keystr)
 		Gosub, %keystr%
 	Return
-}	
+}
 Morse(timeout = 400) ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?t=16951 (Modified to return: KeyWait %key%, T%tout%)
-{ 
+{
    tout := timeout/1000
    key := RegExReplace(A_ThisHotKey,"[\*\~\$\#\+\!\^]")
    IfInString, key, %A_Space%
 		StringTrimLeft, key, key,% InStr(key,A_Space,1,0)
 	If Key in Shift,Win,Ctrl,Alt
 		key1:="{L" key "}{R" key "}"
-   Loop 
+   Loop
    {
       t := A_TickCount
       KeyWait %key%, T%tout%
@@ -144,15 +144,15 @@ Morse(timeout = 400) ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?
 
 ;--------------------------------------------------------------------------------------------------------------
 
-winfade(w:="",t:=128,i:=1,d:=10) 
+winfade(w:="",t:=128,i:=1,d:=10)
 { ; by joedf  -  http://ahkscript.org/boards/viewtopic.php?f=6&t=512
 	w:=(w="")?("ahk_id " WinActive("A")):w
 	t:=(t>255)?255:(t<0)?0:t
 	WinGet,s,Transparent,%w%
 	s:=(s="")?255:s ;prevent trans unset bug
-	WinSet,Transparent,%s%,%w% 
+	WinSet,Transparent,%s%,%w%
 	i:=(s<t)?abs(i):-1*abs(i)
-	while(k:=(i<0)?(s>t):(s<t)&&WinExist(w)) 
+	while(k:=(i<0)?(s>t):(s<t)&&WinExist(w))
 	{
 		WinGet,s,Transparent,%w%
 		s+=i
@@ -194,7 +194,7 @@ PutUni(DataIn)
 
 ;--------------------------------------------------------------------------------------------------------------
 
-RunAsAdmin() 
+RunAsAdmin()
 {
 	Loop, %0%  ; For each parameter:
 	{
@@ -202,7 +202,7 @@ RunAsAdmin()
 		params .= A_Space . param
 	}
 	ShellExecute := A_IsUnicode ? "shell32\ShellExecute":"shell32\ShellExecuteA"
-		
+
 	if not A_IsAdmin
 	{
 		If A_IsCompiled
@@ -215,10 +215,10 @@ RunAsAdmin()
 
 ;--------------------------------------------------------------------------------------------------------------
 
-isWindowFullScreen( winTitle ) 
+isWindowFullScreen( winTitle )
 {
 	;checks if the specified window is full screen
-	
+
 	winID := WinExist( winTitle )
 
 	If ( !winID )
@@ -264,11 +264,11 @@ FadeOut(id)
 				localvar:=localvar-18
 				WinSet, Transparent, %localvar%, ahk_id %id%
 				sleep 10
-				
+
 			}
 		IfWinExist, ahk_id %id%
 			Gui %id%:Destroy
-	}	
+	}
 }
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -281,12 +281,12 @@ FadeIn(id)
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 10
 		localvar:=localvar+15
-	}	
+	}
 }
 
 ;--------------------------------------------------------------------------------------------------------------
 
-GetOSVersion() 
+GetOSVersion()
 {
     Return ((r := DllCall("GetVersion") & 0xFFFF) & 0xFF) "." (r >> 8)
 }

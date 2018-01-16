@@ -2,23 +2,23 @@ RSWeb:
  IniRead, WebNames, settings.ini, Web, WebNames
 	Loop, Parse, WebNames, `|
 	WebName%A_Index%=%A_LoopField%
-	
+
 	Loop, 8
 	{
 		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
 	}
-	
+
 	websearchvar=
 	WebLT := WebLT ? false : true
-	
-	If WebLT=0	
+
+	If WebLT=0
 	{
 		ChoosingWebsite:=false
 		FadeOut(WebL)
 		return
 	}
 	If WebLT=1
-	{		
+	{
 		If (A_ScreenWidth<2000)
 		{
 			zfont=12
@@ -44,18 +44,18 @@ RSWeb:
 			zfont=9
 			amultiplier=0.80
 		}
-		
+
 		guiw:=720*amultiplier
 		guih:=204*amultiplier-25
 		buth:=(guih)/2-15
 		butw:=(guiw)/4
-		
+
 		Gui, WeBL:Destroy
 		Gui, WebL:New, +hwndWebL
 		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
 		Gui, Color,1e1e1e, 333333
 		Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
-		
+
 		Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
 
 		Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
@@ -66,11 +66,11 @@ RSWeb:
 		Opt2 := [ , 0x333333, 0x333333, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
-		
+
 		Opt1 := [6, 0x232323, 0x232323, "White"]
 		Opt2 := [ , 0x252525, 0x252525, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		
+
 		Gui, Add, Button, hwndSCHYT gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
 		ImageButton.Create(SCHYT, Opt1, Opt2, "", Opt4)
 
@@ -106,21 +106,21 @@ RSWeb:
 		ChoosingWebsite:=true
 	}
 return
- 
+
  WebLGuiEscape:
  	WebLT := false
 	FadeOut(WebL)
 	ChoosingWebsite:=false
 return
- 
+
 WebLGuiContextMenu:
- 
+
 	Loop, 8
 	{
 		If A_GuiControl=webname%A_Index%
 			wnumb=%A_Index%
 	}
- 
+
  	Gui, WebEdit:New, +hwndWebEdit
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -131,31 +131,31 @@ WebLGuiContextMenu:
 	Gui, Add, Progress, % "x-1 y-1 w300 h26 Background1f1f1f Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w300 Center BackgroundTrans +0x200 cb1b1b1, Edit Website
-	
+
 	Opt1 := [6, 0x252525, 0x252525, "White"]
 	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Edit, % "x29 y+12 w242 h16 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
 	Gui, Add, Edit, % "x29 y+6 w242 h16 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
-	
+
 	Gui, Add, Button, x50 y70 w95 +default gEditWebsites hwndBut1 +Center, Save
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	Gui, Add, Button, x+10 y70 w95 gExitWebsites hwndBut1 +Center, Cancel
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	
+
 	WinSet, Region, 0-0 w300 h100 r12-12, ahk_id %WebEdit%
 	Gui, Show, % "w300 h100 y" A_ScreenHeight/2+204*amultiplier/2+20 , Web Edit
 	FadeIn(WebEdit)
 return
- 
+
 ExitWebsites:
  FadeOut(WebEdit)
 return
- 
+
 EditWebsites:
- Gui, Submit, NoHide 
+ Gui, Submit, NoHide
 	Loop, 8
 	{
 		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
@@ -169,11 +169,11 @@ EditWebsites:
 	}
 	FadeOut(WebEdit)
  return
- 
+
 StartSearch:
-	Gui, Submit, NoHide 
+	Gui, Submit, NoHide
 	Loop, Parse, websearchvar
-	If (A_LoopField=.) 
+	If (A_LoopField=.)
 	{
 		Run, http:%websearchvar%
 		websearchvar=
