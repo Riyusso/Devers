@@ -168,6 +168,25 @@ return
 
 morebutton:
 	Gui, Submit, NoHide
+
+	If(TransparentStartMenu<12)
+	{
+		If !Tried
+		{
+		Warning:="Careful!"
+		Warning2:="The taskbar will be invisible."
+		GoSub WarningGUI
+		Tried:=true
+		return
+		}
+		else
+		{
+			Warning:="Don't say I didn't warn you!"
+			GoSub WarningGUI
+		}
+	}
+
+	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %PluginSwitch%, settings.ini, settings, PluginSwitch
 
