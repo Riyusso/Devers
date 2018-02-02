@@ -78,3 +78,15 @@ Remove_Show_OSD:
 	sleep 10
 	Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress,Tahoma
 return
+
+vol_up:
+	Suspend, Permit
+	SoundSet, +2
+	gosub, Volume_Show_OSD
+return
+
+vol_down:
+	Suspend, Permit
+	SoundSet, -2
+	gosub, Volume_Show_OSD
+return

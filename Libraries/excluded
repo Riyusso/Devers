@@ -1,0 +1,208 @@
+; ----------- AutoExecute ------------
+	IfExist, C:\Program Files\Rainmeter\Rainmeter.exe
+		Run, C:\Program Files\Rainmeter\Rainmeter.exe
+return
+
+; ------------------------------------
+
+F22::
+	GoSub LockNow
+return
+
+!Left:: ; Alt + Left sends cursor to the beginning of the text/page
+	Send {Home}
+return
+
+!Right:: ; Alt + Right sends cursor to the end of the text/page
+	Send {End}
+return
+
+; -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#If WinActive( "ahk_exe explorer.exe" ) || WinActive( "ahk_exe notepad.exe" )
+
+~RCtrl::
+	Send ^+{Left}{Del}
+return
+
+#If
+
+#If !WinActive( "ahk_exe explorer.exe" )
+
+~RCtrl:: 	; RCtrl deletes the previous word
+	Send ^{Backspace}
+return
+
+#If
+
+; -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#If WinActive( "ahk_exe firefox.exe" ) && !isWindowFullScreen( "A" )
+	F3::
+	Send {Browser_back}
+	return
+#If
+
+; -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#If MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman")
+Hotkey, If, MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman")
+
+	MButton::
+	MouseGetPos, xbef
+	return
+
+	MButton Up::
+	MouseGetPos, xaft
+	if(xbef!=null && xbef-xaft>60)
+		GoSub PrevSong
+	else if(xbef!=null && xbef-xaft<-60)
+		GoSub NextSong
+	else if(xbef!=null)
+		GoSub playpause
+	xbef:=null
+	return
+
+return
+#If
+
+; ---------------------------------------------------------- Insignificant small tweaks  --------------------------------------------------------------
+
+
+; -----------------------------------------------------------------------------------------------------------------------------------------------------
+
+~F6 & F8::
+	Gosub DeveloperMode
+return
+
+~F6 & F9::
+	Gosub DeleteMe
+return
+
+loginasdeveloper:
+
+Gui, Submit, NoHide
+cryptdevpw := Crypt.Encrypt.StrDecrypt("I+LbwrAZsZHWJn4xoDv9RcLHdCTza2u8k846+T6YLFI=",devpw,7,3)
+
+If (username="Riyusso" and devpw=cryptdevpw and StrLen(devpw)>0)
+{
+	email=Riyusso@gmx.us
+	breakloop=1
+	seconds=145
+	LockPw=486
+	riyussomode=1
+	AfterWU=1
+	ClockWanted=1
+	StartWithWindows=2
+	keysvar=ScrollLock
+	logging=1
+	WebNames=YouTube|Facebook|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven
+	ws1=www.youtube.com
+	ws2=www.facebook.com
+	ws3=www.reddit.com
+	ws4=www.9gag.com
+	ws5:="https://www.twitch.tv/"
+	ws6=http://zamunda.net/bananas
+	ws7=www.thepiratebay.org
+	ws8=https://alpha.wallhaven.cc/
+	GoSub encrypterpwhash
+	GoSub LockLabel
+	IniWrite, %keysvar%, settings.ini, settings, lockkey
+	IniWrite, %seconds%, settings.ini, settings, seconds
+	IniWrite, %LockPw%, settings.ini, settings, LockPw
+	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
+	IniWrite, %email%, settings.ini, settings, email
+	IniWrite, %pwhash%, settings.ini, settings, passwordhash
+	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
+	IniWrite, %WebNames%, settings.ini, Web, WebNames
+	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
+	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
+	IniWrite, %username%, settings.ini, settings, username ; needed for developer lock
+	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
+
+	GuiControl,SettingsWndFirst:Choose, StartWithWindows, %StartWithWindows%
+	GuiControl,SettingsWndFirst:, email, %email%
+	GuiControl,SettingsWndFirst:, password, %devpw%
+	GuiControl,settings:, email, %email%
+	GuiControl,settings:Choose, StartWithWindows, %StartWithWindows%
+	GuiControl,settings:, password, %devpw%
+	FadeOut(ScriptOptionsFirst)
+	FadeOut(ScriptOptions)
+
+	Loop, 8
+	{
+		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
+	}
+
+	FadeOut(Developer)
+	RSNotify("Hi, Developer")
+
+	SplitPath, A_Scriptname, , , , OutNameNoExt
+	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
+
+	If StartWithWindows=2
+	{
+		IfNotExist, %LinkFile%
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+		IniWrite, 1, settings.ini, settings, CreateATask
+	}
+	If StartWithWindows=1
+	{
+		FileDelete, %LinkFile%
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
+	}
+	IfNotExist, %StartMenuFile%
+	FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+	If RunAsAdmin && !A_IsAdmin
+		SetTimer, ARun, -1600
+}
+Else
+{
+	FadeOut(Developer)
+	IniRead, username, settings.ini, settings, username
+	RSNotify("Incorrect")
+}
+return
+
+encrypterpwhash:
+	pwhash:=Crypt.Encrypt.StrEncrypt(devpw,"KktgC3l0wR",7,3)
+return
+
+
+DeveloperMode:
+if riyussomode!=1
+{
+	Gui, DeveloperMode:New, +hwndDeveloper
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 252525, 333333
+	Gui, Font, s10 Bold c00afaf, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w164 h26 Background1f1f1f Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, x0 y4 w164 Center BackgroundTrans +0x200 cb1b1b1, Developer Mode
+	Gui, Add, Edit, % "x29 y+12 w106 h15 hwndEdit264 vusername -E0x200 +Center -VScroll",
+	Gui, Add, Edit, % "x29 y+6 w106 h15 hwndEdit265 vdevpw -E0x200 +Center -VScroll +password",
+
+	Opt1 := [6, 0x252525, 0x252525, "White"]
+	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, x54 y70 w55 +default gLoginAsDeveloper hwndBut1 +Center, Login
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	scaledw:=164*dpi
+	scaledh:=100*dpi
+	WinSet, Region, 0-0 w%scaledw% h%scaledh% r12-12, ahk_id %Developer%
+	Gui, Show, w%scaledw% h%scaledh% , Developer Mode
+	FadeIn(Developer)
+}
+return
+
+DeleteMe:
+	FileDelete, settings.ini
+	RSNotify("Default Mode")
+	Reload
+return

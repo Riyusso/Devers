@@ -152,17 +152,6 @@ MouseIsOver(WinTitle)
 	return WinExist(WinTitle . " ahk_id " . Win)
 }
 
-vol_up:
-	Suspend, Permit
-	SoundSet, +2
-	gosub, Volume_Show_OSD
-return
-vol_down:
-	Suspend, Permit
-	SoundSet, -2
-	gosub, Volume_Show_OSD
-return
-
 NextSong:
 	Send {Media_Next}
 	RSNotify("Next", 100)
