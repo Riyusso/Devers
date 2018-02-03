@@ -163,6 +163,8 @@ return
 
 #If (ItsLocked = 1)
 	RButton::Return
+	LAlt::Return
+	RAlt::Return
 	F1::Return
 	F2::Return
 	F3::Return

@@ -184,6 +184,7 @@
 			SetTimer, MinuteUpdate, 15000
 		}
 		IniWrite, 1, settings.ini, settings, LockAfterRestart
+		HideFocusBorder(ZPHWND)
 	}
 return
 

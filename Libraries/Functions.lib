@@ -1,4 +1,21 @@
-﻿SetEditCueBanner(HWND, Cue) {  ; requires AHL_L
+﻿HideFocusBorder(wParam, lParam := "", uMsg := "", hWnd := "") {
+   ; WM_UPDATEUISTATE = 0x0128
+	Static Affected := [] ; affected controls / GUIs
+        , HideFocus := 0x00010001 ; UIS_SET << 16 | UISF_HIDEFOCUS
+	     , OnMsg := OnMessage(0x0128, Func("HideFocusBorder"))
+	If (uMsg = 0x0128) { ; called by OnMessage()
+      If (wParam = HideFocus)
+         Affected[hWnd] := True
+      Else If Affected[hWnd]
+         PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %hWnd%
+   }
+   Else If DllCall("IsWindow", "Ptr", wParam, "UInt")
+	  PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %wParam%
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+SetEditCueBanner(HWND, Cue) {  ; requires AHL_L
    Static EM_SETCUEBANNER := (0x1500 + 1)
    Return DllCall("User32.dll\SendMessageW", "Ptr", HWND, "Uint", EM_SETCUEBANNER, "Ptr", True, "WStr", Cue)
 }
@@ -282,6 +299,7 @@ FadeIn(id)
 		sleep 10
 		localvar:=localvar+15
 	}
+	HideFocusBorder(id)
 }
 
 ;--------------------------------------------------------------------------------------------------------------
