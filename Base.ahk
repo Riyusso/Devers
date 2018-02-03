@@ -126,10 +126,14 @@ OopsMistake:=false
 return
 
 #If (A_IsCompiled)
-~#!SC013::Reload
+~#!SC013::
+IntentReload:=true
+Reload
 #If
 #If (!A_IsCompiled)
-~!SC013::Reload
+~!SC013::
+IntentReload:=true
+Reload
 #If
 
 ~LAlt::
@@ -354,6 +358,14 @@ IfExist, settings.ini
 	IniRead, CreateATask, settings.ini, settings, CreateATask
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 191
 	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
+
+	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
+	If Reloaded=1
+	{
+		RSNotify("Reloaded")
+		IniDelete, settings.ini, settings, Reloaded
+	}
+	
 	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
 	SetTimer, KeepTrans, 12000
 	OnExit, ExitAppL

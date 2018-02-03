@@ -90,7 +90,7 @@ button:
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
-	RSNotify("Settings Applied")
+	RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
@@ -353,7 +353,6 @@ protectionbutton:
 		If(MetRequirements=0)
 		{
 			BreakLoop=0
-			SetTimer, CalculatedProtection, Off
 			return
 		}
 	}
@@ -368,7 +367,7 @@ protectionbutton:
 
 	idleseconds:=1000*(seconds)
 	FadeOut(ProtectionSettings)
-	RSNotify("Settings Applied")
+	RSNotify("Applied")
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	If BreakLoop=1
 		Gosub Protection
@@ -618,6 +617,7 @@ Menu Tray, Click, 1           ; Enable single click action on tray
 Return
 
 mnuScriptReload:
+	IntentReload=1
 	Reload
 Return
 
@@ -665,6 +665,8 @@ mnuExit:
 Return
 
 ExitAppL:
+	If IntentReload=1
+		IniWrite, %IntentReload%, settings.ini, settings, Reloaded
 	WinKill, ahk_pid %PluginPID%
 	ExitApp
 return

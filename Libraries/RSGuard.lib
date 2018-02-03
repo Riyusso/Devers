@@ -4,13 +4,13 @@
 	{
 		RSNotify("No Password")
 		SetTimer, CFullScreen, Off
-		SetTimer, CalculatedProtection, Off
+		BreakLoop=0
 		return
 	}
 	else if LockPw is not digit
 	{
 		RSNotify("Invalid Password")
-		SetTimer, CalculatedProtection, Off
+		BreakLoop=0
 		return
 	}
 
@@ -511,7 +511,6 @@ ProtectSwitch:
 		{
 			ProtectionWarning=1
 			BreakLoop=0
-			SetTimer, CalculatedProtection, Off
 
 			Warning6:=" "
 			Warning7:="Please input everything correctly."
@@ -554,13 +553,8 @@ return
 
 CalculatedProtection:
 
-	If(ItsLocked=0)
+	If(ItsLocked=0 && BreakLoop=1)
 	{
-		if BreakLoop!=1
-		{
-			SetTimer, CalculatedProtection, Off
-			return
-		}
 
 		; IMPORTANT
 		if ((A_TickCount - StartTime > 3500) && AfterWU=1) or (A_TickCount - StartTime > idleseconds)
@@ -590,7 +584,7 @@ CalculatedProtection:
 					Gosub RSGuard
 					return
 				}
-				SetTimer, CFullScreen, 150
+				SetTimer, CFullScreen, 30
 				Return
 			}
 		}
@@ -611,6 +605,7 @@ CFullScreen:
 	If (isFullScreen=0 && AfterFS=1)
 	{
 		LogTime(3)
+		IniWrite, 1, settings.ini, settings, LockAfterRestart
 		Gosub RSGuard
 	}
 return

@@ -13,6 +13,7 @@ IfExist, Libraries/developer.lib
 FileDelete, Base.exe
 FileDelete, devRS-install.exe
 FileDelete, devRS-install-d.exe
+Sleep 500
 Run, Compiler/Ahk2Exe.exe /in "Base.ahk" /icon "Base/RSIcon.ico"
 While ! FileExist( "Base.exe" )
 	Sleep 50
