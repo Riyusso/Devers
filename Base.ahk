@@ -536,7 +536,7 @@ Initiation:
 	ws2=www.facebook.com
 	ws3=www.reddit.com
 	ws4=www.9gag.com
-	ws5:=https://www.twitch.tv
+	ws5=https://www.twitch.tv
 	ws6=http://zamunda.net/bananas
 	ws7=www.thepiratebay.org
 	ws8=https://alpha.wallhaven.cc/
