@@ -618,9 +618,9 @@ Else
 	Menu, TRAY, Icon, RSIcon.ico
 }
 If A_IsCompiled
-Menu, Tray, Tip, .devRS
+Menu, Tray, Tip, %ScriptName%
 Else
-Menu, Tray, Tip, .devRS Uncompiled
+Menu, Tray, Tip, %ScriptName% Uncompiled
 Menu, Tray, NoStandard
 Menu, Tray, ADD, Menu, DefaultMenu
 Menu, Tray, ADD, Reload, mnuScriptReload

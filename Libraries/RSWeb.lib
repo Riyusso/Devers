@@ -100,7 +100,7 @@ RSWeb:
 		WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %WebL%
 		guiw:=guiw/dpi
 		guih:=guih/dpi
-		Gui, Show, h%guih% w%guiw% NoActivate, .devRS Speed Dial
+		Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 
 		FadeIn(WebL)
 		ChoosingWebsite:=true
