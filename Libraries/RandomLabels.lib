@@ -1,4 +1,15 @@
-﻿RunAsAdmin:
+﻿SuspendFSCheck: ; Checks whether the user wants his hotkeys to work in fullscreen or not. Some hotkeys will still work. (Volume control mostly)
+If(SuspendFS=1)
+{
+	IfWinNotActive, ahk_exe explorer.exe
+	If isWindowFullScreen("A")
+		Suspend, On
+	else
+		Suspend, Off
+}
+return
+
+RunAsAdmin:
 RunAsAdmin=1
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)

@@ -62,7 +62,7 @@
 	Gui, Font, s9
 	Gui, Font, normal
 
-	Gui, Font, s10 cFFFFFF Bold
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gbutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
@@ -135,23 +135,27 @@ MoreSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
+	Gui, Add, Text, % "x20 y+30 w120 Center", Hotkeys in Fullscreen ›
+	Gui, Add, DropDownList, % "x+15 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , No|Yes
+
 	IfExist, *.ahk
 	{
-		Gui, Add, Text, % "x15 y+30 w120 Center", All Plugins ›
+		Gui, Add, Text, % "x20 y+30 w120 Center", All Plugins ›
 		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-			Gui, Add, Text, % "x15 y+10 w120 Center", %PluginName% ›
+			Gui, Add, Text, % "x20 y+10 w120 Center", %PluginName% ›
 			Gui, Add, DropDownList, % "x+15 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
 
-	Gui, Add, Text, % "x0 w" Width " y+25 Center", Taskbar Transparency:
+
+	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
 
-	Gui, Font, s10 cFFFFFF Bold
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -162,7 +166,7 @@ MoreSettingsLabel:
 	Gui, Add, Button, % "x+5 w" (Width*0.30) " gmoreclose hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Text, % "x+1 h35 vP"
+	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -196,6 +200,7 @@ morebutton:
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %PluginSwitch%, settings.ini, settings, PluginSwitch
+	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
 	IfExist, *.ahk
 	{
@@ -303,7 +308,7 @@ ProtectionSettings:
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
 	Gui, Add, Hotkey, % "x+8 w87 Center vKeysVar" , %lockkey%
-	Gui, Font, s10 cFFFFFF Bold
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -476,7 +481,7 @@ ScriptFunctions:
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
 
-		Gui, Font, s10 cFFFFFF Bold
+		Gui, Font, s10 cFFFFFF Bold, Segoe UI
 		Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
 		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -563,7 +568,7 @@ SettingsWndFirst:
 	Gui, Font, s9
 	Gui, Font, normal
 
-	Gui, Font, s10 cFFFFFF Bold
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Button, % "x" (Width/2)-(((Width*0.30)*2)/2)-2 " y+15 w" (Width*0.30) " gbuttonfirst hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
@@ -829,7 +834,7 @@ SecurityLoggingLabel:
 	}
 
 	Gui, Color, 2e2e2e
-	Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Font, s11 cFFFFFF Bold, Segoe UI
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " gdestroySecLogs hwndButt2 +Center +Default", Close
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
