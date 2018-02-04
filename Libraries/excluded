@@ -1,6 +1,6 @@
 ; ----------- AutoExecute ------------
-	IfExist, C:\Program Files\Rainmeter\Rainmeter.exe
-		Run, C:\Program Files\Rainmeter\Rainmeter.exe
+IfExist, C:\Program Files\Rainmeter\Rainmeter.exe
+	Run, C:\Program Files\Rainmeter\Rainmeter.exe
 return
 
 ; ------------------------------------

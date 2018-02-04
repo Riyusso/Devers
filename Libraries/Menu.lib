@@ -664,13 +664,15 @@ If A_IsSuspended
 	RSNotify("Suspended")
 	If A_IsPaused
 		Pause, Off
+	IniWrite, Suspended, settings.ini, plugins, State
 }
 If !A_IsSuspended
 {
 	Menu, TRAY, Icon, RSIcon.ico,,1
 	RSNotify("Released")
+	IniWrite, Released, settings.ini, plugins, State
 	If A_IsPaused
-	Pause, Off
+		Pause, Off
 }
 return
 

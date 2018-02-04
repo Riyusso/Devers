@@ -105,7 +105,7 @@ Suspend, Permit
 GoSub vol_down
 return
 
-#!SC01F:: ; Win+Alt+S Suspends the script
+~#!SC01F:: ; Win+Alt+S Suspends the script
 	Suspend, Permit
 	GoSub SuspendScriptToggle
 return
@@ -129,11 +129,13 @@ return
 ~#!SC013::
 IntentReload:=true
 Reload
+return
 #If
 #If (!A_IsCompiled)
 ~!SC013::
 IntentReload:=true
 Reload
+return
 #If
 
 ~LAlt::
@@ -519,14 +521,11 @@ Initiation:
 	email=
 	breakloop=2
 	LockPw=
-	TurnVar=3
-	TurnHour=03
-	TurnMin=59
 	seconds=120
 	ClockWanted=1
 	StartWithWindows=1
 	keysvar=ScrollLock
-	TransparentStartMenu=191
+	TransparentStartMenu=255
 	CheckPeriod = 150
 	lockkey=ScrollLock
 	AfterFS=1
@@ -537,7 +536,7 @@ Initiation:
 	ws2=www.facebook.com
 	ws3=www.reddit.com
 	ws4=www.9gag.com
-	ws5:="https://www.twitch.tv/directory/game/League%20of%20Legends"
+	ws5:=https://www.twitch.tv
 	ws6=http://zamunda.net/bananas
 	ws7=www.thepiratebay.org
 	ws8=https://alpha.wallhaven.cc/
