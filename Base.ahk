@@ -382,11 +382,12 @@ IfExist, settings.ini
 		{
 			IfNotExist, Runner.exe
 				FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
-			ActivePlugins=0
 			Loop, Files, *.ahk
 			{
-				ActivePlugins+=1
-				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PluginPID%ActivePlugins% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				SplitPath, A_LoopFileLongPath,,,, PluginName
+				IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
+				If(PluginState=1)
+					Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, %PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 			}
 		}
 	}

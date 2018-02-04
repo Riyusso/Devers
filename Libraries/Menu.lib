@@ -137,8 +137,15 @@ MoreSettingsLabel:
 
 	IfExist, *.ahk
 	{
-		Gui, Add, Text, % "x8 y+30 w120 Center", Plugins ›
-		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off|Delete
+		Gui, Add, Text, % "x15 y+30 w120 Center", All Plugins ›
+		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off
+		Loop, Files, *.ahk
+		{
+			SplitPath, A_LoopFileLongPath,,,, PluginName
+			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
+			Gui, Add, Text, % "x15 y+10 w120 Center", %PluginName% ›
+			Gui, Add, DropDownList, % "x+15 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
+		}
 	}
 
 	Gui, Add, Text, % "x0 w" Width " y+25 Center", Taskbar Transparency:
@@ -194,24 +201,41 @@ morebutton:
 	{
 		If(PluginSwitch=1)
 		{
-			ActivePlugins=0
 			Loop, Files, *.ahk
 			{
-				ActivePlugins+=1
-				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PluginPID%ActivePlugins% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				SplitPath, A_LoopFileLongPath,,,, PluginName
+				If % PluginState%PluginName%=1
+				{
+					IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+					Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, %PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				}
+				else if % PluginState%PluginName%=2
+				{
+					IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+					IfWinExist, % ahk_pid PluginName
+						WinKill, % ahk_pid PluginName
+				}
 			}
 		}
 		Else If(PluginSwitch=2)
 		{
-			Loop, %ActivePlugins%
+			Loop, Files, *.ahk
 			{
-				IfWinExist, % ahk_pid PluginPID . a_index
-					WinKill, % ahk_pid PluginPID . a_index
+				SplitPath, A_LoopFileLongPath,,,, PluginName
+				IfWinExist, % ahk_pid PluginName
+					WinKill, % ahk_pid PluginName
 			}
 		}
-		Else
+		Loop, Files, *.ahk
 		{
-			GoSub PluginDelete
+			SplitPath, A_LoopFileLongPath,,,, PluginName
+			if % PluginState%PluginName%=3
+			{
+				IniDelete, settings.ini, plugins, PluginState%PluginName%
+				IfWinExist, % ahk_pid PluginName
+					WinKill, % ahk_pid PluginName
+				FileDelete, %PluginName%.ahk
+			}
 		}
 	}
 	FadeOut(MoreHWND)
@@ -223,18 +247,6 @@ FadeOut(MoreHWND)
 return
 destroy:
 	FadeOut(ScriptOptions)
-return
-
-PluginDelete:
-	IniWrite, 1, settings.ini, settings, PluginSwitch
-	Loop, %ActivePlugins%
-	{
-		IfWinExist, % ahk_pid PluginPID . a_index
-			WinKill, % ahk_pid PluginPID . a_index
-	}
-	FileDelete, *.ahk
-	FileDelete, Runner.exe
-	RSNotify("Plugins Deleted")
 return
 
 ;--------------------------------------------------------------------------------------------------------------
