@@ -1,4 +1,4 @@
-﻿HideFocusBorder(wParam, lParam := "", uMsg := "", hWnd := "") {
+﻿HideFocusBorder(wParam, lParam := "", uMsg := "", hWnd := "") { ; credit to "just me" - https://autohotkey.com/boards/viewtopic.php?t=9919
    ; WM_UPDATEUISTATE = 0x0128
 	Static Affected := [] ; affected controls / GUIs
         , HideFocus := 0x00010001 ; UIS_SET << 16 | UISF_HIDEFOCUS

@@ -716,7 +716,7 @@ DefaultMenu:
 			guipos:=A_ScreenHeight-164
 
 		Opt1 := [6, 0x232323, 0x232323, "White"]
-		Opt2 := [ , 0x272727, 0x262626, 0xffffff]
+		Opt2 := [ , 0x292929, 0x282828, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 		Gui, Add, Button, % "x0 y-2 h" buth " w" butw+9 " gProtectSwitch hwndBut1 +Center", Protection

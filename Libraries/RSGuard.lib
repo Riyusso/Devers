@@ -170,7 +170,6 @@
 		document.open()
 		document.write(html)
 
-
 		WinSet, Transparent,0, ahk_id %ZPHWND%
 		Gui, Show, x0 y0 h%zph% w%zpw%
 		GoSub TransProtection

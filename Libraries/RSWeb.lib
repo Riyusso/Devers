@@ -68,7 +68,7 @@ RSWeb:
 		ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
 
 		Opt1 := [6, 0x232323, 0x232323, "White"]
-		Opt2 := [ , 0x252525, 0x252525, 0xffffff]
+		Opt2 := [ , 0x272727, 0x262626, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 		Gui, Add, Button, hwndSCHYT gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
