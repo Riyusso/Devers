@@ -83,6 +83,10 @@ F4 & 8::
 Run, %ws8%
 return
 
+~F6 & F9::
+	Gosub Reinstall
+return
+
 ~F9::
 GoSub playpause
 return

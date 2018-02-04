@@ -31,6 +31,10 @@ Else
 GoSub RSRunScript
 return
 
+Reinstall:
+	FileDelete, settings.ini
+	Reload
+return
 
 UpdateCheck:
 IniRead, ExitVar, build.ini, build, ExitVar

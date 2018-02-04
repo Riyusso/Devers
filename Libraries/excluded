@@ -75,10 +75,6 @@ return
 	Gosub DeveloperMode
 return
 
-~F6 & F9::
-	Gosub DeleteMe
-return
-
 loginasdeveloper:
 
 Gui, Submit, NoHide
@@ -202,10 +198,4 @@ if riyussomode!=1
 	Gui, Show, w%scaledw% h%scaledh% , Developer Mode
 	FadeIn(Developer)
 }
-return
-
-DeleteMe:
-	FileDelete, settings.ini
-	RSNotify("Default Mode")
-	Reload
 return
