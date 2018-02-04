@@ -651,10 +651,11 @@ mnuUninstall:
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling")
-	Loop, %ActivePlugins%
+	Loop, Files, *.ahk
 	{
-		IfWinExist, % ahk_pid PluginPID . a_index
-			WinKill, % ahk_pid PluginPID . a_index
+		SplitPath, A_LoopFileLongPath,,,, PluginName
+		IfWinExist, % ahk_pid PluginName
+			WinKill, % ahk_pid PluginName
 	}
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
@@ -698,10 +699,11 @@ Return
 ExitAppL:
 	If IntentReload=1
 		IniWrite, %IntentReload%, settings.ini, settings, Reloaded
-	Loop, %ActivePlugins%
+	Loop, Files, *.ahk
 	{
-		IfWinExist, % ahk_pid PluginPID . a_index
-			WinKill, % ahk_pid PluginPID . a_index
+		SplitPath, A_LoopFileLongPath,,,, PluginName
+		IfWinExist, % ahk_pid PluginName
+			WinKill, % ahk_pid PluginName
 	}
 	ExitApp
 return
