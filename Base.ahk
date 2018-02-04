@@ -373,13 +373,20 @@ IfExist, settings.ini
 	OnExit, ExitAppL
 
 	; How to use the plugin system :
-	; Just create a Plugin.ahk in the Script directory and it will run next time you restart the script
-	IfExist, Plugin.ahk
+	; Just create a Plugin(number).ahk in the Script directory and it will run next time you restart the script
+	IfExist, *.ahk
 	{
-		IfNotExist, Runner.exe
-			FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
 		If(PluginSwitch=1)
-			Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_MyDocuments%\%ScriptName%\Plugin.ahk,,, PluginPID ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+		{
+			IfNotExist, Runner.exe
+				FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
+			ActivePlugins=0
+			Loop, Files, *.ahk
+			{
+				ActivePlugins+=1
+				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PluginPID%ActivePlugins% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			}
+		}
 	}
 	IfNotExist, launcher.exe
 	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1

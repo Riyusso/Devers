@@ -135,7 +135,7 @@ MoreSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	IfExist, Plugin.ahk
+	IfExist, *.ahk
 	{
 		Gui, Add, Text, % "x8 y+30 w120 Center", Plugins ›
 		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off|Delete
@@ -190,14 +190,24 @@ morebutton:
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %PluginSwitch%, settings.ini, settings, PluginSwitch
 
-	IfExist, Plugin.ahk
+	IfExist, *.ahk
 	{
 		If(PluginSwitch=1)
-			Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_MyDocuments%\%ScriptName%\Plugin.ahk,,, PluginPID ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+		{
+			ActivePlugins=0
+			Loop, Files, *.ahk
+			{
+				ActivePlugins+=1
+				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PluginPID%ActivePlugins% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			}
+		}
 		Else If(PluginSwitch=2)
 		{
-			IfWinExist, ahk_pid %PluginPID%
-				WinKill, ahk_pid %PluginPID%
+			Loop, %ActivePlugins%
+			{
+				IfWinExist, % ahk_pid PluginPID . a_index
+					WinKill, % ahk_pid PluginPID . a_index
+			}
 		}
 		Else
 		{
@@ -217,9 +227,12 @@ return
 
 PluginDelete:
 	IniWrite, 1, settings.ini, settings, PluginSwitch
-	IfWinExist, ahk_pid %PluginPID%
-		WinKill, ahk_pid %PluginPID%
-	FileDelete, Plugin.ahk
+	Loop, %ActivePlugins%
+	{
+		IfWinExist, % ahk_pid PluginPID . a_index
+			WinKill, % ahk_pid PluginPID . a_index
+	}
+	FileDelete, *.ahk
 	FileDelete, Runner.exe
 	RSNotify("Plugins Deleted")
 return
@@ -626,7 +639,11 @@ mnuUninstall:
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
 	RSNotify("Uninstalling")
-	WinKill, ahk_pid %PluginPID%
+	Loop, %ActivePlugins%
+	{
+		IfWinExist, % ahk_pid PluginPID . a_index
+			WinKill, % ahk_pid PluginPID . a_index
+	}
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
@@ -667,7 +684,11 @@ Return
 ExitAppL:
 	If IntentReload=1
 		IniWrite, %IntentReload%, settings.ini, settings, Reloaded
-	WinKill, ahk_pid %PluginPID%
+	Loop, %ActivePlugins%
+	{
+		IfWinExist, % ahk_pid PluginPID . a_index
+			WinKill, % ahk_pid PluginPID . a_index
+	}
 	ExitApp
 return
 
