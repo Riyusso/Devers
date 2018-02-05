@@ -2,10 +2,16 @@
 If(SuspendFS=1)
 {
 	IfWinNotActive, ahk_exe explorer.exe
-	If isWindowFullScreen("A")
+	If isWindowFullScreen("A") && !A_IsSuspended
+	{
+		Menu, TRAY, Icon, RSStopped.ico,,1
 		Suspend, On
-	else
+	}
+	else if A_IsSuspended
+	{
+		Menu, TRAY, Icon, RSIcon.ico,,1
 		Suspend, Off
+	}
 }
 return
 
@@ -217,7 +223,7 @@ GoSubSafe(mySub)
 ;-------------------------------------------------------------------------------------------------------------
 
 KeepTrans: ; keep both KeepTrans and TaskBarSet
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 191
+	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
 return
 

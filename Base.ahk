@@ -27,7 +27,7 @@ StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
 FileCreateDir, %A_MyDocuments%\%ScriptName%
 SetWorkingDir, %A_MyDocuments%\%ScriptName%
-IniRead, CurrentVersion, build.ini, build, FileVersion
+IniRead, CurrentVersion, build.ini, build, FileVersion, 1.0
 If (FileVersion>CurrentVersion)
 GoSub InstallFiles
 DetectHiddenWindows, on
@@ -364,9 +364,9 @@ IfExist, settings.ini
 	If RunAsAdmin && !LockAfterRestart
 	RunAsAdmin()
 	IniRead, CreateATask, settings.ini, settings, CreateATask
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 191
+	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
-	IniRead, SuspendFS, settings.ini, settings, SuspendFS
+	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	If Reloaded=1
