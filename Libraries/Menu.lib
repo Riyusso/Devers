@@ -134,8 +134,8 @@ MoreSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	Gui, Add, Text, % "x15 y+30 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+20 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , Yes|No
+	Gui, Add, Text, % "x20 y+30 w120 Center", Hotkeys in Fullscreen ›
+	Gui, Add, DropDownList, % "x+15 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , Yes|No
 
 	IfExist, *.ahk
 	{

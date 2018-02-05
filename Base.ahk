@@ -28,9 +28,12 @@ StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
 FileCreateDir, %A_MyDocuments%\%ScriptName%
 SetWorkingDir, %A_MyDocuments%\%ScriptName%
-IniRead, CurrentVersion, build.ini, build, FileVersion, 1.0
-If (FileVersion>CurrentVersion)
-GoSub InstallFiles
+IfExist, settings.ini
+{
+	IniRead, CurrentVersion, build.ini, build, FileVersion, 1.0
+	If (FileVersion>CurrentVersion)
+	GoSub InstallFiles
+}
 DetectHiddenWindows, on
 #Include %A_ScriptDir%
 GoSub MenuInit

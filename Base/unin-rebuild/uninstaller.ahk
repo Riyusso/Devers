@@ -7,6 +7,7 @@ ScriptName=.devRS
 
 IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ExitVar
 Sleep 1250
+FileRemoveDir, %A_MyDocuments%\%ScriptName%, 1
 FileDelete, %A_MyDocuments%\%ScriptName%\*.*
 FileRemoveDir, %A_MyDocuments%\%ScriptName%
 
