@@ -3,14 +3,11 @@
 #SingleInstance FORCE
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-; The code below suspends the plugin when the script is suspended.
-SetTimer, Checks, 100
-Checks:
-    IniRead, State, settings.ini, plugins, State
-    If(State="Suspended") && !A_IsSuspended
-	    Suspend, On
-    else if A_IsSuspended
-        Suspend, Off
+; global dpi:=DpiFactor() ; required if you wish to use RSNotify(needs the 3 libraries included)
 return
+
+; #Include Libraries\Functions.lib
+; #Include Libraries\RSNotify.lib
+; #Include Libraries\Library.lib
 
 ; ----------- User functions here -------------

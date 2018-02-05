@@ -308,3 +308,11 @@ GetOSVersion()
 {
     Return ((r := DllCall("GetVersion") & 0xFFFF) & 0xFF) "." (r >> 8)
 }
+
+;--------------------------------------------------------------------------------------------------------------
+
+MouseIsOver(WinTitle)
+{
+	MouseGetPos,,, Win
+	return WinExist(WinTitle . " ahk_id " . Win)
+}

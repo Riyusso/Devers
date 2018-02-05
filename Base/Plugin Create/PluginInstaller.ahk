@@ -28,7 +28,6 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 		IniWrite, ERROR , %A_MyDocuments%\%ScriptName%\build.ini,build,PluginPath
 
 	IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ReloadVar
-	IniWrite, 1, %A_MyDocuments%\%ScriptName%\settings.ini, settings, PluginSwitch
 }
 else
 {

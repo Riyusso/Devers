@@ -370,7 +370,7 @@ IfExist, settings.ini
 	RunAsAdmin()
 	IniRead, CreateATask, settings.ini, settings, CreateATask
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
-	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
+	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	If Reloaded=1
@@ -388,20 +388,28 @@ IfExist, settings.ini
 	; Just create a Plugin(number).ahk in the Script directory and it will run next time you restart the script
 	IfExist, *.ahk
 	{
-		If(PluginSwitch=1)
+		IniWrite, Released, settings.ini, plugins, State
+		IfNotExist, Runner.exe
+			FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
+
+		IfNotExist, Libraries
+			FileCreateDir, Libraries
+		IfNotExist, %A_WorkingDir%/Libraries/RSNotify.lib
+			FileInstall, Libraries/RSNotify.lib, %A_MyDocuments%\%ScriptName%\Libraries\RSNotify.lib, 1
+		IfNotExist, %A_WorkingDir%/Libraries/Functions.lib
+			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
+		IfNotExist, %A_WorkingDir%/Libraries/Library.lib
+			FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
+			
+		Loop, Files, *.ahk
 		{
-			IniWrite, Released, settings.ini, plugins, State
-			IfNotExist, Runner.exe
-				FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
-			Loop, Files, *.ahk
-			{
-				SplitPath, A_LoopFileLongPath,,,, PluginName
-				IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-				If(PluginState=1)
-					Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, %PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
-			}
+			SplitPath, A_LoopFileLongPath,,,, PluginName
+			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
+			If(PluginState=1)
+				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 		}
 	}
+	
 	IfNotExist, launcher.exe
 	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
 	IfNotExist, segoeui.ttf
@@ -541,6 +549,7 @@ Initiation:
 	TransparentStartMenu=255
 	CheckPeriod = 150
 	lockkey=ScrollLock
+	SuspendFS=1
 	AfterFS=1
 	AfterWU=2
 	logging=2
@@ -575,6 +584,7 @@ Initiation:
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
+	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, seconds, settings.ini, settings, seconds

@@ -2,7 +2,6 @@
 #NoTrayIcon
 FileInstall, build.ini, install.ini
 IniRead, Version, install.ini, build, Version
-IniRead, Edition, install.ini, build, Edition
 FileDelete, install.ini
 SendMode Input
 ScriptName=.devRS
@@ -11,11 +10,10 @@ global dpi:=DpiFactor()
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
 	SetWorkingDir %A_MyDocuments%\%scriptname%
-	IniRead, CurrentVersion, build.ini, build, Version
-	IniRead, CurrentEdition, build.ini, build, Edition
+	IniRead, CurrentVersion, build.ini, build, Version, 1.0
 	IfNotExist, %A_MyDocuments%\%ScriptName%\build.ini
 		CurrentVersion=1.0
-	If (Version>CurrentVersion) || (Edition!=CurrentEdition)
+	If (Version>CurrentVersion)
 	{
 		GoSub UpdateIt
 	}
@@ -36,7 +34,6 @@ else
 	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
 	Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
 	IniWrite, %Version%, build.ini, build, Version
-	IniWrite, %Edition%, build.ini, build, Edition
 	ExitApp
 }
 ExitApp
@@ -49,7 +46,6 @@ UpdateIt:
 		FileInstall, Base.exe, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe, 1
 		IniWrite, 0, build.ini, build, ExitVar
 		IniWrite, %Version%, build.ini, build, Version
-		IniWrite, %Edition%, build.ini, build, Edition
 		IsUpdated:=true
 		Sleep 1250
 return

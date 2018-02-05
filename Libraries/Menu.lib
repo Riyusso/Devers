@@ -119,7 +119,6 @@ MoreSettingsLabel:
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
-	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
 	taskbarsave=%TransparentStartMenu%
 
 	Gui, MoreMenu:New, +hwndMoreHWND
@@ -140,13 +139,12 @@ MoreSettingsLabel:
 
 	IfExist, *.ahk
 	{
-		Gui, Add, Text, % "x20 y+30 w120 Center", All Plugins ›
-		Gui, Add, DropDownList, % "x+15 w65 Center vPluginSwitch Choose" PluginSwitch " AltSubmit" , On|Off
+		Gui, Add, Text, % "x0 y+30 w" Width " Center", - Plugins Included -
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-			Gui, Add, Text, % "x20 y+10 w120 Center", %PluginName% ›
+			Gui, Add, Text, % "x20 y+15 w120 Center", %PluginName% ›
 			Gui, Add, DropDownList, % "x+15 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
@@ -199,49 +197,33 @@ morebutton:
 
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
-	IniWrite, %PluginSwitch%, settings.ini, settings, PluginSwitch
+	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
 	IfExist, *.ahk
 	{
-		If(PluginSwitch=1)
-		{
-			Loop, Files, *.ahk
-			{
-				SplitPath, A_LoopFileLongPath,,,, PluginName
-				If % PluginState%PluginName%=1
-				{
-					IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-					Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, %PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
-				}
-				else if % PluginState%PluginName%=2
-				{
-					IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-					IfWinExist, % ahk_pid PluginName
-						WinKill, % ahk_pid PluginName
-				}
-			}
-		}
-		Else If(PluginSwitch=2)
-		{
-			Loop, Files, *.ahk
-			{
-				SplitPath, A_LoopFileLongPath,,,, PluginName
-				IfWinExist, % ahk_pid PluginName
-					WinKill, % ahk_pid PluginName
-			}
-		}
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
-			if % PluginState%PluginName%=3
+			If % PluginState%PluginName%=1
+			{
+				IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			}
+			else if % PluginState%PluginName%=2
+			{
+				IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+				IfWinExist, % "ahk_pid" PID%PluginName%
+					WinKill, % "ahk_pid" PID%PluginName%
+			}
+			else if % PluginState%PluginName%=3
 			{
 				IniDelete, settings.ini, plugins, PluginState%PluginName%
-				IfWinExist, % ahk_pid PluginName
-					WinKill, % ahk_pid PluginName
+				IfWinExist, % "ahk_pid" PID%PluginName%
+					WinKill, % "ahk_pid" PID%PluginName%
 				FileDelete, %PluginName%.ahk
 			}
+			}
 		}
-	}
 	FadeOut(MoreHWND)
 return
 
@@ -659,8 +641,8 @@ mnuUninstall:
 	Loop, Files, *.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
-		IfWinExist, % ahk_pid PluginName
-			WinKill, % ahk_pid PluginName
+		IfWinExist, % "ahk_pid" PID%PluginName%
+			WinKill, % "ahk_pid" PID%PluginName%
 	}
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
@@ -676,6 +658,12 @@ return
 
 SuspendScriptToggle:
 Suspend, Toggle
+Loop, Files, *.ahk
+{
+	SplitPath, A_LoopFileLongPath,,,, PluginName
+	IfWinExist, % "ahk_pid" PID%PluginName%
+		PostMessage, 0x111, 65305,,, %PluginName%.ahk - AutoHotkey ; Suspend plugins.
+}
 If A_IsSuspended
 {
 	Menu, Tray, Icon
@@ -709,8 +697,8 @@ ExitAppL:
 	Loop, Files, *.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
-		IfWinExist, % ahk_pid PluginName
-			WinKill, % ahk_pid PluginName
+		IfWinExist, % "ahk_pid" PID%PluginName%
+			WinKill, % "ahk_pid" PID%PluginName%
 	}
 	ExitApp
 return

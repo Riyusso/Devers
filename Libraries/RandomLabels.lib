@@ -150,12 +150,6 @@ GoSub PasswordCover
 Gosub UnlockPC
 return
 
-MouseIsOver(WinTitle)
-{
-	MouseGetPos,,, Win
-	return WinExist(WinTitle . " ahk_id " . Win)
-}
-
 NextSong:
 	Send {Media_Next}
 	RSNotify("Next", 100)
