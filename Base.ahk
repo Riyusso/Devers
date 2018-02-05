@@ -366,7 +366,6 @@ IfExist, settings.ini
 	IniRead, CreateATask, settings.ini, settings, CreateATask
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	IniRead, PluginSwitch, settings.ini, settings, PluginSwitch, 1
-	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	If Reloaded=1
@@ -377,7 +376,6 @@ IfExist, settings.ini
 	
 	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
 	SetTimer, KeepTrans, 12000
-	SetTimer, SuspendFSCheck, 300
 	
 	OnExit, ExitAppL
 
@@ -535,7 +533,6 @@ Initiation:
 	keysvar=ScrollLock
 	TransparentStartMenu=255
 	CheckPeriod = 150
-	SuspendFS=2
 	lockkey=ScrollLock
 	AfterFS=1
 	AfterWU=2
@@ -568,7 +565,6 @@ Initiation:
 	IniWrite, %CheckPeriod%, settings.ini, settings, CheckPeriod
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
-	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
@@ -585,7 +581,6 @@ Initiation:
 	IniRead, AfterWU, settings.ini, settings, AfterWU
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
-	IniRead, SuspendFS, settings.ini, settings, SuspendFS
 
 	GoSub currentsettings
 return

@@ -90,7 +90,6 @@ If (username="Riyusso" and devpw=cryptdevpw and StrLen(devpw)>0)
 	AfterWU=1
 	ClockWanted=1
 	StartWithWindows=2
-	SuspendFS=1
 	keysvar=ScrollLock
 	logging=1
 	WebNames=YouTube|Facebook|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven
@@ -116,7 +115,6 @@ If (username="Riyusso" and devpw=cryptdevpw and StrLen(devpw)>0)
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %username%, settings.ini, settings, username ; needed for developer lock
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
-	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 	SetTimer, CheckBreakLoop, -2500
 
 	GuiControl,SettingsWndFirst:Choose, StartWithWindows, %StartWithWindows%
