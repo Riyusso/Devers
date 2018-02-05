@@ -1,4 +1,5 @@
 ﻿#NoEnv
+#NoTrayIcon
 #SingleInstance IGNORE
 #WinActivateForce
 #Persistent
@@ -46,6 +47,8 @@ return
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
+#If !isWindowFullscreen( "A" ) or SuspendFS=1 or WinActive("ahk_exe explorer.exe")
+
 F4::
 ChoosingWebsite:=true
 GoSub RSWeb
@@ -87,6 +90,35 @@ return
 	Gosub Reinstall
 return
 
+~LAlt::
+{
+	KeyWait, LAlt
+	KeyWait, LALt, D T.3
+	If (!ErrorLevel && A_PriorKey=="LAlt")
+		{
+			WinMinimize, A
+		}
+	}
+return
+
+
+~CapsLock::RapidHotkey("email", 2, 0.2, 1)
+email:
+SendInput {Raw}%email%
+return
+
+#CapsLock::RapidHotkey("pw", 2, 0.2, 1)
+pw:
+OopsMistake:=true
+SendInput {Raw}%password%
+SetTimer, Oops, -2500
+return
+Oops:
+OopsMistake:=false
+return
+
+#If
+
 ~F9::
 GoSub playpause
 return
@@ -114,21 +146,6 @@ return
 	GoSub SuspendScriptToggle
 return
 
-~CapsLock::RapidHotkey("email", 2, 0.2, 1)
-email:
-SendInput {Raw}%email%
-return
-
-#CapsLock::RapidHotkey("pw", 2, 0.2, 1)
-pw:
-OopsMistake:=true
-SendInput {Raw}%password%
-SetTimer, Oops, -2500
-return
-Oops:
-OopsMistake:=false
-return
-
 #If (A_IsCompiled)
 ~#!SC013::
 IntentReload:=true
@@ -141,18 +158,6 @@ IntentReload:=true
 Reload
 return
 #If
-
-~LAlt::
-{
-	KeyWait, LAlt
-	KeyWait, LALt, D T.3
-	If (!ErrorLevel && A_PriorKey=="LAlt")
-		{
-			WinMinimize, A
-		}
-	}
-return
-
 
 LockLabel:
 If (keysvar="" || keysvar="None" || keysvar="ERROR")
@@ -440,6 +445,7 @@ Installation:
 	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
 	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
+	Menu, Tray, Icon
 	Menu, Tray, Icon, RSIcon.ico
 	GoSub AdminPrompt
 return
