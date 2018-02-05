@@ -390,6 +390,7 @@ IfExist, settings.ini
 	{
 		If(PluginSwitch=1)
 		{
+			IniWrite, Released, settings.ini, plugins, State
 			IfNotExist, Runner.exe
 				FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
 			Loop, Files, *.ahk

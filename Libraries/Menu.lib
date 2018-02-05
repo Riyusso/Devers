@@ -712,7 +712,6 @@ ExitAppL:
 		IfWinExist, % ahk_pid PluginName
 			WinKill, % ahk_pid PluginName
 	}
-	IniWrite, Exit, settings.ini, plugins, State
 	ExitApp
 return
 
