@@ -1,21 +1,4 @@
-﻿SuspendFSCheck: ; Checks whether the user wants his hotkeys to work in fullscreen or not. Some hotkeys will still work. (Volume control mostly)
-If(SuspendFS=1)
-{
-	IfWinNotActive, ahk_exe explorer.exe
-	If isWindowFullScreen("A") && !A_IsSuspended
-	{
-		Menu, TRAY, Icon, RSStopped.ico,,1
-		Suspend, On
-	}
-	else if A_IsSuspended
-	{
-		Menu, TRAY, Icon, RSIcon.ico,,1
-		Suspend, Off
-	}
-}
-return
-
-RunAsAdmin:
+﻿RunAsAdmin:
 RunAsAdmin=1
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)

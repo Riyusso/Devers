@@ -90,7 +90,7 @@ If (username="Riyusso" and devpw=cryptdevpw and StrLen(devpw)>0)
 	AfterWU=1
 	ClockWanted=1
 	StartWithWindows=2
-	SuspendFS=1
+	SuspendFS=2
 	keysvar=ScrollLock
 	logging=1
 	WebNames=YouTube|Facebook|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven

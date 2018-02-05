@@ -136,7 +136,7 @@ MoreSettingsLabel:
 	Gui, Font, normal
 
 	Gui, Add, Text, % "x20 y+30 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+15 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , No|Yes
+	Gui, Add, DropDownList, % "x+15 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , Yes|No
 
 	IfExist, *.ahk
 	{
@@ -445,15 +445,12 @@ ScriptFunctions:
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Minimize Current App:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 2
-
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Show Desktop:
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center",  Alt x 3
+		Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
+		Gui, Add, Text, % "x+0 w" (Width/2) " Center",  Alt x 2
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Control:
+		Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
 
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
@@ -628,10 +625,14 @@ return
 
 MenuInit:
 IfExist RSIcon.ico
-Menu, TRAY, Icon, RSIcon.ico
+{
+	Menu, Tray, Icon
+	Menu, TRAY, Icon, RSIcon.ico
+}
 Else
 {
 	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	Menu, Tray, Icon
 	Menu, TRAY, Icon, RSIcon.ico
 }
 If A_IsCompiled
@@ -678,6 +679,7 @@ SuspendScriptToggle:
 Suspend, Toggle
 If A_IsSuspended
 {
+	Menu, Tray, Icon
 	Menu, TRAY, Icon, RSStopped.ico,,1
 	RSNotify("Suspended")
 	If A_IsPaused
@@ -686,6 +688,7 @@ If A_IsSuspended
 }
 If !A_IsSuspended
 {
+	Menu, Tray, Icon
 	Menu, TRAY, Icon, RSIcon.ico,,1
 	RSNotify("Released")
 	IniWrite, Released, settings.ini, plugins, State
