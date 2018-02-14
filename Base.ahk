@@ -30,8 +30,8 @@ FileCreateDir, %A_MyDocuments%\%ScriptName%
 SetWorkingDir, %A_MyDocuments%\%ScriptName%
 IfExist, settings.ini
 {
-	IniRead, CurrentVersion, build.ini, build, FileVersion, 1.0
-	If (FileVersion>CurrentVersion)
+	IniRead, InstalledFileVersion, build.ini, build, FileVersion, 1.0
+	If (FileVersion>InstalledFileVersion)
 	GoSub InstallFiles
 }
 DetectHiddenWindows, on
@@ -53,8 +53,8 @@ return
 #If !isWindowFullscreen( "A" ) or SuspendFS=1 or WinActive("ahk_exe explorer.exe")
 
 F4::
-ChoosingWebsite:=true
-GoSub RSWeb
+	ChoosingWebsite:=true
+	GoSub RSWeb
 return
 
 F4 & 1::
@@ -93,55 +93,51 @@ return
 	Gosub Reinstall
 return
 
-~LAlt::
-{
-	KeyWait, LAlt
-	KeyWait, LALt, D T.3
-	If (!ErrorLevel && A_PriorKey=="LAlt")
-		{
-			WinMinimize, A
-		}
-	}
+~$LAlt Up::
+	KeyWait, LAlt, U
+	KeyWait, LAlt, D, T0.2
+	If (ErrorLevel = 0) && A_PriorKey = "LAlt"
+	IfWinNotActive, ahk_class WorkerW
+	WinMinimize, A
 return
-
 
 ~CapsLock::RapidHotkey("email", 2, 0.2, 1)
 email:
-SendInput {Raw}%email%
+	SendInput {Raw}%email%
 return
 
 #CapsLock::RapidHotkey("pw", 2, 0.2, 1)
 pw:
-OopsMistake:=true
-SendInput {Raw}%password%
-SetTimer, Oops, -2500
-return
-Oops:
-OopsMistake:=false
+	OopsMistake:=true
+	SendInput {Raw}%password%
+	SetTimer, Oops, -2500
+	return
+	Oops:
+	OopsMistake:=false
 return
 
 #If
 
 ~F9::
-GoSub playpause
+	GoSub playpause
 return
 
 F11::
-GoSub PrevSong
+	GoSub PrevSong
 return
 
 F12::
-GoSub NextSong
+	GoSub NextSong
 return
 
 PgUp::
-Suspend, Permit
-GoSub vol_up
+	Suspend, Permit
+	GoSub vol_up
 return
 
 PgDn::
-Suspend, Permit
-GoSub vol_down
+	Suspend, Permit
+	GoSub vol_down
 return
 
 ~#!SC01F:: ; Win+Alt+S Suspends the script
@@ -151,14 +147,14 @@ return
 
 #If (A_IsCompiled)
 ~#!SC013::
-IntentReload:=true
-Reload
+	IntentReload:=true
+	Reload
 return
 #If
 #If (!A_IsCompiled)
 ~!SC013::
-IntentReload:=true
-Reload
+	IntentReload:=true
+	Reload
 return
 #If
 
@@ -510,6 +506,7 @@ Loop 25
 RunScript.Destroy()
 If CreateATask=1
 {
+	If A_IsCompiled
 	Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 	IniWrite, 0, settings.ini, settings, CreateATask
 }

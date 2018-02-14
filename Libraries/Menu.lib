@@ -100,6 +100,7 @@ button:
 		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 		IfNotExist, %StartMenuFile%
 		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+		If A_IsCompiled
 		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 	}
 	If StartWithWindows=1
@@ -935,7 +936,6 @@ PrInfo:
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0",  Toggles whether RS-Guard will lock the PC
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", after the amount of time or not.
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You can still lock it with the select key
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", Note that the F1 button toggles this function.
 			Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Full Screen -
 			Gui, Font, s9 cFFFFFF Bold, Tahoma

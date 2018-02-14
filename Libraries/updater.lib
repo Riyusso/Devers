@@ -1,8 +1,9 @@
 Updater:
 	UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-	IniRead, CurrentVersion, build.ini, build, Version, 1.0
-	If (UpdateVersion>CurrentVersion)
+	IniRead, InstalledVersion, build.ini, build, Version, 1.0
+
+	If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	{
 		RSNotify("Downloading")
 		Sleep 2000
