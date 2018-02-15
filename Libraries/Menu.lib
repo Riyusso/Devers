@@ -50,7 +50,7 @@
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
@@ -112,7 +112,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-MoreSettingsLabel:
+OtherSettingsLabel:
 	Width := 255
 	labelsx := (Width/7)+30
 	inputw := (Width/2)
@@ -121,15 +121,16 @@ MoreSettingsLabel:
 
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
 	taskbarsave=%TransparentStartMenu%
+	SetTimer, KeepTrans, Off
 
-	Gui, MoreMenu:New, +hwndMoreHWND
+	Gui, OtherMenu:New, +hwndOtherHWND
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", More Settings
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
 
 	Gui, Color, 008383, 333333
 	Gui, Font, s8, Tahoma
@@ -159,10 +160,10 @@ MoreSettingsLabel:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gmorebutton hwndBut1 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gotherbutton hwndBut1 +Center +Default", Apply
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gmoreclose hwndButt2 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gotherclose hwndButt2 +Center",Cancel
 	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Text, % "x+1 h42 vP"
@@ -172,11 +173,11 @@ MoreSettingsLabel:
 	Width:=Width*dpi
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w%Width%, More Settings
-	FadeIn(MoreHWND)
+	Gui, Show, w%Width%, Other Settings
+	FadeIn(OtherHWND)
 return
 
-morebutton:
+otherbutton:
 	Gui, Submit, NoHide
 
 	If(TransparentStartMenu<12)
@@ -199,6 +200,7 @@ morebutton:
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
+	SetTimer, KeepTrans, 12000
 
 	IfExist, *.ahk
 	{
@@ -225,12 +227,12 @@ morebutton:
 			}
 			}
 		}
-	FadeOut(MoreHWND)
+	FadeOut(OtherHWND)
 return
 
-moreclose:
+otherclose:
 WinSet, Transparent, %taskbarsave%, ahk_class Shell_TrayWnd
-FadeOut(MoreHWND)
+FadeOut(OtherHWND)
 return
 destroy:
 	FadeOut(ScriptOptions)
@@ -535,7 +537,7 @@ SettingsWndFirst:
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gMoreSettingsLabel hwndBut2 +Center", Other Settings
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls

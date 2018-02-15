@@ -2,9 +2,12 @@
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
-FileDelete, Base.exe
-FileDelete, devRS-install.exe
-FileDelete, devRS-install-d.exe
+IfExist, Base.exe
+	FileDelete, Base.exe
+IfExist, devRS-install.exe
+	FileDelete, devRS-install.exe
+IfExist, devRS-install-d.exe
+	FileDelete, devRS-install-d.exe
 Sleep 500
 
 IfExist, Libraries/developer.lib
