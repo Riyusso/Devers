@@ -209,7 +209,7 @@ otherbutton:
 			If % PluginState%PluginName%=1
 			{
 				IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 			}
 			else if % PluginState%PluginName%=2
 			{
@@ -765,7 +765,7 @@ DefaultMenu:
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut3 +Center",  Lock
 		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdater hwndBut1 +Center", Update
+		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut1 +Center", Update
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut4 +Center", Controls
@@ -786,6 +786,18 @@ DefaultMenu:
 		guih:=guih/dpi
 		Gui, Show, h%guih% w%guiw% y%guipos%, Menu
 		FadeIn(DefaultHWND)
+
+		IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+		IniRead, InstalledVersion, build.ini, build, Version, 1.0
+		IniRead, PromptVersion, build.ini, build, PromptVersion
+		If % VersionCompare(UpdateVersion, InstalledVersion)=1
+		{		
+			If(PromptVersion!=UpdateVersion)
+				GoSub UpdatePrompt
+			else
+				RSNotify("Update Available")
+		}
+
 		DefaultFader:=true
 	}
 Return
@@ -793,6 +805,29 @@ Return
 ExitDefMenu:
 FadeOut(DefaultHWND)
 DefaultFader:=false
+return
+
+Update:
+	UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	IniRead, InstalledVersion, build.ini, build, Version, 1.0
+
+	If % VersionCompare(UpdateVersion, InstalledVersion)=1
+	{
+		RSNotify("Downloading")
+		Sleep 2000
+		UrlDownloadToFile, 	https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe, %A_Temp%\devRS-install.exe
+		Run, %A_Temp%\devRS-install.exe
+	}
+	Else
+		RSNotify("No new versions")
+return
+
+NoUpdate:
+	Gui, Submit, NoHide
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	IniWrite, %UpdateVersion%, build.ini, build, PromptVersion
+	FadeOut(UpdatePrompt)
 return
 
 
@@ -1003,6 +1038,37 @@ AdminPrompt:
 	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %AdminPrompt%
 	Gui, Show, w%width% h%height% , Are you an admin?
 	FadeIn(AdminPrompt)
+return
+
+;--------------------------------------------------------------------------------------------------------------
+
+UpdatePrompt:
+	width=135
+	height=66
+	Gui, UpdatePrompt:New, +hwndUpdatePrompt
+	Gui, +LastFound +ToolWindow
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 008383
+	Gui, Font, s10 Bold, Tahoma
+	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Update to v%UpdateVersion%?
+	Gui, Add, Button, x8 y30 w55 +default gUpdate hwndBut1 +Center, Yeah
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndButt2 +Center,Nope
+	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+
+	width:=width*dpi
+	height:=height*dpi
+	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UpdatePrompt%
+	Gui, Show, w%width% h%height% , Update Prompt
+	FadeIn(UpdatePrompt)
 return
 
 ;--------------------------------------------------------------------------------------------------------------

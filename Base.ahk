@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=1.03
+FileVersion=2.1.1
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
@@ -31,8 +31,8 @@ SetWorkingDir, %A_MyDocuments%\%ScriptName%
 IfExist, settings.ini
 {
 	IniRead, InstalledFileVersion, build.ini, build, FileVersion, 1.0
-	If (FileVersion>InstalledFileVersion)
-	GoSub InstallFiles
+	If % VersionCompare(FileVersion, InstalledFileVersion)=1
+		GoSub UpdateFiles
 }
 DetectHiddenWindows, on
 #Include %A_ScriptDir%
@@ -388,8 +388,8 @@ IfExist, settings.ini
 	IfExist, *.ahk
 	{
 		IniWrite, Released, settings.ini, plugins, State
-		IfNotExist, Runner.exe
-			FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
+		IfNotExist, Extensions
+			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 
 		IfNotExist, Libraries
 			FileCreateDir, Libraries
@@ -405,11 +405,13 @@ IfExist, settings.ini
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			If(PluginState=1)
-				Run, %A_MyDocuments%\%ScriptName%\Runner.exe %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 		}
 	}
 	
 	GoSub InstallFiles
+	Run, %A_MyDocuments%\%ScriptName%\Extensions updater
+
 	GoSub IniReads
 	Gosub currentsettings
 	If !LockAfterRestart
@@ -458,8 +460,25 @@ InstallFiles:
 		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
 	IfNotExist, updater
 		FileInstall, Libraries/updater.lib, %A_MyDocuments%\%ScriptName%\updater, 1
-	IfNotExist, Runner.exe
-			FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
+	IfNotExist, Extensions
+			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+	IniWrite, %FileVersion%, build.ini, build, FileVersion
+return
+
+UpdateFiles:
+	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
+	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
+	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
+	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
+	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	FileInstall, Libraries/updater.lib, %A_MyDocuments%\%ScriptName%\updater, 1
+	FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+
+	IfExist, Runner.exe
+		FileDelete, Runner.exe
+	
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
 

@@ -3,24 +3,13 @@
 #SingleInstance FORCE
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-global dpi:=DpiFactor() ; required if you wish to use RSNotify(needs the 3 libraries included)
+global dpi:=DpiFactor()
 
 UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
 IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
-If % VersionCompare(UpdateVersion, InstalledVersion)=1
-{
-	RSNotify("Downloading")
-	Sleep 2000
-	UrlDownloadToFile, 	https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe, %A_Temp%\devRS-install.exe
-	Run, %A_Temp%\devRS-install.exe
-}
-Else
-{
-	RSNotify("No new versions")
-}
-
+Sleep 1800
 ExitApp
 return
 
