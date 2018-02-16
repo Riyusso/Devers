@@ -118,7 +118,7 @@ return
 
 #If
 
-~F9::
+F9::
 	GoSub playpause
 return
 
@@ -409,18 +409,7 @@ IfExist, settings.ini
 		}
 	}
 	
-	IfNotExist, launcher.exe
-	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
-	IfNotExist, segoeui.ttf
-	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
-	IfNotExist, RS.png
-	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
-	IfNotExist, rsanimation.mp4
-	FileInstall, Base/rsanimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
-	IfNotExist, RSStopped.ico
-	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	IfNotExist, RSIcon.ico
-	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	GoSub InstallFiles
 	GoSub IniReads
 	Gosub currentsettings
 	If !LockAfterRestart
@@ -446,27 +435,31 @@ Installation:
 	SetWorkingDir, %A_MyDocuments%\%ScriptName%
 	RSNotify("Installing",,750)
 	sleep 1350
-	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
-	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
-	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
-	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
-	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
-	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	IniWrite, %FileVersion%, build.ini, build, FileVersion
+	GoSub InstallFiles
 	Menu, Tray, Icon
 	Menu, Tray, Icon, RSIcon.ico
 	GoSub AdminPrompt
 return
 
 InstallFiles:
-	RSNotify("Installing",,750)
-	sleep 1350
-	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
-	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
-	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
-	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
-	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
-	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	IfNotExist, launcher.exe
+		FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
+	IfNotExist, segoeui.ttf
+		FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
+	IfNotExist, RS.png
+		FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
+	IfNotExist, RSAnimation.mp4
+		FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
+	IfNotExist, RSStopped.ico
+		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	IfNotExist, RSIcon.ico
+		FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	IfNotExist, Base/RSStopped.ico
+		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	IfNotExist, updater
+		FileInstall, Libraries/updater.lib, %A_MyDocuments%\%ScriptName%\updater, 1
+	IfNotExist, Runner.exe
+			FileInstall, Base/Runner.exe, %A_MyDocuments%\%ScriptName%\Runner.exe, 1
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
 
@@ -636,4 +629,3 @@ return
 #Include Libraries/RSWeb.lib
 #Include Libraries/Menu.lib
 #Include Libraries/Voltr.lib
-#Include Libraries/updater.lib
