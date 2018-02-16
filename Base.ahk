@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=2.1.1
+FileVersion=2.0.1.3
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
@@ -372,7 +372,7 @@ IfExist, settings.ini
 	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
-	If Reloaded=1
+	If Reloaded=1 && !A_IsCompiled
 	{
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
