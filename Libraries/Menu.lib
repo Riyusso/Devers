@@ -808,7 +808,10 @@ DefaultFader:=false
 return
 
 Update:
-	UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
+	FileDelete, %A_MyDocuments%\%ScriptName%\build_update.ini
+	Run, %A_MyDocuments%\%ScriptName%\Extensions updater
+	While ! FileExist( "build_update.ini" )
+		Sleep 500
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 

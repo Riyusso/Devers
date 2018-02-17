@@ -9,7 +9,6 @@ UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/bu
 IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
-Sleep 1800
 ExitApp
 return
 

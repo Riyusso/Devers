@@ -372,8 +372,9 @@ IfExist, settings.ini
 	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
-	If Reloaded=1 && !A_IsCompiled
+	If Reloaded=1
 	{
+		If !A_IsCompiled
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
 	}
@@ -384,7 +385,7 @@ IfExist, settings.ini
 	OnExit, ExitAppL
 
 	; How to use the plugin system :
-	; Just create a Plugin(number).ahk in the Script directory and it will run next time you restart the script
+	; Just create a file with the extension .ahk in the Script directory and it will run next time you restart the script
 	IfExist, *.ahk
 	{
 		IniWrite, Released, settings.ini, plugins, State
