@@ -1,4 +1,23 @@
-﻿; VersionCompare function by boiler at ahkscript.org
+﻿; WinHttp_DownloadToFile function by tmplinshi at autohotkey.com
+
+WinHttp_DownloadToFile(Url, FileName) {
+	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+	whr.Open("GET", Url, True)
+	whr.Send()
+	If whr.WaitForResponse()
+	{
+		ado := ComObjCreate("ADODB.Stream")
+		ado.Type := 1 ; adTypeBinary
+		ado.Open
+		ado.Write(whr.ResponseBody)
+		ado.SaveToFile(FileName, 2)
+		ado.Close
+	}
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+; VersionCompare function by boiler at ahkscript.org
 ; Returns 1 if version1 is more recent, 2 if version 2 is more recent, 0 if they are the same.
 VersionCompare(version1, version2)
 {

@@ -1,106 +1,25 @@
-#NoEnv
-#NoTrayIcon
-#SingleInstance FORCE
-SendMode Input
-SetWorkingDir %A_ScriptDir%
-global dpi:=DpiFactor()
+Update:
+	FileDelete, build_update.ini
+	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
-UrlDownloadToFile, https://github.com/Riyusso/.devRS/releases/download/latest/build.ini, build_update.ini
-IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-IniRead, InstalledVersion, build.ini, build, Version, 1.0
-
-ExitApp
-return
-
-DPIFactor()
-{
-RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
-; the reg key was not found - it means default settings
-; 96 is the default font size setting
-if (errorlevel=1) OR (DPI_value=96 )
-	return 1
-else
-	Return  DPI_Value/96
-}
-
-; VersionCompare function by boiler at ahkscript.org
-; Returns 1 if version1 is more recent, 2 if version 2 is more recent, 0 if they are the same.
-VersionCompare(version1, version2)
-{
-	StringSplit, verA, version1, .
-	StringSplit, verB, version2, .
-	Loop, % (verA0> verB0 ? verA0 : verB0)
+	If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	{
-		if (verA0 < A_Index)
-			verA%A_Index% := "0"
-		if (verB0 < A_Index)
-			verB%A_Index% := "0"
-		if (verA%A_Index% > verB%A_Index%)
-			return 1
-		if (verB%A_Index% > verA%A_Index%)
-			return 2
+		RSNotify("Downloading")
+		FadeOut(UpdatePrompt)
+		Sleep 2000
+		WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe", A_Temp . "\devRS-install.exe")
+		Run, %A_Temp%\devRS-install.exe
+		IniDelete, build.ini, build, PromptVersion
 	}
-	return 0
-}
-
-RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
-{
-	global SmartFade=0
-    SetTimer, SmartAppear, Off
-    SetTimer, SmartFade, Off
-	Gui, RSNotify:Destroy
-	Gui,RSNotify:New, +hwndRSNotify
-	Gui, +LastFound +ToolWindow
-	WinSet, Transparent, 0
-	Gui, Color, 008383
-	Gui, Margin, 0, 0
-	Gui, Font, s10 Bold w640, Verdana
-	whc:=47
-
-	Gui, Font, s13 w720, Verdana
-	Gui, -Border -Caption +AlwaysOnTop +ToolWindow +E0x20
-
-
-	Gui, Add, Text,cffffff hwndTHWND y9 +Hidden +Center, %Text% 	; Fake text to get the width so the x can be calculated beforehand
-	GuiControlGet, TC, Pos, %THWND% 	; Get the pos/size of the text into the TC variable, you can use the width of the text control with the variable 'TCW'
-	if(controlwidth!=0)
-		xcalc:=controlwidth/2-(TCW/2)
-	else
-		xcalc=13
-
-	Gui, Add, Text,cffffff x%xcalc% y10 +Center, %Text%
-
-	If controlwidth=0
-		TCW:=(TCW+26)*dpi
 	Else
-		TCW:=controlwidth*dpi
-
-	vhc:=A_ScreenHeight-106*dpi
-	averagex:=A_ScreenWidth-120*dpi-(tcw*0.75)
-	whc:=whc*dpi
-
-	WinSet, Region, 0-0 h%whc% w%TCW% r3-3
-	Gui, Show, x%averagex% y%vhc% h%whc% w%TCW% NoActivate
-	GoSub SmartAppear
-	SetTimer, SmartFade, -%Timed%
-	return
-}
-
-SmartAppear:
-	SmartFade:=SmartFade+8
-	WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
-	SetTimer, SmartAppear, -8
-	If (SmartFade>204)
-		SetTimer, SmartAppear, Off
+		RSNotify("No new versions")
 return
 
-SmartFade:
-		SmartFade:=SmartFade-8
-		WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
-		SetTimer, SmartFade, -8
-		If (SmartFade<9)
-		{
-			Gui, RSNotify:Destroy
-			SetTimer, SmartFade, Off
-		}
+NoUpdate:
+	Gui, Submit, NoHide
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	IniWrite, %UpdateVersion%, build.ini, build, PromptVersion
+	FadeOut(UpdatePrompt)
 return

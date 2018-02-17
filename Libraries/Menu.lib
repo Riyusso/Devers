@@ -813,33 +813,6 @@ FadeOut(DefaultHWND)
 DefaultFader:=false
 return
 
-Update:
-	FileDelete, %A_MyDocuments%\%ScriptName%\build_update.ini
-	Run, %A_MyDocuments%\%ScriptName%\Extensions updater
-	While ! FileExist( "build_update.ini" )
-		Sleep 500
-	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-	IniRead, InstalledVersion, build.ini, build, Version, 1.0
-
-	If % VersionCompare(UpdateVersion, InstalledVersion)=1
-	{
-		RSNotify("Downloading")
-		Sleep 2000
-		UrlDownloadToFile, 	https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe, %A_Temp%\devRS-install.exe
-		Run, %A_Temp%\devRS-install.exe
-	}
-	Else
-		RSNotify("No new versions")
-return
-
-NoUpdate:
-	Gui, Submit, NoHide
-	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-	IniWrite, %UpdateVersion%, build.ini, build, PromptVersion
-	FadeOut(UpdatePrompt)
-return
-
-
 ;--------------------------------------------------------------------------------------------------------------
 
 SecurityLoggingLabel:

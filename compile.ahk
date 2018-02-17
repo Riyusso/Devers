@@ -16,10 +16,10 @@ IfExist, Libraries/developer.lib
 Sleep 500
 Run, Compiler/Ahk2Exe.exe /in "Base.ahk" /icon "Base/RSIcon.ico"
 While ! FileExist( "Base.exe" )
-	Sleep 50
+	Sleep 100
 Run, Compiler/Ahk2Exe.exe /in "installer" /out "devRS-install.exe" /icon "Base/RSIcon.ico"
 While ! FileExist( "devRS-install.exe" )
-	Sleep 50
+	Sleep 100
 If FileExist("devRS-install.exe")
 	FileDelete, Base.exe
 
@@ -28,10 +28,10 @@ IfExist, Libraries/excluded
 	FileMove, Libraries/excluded, Libraries/developer.lib, 1
 	Run, Compiler/Ahk2Exe.exe /in "Base.ahk" /icon "Base/RSIcon.ico"
 	While ! FileExist( "Base.exe" )
-		Sleep 50
+		Sleep 100
 	Run, Compiler/Ahk2Exe.exe /in "installer" /out "devRS-install-d.exe" /icon "Base/RSIcon.ico"
 	While ! FileExist( "devRS-install-d.exe" )
-		Sleep 50
+		Sleep 100
 	FileDelete, Base.exe
 }
 

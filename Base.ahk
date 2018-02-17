@@ -411,8 +411,9 @@ IfExist, settings.ini
 	}
 	
 	GoSub InstallFiles
-	Run, %A_MyDocuments%\%ScriptName%\Extensions updater
-
+	FileDelete, build_update.ini
+	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
+	
 	GoSub IniReads
 	Gosub currentsettings
 	If !LockAfterRestart
@@ -459,8 +460,6 @@ InstallFiles:
 		FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
 	IfNotExist, Base/RSStopped.ico
 		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	IfNotExist, updater
-		FileInstall, Libraries/updater.lib, %A_MyDocuments%\%ScriptName%\updater, 1
 	IfNotExist, Extensions
 			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
@@ -474,7 +473,6 @@ UpdateFiles:
 	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
 	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
 	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	FileInstall, Libraries/updater.lib, %A_MyDocuments%\%ScriptName%\updater, 1
 	FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 
 	IfExist, Runner.exe
@@ -649,3 +647,4 @@ return
 #Include Libraries/RSWeb.lib
 #Include Libraries/Menu.lib
 #Include Libraries/Voltr.lib
+#Include Libraries/updater.lib
