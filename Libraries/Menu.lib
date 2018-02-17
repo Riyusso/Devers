@@ -94,13 +94,16 @@ button:
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
-	If StartWithWindows=2 && A_IsCompiled
+	If StartWithWindows=2
 	{
-		IfNotExist, %LinkFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
-		IfNotExist, %StartMenuFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
-		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+		If A_IsCompiled=1
+		{
+			IfNotExist, %LinkFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+			IfNotExist, %StartMenuFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+		}
 	}
 	If StartWithWindows=1
 	{
@@ -573,13 +576,16 @@ buttonfirst:
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
-	If StartWithWindows=2 && A_IsCompiled
+	If StartWithWindows=2
 	{
-		IfNotExist, %LinkFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
-		IfNotExist, %StartMenuFile%
-		FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
-		IniWrite, 1, settings.ini, settings, CreateATask
+		If A_IsCompiled=1
+		{
+			IfNotExist, %LinkFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+			IfNotExist, %StartMenuFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+			IniWrite, 1, settings.ini, settings, CreateATask
+		}
 	}
 	If StartWithWindows=1
 	{
