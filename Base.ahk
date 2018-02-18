@@ -642,9 +642,9 @@ return
 #Include Libraries/Functions.lib
 #Include Libraries/Library.lib
 #Include Libraries/RandomLabels.lib
+#Include Libraries/updater.lib
 #Include Libraries/RSNotify.lib
 #Include Libraries/RSGuard.lib
 #Include Libraries/RSWeb.lib
 #Include Libraries/Menu.lib
 #Include Libraries/Voltr.lib
-#Include Libraries/updater.lib

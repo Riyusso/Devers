@@ -47,33 +47,33 @@
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut1 +Center", Protection Settings
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Controls
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gbutton hwndBut1 +Center +Default", Apply
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gbutton hwndBut5 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroy hwndButt2 +Center",Cancel
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroy hwndBut6 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
 	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But6, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width , Script Options
@@ -163,16 +163,16 @@ OtherSettingsLabel:
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gotherbutton hwndBut1 +Center +Default", Apply
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gotherclose hwndButt2 +Center",Cancel
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gotherclose hwndBut2 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
 	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, w%Width%, Other Settings
@@ -299,26 +299,26 @@ ProtectionSettings:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", Info
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", Info
 
 	If(logging=1)
 	{
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+9 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut3 +Center", Show Logs
-		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+9 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut2 +Center", Show Logs
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	}
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gprotectionbutton hwndBut1 +Center +Default", Apply
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gprotectionbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyprot hwndButt2 +Center",Cancel
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyprot hwndBut4 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
 	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w295" , RS-Guard Settings
@@ -469,17 +469,17 @@ ScriptFunctions:
 		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+12 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", RS-Guard Info
-		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+12 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.35)/2) " w" (Width*0.35) " y+12 gsubit +hwndButton2 +Default", Exit
-		ImageButton.Create(Button2, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.35)/2) " w" (Width*0.35) " y+12 gsubit +hwndBut2 +Default", Exit
 
 		Gui, Add, Text, % "x7 y+2 w" (Width-14) "h2 vP"
 		GuiControlGet, P, Pos
 		H := PY + PH
 		H:=H*dpi
 		Width:=Width*dpi
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 		Gui, -Caption
 		WinSet, Region, 0-0 w%Width% h%H% r6-6
 		Gui, Show, % "w" Width " NA", Functions
@@ -536,33 +536,33 @@ SettingsWndFirst:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut2 +Center", Protection Settings
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut1 +Center", Protection Settings
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut2 +Center", Controls
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Controls
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut2 +Center", Uninstall
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (Width/2)-(((Width*0.30)*2)/2)-2 " y+15 w" (Width*0.30) " gbuttonfirst hwndBut1 +Center +Default", Apply
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x" (Width/2)-(((Width*0.30)*2)/2)-2 " y+15 w" (Width*0.30) " gbuttonfirst hwndBut5 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyfirst hwndButt2 +Center",Cancel
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyfirst hwndBut6 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h42 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
 	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But6, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width , Menu
@@ -760,33 +760,33 @@ DefaultMenu:
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 		Gui, Add, Button, % "x0 y-2 h" buth " w" butw+9 " gProtectSwitch hwndBut1 +Center", Protection
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gSuspendScriptToggle hwndBut2 +Center", Suspend
-		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw " gmnuScriptReload hwndBut4 +Center", Reload
-		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w" butw " gmnuScriptReload hwndBut3 +Center", Reload
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut3 +Center",  Lock
-		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut4 +Center",  Lock
 
-		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut1 +Center", Update
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut5 +Center", Update
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut4 +Center", Controls
-		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Controls
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut4 +Center", Settings
-		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut7 +Center", Settings
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut3 +Center",  Quit
-		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut8 +Center",  Quit
 
-		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut4 ", ×
-		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut9 ", ×
 		guiw:=guiw*dpi
 		guih:=guih*dpi
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But6, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But7, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But8, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But9, Opt1, Opt2, "", Opt4)
 		WinSet, Region, 0-0 w%guiw% h%guih% r50-50, ahk_id %DefaultHWND%
 		guiw:=guiw/dpi
 		guih:=guih/dpi
@@ -845,17 +845,17 @@ SecurityLoggingLabel:
 	Gui, Color, 2e2e2e
 	Gui, Font, s11 cFFFFFF Bold, Segoe UI
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " gdestroySecLogs hwndButt2 +Center +Default", Close
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " gdestroySecLogs hwndBut1 +Center +Default", Close
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
 	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r12-12
 	Gui, Show, % "w" Width  , Security Logs
@@ -969,11 +969,11 @@ PrInfo:
 		Gui, Color, 2e2e2e
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+18 w" (Width*0.64) " gdestroyPrInfo hwndButt2 +Center +Default", Got it
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+18 w" (Width*0.64) " gdestroyPrInfo hwndBut1 +Center +Default", Got it
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
@@ -1012,8 +1012,8 @@ AdminPrompt:
 	Gui, Add, Button, x8 y30 w55 +default gRunAsAdmin hwndBut1 +Center, Yeah
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, x71 y30 w55 gNotAnAdmin hwndButt2 +Center,Nope
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, x71 y30 w55 gNotAnAdmin hwndBut2 +Center,Nope
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 
 	width:=width*dpi
 	height:=height*dpi
@@ -1041,13 +1041,13 @@ UpdatePrompt:
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Update to v%UpdateVersion%?
 	Gui, Add, Button, x8 y30 w55 +default gUpdate hwndBut1 +Center, Yeah
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndButt2 +Center,Nope
-	ImageButton.Create(Butt2, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndBut2 +Center,Nope
 
 	width:=width*dpi
 	height:=height*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UpdatePrompt%
 	Gui, Show, w%width% h%height% , Update Prompt
 	FadeIn(UpdatePrompt)

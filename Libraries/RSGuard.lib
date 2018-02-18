@@ -88,6 +88,7 @@
 		Gui, Font, w670 s31 q4, Segoe UI
 		Gui, Color, 000000
 		Gui, -Border -Caption +AlwaysOnTop +ToolWindow
+		HideFocusBorder(ZPHWND)
 		BlockKeyBoardInputs("On")
 		Formula=0
 		VolumeTR:=true
@@ -114,30 +115,31 @@
 		Hidden:=(!DontShowRS) ? "+Hidden" : "" ; important
 
 		Gui, Add, Button, hwndSCHYT1 vSCH1 gplus7 x%halfcw% y%halfch% w%halfw% h%halfh% %Hidden%, 7
-		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT2 vSCH2 gplus8 x%czpw% y%ch1% w%calculatedsize% h%calculatedsize% %Hidden%, 8
-		ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT3 vSCH3 gplus9 x%cw2% y%halfch% w%halfw% h%halfh% %Hidden%, 9
-		ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT4 vSCH4 gplus4 x%cw1% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 4
-		ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT5 vSCH5 gplus5 x%czpw% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 5
-		ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT6 vSCH6 gplus6 x%cw2% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 6
-		ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT7 vSCH7 gplus1 x%halfcw% y%halfch2% w%halfw% h%halfh% %Hidden%, 1
-		ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT8 vSCH8 gplus2 x%czpw% y%ch2% w%calculatedsize% h%calculatedsize% %Hidden%, 2
-		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT9 vSCH9 gplus3 x%cw2% y%halfch2% w%halfw% h%halfh% %Hidden%, 3
+
+		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(SCHYT9, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% %Hidden%, 0
@@ -197,7 +199,6 @@
 			SetTimer, MinuteUpdate, 15000
 		}
 		IniWrite, 1, settings.ini, settings, LockAfterRestart
-		HideFocusBorder(ZPHWND)
 	}
 return
 
