@@ -116,6 +116,14 @@ pw:
 	OopsMistake:=false
 return
 
+~!SC013::
+	If (!A_IsCompiled)
+	{
+		IntentReload:=true
+		Reload
+	}
+return
+
 #If
 
 F9::
@@ -140,23 +148,17 @@ PgDn::
 	GoSub vol_down
 return
 
-~#!SC01F:: ; Win+Alt+S Suspends the script
-	Suspend, Permit
-	GoSub SuspendScriptToggle
-return
-
 #If (A_IsCompiled)
 ~#!SC013::
 	IntentReload:=true
 	Reload
 return
 #If
-#If (!A_IsCompiled)
-~!SC013::
-	IntentReload:=true
-	Reload
+
+~#!SC01F:: ; Win+Alt+S Suspends the script
+	Suspend, Permit
+	GoSub SuspendScriptToggle
 return
-#If
 
 LockLabel:
 If (keysvar="" || keysvar="None" || keysvar="ERROR")
