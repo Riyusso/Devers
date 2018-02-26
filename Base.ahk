@@ -108,12 +108,14 @@ return
 
 #CapsLock::RapidHotkey("pw", 2, 0.2, 1)
 pw:
-	OopsMistake:=true
+	If !Authorized
+	{
+		DontShowRS:=true
+		AuthReq:=true
+		GoSub LockNow
+		return
+	}
 	SendInput {Raw}%password%
-	SetTimer, Oops, -2500
-	return
-	Oops:
-	OopsMistake:=false
 return
 
 ~!SC013::
@@ -188,6 +190,7 @@ return
 	F7::Return
 	F8::Return
 	F10::Return
+	CapsLock::Return
 	LCtrl::Return
 	RCtrl::Return
 	Esc::Return
