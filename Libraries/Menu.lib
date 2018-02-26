@@ -686,7 +686,6 @@ If !A_IsSuspended
 	Menu, Tray, Icon
 	Menu, TRAY, Icon, RSIcon.ico,,1
 	RSNotify("Released")
-	IniWrite, Released, settings.ini, plugins, State
 	If A_IsPaused
 		Pause, Off
 }

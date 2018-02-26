@@ -177,7 +177,9 @@ return
 	RButton::Return
 	LAlt::Return
 	RAlt::Return
-	F1::Return
+	F1::
+		GoSub fadeinclock
+	return
 	F2::Return
 	F3::Return
 	F4::Return
@@ -390,7 +392,6 @@ IfExist, settings.ini
 	; Just create a file with the extension .ahk in the Script directory and it will run next time you restart the script
 	IfExist, *.ahk
 	{
-		IniWrite, Released, settings.ini, plugins, State
 		IfNotExist, Extensions
 			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 
@@ -567,8 +568,8 @@ Initiation:
 	AfterWU=2
 	logging=2
 
-	ws1=www.youtube.com
-	ws2=www.facebook.com
+	ws1=www.facebook.com
+	ws2=www.youtube.com
 	ws3=www.reddit.com
 	ws4=www.9gag.com
 	ws5=https://www.twitch.tv
@@ -576,7 +577,7 @@ Initiation:
 	ws7=www.thepiratebay.org
 	ws8=https://alpha.wallhaven.cc/
 
-	WebNames=YouTube|Facebook|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven
+	WebNames=Facebook|YouTube|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven
 	IniWrite, %WebNames%, settings.ini, Web, WebNames
 
 	Loop, 8

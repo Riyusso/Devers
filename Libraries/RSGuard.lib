@@ -92,14 +92,12 @@
 		BlockKeyBoardInputs("On")
 		Formula=0
 		VolumeTR:=true
+		Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
+		Gui, Add, Text, c000000 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
+		Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
+		Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
 		If ClockWanted=1
-		{
-			Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
-			Gui, Add, Text, c000000 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
-			Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
-			Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
-			SetTimer, changeclr, -5000
-		}
+			SetTimer, fadeinclock, -5000
 
 		Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
 		Gui, Color, 000000
@@ -202,7 +200,7 @@
 	}
 return
 
-changeclr:
+fadeinclock:
 SetFormat, IntegerFast, hex
 Var += 0  ; Sets Var (which previously contained 11) to be 0xb.
 Var .= ""  ; Necessary due to the "fast" mode.
@@ -312,7 +310,7 @@ UnlockPC:
 	{
 		VolumeTR:=false
 		sleep 35
-		SetTimer, changeclr, Off
+		SetTimer, fadeinclock, Off
 		SetTimer, SecondDisplayProtection, Off
 		SetTimer, KeepOnTop, Off
 		SetTimer ShowAgain, Off
