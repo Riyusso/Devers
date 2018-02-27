@@ -1,5 +1,4 @@
 ﻿RSGuard:
-	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	If !LockPw
 	{
 		RSNotify("No Password")
@@ -554,9 +553,8 @@ ProtectSwitch:
 Return
 
 CheckBreakLoop:
-IniRead, BreakLoop, settings.ini, settings, BreakLoop
-If BreakLoop=1
-GoSub Protection
+	If BreakLoop=1
+		GoSub Protection
 return
 
 Protection:

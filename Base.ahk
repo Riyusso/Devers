@@ -364,18 +364,13 @@ return
 
 RunScript: ; This is the beginning of the script
 GoSub VolTR
+GoSub IniReads
 SetTimer, CheckBreakLoop, -2500
 IfExist, settings.ini
 {
-	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
-	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	If RunAsAdmin && !LockAfterRestart
 	RunAsAdmin()
-	IniRead, CreateATask, settings.ini, settings, CreateATask
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
-	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 
-	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	If Reloaded=1
 	{
 		If !A_IsCompiled
@@ -417,7 +412,6 @@ IfExist, settings.ini
 	FileDelete, build_update.ini
 	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
 	
-	GoSub IniReads
 	Gosub currentsettings
 	If !LockAfterRestart
 	{
@@ -617,6 +611,8 @@ Initiation:
 return
 
 IniReads:
+	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
+	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	IniRead, keysvar, settings.ini, settings, lockkey
 	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
@@ -628,6 +624,10 @@ IniReads:
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 	IniRead, AfterFS, settings.ini, settings, AfterFS
 	IniRead, AfterWU, settings.ini, settings, AfterWU
+	IniRead, CreateATask, settings.ini, settings, CreateATask
+	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
+	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
+	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3)
 
 	Loop, 8
