@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=2.0.1.3
+FileVersion=2.0.1.4
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
@@ -108,12 +108,60 @@ return
 
 #CapsLock::RapidHotkey("pw", 2, 0.2, 1)
 pw:
-	OopsMistake:=true
+	If !Authorized
+	{
+		GoSub Authorization
+		return
+	}
 	SendInput {Raw}%password%
-	SetTimer, Oops, -2500
-	return
-	Oops:
-	OopsMistake:=false
+return
+
+Authorization:
+	Gui, Auth:New, +hwndAuth
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 333333, 333333
+	Gui, Font, s10 Bold c00afaf, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w200 h26 Background1f1f1f Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, x0 y4 w200 Center BackgroundTrans +0x200 cb1b1b1, Please authorize yourself.
+
+	Gui, Font, w700 s12 c00afaf, Segoe UI Black
+	Gui, Add, Edit, % "x0 y+13 w155 h25 hwndEdit265 vorigpass -E0x200 +Center -VScroll +password",
+
+	
+	Gui, Font, w700 s11 ceeeeee, Segoe UI Black
+	Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0]
+	Opt2 := [ , 0x333333, 0x333333, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, x+0 w45 h25 +default gAuthorize hwndBut1 +Center, Go
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	scaledw:=200*dpi
+	scaledh:=70*dpi
+	SHAutoComplete(Edit265)
+	WinSet, Region, 0-0 w%scaledw% h%scaledh% r12-12, ahk_id %Auth%
+	Gui, Show, w%scaledw% h%scaledh%, Authorization
+	FadeIn(Auth)
+return
+
+Authorize:
+	Gui, Submit, NoHide
+	If (origpass=password and StrLen(origpass)>0)
+	{
+		Authorized:=true
+		RSNotify("Authorized")
+		FadeOut(Auth)
+		WinWaitNotActive, ahk_id %Auth%,,15
+		SendInput {Raw}%password%
+	}
+	Else
+		RSNotify("Not Authorized")
+	SetTimer, AuthExpire, -900000
+	FadeOut(Auth)
 return
 
 ~!SC013::
@@ -188,6 +236,7 @@ return
 	F7::Return
 	F8::Return
 	F10::Return
+	CapsLock::Return
 	LCtrl::Return
 	RCtrl::Return
 	Esc::Return
@@ -474,8 +523,16 @@ UpdateFiles:
 
 	IfExist, Runner.exe
 		FileDelete, Runner.exe
-	
+	GoSub Migrations
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
+return
+
+Migrations:
+	Migration1:
+		IniRead, LockPw, settings.ini, settings, LockPw
+		IniDelete, settings.ini, settings, LockPw
+		LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
+		IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -580,7 +637,7 @@ Initiation:
 	}
 
 	IniWrite, %lockkey%, settings.ini, settings, lockkey
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
+	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %email%, settings.ini, settings, email
@@ -594,7 +651,7 @@ Initiation:
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
 	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
-	IniRead, LockPw, settings.ini, settings, LockPw
+	IniRead, LockPwHash, settings.ini, settings, LockPwHash
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, email, settings.ini, settings, email
@@ -614,7 +671,10 @@ IniReads:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	IniRead, keysvar, settings.ini, settings, lockkey
-	IniRead, LockPw, settings.ini, settings, LockPw
+
+	IniRead, LockPwHash, settings.ini, settings, LockPwHash
+	LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3)
+
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, passwordhash, settings.ini, settings, passwordhash
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop

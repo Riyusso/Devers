@@ -6,7 +6,6 @@
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
-	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, email, settings.ini, settings, email
 	IniRead, passwordhash, settings.ini, settings, passwordhash
@@ -32,7 +31,6 @@
 	Gui, Font, s9 cDFDFDF
 	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
 	Gui, Font, s9 cFFFFFF
-
 
 	Gui, Add, Text, % "x" labelsx " y+12", Email:
 	Gui, Add, Edit, % "x+38 w" inputw " h15 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
@@ -86,7 +84,6 @@ button:
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
@@ -152,7 +149,6 @@ OtherSettingsLabel:
 			Gui, Add, DropDownList, % "x+20 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
-
 
 	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
@@ -250,8 +246,12 @@ ProtectionSettings:
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 0
 	IniRead, AfterFS, settings.ini, settings, AfterFS
 	IniRead, AfterWU, settings.ini, settings, AfterWU
-	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
+
+	If LockPw
+		AuthPassword=%LockPw%
+	else
+		AuthPassword:=false
 
 	If BreakLoop=1
 	ChooseBL=1
@@ -275,7 +275,7 @@ ProtectionSettings:
 
 	Gui, Add, DropDownList, % "x+8 w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
 
-	Gui, Add, Text, % "x8 y+22 w147 Center", Lock Password ›
+	Gui, Add, Text, % "x8 y+22 w147 Center", Protection PIN ›
 	Gui, Add, Edit, % "x+8 w87 h15 vLockPw hwndEdit8 +password -E0x200 +Center -VScroll", %LockPw%
 
 	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
@@ -330,7 +330,6 @@ FadeOut(ProtectionSettings)
 return
 
 protectionbutton:
-
 	Gui, Submit, NoHide
 
 	MetRequirements:=True
@@ -372,11 +371,23 @@ protectionbutton:
 			return
 		}
 	}
+	NewLockPw:=LockPw
+	LockPw:=AuthPassword
+	If (NewLockPw!=AuthPassword) && AuthPassword
+	{
+		DontShowRS:=true
+		AuthReq:=true
+		GoSub LockNow
+		WinWaitActive, ahk_id %ZPHWND%
+		WinWaitNotActive, ahk_id %ZPHWND%
+	}
+	LockPw:=NewLockPw
 
+	LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
+	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %KeysVar%, settings.ini, settings, lockkey
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
@@ -596,7 +607,6 @@ buttonfirst:
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptionsFirst)

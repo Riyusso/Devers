@@ -5,6 +5,10 @@ FadeOut(AdminPrompt)
 GoSub SettingsWndFirst
 return
 
+AuthExpire:
+Authorized:=false
+return
+
 NotAnAdmin:
 RunAsAdmin=0
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
