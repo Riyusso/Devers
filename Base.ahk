@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=2.0.1.3
+FileVersion=2.0.1.4
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
@@ -483,8 +483,16 @@ UpdateFiles:
 
 	IfExist, Runner.exe
 		FileDelete, Runner.exe
-	
+	GoSub Migrations
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
+return
+
+Migrations:
+	Migration1:
+		IniRead, LockPw, settings.ini, settings, LockPw
+		IniDelete, settings.ini, settings, LockPw
+		LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
+		IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -589,7 +597,7 @@ Initiation:
 	}
 
 	IniWrite, %lockkey%, settings.ini, settings, lockkey
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
+	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %email%, settings.ini, settings, email
@@ -603,7 +611,7 @@ Initiation:
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
 	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
-	IniRead, LockPw, settings.ini, settings, LockPw
+	IniRead, LockPwHash, settings.ini, settings, LockPwHash
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, email, settings.ini, settings, email
@@ -621,7 +629,10 @@ return
 
 IniReads:
 	IniRead, keysvar, settings.ini, settings, lockkey
-	IniRead, LockPw, settings.ini, settings, LockPw
+
+	IniRead, LockPwHash, settings.ini, settings, LockPwHash
+	LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3)
+
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, passwordhash, settings.ini, settings, passwordhash
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop

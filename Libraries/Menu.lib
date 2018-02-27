@@ -6,7 +6,6 @@
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
-	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, email, settings.ini, settings, email
 	IniRead, passwordhash, settings.ini, settings, passwordhash
@@ -32,7 +31,6 @@
 	Gui, Font, s9 cDFDFDF
 	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
 	Gui, Font, s9 cFFFFFF
-
 
 	Gui, Add, Text, % "x" labelsx " y+12", Email:
 	Gui, Add, Edit, % "x+38 w" inputw " h15 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
@@ -86,7 +84,6 @@ button:
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
@@ -250,7 +247,6 @@ ProtectionSettings:
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 0
 	IniRead, AfterFS, settings.ini, settings, AfterFS
 	IniRead, AfterWU, settings.ini, settings, AfterWU
-	IniRead, LockPw, settings.ini, settings, LockPw
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 
 	If BreakLoop=1
@@ -372,11 +368,11 @@ protectionbutton:
 			return
 		}
 	}
-
+	LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
+	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %KeysVar%, settings.ini, settings, lockkey
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
@@ -596,7 +592,6 @@ buttonfirst:
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
-	IniWrite, %LockPw%, settings.ini, settings, LockPw
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptionsFirst)
