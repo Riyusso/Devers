@@ -313,12 +313,7 @@ UnlockPC:
 	{
 		VolumeTR:=false
 		sleep 35
-		If AuthReq
-		{
-			Authorized:=true
-			AuthReq:=false
-			SetTimer, AuthExpire, -1800000
-		}
+		AuthReq:=false
 		SetTimer, fadeinclock, Off
 		SetTimer, SecondDisplayProtection, Off
 		SetTimer, KeepOnTop, Off

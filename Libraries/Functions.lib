@@ -1,4 +1,13 @@
-﻿; WinHttp_DownloadToFile function by tmplinshi at autohotkey.com
+﻿SHAutoComplete(hEdit)	; adds the ability to insert control characters from the Ascii table (such as ctrl + backspace)
+{
+	DllCall("ole32\CoInitialize", "Uint", 0)
+	DllCall("shlwapi\SHAutoComplete", "Uint", hEdit, "Uint",0x80000000|0x20000000)
+	DllCall("ole32\CoUninitialize")
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+; WinHttp_DownloadToFile function by tmplinshi at autohotkey.com
 
 WinHttp_DownloadToFile(Url, FileName) {
 	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
