@@ -416,7 +416,7 @@ IfExist, settings.ini
 	FileDelete, build_update.ini
 	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
 	
-	Gosub currentsettings
+	Gosub defaultsettings
 	If !LockAfterRestart
 	{
 		If A_IsCompiled
@@ -436,6 +436,7 @@ Gosub Installation
 return
 
 Installation:
+	FirstRun:=true
 	FileCreateDir, %A_MyDocuments%\%ScriptName%
 	SetWorkingDir, %A_MyDocuments%\%ScriptName%
 	RSNotify("Installing",,750)
@@ -534,7 +535,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-currentsettings:
+defaultsettings:
 	OSVer := GetOSVersion()
 	DestroyEnded=1
 	anvar = %A_MyDocuments%\%ScriptName%\rsanimation.mp4 ; location of gif you want to show
@@ -618,7 +619,7 @@ Initiation:
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 
-	GoSub currentsettings
+	GoSub defaultsettings
 return
 
 IniReads:

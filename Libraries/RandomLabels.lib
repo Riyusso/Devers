@@ -1,19 +1,19 @@
-﻿RunAsAdmin:
+﻿AuthExpire:
+Authorized:=false
+return
+
+RunAsAdmin:
 RunAsAdmin=1
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)
-GoSub SettingsWndFirst
-return
-
-AuthExpire:
-Authorized:=false
+GoSub Settings
 return
 
 NotAnAdmin:
 RunAsAdmin=0
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)
-GoSub SettingsWndFirst
+GoSub Settings
 return
 
 ARun:
