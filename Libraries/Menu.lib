@@ -101,7 +101,10 @@ button:
 			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 			IfNotExist, %StartMenuFile%
 			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
-			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+			If FirstRun
+				IniWrite, 1, settings.ini, settings, CreateATask
+			else
+				Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 		}
 	}
 	If StartWithWindows=1
@@ -110,8 +113,10 @@ button:
 		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	}
 	If FirstRun
+	{
 		SetTimer, ARun, -1600
-	FirstRun:=false
+		FirstRun:=false
+	}
 return
 
 destroyset:
