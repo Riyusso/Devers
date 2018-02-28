@@ -369,6 +369,9 @@ return
 RunScript: ; This is the beginning of the script
 GoSub VolTR
 GoSub IniReads
+IniRead, LockPwHash, settings.ini, settings, LockPwHash ; keep in a separate thread with passwordhash decryption
+if LockPwHash!=ERROR || LockPwHas ; keep in a separate thread with passwordhash decryption
+LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3) ; keep in a separate thread with passwordhash decryption
 SetTimer, CheckBreakLoop, -2500
 IfExist, settings.ini
 {
@@ -627,11 +630,7 @@ IniReads:
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	IniRead, keysvar, settings.ini, settings, lockkey
 
-	IniRead, LockPwHash, settings.ini, settings, LockPwHash
-	LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3)
-
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
-	IniRead, passwordhash, settings.ini, settings, passwordhash
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, email, settings.ini, settings, email
 	IniRead, seconds, settings.ini, settings, seconds
@@ -643,7 +642,10 @@ IniReads:
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
-	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3)
+
+	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
+	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption
+	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3) ; keep in a separate thread with lockpwhash decryption
 
 	Loop, 8
 	{
