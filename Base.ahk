@@ -108,12 +108,15 @@ return
 
 #CapsLock::RapidHotkey("pw", 2, 0.2, 1)
 pw:
-	If !Authorized
+	If password
 	{
-		GoSub Authorization
-		return
+		If !Authorized
+		{
+			GoSub Authorization
+			return
+		}
+		SendInput {Raw}%password%	
 	}
-	SendInput {Raw}%password%
 return
 
 ~!SC013::
@@ -538,7 +541,6 @@ currentsettings:
 	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<img src=""" anvar """ width=""" awsize """ height=""" ahsize """>'n</center>`n</body>`n</html>"
 	Formula=0
 	ItsMeHaha=0
-	ClockWanted=1
 	vh:=A_ScreenHeight-92
 	musique=0
 	AlreadyLogged=0
