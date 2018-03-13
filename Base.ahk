@@ -101,6 +101,10 @@ return
 	WinMinimize, A
 return
 
+!Shift::
+	PostMessage, 0x50, 2, 0
+return
+
 ~CapsLock::RapidHotkey("email", 2, 0.2, 1)
 email:
 	SendInput {Raw}%email%
