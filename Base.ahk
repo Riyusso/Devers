@@ -102,7 +102,7 @@ return
 return
 
 !Shift::
-	PostMessage, 0x50, 2, 0
+	Send {LShift Down}{LAlt Down}{LShift Up}{LAlt Up}
 return
 
 ~CapsLock::RapidHotkey("email", 2, 0.2, 1)
