@@ -7,6 +7,21 @@ SendMode Input
 ScriptName=.devRS
 global dpi:=DpiFactor()
 
+If (A_ScriptName == "devRS-install-d.exe")
+{
+	SetWorkingDir %A_MyDocuments%\%scriptname%
+	GoSub UpdateIt
+
+	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
+	{
+		Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
+		If(IsUpdated)
+			RSNotify("Updated")
+		Sleep 1750
+	}
+	ExitApp
+}
+
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
 	SetWorkingDir %A_MyDocuments%\%scriptname%
