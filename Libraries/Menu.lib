@@ -984,6 +984,10 @@ Authorize:
 	FadeOut(Auth)
 return
 
+AuthExpire:
+Authorized:=false
+return
+
 ;--------------------------------------------------------------------------------------------------------------
 
 UpdatePrompt:
