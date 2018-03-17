@@ -975,6 +975,7 @@ Authorize:
 		RSNotify("Authorized")
 		FadeOut(Auth)
 		WinWaitNotActive, ahk_id %Auth%,,15
+		If !BreakLoop=1
 		SetTimer, AuthExpire, -900000
 		SendInput {Raw}%password%
 		return

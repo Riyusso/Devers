@@ -1,4 +1,6 @@
 ﻿RSGuard:
+	Authorized:=false
+	SetTimer, AuthExpire, Off
 	If !LockPw
 	{
 		RSNotify("No Password")
