@@ -1,8 +1,4 @@
-﻿AuthExpire:
-Authorized:=false
-return
-
-RunAsAdmin:
+﻿RunAsAdmin:
 RunAsAdmin=1
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)
