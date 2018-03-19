@@ -97,7 +97,7 @@ return
 	GetKeyState, state, Shift
 	If state=D
 	{
-		Send {LAlt Down}{LShift Down}{LShift Up}{LAlt Up}
+		Send {LAlt Down}{LShift Up}{LAlt Up}
 		return
 	}
 	KeyWait, LAlt, U
