@@ -1,6 +1,14 @@
 ﻿RSGuard:
-	Authorized:=false
-	SetTimer, AuthExpire, Off
+	If authCheckDelay
+	{
+		SetTimer, CheckAuth, -5000
+		authCheckDelay:=false
+	}
+	else
+	{
+		Authorized:=false
+		SetTimer, AuthExpire, Off
+	}
 	If !LockPw
 	{
 		RSNotify("No Password")
@@ -319,6 +327,7 @@ UnlockPC:
 		SetTimer, SecondDisplayProtection, Off
 		SetTimer, KeepOnTop, Off
 		SetTimer ShowAgain, Off
+		SetTimer, CheckAuth, Off
 		BlockKeyBoardInputs("Off")
 		SetTimer, FadeClock, Off
 		GoSub TransProtectionReverse
@@ -455,6 +464,14 @@ RevTrans:
 	ItsLocked=0
 	DontDoItTwice=1
 	SetTimer, DontDoItLabel, -2000
+return
+
+CheckAuth:
+IfWinActive, ahk_id %ZPHWND%
+{
+	Authorized:=false
+	SetTimer, AuthExpire, Off
+}
 return
 
 LockNow:
@@ -627,6 +644,7 @@ CFullScreen:
 		LogTime(3)
 		IniWrite, 1, settings.ini, settings, LockAfterRestart
 		DontShowRS:=true
+		authCheckDelay:=true
 		Gosub RSGuard
 	}
 return
