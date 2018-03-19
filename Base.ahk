@@ -94,15 +94,17 @@ return
 return
 
 ~$LAlt Up::
+	GetKeyState, state, Shift
+	If state=D
+	{
+		Send {LAlt Down}{LShift Down}{LShift Up}{LAlt Up}
+		return
+	}
 	KeyWait, LAlt, U
 	KeyWait, LAlt, D, T0.2
 	If (ErrorLevel = 0) && A_PriorKey = "LAlt"
 	IfWinNotActive, ahk_class WorkerW
 	WinMinimize, A
-return
-
-!Shift::
-	Send {LShift Down}{LAlt Down}{LShift Up}{LAlt Up}
 return
 
 ~CapsLock::RapidHotkey("email", 2, 0.2, 1)
