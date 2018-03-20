@@ -351,8 +351,8 @@ return
 ~LButton Up::
 MouseGetPos, , , id, control
 WinGetClass, class, ahk_id %id%
-if (class!="AutoHotkeyGUI")
-GoSub ExitDefMenu
+if (class!="AutoHotkeyGUI" && class!="#32769")
+	GoSub ExitDefMenu
 return
 ~RButton Up::
 MouseGetPos, , , id, control
