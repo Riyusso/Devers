@@ -160,10 +160,6 @@ PrevSong:
 	RSNotify("Previous")
 return
 
-DontDoItLabel:
-DontDoItTwice=0
-return
-
 GuiClose:
    Gui, Destroy
    CtlColors.Free()

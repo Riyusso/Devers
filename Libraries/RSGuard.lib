@@ -461,8 +461,6 @@ return
 RevTrans:
 	UnlockDelay:=false
 	ItsLocked=0
-	DontDoItTwice=1
-	SetTimer, DontDoItLabel, -2000
 return
 
 CheckAuth:
