@@ -49,21 +49,21 @@
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut1 +Center", Protection Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Functions
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Functions
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gbutton hwndBut5 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h33 gbutton hwndBut5 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyset hwndBut6 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h33 gdestroyset hwndBut6 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 h42 vP"
+	Gui, Add, Text, % "x+1 y+2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
