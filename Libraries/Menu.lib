@@ -429,7 +429,7 @@ ScriptFunctions:
 		Width := 300
 		Gui, Functions:New, +hwndSFunctions
 		Gui, +LastFound
-		WinSet, Transparent, 210
+		WinSet, Transparent, 0
 		Gui, Color, 008383
 		Gui, Margin, 0, 0
 		Gui, Font, s11 cD0D0D0 Bold
