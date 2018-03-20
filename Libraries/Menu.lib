@@ -546,6 +546,7 @@ ScriptFunctions:
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width " NA", Functions
 	FadeIn(SFunctions)
+	GoSub GetLatestVersion
 return
 
 subit:

@@ -422,8 +422,7 @@ IfExist, settings.ini
 	}
 	
 	GoSub InstallFiles
-	FileDelete, build_update.ini
-	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
+	GoSub GetLatestVersion
 	
 	Gosub defaultsettings
 	If !LockAfterRestart

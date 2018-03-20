@@ -1,6 +1,5 @@
 Update:
-	FileDelete, build_update.ini
-	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
+	GoSub GetLatestVersion
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
@@ -16,6 +15,11 @@ Update:
 	}
 	Else
 		RSNotify("No new versions")
+return
+
+GetLatestVersion:
+	FileDelete, build_update.ini
+	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
 return
 
 NoUpdate:
