@@ -63,7 +63,7 @@
 
 	Gui, Add, Button, % "x+5 w" (Width*0.38) " h33 gdestroyset hwndBut6 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 y+2 vP"
+	Gui, Add, Text, % "x+1 y+0 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -178,11 +178,11 @@ OtherSettingsLabel:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gotherbutton hwndBut1 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h31 gotherbutton hwndBut1 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gotherclose hwndBut2 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut2 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 h42 vP"
+	Gui, Add, Text, % "x+1 h44 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -323,13 +323,13 @@ ProtectionSettings:
 
 	If(logging=1)
 	{
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+9 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut2 +Center", Show Logs
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut2 +Center", Show Logs
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	}
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.30)-2 " y+15 w" (Width*0.30) " gprotectionbutton hwndBut3 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gprotectionbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.30) " gdestroyprot hwndBut4 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gdestroyprot hwndBut4 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
