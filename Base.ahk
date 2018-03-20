@@ -563,6 +563,8 @@ defaultsettings:
 	Green := "00C000"
 	Blue  := "0000FF"
 	Pink  := "FF20FF"
+	darkerc=D0D0D0
+	lightc=F6F6F6
 	idleseconds:=1000*(seconds)
 	ItsLocked=0
 return

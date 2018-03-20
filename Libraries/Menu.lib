@@ -20,7 +20,7 @@
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
+	Gui, Add, Text, % "x0 y7 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 
 		Gui, Color, 008383, 252525
 		Gui, Font, s9
@@ -51,7 +51,7 @@
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Controls
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Functions
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+0 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
 
@@ -426,7 +426,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ScriptFunctions:
-		Width := 300
+		Width := 350
 		Gui, Functions:New, +hwndSFunctions
 		Gui, +LastFound
 		WinSet, Transparent, 0
@@ -439,60 +439,88 @@ ScriptFunctions:
 		Gui, Font, s8 c228a96, Tahoma
 		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", The Lock key is configurable
 		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check Protection Settings
-		Gui, Font, s10 cD0D0D0, Tahoma
-		Gui, Add, Text, % "x-2 y+10 w" (Width-(Width*0.47)) " Center BackgroundTrans", Function
-		Gui, Add, Text, % "x+52 w30 Center BackgroundTrans", Keys
-		Gui, Font, s8 cD0D0D0, Tahoma
+		Gui, Font, s10 c%lightc%, Tahoma
+		Gui, Add, Text, % "x0 y+15 w" (Width/2) " Center BackgroundTrans", Function
+		Gui, Font, s10 c%lightc%, Tahoma
+		Gui, Add, Text, % "x+2 w" (Width/2) " Center BackgroundTrans", Keys
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ",
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4
+		Gui, Font, s8 c%lightc%, Tahoma
+		Gui, Add, Text, % "x+0 w" (Width/2) " Center", F4
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+0 w" (Width/2) " Center",  Alt x 2
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2
 
 		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
 
+		Gui, Font, s8 c%darkerc%, Tahoma
 		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
+		Gui, Font, s8 c%lightc%, Tahoma
 		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
 
 		Gui, Font, s10 cFFFFFF Bold, Segoe UI
@@ -500,17 +528,20 @@ ScriptFunctions:
 		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+12 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.35)/2) " w" (Width*0.35) " y+12 gsubit +hwndBut2 +Default", Exit
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut2 +Center", About
 
-		Gui, Add, Text, % "x7 y+2 w" (Width-14) "h2 vP"
+		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
+
+		Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
 		GuiControlGet, P, Pos
 		H := PY + PH
 		H:=H*dpi
 		Width:=Width*dpi
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 		Gui, -Caption
 		WinSet, Region, 0-0 w%Width% h%H% r6-6
 		Gui, Show, % "w" Width " NA", Functions
@@ -520,6 +551,69 @@ return
 subit:
 FadeOut(SFunctions)
  	Gui, Submit, NoHide
+return
+
+;--------------------------------------------------------------------------------------------------------------
+
+AboutInfo:
+	IniRead, InstalledVersion, build.ini, build, Version, Unknown
+	IniRead, UpdateVersion, build_update.ini, build, Version, Offline
+	width=230
+	Gui, AboutInfo:New, +hwndAboutInfo +ToolWindow
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 2e2e2e
+	Gui, Font, s10 Bold, Tahoma
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background272727 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 c%darkerc%, About
+
+	Gui, Font, s9 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Version
+	Gui, Font, c%lightc%, Tahoma
+	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", v%InstalledVersion%
+	Gui, Font, c%darkerc%, Tahoma
+	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Newest
+	Gui, Font, c%lightc%, Tahoma
+	If UpdateVersion!=Offline
+		Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", v%UpdateVersion%
+	else
+		Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", Offline
+	Gui, Font, c%darkerc%, Tahoma
+	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Creator
+	Gui, Font, c%lightc%, Tahoma
+	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", Riyusso
+	Gui, Font, c%darkerc%, Tahoma
+	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Tester
+	Gui, Font, c%lightc%, Tahoma
+	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", physic
+	Gui, Font, c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Website
+	Gui, Font, c%lightc%, Tahoma
+	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", github.com/Riyusso/.devRS
+
+	Gui, Font, s10 Bold, Tahoma
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " w" (Width*0.64) "  y+25 h34 gAboutExit +hwndBut1 +Default", Exit
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
+	WinSet, Region, 0-0 w%width% h%H% r6-6, ahk_id %AboutInfo%
+	Gui, Show, w%width% h%H%, About
+	FadeIn(AboutInfo)
+	WinSet, Transparent, 250
+return
+
+AboutExit:
+	FadeOut(AboutInfo)
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -680,7 +774,7 @@ DefaultMenu:
 
 		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut5 +Center", Update
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Controls
+		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Functions
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut7 +Center", Settings
 
