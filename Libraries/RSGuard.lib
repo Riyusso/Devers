@@ -445,7 +445,7 @@ UnlockDelay:=true
 ReverseTransCalc=%TransProtectionCalculation%
 Loop, 32
 {
-	ReverseTransCalc:=ReverseTransCalc-7
+	ReverseTransCalc:=ReverseTransCalc-(4+(A_Index*0.23))
 	If (ReverseTransCalc<10)
 	{
 		WinSet, Transparent, 5, ahk_id %ZPHWND%
