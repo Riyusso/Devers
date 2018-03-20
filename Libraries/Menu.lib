@@ -426,126 +426,126 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ScriptFunctions:
-		Width := 350
-		Gui, Functions:New, +hwndSFunctions
-		Gui, +LastFound
-		WinSet, Transparent, 0
-		Gui, Color, 008383
-		Gui, Margin, 0, 0
-		Gui, Font, s11 cD0D0D0 Bold
-		Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h66 Background1F2326 Disabled hwndHPROG"
-		Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-		Gui, Add, Text, % "x0 y0 w" Width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Functions
-		Gui, Font, s8 c228a96, Tahoma
-		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", The Lock key is configurable
-		Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check Protection Settings
-		Gui, Font, s10 c%lightc%, Tahoma
-		Gui, Add, Text, % "x0 y+15 w" (Width/2) " Center BackgroundTrans", Function
-		Gui, Font, s10 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+2 w" (Width/2) " Center BackgroundTrans", Keys
+	Width := 350
+	Gui, Functions:New, +hwndSFunctions
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Color, 008383
+	Gui, Margin, 0, 0
+	Gui, Font, s11 cD0D0D0 Bold
+	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h66 Background1F2326 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, % "x0 y0 w" Width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Functions
+	Gui, Font, s8 c228a96, Tahoma
+	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", The Lock key is configurable
+	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check Protection Settings
+	Gui, Font, s10 c%lightc%, Tahoma
+	Gui, Add, Text, % "x0 y+15 w" (Width/2) " Center BackgroundTrans", Function
+	Gui, Font, s10 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+2 w" (Width/2) " Center BackgroundTrans", Keys
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ",
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+0 w" (Width/2) " Center", F4
+	Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ",
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+0 w" (Width/2) " Center", F4
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+0 w" (Width/2) " Center",  Alt x 2
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+0 w" (Width/2) " Center",  Alt x 2
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2
 
-		Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
 
-		Gui, Font, s8 c%darkerc%, Tahoma
-		Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
-		Gui, Font, s8 c%lightc%, Tahoma
-		Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
 
-		Gui, Font, s10 cFFFFFF Bold, Segoe UI
-		Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
-		Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
+	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut2 +Center", About
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut2 +Center", About
 
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
 
-		Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
-		GuiControlGet, P, Pos
-		H := PY + PH
-		H:=H*dpi
-		Width:=Width*dpi
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-		Gui, -Caption
-		WinSet, Region, 0-0 w%Width% h%H% r6-6
-		Gui, Show, % "w" Width " NA", Functions
-		FadeIn(SFunctions)
+	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	Gui, -Caption
+	WinSet, Region, 0-0 w%Width% h%H% r6-6
+	Gui, Show, % "w" Width " NA", Functions
+	FadeIn(SFunctions)
 return
 
 subit:
