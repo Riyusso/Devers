@@ -581,7 +581,7 @@ AboutInfo:
 	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Newest
 	Gui, Font, c%lightc%, Tahoma
 	If UpdateVersion!=Offline
-		Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", v%UpdateVersion%
+		Gui, Add, Text, % "x+0 w" (Width/2.5) " vUpVersionVar Center", v%UpdateVersion%
 	else
 		Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", Offline
 	Gui, Font, c%darkerc%, Tahoma
@@ -610,6 +610,12 @@ AboutInfo:
 	Gui, Show, w%width% h%H%, About
 	FadeIn(AboutInfo)
 	WinSet, Transparent, 250
+	GoSub GetLatestVersion
+	IniRead, UpdateVersion, build_update.ini, build, Version, Offline
+	If UpdateVersion!=Offline
+		GuiControl, AboutInfo:, UpVersionVar, v%UpdateVersion%
+	else
+		GuiControl, AboutInfo:, UpVersionVar, Offline
 return
 
 AboutExit:
