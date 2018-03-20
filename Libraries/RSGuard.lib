@@ -443,7 +443,7 @@ return
 TransProtectionReverse:
 UnlockDelay:=true
 ReverseTransCalc=%TransProtectionCalculation%
-Loop, 30
+Loop, 32
 {
 	ReverseTransCalc:=ReverseTransCalc-7
 	If (ReverseTransCalc<10)
