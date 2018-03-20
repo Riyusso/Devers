@@ -975,8 +975,9 @@ Authorize:
 		RSNotify("Authorized")
 		FadeOut(Auth)
 		WinWaitNotActive, ahk_id %Auth%,,15
-		SetTimer, AuthExpire, 2000
 		SendInput {Raw}%password%
+		SetTimer, AuthExpirationCheck, 2000
+		StartTick:=A_TickCount
 		return
 	}
 	Else
@@ -984,13 +985,18 @@ Authorize:
 	FadeOut(Auth)
 return
 
-AuthExpire:
+AuthExpirationCheck:
 	If (A_TimeIdle > 360000) or (A_TickCount - StartTick > 7500) ; Authorization will expire when computer goes to sleep or when idle for 6 minutes.
 	{
-		SetTimer, AuthExpire, Off
 		Authorized:=false
+		SetTimer, AuthExpirationCheck, Off
 	}
 	StartTick:=A_TickCount
+return
+
+AuthExpire:
+	Authorized:=false
+	SetTimer, AuthExpirationCheck, Off
 return
 
 AuthGuiEscape:

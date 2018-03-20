@@ -6,8 +6,7 @@
 	}
 	else
 	{
-		Authorized:=false
-		SetTimer, AuthExpire, Off
+		GoSub AuthExpire
 	}
 	If !LockPw
 	{
@@ -468,10 +467,7 @@ return
 
 CheckAuth:
 IfWinActive, ahk_id %ZPHWND%
-{
-	Authorized:=false
-	SetTimer, AuthExpire, Off
-}
+	GoSub AuthExpire
 return
 
 LockNow:
