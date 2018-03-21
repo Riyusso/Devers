@@ -1062,6 +1062,7 @@ Authorization:
 	WinSet, Region, 0-0 w%scaledw% h%scaledh% r12-12, ahk_id %Auth%
 	Gui, Show, w%scaledw% h%scaledh%, Authorization
 	FadeIn(Auth)
+	SetTimer, CheckIfAuthInactive, 200
 return
 
 Authorize:
@@ -1089,6 +1090,14 @@ AuthExpirationCheck:
 		SetTimer, AuthExpirationCheck, Off
 	}
 	StartTick:=A_TickCount
+return
+
+CheckIfAuthInactive:
+	IfWinNotActive, ahk_id %Auth%
+	{
+		SetTimer, CheckIfAuthInactive, Off
+		FadeOut(Auth)
+	}
 return
 
 AuthExpire:
