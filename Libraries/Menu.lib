@@ -556,9 +556,9 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 AboutInfo:
-	IniRead, InstalledVersion, build.ini, build, Version, Unknown
-	IniRead, UpdateVersion, build_update.ini, build, Version, Offline
-	width=230
+	IniRead, InstalledVersion, build.ini, build, Version, 1.0
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	width=250
 	Gui, AboutInfo:New, +hwndAboutInfo +ToolWindow
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -576,14 +576,13 @@ AboutInfo:
 	Gui, Font, s9 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Version
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", v%InstalledVersion%
+	InVersionVar:= (InstalledVersion=1.0) ? "Unknown" : "v" . InstalledVersion
+	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", %InVersionVar%
 	Gui, Font, c%darkerc%, Tahoma
 	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Newest
 	Gui, Font, c%lightc%, Tahoma
-	If UpdateVersion!=Offline
-		Gui, Add, Text, % "x+0 w" (Width/2.5) " vUpVersionVar Center", v%UpdateVersion%
-	else
-		Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", Offline
+	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion
+	Gui, Add, Text, % "x+0 w" (Width/2.5) " vUpVersionVar Center", %UpVersionVar%
 	Gui, Font, c%darkerc%, Tahoma
 	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Creator
 	Gui, Font, c%lightc%, Tahoma
@@ -611,11 +610,9 @@ AboutInfo:
 	FadeIn(AboutInfo)
 	WinSet, Transparent, 250
 	GoSub GetLatestVersion
-	IniRead, UpdateVersion, build_update.ini, build, Version, Offline
-	If UpdateVersion!=Offline
-		GuiControl, AboutInfo:, UpVersionVar, v%UpdateVersion%
-	else
-		GuiControl, AboutInfo:, UpVersionVar, Offline
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion
+	GuiControl, AboutInfo:, UpVersionVar, %UpVersionVar%
 return
 
 AboutExit:
