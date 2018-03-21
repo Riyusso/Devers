@@ -274,12 +274,6 @@ return
 	GoSub FormulaNull
 	return
 	~Enter::
-	If !Disablekeys
-	{
-		Suspend, Permit
-		GoSub TryPw
-	}
-	return
 	~NumpadEnter::
 	If !Disablekeys
 	{
