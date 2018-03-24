@@ -51,7 +51,7 @@
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Functions
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Features
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
 
@@ -778,7 +778,7 @@ DefaultMenu:
 
 		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut5 +Center", Update
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Functions
+		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Features
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut7 +Center", Settings
 
