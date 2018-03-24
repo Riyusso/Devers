@@ -157,7 +157,10 @@
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
+		If AuthReq
+			Gui, Add, Button, hwndSCHYT11 vSCH11 gCancelPasswordChange x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, Cancel
+		else
+			Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
 		Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
 		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -313,6 +316,12 @@ If (A_TimeIdle>5000 && !RSAnimationShown)
 	Disablekeys:=true
 	Formula=0
 }
+return
+
+CancelPasswordChange:
+	cancelChange:=true
+	Formula:=LockPw
+	GoSub UnlockPC
 return
 
 UnlockPC:

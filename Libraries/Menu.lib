@@ -268,11 +268,6 @@ ProtectionSettings:
 	IniRead, AfterWU, settings.ini, settings, AfterWU
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 
-	If LockPw
-		AuthPassword=%LockPw%
-	else
-		AuthPassword:=false
-
 	If BreakLoop=1
 	ChooseBL=1
 	Else
@@ -296,7 +291,7 @@ ProtectionSettings:
 	Gui, Add, DropDownList, % "x+8 w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
 
 	Gui, Add, Text, % "x8 y+22 w147 Center", Protection PIN ›
-	Gui, Add, Edit, % "x+8 w87 h15 vLockPw hwndEdit8 +password -E0x200 +Center -VScroll", %LockPw%
+	Gui, Add, Edit, % "x+8 w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll", %LockPw%
 
 	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
 	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll", %seconds%
@@ -391,15 +386,21 @@ protectionbutton:
 			return
 		}
 	}
-	NewLockPw:=LockPw
-	LockPw:=AuthPassword
-	If (NewLockPw!=AuthPassword) && AuthPassword
+
+	If (NewLockPw!=LockPw)
 	{
 		DontShowRS:=true
 		AuthReq:=true
+		cancelChange:=false
 		GoSub LockNow
 		WinWaitActive, ahk_id %ZPHWND%
 		WinWaitNotActive, ahk_id %ZPHWND%
+		If cancelChange
+		{
+			GuiControl,  ProtectionMenu:, NewLockPW, %LockPw%
+			RSNotify("Canceled")
+			return
+		}
 	}
 	LockPw:=NewLockPw
 
