@@ -1,4 +1,4 @@
-﻿settings: ;settings
+﻿settings:
 	if FirstRun
 		GoSub Initiation
 
