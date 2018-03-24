@@ -488,9 +488,12 @@ return
 Migrations:
 	Migration1:
 		IniRead, LockPw, settings.ini, settings, LockPw
-		IniDelete, settings.ini, settings, LockPw
-		LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
-		IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
+		If LockPw is Digit
+		{
+			IniDelete, settings.ini, settings, LockPw
+			LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
+			IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
+		}
 return
 
 ;--------------------------------------------------------------------------------------------------------------
