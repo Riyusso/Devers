@@ -135,18 +135,6 @@ return
 
 #If
 
-F9::
-	GoSub playpause
-return
-
-F11::
-	GoSub PrevSong
-return
-
-F12::
-	GoSub NextSong
-return
-
 PgUp::
 	Suspend, Permit
 	GoSub vol_up
@@ -170,15 +158,33 @@ return
 return
 
 ButtonsLabel:
-If (keysvar="" || keysvar="None" || keysvar="ERROR")
-keysvar=None
+keysArray=lockkey|keyplay|keyprev|keynext
 
-#If (keysvar!="None") && !WinActive( "ahk_id" . ProtectionSettings )
-	Hotkey, If, (keysvar!="None") && !WinActive( "ahk_id" . ProtectionSettings )
-	If (keysvar!="None")
+Loop, Parse, keysArray, `|
+	If (assigned%A_LoopField%="" || assigned%A_LoopField%="None" || assigned%A_LoopField%="ERROR")
+		assigned%A_LoopField%=None
+
+#If !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
+	Hotkey, If, !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
+	If (assignedKeyLock!="None")
 	{
-		Hotkey, %keysvar%, LockNow
-		Hotkey, %keysvar%, LockNow, On
+		Hotkey, %assignedKeyLock%, LockNow
+		Hotkey, %assignedKeyLock%, LockNow, On
+	}
+	If (assignedKeyPlay!="None")
+	{
+		Hotkey, %assignedKeyPlay%, playpause
+		Hotkey, %assignedKeyPlay%, playpause, On
+	}
+	If (assignedKeyPrev!="None")
+	{
+		Hotkey, %assignedKeyPrev%, PrevSong
+		Hotkey, %assignedKeyPrev%, PrevSong, On
+	}
+	If (assignedKeyNext!="None")
+	{
+		Hotkey, %assignedKeyNext%, NextSong
+		Hotkey, %assignedKeyNext%, NextSong, On
 	}
 return
 
@@ -572,7 +578,10 @@ Initiation:
 	seconds=120
 	ClockWanted=1
 	StartWithWindows=1
-	keysvar=ScrollLock
+	assignedKeyLock=ScrollLock
+	assignedKeyPlay=F9
+	assignedKeyPrev=F11
+	assignedKeyNext=F12
 	TransparentStartMenu=255
 	CheckPeriod = 150
 	lockkey=ScrollLock
@@ -612,6 +621,9 @@ Initiation:
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
 	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
+	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
+	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
+	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
 
 	IniRead, LockPwHash, settings.ini, settings, LockPwHash
 	IniRead, seconds, settings.ini, settings, seconds
@@ -632,7 +644,10 @@ return
 IniReads:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
-	IniRead, keysvar, settings.ini, settings, lockkey
+	IniRead, assignedKeyLock, settings.ini, settings, lockkey, ScrollLock
+	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
+	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
+	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12
 
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop

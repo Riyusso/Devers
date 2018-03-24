@@ -7,8 +7,8 @@ Volume_OSD_Center:=1
 vol_up = WheelUp
 vol_down = WheelDown
 
-#If % MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
-Hotkey, If, % MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
+#If MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
+Hotkey, If, MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW")
 
 	Hotkey,%vol_up%,vol_up
 	Hotkey,%vol_down%,vol_down

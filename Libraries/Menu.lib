@@ -259,7 +259,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ProtectionSettings:
-	IniWrite, %keysvar%, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
 	IniRead, lockkey, settings.ini, settings, lockkey
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, seconds, settings.ini, settings, seconds
@@ -308,7 +308,7 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+14 w147 Center", Clock ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
-	Gui, Add, Hotkey, % "x+8 w87 Center vKeysVar" , %lockkey%
+	Gui, Add, Hotkey, % "x+8 w87 Center vassignedKeyLock" , %lockkey%
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
@@ -406,7 +406,7 @@ protectionbutton:
 
 	LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
 	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
-	IniWrite, %KeysVar%, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
@@ -419,8 +419,8 @@ protectionbutton:
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	If BreakLoop=1
 		Gosub Protection
-	If (lockkey!="None" && lockkey!="" and lockkey!=keysvar)
-		Hotkey, %lockkey%, Off
+	If (lockkey!="None" && lockkey!="" and lockkey!=assignedKeyLock)
+		Hotkey, %lockkey%, LockNow, Off
 	GoSub ButtonsLabel
 return
 
@@ -500,7 +500,7 @@ ScriptFunctions:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", %keysvar%
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", %assignedKeyLock%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
@@ -529,11 +529,13 @@ ScriptFunctions:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", RS-Guard Info
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Change Hotkeys
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut2 +Center", About
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", RS-Guard Info
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut3 +Center", About
+
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut4 +Default", Exit
 
 	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
 	GuiControlGet, P, Pos
@@ -543,6 +545,7 @@ ScriptFunctions:
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width " NA", Functions
@@ -552,6 +555,80 @@ return
 subit:
 FadeOut(SFunctions)
  	Gui, Submit, NoHide
+return
+
+;--------------------------------------------------------------------------------------------------------------
+
+ChangeHotkeys:
+	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
+	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
+	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+
+	IniRead, KeyPlay, settings.ini, settings, KeyPlay
+	IniRead, KeyPrev, settings.ini, settings, KeyPrev
+	IniRead, KeyNext, settings.ini, settings, KeyNext
+
+	Width := 255
+	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
+
+	Gui, Color, 008383, 333333
+	Gui, Font, s8, Tahoma
+
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Play/Pause:
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPlay" , %KeyPlay%
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous ›
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPrev" , %KeyPrev%
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next ›
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyNext" , %KeyNext%
+
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+25 w" (Width*0.38) " h31 gchangebutton hwndBut1 +Center +Default", Apply
+
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gchangeclose hwndBut2 +Center",Cancel
+
+	Gui, Add, Text, % "x+1 h44 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	Gui, -Caption
+	WinSet, Region, 0-0 w%Width% h%H% r6-6
+	Gui, Show, w%Width%, Other Settings
+	FadeIn(ChangeHotkeys)
+return
+
+ChangeButton:
+	Gui, Submit, NoHide
+	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
+	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
+	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+
+	If (KeyPlay!="None" && KeyPlay!="" and KeyPlay!=assignedKeyPlay)
+		Hotkey, %KeyPlay%, playpause, Off
+	If (KeyPrev!="None" && KeyPrev!="" and KeyPrev!=assignedKeyPrev)
+		Hotkey, %KeyPrev%, prevsong, Off
+	If (KeyNext!="None" && KeyNext!="" and KeyNext!=assignedKeyNext)
+		Hotkey, %KeyNext%, nextsong, Off
+
+	GoSub ButtonsLabel
+ChangeClose:
+	FadeOut(ChangeHotkeys)
 return
 
 ;--------------------------------------------------------------------------------------------------------------
