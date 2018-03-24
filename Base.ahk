@@ -169,7 +169,7 @@ return
 	GoSub SuspendScriptToggle
 return
 
-LockLabel:
+ButtonsLabel:
 If (keysvar="" || keysvar="None" || keysvar="ERROR")
 keysvar=None
 
@@ -431,7 +431,7 @@ IfExist, settings.ini
 		RunAsAdminAfterLock:=1
 	}
 	LogTime(0)
-	GoSub LockLabel
+	GoSub ButtonsLabel
 }
 IfNotExist, settings.ini
 Gosub Installation

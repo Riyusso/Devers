@@ -421,7 +421,7 @@ protectionbutton:
 		Gosub Protection
 	If (lockkey!="None" && lockkey!="" and lockkey!=keysvar)
 		Hotkey, %lockkey%, Off
-	GoSub LockLabel
+	GoSub ButtonsLabel
 return
 
 ;--------------------------------------------------------------------------------------------------------------
