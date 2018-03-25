@@ -578,21 +578,14 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ChangeHotkeys:
-	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
-	IniWrite, %assignedKeyPlay%, settings.ini, settings, keyPlay
-	IniWrite, %assignedKeyPrev%, settings.ini, settings, keyPrev
-	IniWrite, %assignedKeyNext%, settings.ini, settings, keyNext
-	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
-	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
-	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
 
-	IniRead, keyRSWeb, settings.ini, settings, keyRSWeb, F4
-	IniRead, keyPlay, settings.ini, settings, keyPlay, F9
-	IniRead, keyPrev, settings.ini, settings, keyPrev, F11
-	IniRead, keyNext, settings.ini, settings, keyNext, F12
-	IniRead, keyVolUp, settings.ini, settings, keyVolUp, PgUp
-	IniRead, keyVolDown, settings.ini, settings, keyVolDown, PgDn
-	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock
+	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
+	Loop, Parse, keysArray, `|
+	{
+		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
+		IniRead, %A_LoopField%, settings.ini, settings, %A_LoopField%
+	}
+	
 	Width := 280
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
@@ -654,19 +647,13 @@ return
 
 ChangeButton:
 	Gui, Submit, NoHide
-	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
-	IniWrite, %assignedKeyPlay%, settings.ini, settings, keyPlay
-	IniWrite, %assignedKeyPrev%, settings.ini, settings, keyPrev
-	IniWrite, %assignedKeyNext%, settings.ini, settings, keyNext
-	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
-	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
-	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
-
 	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
-	
 	Loop, Parse, keysArray, `|
-	If (%A_LoopField%!="None" && %A_LoopField%!="" and %A_LoopField%!=assigned%A_LoopField%)
-		Hotkey, % %A_LoopField%, Off
+	{
+		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
+		If (%A_LoopField%!="None" && %A_LoopField%!="" and %A_LoopField%!=assigned%A_LoopField%)
+			Hotkey, % %A_LoopField%, Off
+	}
 		
 	GoSub ButtonsLabel
 ChangeClose:

@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=2.0.1.5
+FileVersion=2.0.1.6
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
@@ -38,6 +38,7 @@ DetectHiddenWindows, on
 #Include %A_ScriptDir%
 GoSub MenuInit
 GoSub RunScript
+GoSub defaultsettings
 #Include *i Libraries/developer.lib
 return
 
@@ -399,7 +400,6 @@ IfExist, settings.ini
 	GoSub InstallFiles
 	GoSub GetLatestVersion
 	
-	Gosub defaultsettings
 	If !LockAfterRestart
 	{
 		If A_IsCompiled
@@ -565,6 +565,8 @@ Initiation:
 	assignedKeyPlay=F9
 	assignedKeyPrev=F11
 	assignedKeyNext=F12
+	assignedKeyVolUp=PgUp
+	assignedKeyVolDown=PgDn
 	TransparentStartMenu=255
 	CheckPeriod = 150
 	keyLock=ScrollLock
@@ -590,7 +592,6 @@ Initiation:
 		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
 	}
 
-	IniWrite, %keyLock%, settings.ini, settings, keyLock
 	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
@@ -604,11 +605,10 @@ Initiation:
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
 	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
-	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
-	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
-	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
-	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
-	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
+
+	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
+	Loop, Parse, keysArray, `|
+		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
 
 	IniRead, LockPwHash, settings.ini, settings, LockPwHash
 	IniRead, seconds, settings.ini, settings, seconds
@@ -622,20 +622,18 @@ Initiation:
 	IniRead, AfterWU, settings.ini, settings, AfterWU
 	IniRead, logging, settings.ini, settings, LoggingLockTimes
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
-
-	GoSub defaultsettings
 return
 
 IniReads:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
-	IniRead, assignedKeyLock, settings.ini, settings, keyLock, ScrollLock
 	IniRead, assignedKeyRSWeb, settings.ini, settings, keyRSWeb, F4
 	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
 	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
 	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12
 	IniRead, assignedKeyVolUp, settings.ini, settings, keyVolUp, PgUp
 	IniRead, assignedKeyVolDown, settings.ini, settings, keyVolDown, PgDn
+	IniRead, assignedKeyLock, settings.ini, settings, keyLock, ScrollLock
 
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
