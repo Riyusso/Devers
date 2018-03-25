@@ -560,11 +560,13 @@ return
 
 SetButtons:
 	keysArray=assignedKeyRSWeb|assignedKeyPlay|assignedKeyPrev|assignedKeyNext|assignedKeyVolUp|assignedKeyVolDown|assignedKeyLock
-
 	Loop, Parse, keysArray, `|
 	{
+		Replacement:=RegExReplace(%A_LoopField%, "[\^]", "Ctrl & ")
+		Replacement:=RegExReplace(Replacement, "[+]", "Shift & ")
+		Replacement:=RegExReplace(Replacement, "[&]", "+")
 		If % %A_LoopField%!="None"
-			GuiControl, Functions:, %A_LoopField%Var, % %A_LoopField%
+			GuiControl, Functions:, %A_LoopField%Var, % Replacement
 		else
 			GuiControl, Functions:, %A_LoopField%Var, Off
 	}
@@ -600,7 +602,7 @@ ChangeHotkeys:
 	Gui, Font, s8, Tahoma
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Press Delete on hotkeys to disable them
+	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Press Delete on a hotkey to disable it
 	Gui, Add, Text, % "x0 y+20 w" (Width/2) " vLabelSP Center ", Speed Dial
 	Gui, Add, Hotkey, % "x+30 w72 Center gRSWebKeyModifiersCheck vassignedKeyRSWeb" , %keyRSWeb%
 
