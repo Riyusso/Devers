@@ -135,16 +135,6 @@ return
 
 #If
 
-PgUp::
-	Suspend, Permit
-	GoSub vol_up
-return
-
-PgDn::
-	Suspend, Permit
-	GoSub vol_down
-return
-
 #If (A_IsCompiled)
 ~#!SC013::
 	IntentReload:=true
@@ -158,7 +148,7 @@ return
 return
 
 ButtonsLabel:
-keysArray=lockkey|keyplay|keyprev|keynext
+keysArray=lockkey|keyplay|keyprev|keynext|keyVolUp|keyVolDown
 
 Loop, Parse, keysArray, `|
 	If (assigned%A_LoopField%="" || assigned%A_LoopField%="None" || assigned%A_LoopField%="ERROR")
@@ -185,6 +175,16 @@ Loop, Parse, keysArray, `|
 	{
 		Hotkey, %assignedKeyNext%, NextSong
 		Hotkey, %assignedKeyNext%, NextSong, On
+	}
+	If (assignedKeyVolUp!="None")
+	{
+		Hotkey, %assignedKeyVolUp%, vol_up
+		Hotkey, %assignedKeyVolUp%, vol_up, On
+	}
+	If (assignedKeyVolDown!="None")
+	{
+		Hotkey, %assignedKeyVolDown%, vol_down
+		Hotkey, %assignedKeyVolDown%, vol_down, On
 	}
 return
 
@@ -349,12 +349,14 @@ return
 
 #If (DefaultFader=1)
 ~LButton Up::
+Suspend, Permit
 MouseGetPos, , , id, control
 WinGetClass, class, ahk_id %id%
 if (class!="AutoHotkeyGUI" && class!="#32769")
 	GoSub ExitDefMenu
 return
 ~RButton Up::
+Suspend, Permit
 MouseGetPos, , , id, control
 WinGetClass, class, ahk_id %id%
 if (class!="AutoHotkeyGUI")
@@ -624,6 +626,8 @@ Initiation:
 	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
 	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
+	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
 
 	IniRead, LockPwHash, settings.ini, settings, LockPwHash
 	IniRead, seconds, settings.ini, settings, seconds
@@ -648,6 +652,8 @@ IniReads:
 	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
 	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
 	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12
+	IniRead, assignedKeyVolUp, settings.ini, settings, keyVolUp, PgUp
+	IniRead, assignedKeyVolDown, settings.ini, settings, keyVolUp, PgDn
 
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop

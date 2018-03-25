@@ -563,11 +563,14 @@ ChangeHotkeys:
 	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
 	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
+	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
 
-	IniRead, KeyPlay, settings.ini, settings, KeyPlay
-	IniRead, KeyPrev, settings.ini, settings, KeyPrev
-	IniRead, KeyNext, settings.ini, settings, KeyNext
-
+	IniRead, KeyPlay, settings.ini, settings, KeyPlay, F9
+	IniRead, KeyPrev, settings.ini, settings, KeyPrev, F11
+	IniRead, KeyNext, settings.ini, settings, KeyNext, F12
+	IniRead, keyVolUp, settings.ini, settings, keyVolUp, PgUp
+	IniRead, keyVolDown, settings.ini, settings, keyVolDown, PgDn
 	Width := 255
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
@@ -583,13 +586,19 @@ ChangeHotkeys:
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Play/Pause:
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPlay" , %KeyPlay%
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPlay" , %keyPlay%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPrev" , %KeyPrev%
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPrev" , %keyPrev%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyNext" , %KeyNext%
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyNext" , %keyNext%
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up ›
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyVolUp" , %keyVolUp%
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down ›
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
@@ -618,7 +627,13 @@ ChangeButton:
 	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
 	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
+	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
 
+	If (KeyVolUp!="None" && KeyVolUp!="" and KeyVolUp!=assignedKeyVolUp)
+		Hotkey, %KeyVolUp%, playpause, Off
+	If (KeyVolDown!="None" && KeyVolDown!="" and KeyVolDown!=assignedKeyVolDown)
+		Hotkey, %KeyVolDown%, playpause, Off
 	If (KeyPlay!="None" && KeyPlay!="" and KeyPlay!=assignedKeyPlay)
 		Hotkey, %KeyPlay%, playpause, Off
 	If (KeyPrev!="None" && KeyPrev!="" and KeyPrev!=assignedKeyPrev)
