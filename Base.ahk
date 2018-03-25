@@ -627,7 +627,7 @@ IniReads:
 	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
 	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12
 	IniRead, assignedKeyVolUp, settings.ini, settings, keyVolUp, PgUp
-	IniRead, assignedKeyVolDown, settings.ini, settings, keyVolUp, PgDn
+	IniRead, assignedKeyVolDown, settings.ini, settings, keyVolDown, PgDn
 
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop

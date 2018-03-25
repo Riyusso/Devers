@@ -575,7 +575,7 @@ ChangeHotkeys:
 	IniRead, keyVolUp, settings.ini, settings, keyVolUp, PgUp
 	IniRead, keyVolDown, settings.ini, settings, keyVolDown, PgDn
 	IniRead, lockkey, settings.ini, settings, lockkey, ScrollLock
-	Width := 255
+	Width := 280
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -590,25 +590,25 @@ ChangeHotkeys:
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Speed Dial
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyRSWeb" , %keyRSWeb%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyRSWeb" , %keyRSWeb%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPlay" , %keyPlay%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPlay" , %keyPlay%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPrev" , %keyPrev%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPrev" , %keyPrev%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyNext" , %keyNext%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyNext" , %keyNext%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyVolUp" , %keyVolUp%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolUp" , %keyVolUp%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyVolDown" , %keyVolDown%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock ›
-	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyLock" , %lockKey%
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %lockKey%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
