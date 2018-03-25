@@ -1,5 +1,6 @@
 RSWeb:
- IniRead, WebNames, settings.ini, Web, WebNames
+	ChoosingWebsite:=true
+	IniRead, WebNames, settings.ini, Web, WebNames
 	Loop, Parse, WebNames, `|
 	WebName%A_Index%=%A_LoopField%
 

@@ -52,43 +52,6 @@ return
 
 #If !isWindowFullscreen( "A" ) or SuspendFS=1 or WinActive("ahk_exe explorer.exe")
 
-F4::
-	ChoosingWebsite:=true
-	GoSub RSWeb
-return
-
-F4 & 1::
-Run, %ws1%
-return
-
-F4 & 2::
-Run, %ws2%
-return
-
-F4 & 3::
-Run, %ws3%
-return
-
-F4 & 4::
-Run, %ws4%
-return
-
-F4 & 5::
-Run, %ws5%
-return
-
-F4 & 6::
-Run, %ws6%
-return
-
-F4 & 7::
-Run, %ws7%
-return
-
-F4 & 8::
-Run, %ws8%
-return
-
 ~F6 & F9::
 	Gosub Reinstall
 return
@@ -148,7 +111,7 @@ return
 return
 
 ButtonsLabel:
-keysArray=lockkey|keyplay|keyprev|keynext|keyVolUp|keyVolDown
+keysArray=lockkey|keyplay|keyprev|keynext|keyVolUp|keyVolDown|keyRSWeb
 
 Loop, Parse, keysArray, `|
 	If (assigned%A_LoopField%="" || assigned%A_LoopField%="None" || assigned%A_LoopField%="ERROR")
@@ -160,6 +123,16 @@ Loop, Parse, keysArray, `|
 	{
 		Hotkey, %assignedKeyLock%, LockNow
 		Hotkey, %assignedKeyLock%, LockNow, On
+	}
+	If (assignedKeyRSWeb!="None")
+	{
+		Hotkey, %assignedKeyRSWeb%, RSWeb
+		Hotkey, %assignedKeyRSWeb%, RSWeb, On
+		Loop, 8
+		{
+			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%
+			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%, On
+		}
 	}
 	If (assignedKeyPlay!="None")
 	{
@@ -649,6 +622,7 @@ IniReads:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	IniRead, assignedKeyLock, settings.ini, settings, lockkey, ScrollLock
+	IniRead, assignedKeyRSWeb, settings.ini, settings, keyRSWeb, F4
 	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
 	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
 	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12

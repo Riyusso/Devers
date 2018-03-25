@@ -560,12 +560,14 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ChangeHotkeys:
+	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
 	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
 	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
 
+	IniRead, keyRSWeb, settings.ini, settings, keyRSWeb, F4
 	IniRead, KeyPlay, settings.ini, settings, KeyPlay, F9
 	IniRead, KeyPrev, settings.ini, settings, KeyPrev, F11
 	IniRead, KeyNext, settings.ini, settings, KeyNext, F12
@@ -585,7 +587,10 @@ ChangeHotkeys:
 	Gui, Font, s8, Tahoma
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Play/Pause:
+	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Speed Dial
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyRSWeb" , %keyRSWeb%
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
 	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyPlay" , %keyPlay%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous ›
@@ -624,12 +629,16 @@ return
 
 ChangeButton:
 	Gui, Submit, NoHide
+	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
 	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
 	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
 
+
+	If (keyRSWeb!="None" && keyRSWeb!="" and keyRSWeb!=assignedkeyRSWeb)
+		Hotkey, %keyRSWeb%, playpause, Off
 	If (KeyVolUp!="None" && KeyVolUp!="" and KeyVolUp!=assignedKeyVolUp)
 		Hotkey, %KeyVolUp%, playpause, Off
 	If (KeyVolDown!="None" && KeyVolDown!="" and KeyVolDown!=assignedKeyVolDown)
