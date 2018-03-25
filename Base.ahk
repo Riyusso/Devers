@@ -302,7 +302,7 @@ return
 	return
 #If
 
-#If (ChoosingWebsite=1) && !WinActive("ahk_id" . WebL) && ItsLocked!=1
+#If (ChoosingWebsite=1) && !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit) && ItsLocked!=1
 	1::
 	GoSub ws1
 	return
