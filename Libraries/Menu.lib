@@ -602,7 +602,7 @@ ChangeHotkeys:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Press Delete on hotkeys to disable them
 	Gui, Add, Text, % "x0 y+20 w" (Width/2) " vLabelSP Center ", Speed Dial
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyRSWeb" , %keyRSWeb%
+	Gui, Add, Hotkey, % "x+30 w72 Center gRSWebKeyModifiersCheck vassignedKeyRSWeb" , %keyRSWeb%
 
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPlay" , %keyPlay%
@@ -661,6 +661,11 @@ ChangeClose:
 	FadeOut(ChangeHotkeys)
 return
 
+RSWebKeyModifiersCheck:    ; Prevents the HotKey box from accepting any combination of the Ctrl, Alt, and Shift keys. ; Credit where it is due: Shadowpheonix at autohotkey.com/boards/viewtopic.php?t=19518
+	Gui, Submit, NoHide
+	assignedKeyRSWeb := RegExReplace(assignedKeyRSWeb, "[!^+]*(.*)", "$1")
+	GuiControl, ChangeHotkeys:, assignedKeyRSWeb, %assignedKeyRSWeb%
+Return
 ;--------------------------------------------------------------------------------------------------------------
 
 AboutInfo:
