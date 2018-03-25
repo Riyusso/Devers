@@ -566,6 +566,7 @@ ChangeHotkeys:
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
+	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
 
 	IniRead, keyRSWeb, settings.ini, settings, keyRSWeb, F4
 	IniRead, KeyPlay, settings.ini, settings, KeyPlay, F9
@@ -573,6 +574,7 @@ ChangeHotkeys:
 	IniRead, KeyNext, settings.ini, settings, KeyNext, F12
 	IniRead, keyVolUp, settings.ini, settings, keyVolUp, PgUp
 	IniRead, keyVolDown, settings.ini, settings, keyVolDown, PgDn
+	IniRead, lockkey, settings.ini, settings, lockkey, ScrollLock
 	Width := 255
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
@@ -605,6 +607,9 @@ ChangeHotkeys:
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down ›
 	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock ›
+	Gui, Add, Hotkey, % "x+20 w72 Center vassignedKeyLock" , %lockKey%
+
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
@@ -635,7 +640,7 @@ ChangeButton:
 	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
-
+	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
 
 	If (keyRSWeb!="None" && keyRSWeb!="" and keyRSWeb!=assignedkeyRSWeb)
 		Hotkey, %keyRSWeb%, playpause, Off
@@ -649,7 +654,9 @@ ChangeButton:
 		Hotkey, %KeyPrev%, prevsong, Off
 	If (KeyNext!="None" && KeyNext!="" and KeyNext!=assignedKeyNext)
 		Hotkey, %KeyNext%, nextsong, Off
-
+	If (lockkey!="None" && lockkey!="" and lockkey!=assignedKeyLock)
+		Hotkey, %lockkey%, LockNow, Off
+		
 	GoSub ButtonsLabel
 ChangeClose:
 	FadeOut(ChangeHotkeys)
