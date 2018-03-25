@@ -51,8 +51,6 @@ return
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-#If !isWindowFullscreen( "A" ) or SuspendFS=1 or WinActive("ahk_exe explorer.exe")
-
 ~F6 & F9::
 	Gosub Reinstall
 return
@@ -96,8 +94,6 @@ return
 		Reload
 	}
 return
-
-#If
 
 #If (A_IsCompiled)
 ~#!SC013::
@@ -570,7 +566,6 @@ Initiation:
 	TransparentStartMenu=255
 	CheckPeriod = 150
 	keyLock=ScrollLock
-	SuspendFS=1
 	AfterFS=1
 	AfterWU=2
 	logging=2
@@ -604,7 +599,6 @@ Initiation:
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
-	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 
 	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
 	Loop, Parse, keysArray, `|
@@ -645,7 +639,6 @@ IniReads:
 	IniRead, AfterWU, settings.ini, settings, AfterWU
 	IniRead, CreateATask, settings.ini, settings, CreateATask
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
-	IniRead, SuspendFS, settings.ini, settings, SuspendFS, 1
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption

@@ -155,9 +155,6 @@ OtherSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	Gui, Add, Text, % "x20 y+30 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+15 w65 Center vSuspendFS Choose" SuspendFS " AltSubmit" , Yes|No
-
 	IfExist, *.ahk
 	{
 		Gui, Add, Text, % "x0 y+25 w" Width " Center", -   Extensions   -
@@ -217,7 +214,6 @@ otherbutton:
 
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
-	IniWrite, %SuspendFS%, settings.ini, settings, SuspendFS
 	SetTimer, KeepTrans, 12000
 
 	IfExist, *.ahk
