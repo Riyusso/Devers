@@ -640,7 +640,7 @@ ChangeHotkeys:
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w%Width%, Other Settings
+	Gui, Show, w%Width%, Change Hotkeys
 	GuiControl, Focus, LabelSP
 	FadeIn(ChangeHotkeys)
 return
