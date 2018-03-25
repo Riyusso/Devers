@@ -111,7 +111,7 @@ return
 return
 
 ButtonsLabel:
-keysArray=lockkey|keyplay|keyprev|keynext|keyVolUp|keyVolDown|keyRSWeb
+keysArray=keyLock|keyplay|keyprev|keynext|keyVolUp|keyVolDown|keyRSWeb
 
 Loop, Parse, keysArray, `|
 	If (assigned%A_LoopField%="" || assigned%A_LoopField%="None" || assigned%A_LoopField%="ERROR")
@@ -475,6 +475,14 @@ Migrations:
 			LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
 			IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 		}
+	Migration2:
+		IniRead, LockKey, settings.ini, settings, LockKey
+		if LockKey!=ERROR
+		{
+			IniDelete, settings.ini, settings, LockKey
+			IniWrite, %LockKey%, settings.ini, settings, keyLock
+			IniRead, keyLock, settings.ini, settings, keyLock
+		}
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -559,7 +567,7 @@ Initiation:
 	assignedKeyNext=F12
 	TransparentStartMenu=255
 	CheckPeriod = 150
-	lockkey=ScrollLock
+	keyLock=ScrollLock
 	SuspendFS=1
 	AfterFS=1
 	AfterWU=2
@@ -582,7 +590,7 @@ Initiation:
 		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
 	}
 
-	IniWrite, %lockkey%, settings.ini, settings, lockkey
+	IniWrite, %keyLock%, settings.ini, settings, keyLock
 	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
@@ -621,7 +629,7 @@ return
 IniReads:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
-	IniRead, assignedKeyLock, settings.ini, settings, lockkey, ScrollLock
+	IniRead, assignedKeyLock, settings.ini, settings, keyLock, ScrollLock
 	IniRead, assignedKeyRSWeb, settings.ini, settings, keyRSWeb, F4
 	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
 	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11

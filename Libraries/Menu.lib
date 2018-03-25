@@ -259,8 +259,8 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ProtectionSettings:
-	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
-	IniRead, lockkey, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
+	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock
 	IniRead, BreakLoop, settings.ini, settings, BreakLoop
 	IniRead, seconds, settings.ini, settings, seconds
 	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 0
@@ -308,7 +308,7 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+14 w147 Center", Clock ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
-	Gui, Add, Hotkey, % "x+8 w87 Center vassignedKeyLock" , %lockkey%
+	Gui, Add, Hotkey, % "x+8 w87 Center vassignedKeyLock" , %keyLock%
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
@@ -406,7 +406,7 @@ protectionbutton:
 
 	LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
 	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
-	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
 	IniWrite, %BreakLoop%, settings.ini, settings, breakloop
 	IniWrite, %ClockWanted%, settings.ini, settings, ClockWanted
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
@@ -419,8 +419,8 @@ protectionbutton:
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	If BreakLoop=1
 		Gosub Protection
-	If (lockkey!="None" && lockkey!="" and lockkey!=assignedKeyLock)
-		Hotkey, %lockkey%, LockNow, Off
+	If (keyLock!="None" && keyLock!="" and keyLock!=assignedKeyLock)
+		Hotkey, %keyLock%, LockNow, Off
 	GoSub ButtonsLabel
 return
 
@@ -449,27 +449,27 @@ ScriptFunctions:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2) " Center", F4
+	Gui, Add, Text, % "x+0 w" (Width/2) " vassignedKeyRSWebVar Center", %assignedKeyRSWeb%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F4 + 1/2/3...8
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F9
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyPlayVar Center", %assignedKeyPlay%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F11
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyPrevVar Center", %assignedKeyPrev%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", F12
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyNextVar Center", %assignedKeyNext%
 
 	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
@@ -488,19 +488,19 @@ ScriptFunctions:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Up
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyVolUpVar Center", %assignedKeyVolUp%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Page Down
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyVolDownVar Center", %assignedKeyVolDown%
 
 	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", %assignedKeyLock%
+	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyLockVar Center", %assignedKeyLock%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
@@ -549,6 +549,7 @@ ScriptFunctions:
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width " NA", Functions
+	GoSub SetButtons
 	FadeIn(SFunctions)
 return
 
@@ -557,24 +558,41 @@ FadeOut(SFunctions)
  	Gui, Submit, NoHide
 return
 
+SetButtons:
+	keysArray=assignedKeyRSWeb|assignedKeyPlay|assignedKeyPrev|assignedKeyNext|assignedKeyVolUp|assignedKeyVolDown|assignedKeyLock
+
+	Loop, Parse, keysArray, `|
+	{
+		If % %A_LoopField%!="None"
+			GuiControl, Functions:, %A_LoopField%Var, % %A_LoopField%
+		else
+			GuiControl, Functions:, %A_LoopField%Var, Off
+	}
+
+	If assignedKeyRSWeb!=None
+		GuiControl, Functions:, assignedKeyRSWeb2Var, %assignedKeyRSWeb% + 1/2/3...8
+	else
+		GuiControl, Functions:, assignedKeyRSWeb2Var, Off
+return
+
 ;--------------------------------------------------------------------------------------------------------------
 
 ChangeHotkeys:
 	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
-	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
-	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
-	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+	IniWrite, %assignedKeyPlay%, settings.ini, settings, keyPlay
+	IniWrite, %assignedKeyPrev%, settings.ini, settings, keyPrev
+	IniWrite, %assignedKeyNext%, settings.ini, settings, keyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
-	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
 
 	IniRead, keyRSWeb, settings.ini, settings, keyRSWeb, F4
-	IniRead, KeyPlay, settings.ini, settings, KeyPlay, F9
-	IniRead, KeyPrev, settings.ini, settings, KeyPrev, F11
-	IniRead, KeyNext, settings.ini, settings, KeyNext, F12
+	IniRead, keyPlay, settings.ini, settings, keyPlay, F9
+	IniRead, keyPrev, settings.ini, settings, keyPrev, F11
+	IniRead, keyNext, settings.ini, settings, keyNext, F12
 	IniRead, keyVolUp, settings.ini, settings, keyVolUp, PgUp
 	IniRead, keyVolDown, settings.ini, settings, keyVolDown, PgDn
-	IniRead, lockkey, settings.ini, settings, lockkey, ScrollLock
+	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock
 	Width := 280
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
@@ -585,34 +603,35 @@ ChangeHotkeys:
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
 
-	Gui, Color, 008383, 333333
+	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width/2) " Center ", Speed Dial
+	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Press Delete on hotkeys to disable them
+	Gui, Add, Text, % "x0 y+20 w" (Width/2) " vLabelSP Center ", Speed Dial
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyRSWeb" , %keyRSWeb%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPlay" , %keyPlay%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous ›
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPrev" , %keyPrev%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next ›
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyNext" , %keyNext%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up ›
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolUp" , %keyVolUp%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down ›
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock ›
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %lockKey%
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock
+	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+25 w" (Width*0.38) " h31 gchangebutton hwndBut1 +Center +Default", Apply
@@ -629,36 +648,29 @@ ChangeHotkeys:
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, w%Width%, Other Settings
+	GuiControl, Focus, LabelSP
 	FadeIn(ChangeHotkeys)
 return
 
 ChangeButton:
 	Gui, Submit, NoHide
 	IniWrite, %assignedKeyRSWeb%, settings.ini, settings, keyRSWeb
-	IniWrite, %assignedKeyPlay%, settings.ini, settings, KeyPlay
-	IniWrite, %assignedKeyPrev%, settings.ini, settings, KeyPrev
-	IniWrite, %assignedKeyNext%, settings.ini, settings, KeyNext
+	IniWrite, %assignedKeyPlay%, settings.ini, settings, keyPlay
+	IniWrite, %assignedKeyPrev%, settings.ini, settings, keyPrev
+	IniWrite, %assignedKeyNext%, settings.ini, settings, keyNext
 	IniWrite, %assignedKeyVolUp%, settings.ini, settings, keyVolUp
 	IniWrite, %assignedKeyVolDown%, settings.ini, settings, keyVolDown
-	IniWrite, %assignedKeyLock%, settings.ini, settings, lockkey
+	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
 
-	If (keyRSWeb!="None" && keyRSWeb!="" and keyRSWeb!=assignedkeyRSWeb)
-		Hotkey, %keyRSWeb%, playpause, Off
-	If (KeyVolUp!="None" && KeyVolUp!="" and KeyVolUp!=assignedKeyVolUp)
-		Hotkey, %KeyVolUp%, playpause, Off
-	If (KeyVolDown!="None" && KeyVolDown!="" and KeyVolDown!=assignedKeyVolDown)
-		Hotkey, %KeyVolDown%, playpause, Off
-	If (KeyPlay!="None" && KeyPlay!="" and KeyPlay!=assignedKeyPlay)
-		Hotkey, %KeyPlay%, playpause, Off
-	If (KeyPrev!="None" && KeyPrev!="" and KeyPrev!=assignedKeyPrev)
-		Hotkey, %KeyPrev%, prevsong, Off
-	If (KeyNext!="None" && KeyNext!="" and KeyNext!=assignedKeyNext)
-		Hotkey, %KeyNext%, nextsong, Off
-	If (lockkey!="None" && lockkey!="" and lockkey!=assignedKeyLock)
-		Hotkey, %lockkey%, LockNow, Off
+	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
+	
+	Loop, Parse, keysArray, `|
+	If (%A_LoopField%!="None" && %A_LoopField%!="" and %A_LoopField%!=assigned%A_LoopField%)
+		Hotkey, % %A_LoopField%, Off
 		
 	GoSub ButtonsLabel
 ChangeClose:
+	GoSub SetButtons
 	FadeOut(ChangeHotkeys)
 return
 
