@@ -164,6 +164,7 @@ return
 	RAlt::Return
 	F1::
 		GoSub fadeinclock
+		SetTimer, MinuteUpdate, 15000
 	return
 	F2::Return
 	F3::Return
