@@ -10,15 +10,20 @@
 	}
 	If !LockPw
 	{
+		IniDelete, settings.ini, settings, LockPwHash
 		RSNotify("No Password")
 		SetTimer, CFullScreen, Off
 		BreakLoop=0
+		LockPw=
 		return
 	}
 	else if LockPw is not digit
 	{
-		RSNotify("Invalid Password")
+		IniDelete, settings.ini, settings, LockPwHash
+		RSNotify("Corrupt Password")
+		SetTimer, CFullScreen, Off
 		BreakLoop=0
+		LockPw=
 		return
 	}
 

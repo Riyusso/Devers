@@ -346,13 +346,13 @@ protectionbutton:
 	MetRequirements:=True
 	If BreakLoop=1
 	{
-		If !LockPw
+		If !NewLockPw
 		{
 			Warning:="A password is needed."
 			GoSub WarningGUI
 			MetRequirements:=False
 		}
-		Else If LockPw is not digit
+		Else If NewLockPw is not digit
 		{
 			Warning:="Password needs to be a number."
 			GoSub WarningGUI
@@ -383,7 +383,7 @@ protectionbutton:
 		}
 	}
 
-	If (NewLockPw!=LockPw)
+	If (NewLockPw!=LockPw && LockPw)
 	{
 		DontShowRS:=true
 		AuthReq:=true
@@ -398,7 +398,8 @@ protectionbutton:
 			return
 		}
 	}
-	LockPw:=NewLockPw
+	if !cancelChange
+		LockPw:=NewLockPw
 
 	LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
 	IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
