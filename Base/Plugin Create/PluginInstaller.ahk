@@ -12,7 +12,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 {
 	SplitPath, A_ScriptName,,,, PluginName
 	IfExist, %A_MyDocuments%\%ScriptName%\%PluginName%.ahk
-		MsgBox, 4, Replace %PluginName%?, The plugin is already installed, do you want to replace it?
+		MsgBox, 4, Replace %PluginName%?, The plugin is already installed, do you want to reinstall it?
 
 	IfMsgBox No
 	{
@@ -20,12 +20,8 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 		return
 	}
 
+	IniDelete, %A_MyDocuments%\%ScriptName%\plugin-settings.ini, %PluginName%
 	FileInstall, Plugin.ahk, %A_MyDocuments%\%ScriptName%\%PluginName%.ahk, 1
-
-	If(A_IsCompiled)
-		IniWrite, %A_ScriptFullPath%, %A_MyDocuments%\%ScriptName%\build.ini, build, PluginPath
-	Else
-		IniWrite, ERROR , %A_MyDocuments%\%ScriptName%\build.ini,build,PluginPath
 
 	IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ReloadVar
 }
