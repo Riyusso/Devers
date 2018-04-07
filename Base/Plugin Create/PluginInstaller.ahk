@@ -24,6 +24,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 	FileInstall, Plugin.ahk, %A_MyDocuments%\%ScriptName%\%PluginName%.ahk, 1
 
 	IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ReloadVar
+	IniWrite, 1, %A_MyDocuments%\%ScriptName%\settings.ini, plugins, PluginInstalled
 }
 else
 {

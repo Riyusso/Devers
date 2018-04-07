@@ -363,6 +363,14 @@ IfExist, settings.ini
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
 	}
+	If CreateATask=1
+	{
+		If A_IsCompiled
+		{
+			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+			IniWrite, 0, settings.ini, settings, CreateATask
+		}
+	}
 	
 	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
 	SetTimer, KeepTrans, 12000
@@ -400,7 +408,7 @@ IfExist, settings.ini
 	If !LockAfterRestart
 	{
 		If A_IsCompiled
-		SetTimer, RSRunScript, -25
+			SetTimer, RSRunScript, -25
 	}
 	If LockAfterRestart
 	{
@@ -485,43 +493,45 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 RSRunScript:
-	logofader=10
-	xc:=A_ScreenWidth/2-223
-	yc:=A_ScreenHeight/2-261
-	RunScript := new GUI()
-	RunScript.Color := "black"
-	RunScript.SetTransparent("0")
-	RunScript.SetStyle("-Caption +AlwaysOnTop -Border +ToolWindow -DPIScale")
-	Gui, Add, Picture, x0 y0 w447 h523 vKC0, RS.png
-	RunScript.Show("x" xc "y" yc "w447 h523")
-	sleep 16
-	RunScript.Aero.Set(500,500,0,0)
-	Loop 25
+	If (ShowRSRunScript=1) && !PluginInstalled
 	{
-		RunScript.SetTransparent(logofader)
-		sleep 16
-		logofader:=logofader+10
+		logofader=0
+		xc:=A_ScreenWidth/2-223
+		yc:=A_ScreenHeight/2-261
+		RunScript := new GUI()
+		RunScript.SetTransparent("0")
+		RunScript.Color := "black"
+		RunScript.SetStyle("-Caption +AlwaysOnTop -Border +ToolWindow -DPIScale")
+		Gui, Add, Picture, x0 y0 w447 h523 vKC0, RS.png
+		RunScript.Aero.Set(500,500,0,0)
+		sleep 50
+		RunScript.Show("x" xc "y" yc "w447 h523")
+		Loop 23
+		{
+			RunScript.SetTransparent(logofader)
+			sleep 10
+			logofader:=logofader+10
+		}
+		SetTimer, FadeRSOut, -370
+		return
 	}
-	SetTimer, FadeRSOut, -100
+	If PluginInstalled
+	{
+		RSNotify("Plugin Added")
+		IniDelete, settings.ini, plugins, PluginInstalled
+	}
 return
 
 FadeRSOut:
-sleep 350
 GuiControl, Hide, MC0
 logofader=250
-Loop 25
+Loop 23
 {
 	RunScript.SetTransparent(logofader)
-	sleep 16
+	sleep 10
 	logofader:=logofader-10
 }
 RunScript.Destroy()
-If CreateATask=1
-{
-	If A_IsCompiled
-	Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
-	IniWrite, 0, settings.ini, settings, CreateATask
-}
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -641,6 +651,8 @@ IniReads:
 	IniRead, CreateATask, settings.ini, settings, CreateATask
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
+	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
+	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption

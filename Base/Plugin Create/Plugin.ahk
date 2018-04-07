@@ -55,7 +55,10 @@ SubmitButton:
         RSNotify("Not possible")
 return
 ChooseHotkeyGuiEscape:
+	FileDelete, %A_ScriptFullPath%
     FadeOut(ChooseHotkey)
+	RSNotify("Canceled")
+	Sleep 1500
     ExitApp
 return
 AssignHotkey:

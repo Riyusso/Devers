@@ -155,6 +155,9 @@ OtherSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
+	Gui, Add, Text, % "x15 y+30 w120 Center", Show Logo on start ›
+	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+
 	IfExist, *.ahk
 	{
 		Gui, Add, Text, % "x0 y+25 w" Width " Center", -   Extensions   -
@@ -214,6 +217,7 @@ otherbutton:
 
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
+	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
 	SetTimer, KeepTrans, 12000
 
 	IfExist, *.ahk
