@@ -725,7 +725,7 @@ AboutInfo:
 	WinSet, Region, 0-0 w%width% h%H% r6-6, ahk_id %AboutInfo%
 	Gui, Show, w%width% h%H%, About
 	FadeIn(AboutInfo)
-	WinSet, Transparent, 250
+	WinSet, Transparent, 247
 	GoSub GetLatestVersion
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion

@@ -325,7 +325,7 @@ FadeOut(id)
 {
 	IfWinExist, ahk_id %id%
 	{
-		localvar=255
+		localvar=240
 		Loop, 14
 			{
 				localvar:=localvar-18
@@ -343,11 +343,29 @@ FadeOut(id)
 FadeIn(id)
 {
 	localvar=0
-	loop, 17
+	loop, 14
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 10
-		localvar:=localvar+15
+		localvar:=localvar+12
+	}
+	loop, 10
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+5
+	}
+	loop, 7
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+2
+	}
+	loop, 10
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+1
 	}
 	HideFocusBorder(id)
 }
