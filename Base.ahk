@@ -523,8 +523,7 @@ RSRunScript:
 return
 
 FadeRSOut:
-GuiControl, Hide, MC0
-logofader=250
+logofader=230
 Loop 23
 {
 	RunScript.SetTransparent(logofader)
