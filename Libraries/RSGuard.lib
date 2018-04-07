@@ -410,14 +410,15 @@ If (confiney < MouseY) || (confinex < MouseX) || (MouseX < 0) || (MouseY < 0)
 return
 
 TransProtection:
-Loop, 30
+Loop, 31
 {
 	TransProtectionCalculation:=(A_Index)*8
 	WinSet, Transparent, %TransProtectionCalculation%, ahk_id %ZPHWND%
 	sleep, 3
 	If UnlockDelay
-		break
+		return
 }
+WinSet, Transparent, 245, ahk_id %ZPHWND%
 return
 
 PasswordCover:
@@ -456,7 +457,7 @@ return
 
 TransProtectionReverse:
 UnlockDelay:=true
-ReverseTransCalc=%TransProtectionCalculation%
+ReverseTransCalc=245
 Loop, 32
 {
 	ReverseTransCalc:=ReverseTransCalc-(4+(A_Index*0.23))
