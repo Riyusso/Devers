@@ -10,20 +10,6 @@ global dpi:=DpiFactor()
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
 	SetWorkingDir %A_MyDocuments%\%ScriptName%
-	If (A_ScriptName == "devRS-install-d.exe")
-	{
-		GoSub UpdateIt
-
-		IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
-		{
-			Run, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
-			If(IsUpdated)
-				RSNotify("Updated")
-			Sleep 1750
-		}
-		ExitApp
-	}
-
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 	IfNotExist, %A_MyDocuments%\%ScriptName%\build.ini
 		InstalledVersion=1.0
