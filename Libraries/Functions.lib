@@ -343,25 +343,25 @@ FadeOut(id)
 FadeIn(id)
 {
 	localvar=0
-	loop, 14
+	loop, 10
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 10
-		localvar:=localvar+12
+		localvar:=localvar+17
 	}
-	loop, 10
+	loop, 8
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 20
-		localvar:=localvar+5
+		localvar:=localvar+7
 	}
-	loop, 7
+	loop, 4
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 20
-		localvar:=localvar+2
+		localvar:=localvar+3
 	}
-	loop, 10
+	loop, 9
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 20
