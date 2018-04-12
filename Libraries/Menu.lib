@@ -739,16 +739,16 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MenuInit:
-IfExist RSIcon.ico
+IfExist OptionsIcon.ico
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, RSIcon.ico
+	Menu, TRAY, Icon, OptionsIcon.ico
 }
 Else
 {
-	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, RSIcon.ico
+	Menu, TRAY, Icon, OptionsIcon.ico
 }
 If A_IsCompiled
 Menu, Tray, Tip, %ScriptName%
@@ -810,7 +810,7 @@ If A_IsSuspended
 If !A_IsSuspended
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, RSIcon.ico,,1
+	Menu, TRAY, Icon, OptionsIcon.ico,,1
 	RSNotify("Released")
 	If A_IsPaused
 		Pause, Off

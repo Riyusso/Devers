@@ -4,7 +4,7 @@
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 SplitPath, A_ScriptName,,,, PluginName
-Menu, Tray, Icon, RSIcon.ico
+Menu, Tray, Icon, OptionsIcon.ico
 global dpi:=DpiFactor() ; required if you wish to use RSNotify(needs the 3 libraries included)
 IniRead, Hotkey, plugin-settings.ini, %PluginName%, key, UNASSIGNED
 If Hotkey=UNASSIGNED

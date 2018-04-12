@@ -431,7 +431,7 @@ Installation:
 	sleep 1350
 	GoSub InstallFiles
 	Menu, Tray, Icon
-	Menu, Tray, Icon, RSIcon.ico
+	Menu, Tray, Icon, OptionsIcon.ico
 	GoSub AdminPrompt
 return
 
@@ -446,10 +446,8 @@ InstallFiles:
 		FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
 	IfNotExist, RSStopped.ico
 		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	IfNotExist, RSIcon.ico
-		FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
-	IfNotExist, Base/RSStopped.ico
-		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	IfNotExist, OptionsIcon.ico
+		FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
 	IfNotExist, Extensions
 			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
@@ -460,8 +458,7 @@ UpdateFiles:
 	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
 	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
 	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
-	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	FileInstall, Base/RSIcon.ico, %A_MyDocuments%\%ScriptName%\RSIcon.ico, 1
+	FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
 	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
 	FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 
@@ -490,11 +487,11 @@ RSRunScript:
 		RunScript.Aero.Set(500,500,0,0)
 		sleep 50
 		RunScript.Show("x" xc "y" yc "w447 h523")
-		Loop 17
+		Loop 19
 		{
 			RunScript.SetTransparent(logofader)
 			sleep 10
-			logofader:=logofader+14
+			logofader:=logofader+13
 		}
 		SetTimer, FadeRSOut, -450
 		return
@@ -507,12 +504,12 @@ RSRunScript:
 return
 
 FadeRSOut:
-logofader=238
-Loop 17
+logofader=247
+Loop 19
 {
 	RunScript.SetTransparent(logofader)
 	sleep 10
-	logofader:=logofader-14
+	logofader:=logofader-13
 }
 RunScript.Destroy()
 return
