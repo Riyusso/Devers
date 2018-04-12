@@ -126,6 +126,8 @@ Loop, Parse, keysArray, `|
 	{
 		Hotkey, %assignedKeyRSWeb%, RSWeb
 		Hotkey, %assignedKeyRSWeb%, RSWeb, On
+		Hotkey, % assignedKeyRSWeb . " & SC029", RSWebFocused
+		Hotkey, % assignedKeyRSWeb . " & SC029", RSWebFocused, On
 		Loop, 8
 		{
 			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%
