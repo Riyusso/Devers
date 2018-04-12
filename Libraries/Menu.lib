@@ -1186,17 +1186,18 @@ Authorize:
 	Gui, Submit, NoHide
 	If (origpass=password and StrLen(origpass)>0)
 	{
-		Authorized:=true
-		RSNotify("Authorized")
 		FadeOut(Auth)
-		WinWaitNotActive, ahk_id %Auth%,,15
-		{
-			Sleep 100
-			SendInput {Raw}%password%
-		}
+		Authorized:=true
 		SetTimer, AuthExpirationCheck, 2000
 		SetTimer, CheckIfAuthInactive, Off
+		WinWaitNotActive, ahk_id %Auth%,,15
+		{
+			Sleep 10
+			WinActivate, ahk_id %activeWindowForPassword%
+			SendInput {Raw}%password%
+		}
 		StartTick:=A_TickCount
+		RSNotify("Authorized")
 		return
 	}
 	Else

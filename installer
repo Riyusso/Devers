@@ -9,7 +9,8 @@ global dpi:=DpiFactor()
 
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
-	IfExist, Base.ahk
+	SetWorkingDir %A_MyDocuments%\%ScriptName%
+	IfExist, %A_ScriptDir%\Base.ahk
 	{
 		GoSub UpdateIt
 
@@ -22,7 +23,6 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 		}
 		ExitApp
 	}
-	SetWorkingDir %A_MyDocuments%\%ScriptName%
 
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 	IfNotExist, %A_MyDocuments%\%ScriptName%\build.ini

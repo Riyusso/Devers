@@ -80,6 +80,7 @@ pw:
 	{
 		If !Authorized
 		{
+			WinGet, activeWindowForPassword, ID, A
 			GoSub Authorization
 			return
 		}
@@ -506,13 +507,13 @@ RSRunScript:
 		RunScript.Aero.Set(500,500,0,0)
 		sleep 50
 		RunScript.Show("x" xc "y" yc "w447 h523")
-		Loop 23
+		Loop 17
 		{
 			RunScript.SetTransparent(logofader)
 			sleep 10
-			logofader:=logofader+10
+			logofader:=logofader+14
 		}
-		SetTimer, FadeRSOut, -370
+		SetTimer, FadeRSOut, -450
 		return
 	}
 	If PluginInstalled
@@ -523,12 +524,12 @@ RSRunScript:
 return
 
 FadeRSOut:
-logofader=230
-Loop 23
+logofader=238
+Loop 17
 {
 	RunScript.SetTransparent(logofader)
 	sleep 10
-	logofader:=logofader-10
+	logofader:=logofader-14
 }
 RunScript.Destroy()
 return
