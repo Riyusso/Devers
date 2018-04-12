@@ -1190,6 +1190,10 @@ Authorize:
 		RSNotify("Authorized")
 		FadeOut(Auth)
 		WinWaitNotActive, ahk_id %Auth%,,15
+		{
+			Sleep 100
+			SendInput {Raw}%password%
+		}
 		SetTimer, AuthExpirationCheck, 2000
 		SetTimer, CheckIfAuthInactive, Off
 		StartTick:=A_TickCount

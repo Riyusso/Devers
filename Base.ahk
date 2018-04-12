@@ -83,7 +83,7 @@ pw:
 			GoSub Authorization
 			return
 		}
-		SendInput {Raw}%password%	
+		SendInput {Raw}%password%
 	}
 return
 
