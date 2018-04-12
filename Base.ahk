@@ -7,7 +7,7 @@
 #HotkeyInterval 99000000
 #KeyHistory
 FileEncoding, UTF-8
-FileVersion=2.0.1.6
+FileVersion=2.0.1.7
 SetTimer, UpdateCheck, 200
 ListLines Off
 Process, Priority, , H
