@@ -404,20 +404,17 @@ IfExist, settings.ini
 	}
 	
 	GoSub InstallFiles
-	GoSub GetLatestVersion
-	
-	If !LockAfterRestart
-	{
-		If A_IsCompiled
+	If !LockAfterRestart && (A_IsCompiled)
 			SetTimer, RSRunScript, -25
-	}
+	
 	If LockAfterRestart
 	{
 		GoSub RSGuard
 		If RunAsAdmin
-		RunAsAdminAfterLock:=1
+			RunAsAdminAfterLock:=1
 	}
 	LogTime(0)
+	GoSub GetLatestVersion
 	GoSub ButtonsLabel
 }
 IfNotExist, settings.ini
