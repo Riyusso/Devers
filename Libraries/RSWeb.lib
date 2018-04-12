@@ -107,7 +107,7 @@ RSWeb:
 			Gui, Show, h%guih% w%guiw%, %ScriptName% Speed Dial
 		else
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
-
+		ShAutoComplete(WebSearch)
 		FadeIn(WebL)
 		ChoosingWebsite:=true
 	}
@@ -151,7 +151,8 @@ WebLGuiContextMenu:
 
 	Gui, Add, Button, x+10 y70 w95 gExitWebsites hwndBut2 +Center, Cancel
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-
+	ShAutoComplete(Edit264)
+	ShAutoComplete(Edit265)
 	WinSet, Region, 0-0 w300 h100 r12-12, ahk_id %WebEdit%
 	Gui, Show, % "w300 h100 y" A_ScreenHeight/2+204*amultiplier/2+20 , Web Edit
 	FadeIn(WebEdit)
