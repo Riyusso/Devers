@@ -581,13 +581,13 @@ Initiation:
 	ws1=www.facebook.com
 	ws2=www.youtube.com
 	ws3=www.reddit.com
-	ws4=www.9gag.com
-	ws5=https://www.twitch.tv
-	ws6=http://zamunda.net/bananas
-	ws7=www.thepiratebay.org
+	ws4=www.gmail.com
+	ws5=%A_MyDocuments%
+	ws6=https://www.twitch.tv
+	ws7=https://open.spotify.com/browse
 	ws8=https://alpha.wallhaven.cc/
 
-	WebNames=Facebook|YouTube|Reddit|9Gag|Twitch|Zamunda|PirateBay|WallHaven
+	WebNames=Facebook|YouTube|Reddit|Gmail|Documents|Twitch|Spotify|WallHaven
 	IniWrite, %WebNames%, settings.ini, Web, WebNames
 
 	Loop, 8
