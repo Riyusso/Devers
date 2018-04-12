@@ -6,17 +6,17 @@ SetWorkingDir %A_ScriptDir%
 
 IfExist, Base.exe
 	FileDelete, Base.exe
-IfExist, devRS-install.exe
-	FileDelete, devRS-install.exe
+IfExist, Devers-install.exe
+	FileDelete, Devers-install.exe
 Sleep 500
 
 Run, Compiler/Compiler.exe /in "Base.ahk" /icon "Base/RSIcon.ico"
 While ! FileExist( "Base.exe" )
 	Sleep 250
-Run, Compiler/Compiler.exe /in "installer" /out "devRS-install.exe" /icon "Base/RSIcon.ico"
-While ! FileExist( "devRS-install.exe" )
+Run, Compiler/Compiler.exe /in "installer" /out "Devers-install.exe" /icon "Base/RSIcon.ico"
+While ! FileExist( "Devers-install.exe" )
 	Sleep 250
-If FileExist("devRS-install.exe")
+If FileExist("Devers-install.exe")
 	FileDelete, Base.exe
 
 ExitApp

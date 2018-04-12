@@ -6,7 +6,7 @@
 #NoTrayIcon
 SendMode Input
 SetWorkingDir %A_ScriptDir% 
-ScriptName=.devRS
+ScriptName=Devers
 
 IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 {
@@ -28,7 +28,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 }
 else
 {
-	MsgBox, .devRS is not installed on your computer.
+	MsgBox, Devers is not installed on your computer.
 }
 
 ExitApp

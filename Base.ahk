@@ -21,7 +21,7 @@ ComObjError(false)
 SetWinDelay, 0
 SetControlDelay, 0
 SendMode Event
-ScriptName=.devRS
+ScriptName=Devers
 global logging
 global dpi:=DpiFactor()
 StartTime:=A_TickCount
@@ -472,22 +472,6 @@ UpdateFiles:
 return
 
 Migrations:
-	Migration1:
-		IniRead, LockPw, settings.ini, settings, LockPw
-		If LockPw is Digit
-		{
-			IniDelete, settings.ini, settings, LockPw
-			LockPwHash:=Crypt.Encrypt.StrEncrypt(LockPw,"KktgC3l0wR",7,3)
-			IniWrite, %LockPwHash%, settings.ini, settings, LockPwHash
-		}
-	Migration2:
-		IniRead, LockKey, settings.ini, settings, LockKey
-		if LockKey!=ERROR
-		{
-			IniDelete, settings.ini, settings, LockKey
-			IniWrite, %LockKey%, settings.ini, settings, keyLock
-			IniRead, keyLock, settings.ini, settings, keyLock
-		}
 return
 
 ;--------------------------------------------------------------------------------------------------------------

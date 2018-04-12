@@ -9,8 +9,8 @@ Update:
 		FadeOut(UpdatePrompt)
 		IniWrite, %UpdateVersion%, build.ini, build, PromptVersion
 		Sleep 2000
-		WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/devRS-install.exe", A_Temp . "\devRS-install.exe")
-		Run, %A_Temp%\devRS-install.exe
+		WinHttp_DownloadToFile("https://github.com/Riyusso/Devers/releases/download/latest/Devers-install.exe", A_Temp . "\Devers-install.exe")
+		Run, %A_Temp%\Devers-install.exe
 		IniDelete, build.ini, build, PromptVersion
 	}
 	Else
@@ -19,7 +19,7 @@ return
 
 GetLatestVersion:
 	FileDelete, build_update.ini
-	WinHttp_DownloadToFile("https://github.com/Riyusso/.devRS/releases/download/latest/build.ini", "build_update.ini")
+	WinHttp_DownloadToFile("https://github.com/Riyusso/Devers/releases/download/latest/build.ini", "build_update.ini")
 return
 
 NoUpdate:

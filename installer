@@ -4,7 +4,7 @@ FileInstall, build.ini, install.ini
 IniRead, UpdateVersion, install.ini, build, Version
 FileDelete, install.ini
 SendMode Input
-ScriptName=.devRS
+ScriptName=Devers
 global dpi:=DpiFactor()
 
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe

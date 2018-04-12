@@ -92,7 +92,7 @@ button:
 	RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
+	StartMenuFile=%A_StartMenu%\Programs\Devers.lnk
 	If StartWithWindows=2
 	{
 		If A_IsCompiled=1
@@ -711,7 +711,7 @@ AboutInfo:
 	Gui, Font, c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Website
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", github.com/Riyusso/.devRS
+	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", github.com/Riyusso/Devers
 
 	Gui, Font, s10 Bold, Tahoma
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " w" (Width*0.64) "  y+25 h34 gAboutExit +hwndBut1 +Default", Exit
@@ -781,7 +781,7 @@ mnuUninstall:
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\devRS.lnk
+	StartMenuFile=%A_StartMenu%\Programs\Devers.lnk
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE

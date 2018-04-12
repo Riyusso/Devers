@@ -3,7 +3,7 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-ScriptName=.devRS
+ScriptName=Devers
 
 IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ExitVar
 Sleep 1250
