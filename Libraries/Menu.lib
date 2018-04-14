@@ -151,12 +151,9 @@ OtherSettingsLabel:
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
 
-	Gui, Color, 008383, 333333
+	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
-
-	Gui, Add, Text, % "x15 y+30 w120 Center", Show Logo on start ›
-	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
 
 	IfExist, *.ahk
 	{
@@ -165,17 +162,21 @@ OtherSettingsLabel:
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-			Gui, Add, Text, % "x15 y+15 w120 Center", %PluginName% ›
+			Gui, Add, Text, % "x15 y+14 w120 Center", %PluginName% ›
 			Gui, Add, DropDownList, % "x+20 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
+
+	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
+	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
+	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
 
 	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19 -Theme +Center", %TransparentStartMenu%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h31 gotherbutton hwndBut1 +Center +Default", Apply
@@ -675,7 +676,7 @@ Return
 AboutInfo:
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-	width=250
+	width=260
 	Gui, AboutInfo:New, +hwndAboutInfo +ToolWindow
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -712,6 +713,10 @@ AboutInfo:
 	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Website
 	Gui, Font, c%lightc%, Tahoma
 	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", github.com/Riyusso/Devers
+	Gui, Font, c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Email
+	Gui, Font, c%lightc%, Tahoma
+	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", Riyusso@gmx.us
 
 	Gui, Font, s10 Bold, Tahoma
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " w" (Width*0.64) "  y+25 h34 gAboutExit +hwndBut1 +Default", Exit
