@@ -93,7 +93,7 @@
 	pwcover=
 	pwadd=•
 
-	If ItsLocked=0
+	If !ItsLocked
 	{
 		ItsLocked=1
 		Gui, ProtectionAgainstZombies:New    ; ZPScreen
@@ -247,8 +247,6 @@ Loop, 85
 }
 return
 
-
-
 RGB(Red, Green, Blue) ; Fading the clock in
 {
     ;store previous setting
@@ -387,13 +385,12 @@ return
 
 KeepOnTop:
 	IfWinNotActive, ahk_id %ZPHWND%
-	IfWinNotActive, ahk_id %InterfaceWND%
-	{
 		WinActivate, ahk_id %ZPHWND%
-	}
 	IfWinExist, ahk_exe Taskmgr.exe
-	WinClose, ahk_exe Taskmgr.exe
+		WinClose, ahk_exe Taskmgr.exe
+return
 
+ProtectionAgainstZombiesGuiClose:
 return
 
 SecondDisplayProtection:
