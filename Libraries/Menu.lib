@@ -222,7 +222,6 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-^k::
 ExtSettings:
 	Width := 255
 	labelsx := (Width/7)+30
@@ -237,7 +236,7 @@ ExtSettings:
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Extensions
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma

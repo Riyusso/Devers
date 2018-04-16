@@ -212,7 +212,7 @@ return
 StartSearch:
 	Gui, Submit, NoHide
 	Loop, Parse, websearchvar
-	If (A_LoopField="." && !InStr(websearchvar," "))
+	If (A_LoopField="." && !InStr(websearchvar," ") && !FastSearching)
 	{
 		Run, http:%websearchvar%
 		websearchvar=
