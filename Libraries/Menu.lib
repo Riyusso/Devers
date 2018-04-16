@@ -464,6 +464,16 @@ ScriptFunctions:
 	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
 
 	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search
+	Gui, Font, s8 c%lightc%, Tahoma
+	If FastSearchWanted
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", RAlt
+	else
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Off
+
+	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	
+	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
 	Gui, Font, s8 c%lightc%, Tahoma
 	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyPlayVar Center", %assignedKeyPlay%
