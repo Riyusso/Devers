@@ -51,10 +51,7 @@ return
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-~F6 & F9::
-	Gosub Reinstall
-return
-
+#If ItsLocked!=1
 ~$LAlt Up::
 	GetKeyState, state, Shift
 	If state=D
@@ -95,6 +92,7 @@ return
 		Reload
 	}
 return
+#If 
 
 #If (A_IsCompiled)
 ~#!SC013::
@@ -318,7 +316,7 @@ return
 ::g::
 Gui, WebL:Submit, NoHide
 If !websearchvar
-	SendInput {BS 2}Google:{Space 2}
+	SendInput Google:{Space 2}
 else
 	SendInput g{Space}
 return
