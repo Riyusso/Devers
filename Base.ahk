@@ -51,7 +51,7 @@ return
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-#If ItsLocked!=1
+#If ItsLocked!=1 && !WinActive("ahk_class AutoHotkeyGUI")
 ~$LAlt Up::
 	GetKeyState, state, Shift
 	If state=D
@@ -84,6 +84,7 @@ pw:
 		SendInput {Raw}%password%
 	}
 return
+#If 
 
 ~!SC013::
 	If (!A_IsCompiled)
@@ -92,7 +93,6 @@ return
 		Reload
 	}
 return
-#If 
 
 #If (A_IsCompiled)
 ~#!SC013::

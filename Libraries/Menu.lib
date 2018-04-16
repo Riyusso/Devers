@@ -138,7 +138,6 @@ OtherSettingsLabel:
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
-	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
 	taskbarsave=%TransparentStartMenu%
 	SetTimer, KeepTrans, Off
@@ -171,9 +170,6 @@ OtherSettingsLabel:
 	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
 	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
-
-	Gui, Add, Text, % "x15 y+14 w120 Center", Fast Search ›
-	Gui, Add, DropDownList, % "x+20 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Yes|No
 
 	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
@@ -223,7 +219,6 @@ otherbutton:
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
-	IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 	SetTimer, KeepTrans, 12000
 
 	IfExist, *.ahk
@@ -445,8 +440,8 @@ ScriptFunctions:
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, % "x0 y0 w" Width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Features
 	Gui, Font, s8 c228a96, Tahoma
-	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", The Lock key is configurable
-	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check Protection Settings
+	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Some hotkeys/features are configurable
+	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check "Configure Hotkeys"
 	Gui, Font, s10 c%lightc%, Tahoma
 	Gui, Add, Text, % "x0 y+15 w" (Width/2) " Center BackgroundTrans", Function
 	Gui, Font, s10 c%lightc%, Tahoma
@@ -462,14 +457,6 @@ ScriptFunctions:
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
 	Gui, Font, s8 c%lightc%, Tahoma
 	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
-
-	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search
-	Gui, Font, s8 c%lightc%, Tahoma
-	If FastSearchWanted
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", RAlt
-	else
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Off
 
 	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 	
@@ -489,6 +476,15 @@ ScriptFunctions:
 	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyNextVar Center", %assignedKeyNext%
 
 	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search
+	Gui, Font, s8 c%lightc%, Tahoma
+
+	If FastSearchWanted=1
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center vRAltVar", Right Alt
+	else
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center vRAltVar", Off
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
@@ -546,7 +542,7 @@ ScriptFunctions:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Change Hotkeys
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", RS-Guard Info
 
@@ -588,6 +584,11 @@ SetButtons:
 		else
 			GuiControl, Functions:, %A_LoopField%Var, Off
 	}
+
+	If FastSearchWanted=1
+		GuiControl, Functions:, RAltVar, Right Alt
+	else
+		GuiControl, Functions:, RAltVar, Off
 
 	If assignedKeyRSWeb!=None
 		GuiControl, Functions:, assignedKeyRSWeb2Var, %assignedKeyRSWeb% + 1/2/3...8
@@ -642,6 +643,11 @@ ChangeHotkeys:
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %keyLock%
 
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", 
+
+	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search 
+	Gui, Add, DropDownList, % "x+30 w72 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
+
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
@@ -674,7 +680,7 @@ ChangeButton:
 		If (%A_LoopField%!="None" && %A_LoopField%!="" and %A_LoopField%!=assigned%A_LoopField%)
 			Hotkey, % %A_LoopField%, Off
 	}
-		
+	IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 	GoSub ButtonsLabel
 ChangeClose:
 	GoSub SetButtons
