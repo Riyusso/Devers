@@ -167,9 +167,9 @@ OtherSettingsLabel:
 	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+20 w" (Width*0.80) " h37 gmnuUninstall hwndBut1 +Center", Uninstall
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+15 w" (Width*0.80) " h37 gmnuUninstall hwndBut1 +Center", Uninstall
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h31 gotherbutton hwndBut2 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gotherbutton hwndBut2 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut3 +Center",Cancel
 
@@ -222,6 +222,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
+^k::
 ExtSettings:
 	Width := 255
 	labelsx := (Width/7)+30
@@ -246,6 +247,10 @@ ExtSettings:
 
 	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", Fast Search 
 	Gui, Add, DropDownList, % "x+20 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", LAlt to Minimize
+	Gui, Add, DropDownList, % "x+20 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", Volume Over Tray
+	Gui, Add, DropDownList, % "x+20 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
 
 	IfExist, *.ahk
 	{
@@ -313,6 +318,7 @@ IfExist, *.ahk
 	}
 }
 IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
+IniWrite, %AltMinimizeWanted%, settings.ini, settings, AltMinimizeWanted
 
 If FastSearchWanted=1
 	GuiControl, Functions:, RAltVar, Right Alt

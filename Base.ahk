@@ -51,7 +51,7 @@ return
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-#If ItsLocked!=1 && !WinActive("ahk_class AutoHotkeyGUI")
+#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1)
 ~$LAlt Up::
 	GetKeyState, state, Shift
 	If state=D
@@ -65,6 +65,7 @@ return
 	IfWinNotActive, ahk_class WorkerW
 	WinMinimize, A
 return
+#If
 
 ~CapsLock::RapidHotkey("email", 2, 0.2, 1)
 email:
@@ -84,7 +85,6 @@ pw:
 		SendInput {Raw}%password%
 	}
 return
-#If 
 
 #If (!A_IsCompiled)
 ~!SC013::
@@ -666,6 +666,8 @@ IniReads:
 	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
 	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
 	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
+	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
+	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption
