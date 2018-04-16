@@ -1,4 +1,4 @@
-RSWeb:
+﻿RSWeb:
 	ChoosingWebsite:=true
 	IniRead, WebNames, settings.ini, Web, WebNames
 	Loop, Parse, WebNames, `|
@@ -15,6 +15,7 @@ RSWeb:
 	If WebLT=0
 	{
 		ChoosingWebsite:=false
+		SearchBased:=false
 		RSWebWithSearchFocused:=false
 		FadeOut(WebL)
 		return
@@ -47,25 +48,52 @@ RSWeb:
 			amultiplier=0.80
 		}
 
-		guiw:=720*amultiplier
-		guih:=204*amultiplier-25
+		If SearchBased
+		{
+			guiw:=520*amultiplier
+			guih:=47
+		}
+		else
+		{
+			guiw:=720*amultiplier
+			guih:=204*amultiplier-25
+		}
+
 		buth:=(guih)/2-15
 		butw:=(guiw)/4
 
 		Gui, WeBL:Destroy
 		Gui, WebL:New, +hwndWebL
 		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
-		Gui, Color,1e1e1e, 333333
-		Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
+		If SearchBased
+		{
+			Gui, Color,172326, 172326
+			Gui, Font, w300 s13 ceeeeee, Segoe UI Black
+			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background172326 Disabled hwndHPROG"
+		}
+		else
+		{
+			Gui, Color,1e1e1e, 333333
+			Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
+			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
+		}
 
-		Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
 
-		Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
-		WinSet, Transparent, 0
-
-		Gui, Add, Button, % "x+0 h25 w45 gStartSearch hwndSearchBut1 +Default", Go
-		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0]
-		Opt2 := [ , 0x333333, 0x333333, 0xffffff]
+		If SearchBased
+		{
+			Gui, Add, Edit, % "x16 y11 w" guiw-85 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
+			Gui, Font, w700 s23 ceeeeee, Segoe UI Black
+			Gui, Add, Button, % "x+2 y-4 h45 w60 gStartSearch hwndSearchBut1 +Default", •••
+			Opt1 := [6, 0x172326, 0x172326, 0x6a6a6a]
+			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
+		}
+		else
+		{
+			Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
+			Gui, Add, Button, % "x+0 h25 w45 gStartSearch hwndSearchBut1 +Default", Go
+			Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0]
+			Opt2 := [ , 0x333333, 0x333333, 0xffffff]
+		}
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
 
@@ -73,50 +101,63 @@ RSWeb:
 		Opt2 := [ , 0x272727, 0x262626, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Gui, Add, Button, hwndSCHYT1 gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
-		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
+		If !SearchBased
+		{
+			Gui, Add, Button, hwndSCHYT1 gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
+			ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT2 gws2 vwebname2 x+0 w%butw% h%buth%, %WebName2%
-		ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT2 gws2 vwebname2 x+0 w%butw% h%buth%, %WebName2%
+			ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT3 vwebname3 gws3 x+0 w%butw% h%buth%, %WebName3%
-		ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT3 vwebname3 gws3 x+0 w%butw% h%buth%, %WebName3%
+			ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT4 vwebname4 gws4 x+0 w%butw% h%buth%, %WebName4%
-		ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT4 vwebname4 gws4 x+0 w%butw% h%buth%, %WebName4%
+			ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT5 vwebname5 gws5 x0 y+0 w%butw% h%buth%, %WebName5%
-		ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT5 vwebname5 gws5 x0 y+0 w%butw% h%buth%, %WebName5%
+			ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT6 vwebname6 gws6 x+0 w%butw% h%buth%, %WebName6%
-		ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT6 vwebname6 gws6 x+0 w%butw% h%buth%, %WebName6%
+			ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT7 vwebname7 gws7 x+0 w%butw% h%buth%, %WebName7%
-		ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT7 vwebname7 gws7 x+0 w%butw% h%buth%, %WebName7%
+			ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT8 vwebname8 gws8 x+0 w%butw% h%buth% , %WebName8%
-		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, hwndSCHYT8 vwebname8 gws8 x+0 w%butw% h%buth% , %WebName8%
+			ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
+		}
 
 		guih:=guih*dpi
 		guiw:=guiw*dpi
-		WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %WebL%
+		If SearchBased
+		{
+			WinSet, Transparent, 245
+			WinSet, Region, 0-0 w%guiw% h%guih% r12-12, ahk_id %WebL%
+		}
+		else
+		{
+			WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %WebL%
+			WinSet, Transparent, 0
+		}
 		guiw:=guiw/dpi
 		guih:=guih/dpi
-
-		If RSWebWithSearchFocused
+		If RSWebWithSearchFocused || SearchBased
 			Gui, Show, h%guih% w%guiw%, %ScriptName% Speed Dial
 		else
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 		ShAutoComplete(WebSearch)
-		FadeIn(WebL)
+		If !SearchBased
+			FadeIn(WebL)
 		ChoosingWebsite:=true
 	}
 return
 
- WebLGuiEscape:
+WebLGuiEscape:
  	WebLT := false
 	FadeOut(WebL)
 	ChoosingWebsite:=false
+	SearchBased:=false
 	RSWebWithSearchFocused:=false
 return
 
@@ -186,13 +227,15 @@ return
 StartSearch:
 	Gui, Submit, NoHide
 	Loop, Parse, websearchvar
-	If (A_LoopField=.)
+	If (A_LoopField="." && SubStr(websearchvar, 1, 7)!="Google:" && !InStr(websearchvar," "))
 	{
 		Run, http:%websearchvar%
 		websearchvar=
 		GoSub RSWeb
 		return
 	}
+	If (SubStr(websearchvar, 1, 7)="Google:")
+		StringTrimLeft, websearchvar, websearchvar, 7
 	websearchvar:="https://www.google.bg/search?q=" websearchvar
 	Run, %websearchvar%,, UseErrorLevel
 	websearchvar=

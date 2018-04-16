@@ -138,6 +138,7 @@ OtherSettingsLabel:
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
+	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
 	taskbarsave=%TransparentStartMenu%
 	SetTimer, KeepTrans, Off
@@ -170,6 +171,9 @@ OtherSettingsLabel:
 	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
 	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+
+	Gui, Add, Text, % "x15 y+14 w120 Center", Fast Search ›
+	Gui, Add, DropDownList, % "x+20 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Yes|No
 
 	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
@@ -219,6 +223,7 @@ otherbutton:
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
+	IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 	SetTimer, KeepTrans, 12000
 
 	IfExist, *.ahk

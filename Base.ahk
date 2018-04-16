@@ -314,6 +314,24 @@ return
 	return
 #If
 
+#If WinActive("ahk_id" . WebL)
+::g::
+Gui, WebL:Submit, NoHide
+If !websearchvar
+	SendInput {BS 2}Google:{Space 2}
+else
+	SendInput g{Space}
+return
+#If
+
+#If FastSearchWanted=1 && ItsLocked!=1
+RAlt::
+LCtrl & RAlt::
+	SearchBased:=true
+	GoSub RSWeb
+return
+#If
+
 #If (OopsMistake)
 LALt::
 Send +{Home}
@@ -633,6 +651,7 @@ IniReads:
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
 	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
+	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption
