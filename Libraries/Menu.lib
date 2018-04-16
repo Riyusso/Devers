@@ -159,7 +159,7 @@ OtherSettingsLabel:
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
 	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
 
-	Gui, Add, Text, % "x0 w" Width " y+30 Center", Taskbar Transparency:
+	Gui, Add, Text, % "x0 w" Width " y+35 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
@@ -222,7 +222,6 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-^k::
 ExtSettings:
 	Width := 255
 	labelsx := (Width/7)+30
