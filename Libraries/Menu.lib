@@ -319,6 +319,7 @@ IfExist, *.ahk
 }
 IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 IniWrite, %AltMinimizeWanted%, settings.ini, settings, AltMinimizeWanted
+IniWrite, %VolumeOTWanted%, settings.ini, settings, VolumeOTWanted
 
 If FastSearchWanted=1
 	GuiControl, Functions:, RAltVar, Right Alt
