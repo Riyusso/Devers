@@ -86,13 +86,12 @@ pw:
 return
 #If 
 
+#If (!A_IsCompiled)
 ~!SC013::
-	If (!A_IsCompiled)
-	{
 		IntentReload:=true
 		Reload
-	}
 return
+#If
 
 #If (A_IsCompiled)
 ~#!SC013::

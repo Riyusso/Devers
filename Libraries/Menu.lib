@@ -457,8 +457,6 @@ ScriptFunctions:
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
 	Gui, Font, s8 c%lightc%, Tahoma
 	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
-
-	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 	
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
