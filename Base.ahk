@@ -312,13 +312,30 @@ return
 	return
 #If
 
-#If WinActive("ahk_id" . WebL)
-::g::
+#If WinActive("ahk_id" . WebL) && (SearchBased)
+~*SC00E::
 Gui, WebL:Submit, NoHide
 If !websearchvar
-	SendInput Google:{Space 2}
-else
-	SendInput g{Space}
+{
+	GuiControl, WebL:Move, websearchvar, % "x16 w" guiw-85
+	GuiControl, WebL:Hide, GoogleSearchLabel
+	FastSearching:=false
+}
+return
+Tab::
+return
+~Space::
+If !FastSearching
+{
+	Gui, WebL:Submit, NoHide
+	If websearchvar=g
+	{
+		SendInput {BS 2}
+		FastSearching:=true
+		GuiControl, WebL:Move, websearchvar, % "x90 w" guiw-155
+		GuiControl, WebL:Show, GoogleSearchLabel
+	}
+}
 return
 #If
 

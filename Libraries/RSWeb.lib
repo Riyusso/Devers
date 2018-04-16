@@ -10,14 +10,12 @@
 	}
 
 	websearchvar=
+	FastSearching:=false
 	WebLT := WebLT ? false : true
 
 	If WebLT=0
 	{
-		ChoosingWebsite:=false
-		SearchBased:=false
-		RSWebWithSearchFocused:=false
-		FadeOut(WebL)
+		GoSub WebLClose
 		return
 	}
 	If WebLT=1
@@ -48,61 +46,47 @@
 			amultiplier=0.80
 		}
 
+		Gui, WeBL:Destroy
+		Gui, WebL:New, +hwndWebL
+		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
+
 		If SearchBased
 		{
 			guiw:=520*amultiplier
 			guih:=47
+			Gui, Color,172326, 172326
+			Gui, Font, w300 s13 c909090, Segoe UI Black
+			Gui, Add, Text, x16 y11 h45 w95 vGoogleSearchLabel +Hidden, Google:
+			Gui, Font, w300 s13 ceeeeee, Segoe UI Black
+			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
+			Gui, Font, w700 s23 ceeeeee, Segoe UI Black
+			Gui, Add, Button, % "x+2 y-4 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
+			Opt1 := [6, 0x172326, 0x172326, 0x909090]
+			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
 		}
 		else
 		{
 			guiw:=720*amultiplier
 			guih:=204*amultiplier-25
-		}
-
-		buth:=(guih)/2-15
-		butw:=(guiw)/4
-
-		Gui, WeBL:Destroy
-		Gui, WebL:New, +hwndWebL
-		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
-		If SearchBased
-		{
-			Gui, Color,172326, 172326
-			Gui, Font, w300 s13 ceeeeee, Segoe UI Black
-			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background172326 Disabled hwndHPROG"
-		}
-		else
-		{
 			Gui, Color,1e1e1e, 333333
 			Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
 			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
-		}
-
-
-		If SearchBased
-		{
-			Gui, Add, Edit, % "x16 y11 w" guiw-85 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
-			Gui, Font, w700 s23 ceeeeee, Segoe UI Black
-			Gui, Add, Button, % "x+2 y-4 h45 w60 gStartSearch hwndSearchBut1 +Default", •••
-			Opt1 := [6, 0x172326, 0x172326, 0x6a6a6a]
-			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
-		}
-		else
-		{
 			Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
 			Gui, Add, Button, % "x+0 h25 w45 gStartSearch hwndSearchBut1 +Default", Go
 			Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0]
 			Opt2 := [ , 0x333333, 0x333333, 0xffffff]
 		}
+
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
-
-		Opt1 := [6, 0x232323, 0x232323, "White"]
-		Opt2 := [ , 0x272727, 0x262626, 0xffffff]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		buth:=(guih)/2-15
+		butw:=(guiw)/4
 
 		If !SearchBased
 		{
+			Opt1 := [6, 0x232323, 0x232323, "White"]
+			Opt2 := [ , 0x272727, 0x262626, 0xffffff]
+			Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 			Gui, Add, Button, hwndSCHYT1 gws1 vwebname1 x0 y+0 w%butw% h%buth%, %WebName1%
 			ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
 
@@ -153,6 +137,7 @@
 	}
 return
 
+WebLClose:
 WebLGuiEscape:
  	WebLT := false
 	FadeOut(WebL)
@@ -227,15 +212,13 @@ return
 StartSearch:
 	Gui, Submit, NoHide
 	Loop, Parse, websearchvar
-	If (A_LoopField="." && SubStr(websearchvar, 1, 7)!="Google:" && !InStr(websearchvar," "))
+	If (A_LoopField="." && !InStr(websearchvar," "))
 	{
 		Run, http:%websearchvar%
 		websearchvar=
 		GoSub RSWeb
 		return
 	}
-	If (SubStr(websearchvar, 1, 7)="Google:")
-		StringTrimLeft, websearchvar, websearchvar, 7
 	websearchvar:="https://www.google.bg/search?q=" websearchvar
 	Run, %websearchvar%,, UseErrorLevel
 	websearchvar=
