@@ -51,9 +51,9 @@
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Functions
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gExtSettings hwndBut3 +Center", Extensions
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gmnuUninstall hwndBut4 +Center", Uninstall
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut4 +Center", Features
 
 	Gui, Font, s9
 	Gui, Font, normal
@@ -155,18 +155,6 @@ OtherSettingsLabel:
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	IfExist, *.ahk
-	{
-		Gui, Add, Text, % "x0 y+25 w" Width " Center", -   Extensions   -
-		Loop, Files, *.ahk
-		{
-			SplitPath, A_LoopFileLongPath,,,, PluginName
-			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-			Gui, Add, Text, % "x15 y+14 w120 Center", %PluginName% ›
-			Gui, Add, DropDownList, % "x+20 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
-		}
-	}
-
 	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
 	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
@@ -179,9 +167,11 @@ OtherSettingsLabel:
 	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h31 gotherbutton hwndBut1 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+20 w" (Width*0.80) " h37 gmnuUninstall hwndBut1 +Center", Uninstall
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut2 +Center",Cancel
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h31 gotherbutton hwndBut2 +Center +Default", Apply
+
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut3 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h44 vP"
 	GuiControlGet, P, Pos
@@ -190,6 +180,7 @@ OtherSettingsLabel:
 	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, w%Width%, Other Settings
@@ -221,31 +212,6 @@ otherbutton:
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
 	SetTimer, KeepTrans, 12000
 
-	IfExist, *.ahk
-	{
-		Loop, Files, *.ahk
-		{
-			SplitPath, A_LoopFileLongPath,,,, PluginName
-			If % PluginState%PluginName%=1
-			{
-				IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
-			}
-			else if % PluginState%PluginName%=2
-			{
-				IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-				IfWinExist, % "ahk_pid" PID%PluginName%
-					WinKill, % "ahk_pid" PID%PluginName%
-			}
-			else if % PluginState%PluginName%=3
-			{
-				IniDelete, settings.ini, plugins, PluginState%PluginName%
-				IfWinExist, % "ahk_pid" PID%PluginName%
-					WinKill, % "ahk_pid" PID%PluginName%
-				FileDelete, %PluginName%.ahk
-			}
-			}
-		}
 	FadeOut(OtherHWND)
 return
 
@@ -253,8 +219,112 @@ otherclose:
 WinSet, Transparent, %taskbarsave%, ahk_class Shell_TrayWnd
 FadeOut(OtherHWND)
 return
-destroy:
-	FadeOut(ScriptOptions)
+
+;--------------------------------------------------------------------------------------------------------------
+
+^k::
+ExtSettings:
+	Width := 255
+	labelsx := (Width/7)+30
+	inputw := (Width/2)
+	lpwwidth:=56
+	lpwpos:=(inputw/2)-(lpwwidth/2)+18
+
+	Gui, ExtSettings:New, +hwndExtHWND
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
+
+	Gui, Color, 2e2e2e, 333333
+	Gui, Font, s8, Tahoma
+	Gui, Font, normal
+
+	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Built in    -
+
+	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", Fast Search 
+	Gui, Add, DropDownList, % "x+20 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
+
+	IfExist, *.ahk
+	{
+		Gui, Add, Text, % "x0 y+25 w" Width " Center", -   Others   -
+		Loop, Files, *.ahk
+		{
+			SplitPath, A_LoopFileLongPath,,,, PluginName
+			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
+			Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", %PluginName% ›
+			Gui, Add, DropDownList, % "x+20 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
+		}
+	}
+
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+20 w" (Width*0.80) " h37 gGoToWebsite hwndBut1 +Center", Get More
+
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
+
+	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gextclose hwndBut3 +Center",Cancel
+
+	Gui, Add, Text, % "x+1 h44 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
+	H:=H*dpi
+	Width:=Width*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	Gui, -Caption
+	WinSet, Region, 0-0 w%Width% h%H% r6-6
+	Gui, Show, w%Width%, Extensions
+	FadeIn(ExtHWND)
+
+return
+
+extbutton:
+Gui, Submit, NoHide
+IfExist, *.ahk
+{
+	Loop, Files, *.ahk
+	{
+		SplitPath, A_LoopFileLongPath,,,, PluginName
+		If % PluginState%PluginName%=1
+		{
+			IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+			Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+		}
+		else if % PluginState%PluginName%=2
+		{
+			IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
+			IfWinExist, % "ahk_pid" PID%PluginName%
+				WinKill, % "ahk_pid" PID%PluginName%
+		}
+		else if % PluginState%PluginName%=3
+		{
+			IniDelete, settings.ini, plugins, PluginState%PluginName%
+			IfWinExist, % "ahk_pid" PID%PluginName%
+				WinKill, % "ahk_pid" PID%PluginName%
+			FileDelete, %PluginName%.ahk
+		}
+	}
+}
+IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
+
+If FastSearchWanted=1
+	GuiControl, Functions:, RAltVar, Right Alt
+else
+	GuiControl, Functions:, RAltVar, Off
+
+FadeOut(ExtHWND)
+return
+
+extclose:
+FadeOut(ExtHWND)
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -583,11 +653,6 @@ SetButtons:
 			GuiControl, Functions:, %A_LoopField%Var, Off
 	}
 
-	If FastSearchWanted=1
-		GuiControl, Functions:, RAltVar, Right Alt
-	else
-		GuiControl, Functions:, RAltVar, Off
-
 	If assignedKeyRSWeb!=None
 		GuiControl, Functions:, assignedKeyRSWeb2Var, %assignedKeyRSWeb% + 1/2/3...8
 	else
@@ -641,11 +706,6 @@ ChangeHotkeys:
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %keyLock%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", 
-
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search 
-	Gui, Add, DropDownList, % "x+30 w72 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
-
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
@@ -678,7 +738,6 @@ ChangeButton:
 		If (%A_LoopField%!="None" && %A_LoopField%!="" and %A_LoopField%!=assigned%A_LoopField%)
 			Hotkey, % %A_LoopField%, Off
 	}
-	IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 	GoSub ButtonsLabel
 ChangeClose:
 	GoSub SetButtons

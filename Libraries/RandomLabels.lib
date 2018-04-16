@@ -1,4 +1,9 @@
-﻿RunAsAdmin:
+﻿GoToWebsite:
+	website:="https://riyusso.github.io"
+	Run, %website%
+return
+
+RunAsAdmin:
 RunAsAdmin=1
 IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 FadeOut(AdminPrompt)
