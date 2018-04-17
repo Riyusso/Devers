@@ -1003,7 +1003,7 @@ DefaultMenu:
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut4 +Center",  Lock
 
-		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdate hwndBut5 +Center", Update
+		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdatePrompt hwndBut5 +Center", Update
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Features
 
@@ -1346,6 +1346,12 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 UpdatePrompt:
+GoSub GetLatestVersion
+IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+IniRead, InstalledVersion, build.ini, build, Version, 1.0
+
+If % VersionCompare(UpdateVersion, InstalledVersion)=1
+{
 	width=135
 	height=66
 	Gui, UpdatePrompt:New, +hwndUpdatePrompt
@@ -1372,6 +1378,9 @@ UpdatePrompt:
 	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UpdatePrompt%
 	Gui, Show, w%width% h%height% , Update Prompt
 	FadeIn(UpdatePrompt)
+}
+Else
+	RSNotify("No new versions")
 return
 
 ;--------------------------------------------------------------------------------------------------------------
