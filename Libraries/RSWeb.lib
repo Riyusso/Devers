@@ -59,8 +59,8 @@
 			Gui, Add, Text, x16 y11 h45 w95 vGoogleSearchLabel +Hidden, Google:
 			Gui, Font, w300 s13 ceeeeee, Segoe UI Black
 			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
-			Gui, Font, w700 s23 ceeeeee, Segoe UI Black
-			Gui, Add, Button, % "x+2 y-4 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
+			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
+			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]
 			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
 		}
