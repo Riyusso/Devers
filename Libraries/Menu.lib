@@ -638,7 +638,7 @@ ScriptFunctions:
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", RS-Guard Info
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", Protection
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut3 +Center", About
 
