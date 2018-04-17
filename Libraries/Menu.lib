@@ -896,6 +896,7 @@ If A_IsSuspended
 {
 	Menu, Tray, Icon
 	Menu, TRAY, Icon, RSStopped.ico,,1
+	If !SuspendedByFullScreen
 	RSNotify("Suspended")
 	If A_IsPaused
 		Pause, Off
@@ -905,6 +906,7 @@ If !A_IsSuspended
 {
 	Menu, Tray, Icon
 	Menu, TRAY, Icon, OptionsIcon.ico,,1
+	If !SuspendedByFullScreen
 	RSNotify("Released")
 	If A_IsPaused
 		Pause, Off

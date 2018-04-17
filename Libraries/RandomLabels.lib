@@ -10,17 +10,17 @@
 		AltMinimizeWanted=2
 		FastSearchWanted=2
 		VolumeOTWanted=2
-		ItWasSuspended:=true
+		SuspendedByFullScreen:=true
 		GoSub, SuspendScriptToggle
 		return
 	}
-	else if (isFullscreen=0) && (ItWasSuspended=1)
+	else if (isFullscreen=0) && (SuspendedByFullScreen=1)
 	{
 		GoSub SuspendScriptToggle
 		AltMinimizeWanted:=AltMinimizeWantedSave
 		FastSearchWanted:=FastSearchWantedSave
 		VolumeOTWanted:=VolumeOTWantedSave
-		ItWasSuspended:=false
+		SuspendedByFullScreen:=false
 	}
 
 return
