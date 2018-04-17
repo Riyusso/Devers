@@ -1,4 +1,31 @@
-﻿GoToWebsite:
+﻿HotkeysSuspendCheck:
+	if hotkeysInFullscreen=1
+		SetTimer, HotkeysSuspendCheck, Off
+	isFullscreen := isWindowFullScreen( "A" )
+	if (isFullscreen=1 && ItsLocked!=1 && !A_IsSuspended && !WinActive("ahk_exe explorer.exe"))
+	{
+		FastSearchWantedSave:=FastSearchWanted
+		AltMinimizeWantedSave:=AltMinimizeWanted
+		VolumeOTWantedSave:=VolumeOTWanted
+		AltMinimizeWanted=2
+		FastSearchWanted=2
+		VolumeOTWanted=2
+		ItWasSuspended:=true
+		GoSub, SuspendScriptToggle
+		return
+	}
+	else if (isFullscreen=0) && (ItWasSuspended=1)
+	{
+		GoSub SuspendScriptToggle
+		AltMinimizeWanted:=AltMinimizeWantedSave
+		FastSearchWanted:=FastSearchWantedSave
+		VolumeOTWanted:=VolumeOTWantedSave
+		ItWasSuspended:=false
+	}
+
+return
+
+GoToWebsite:
 	website:="https://riyusso.github.io"
 	Run, %website%
 return

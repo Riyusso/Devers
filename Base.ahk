@@ -436,7 +436,7 @@ IfExist, settings.ini
 				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 		}
 	}
-	
+
 	GoSub InstallFiles
 	If !LockAfterRestart && (A_IsCompiled)
 			SetTimer, RSRunScript, -25
@@ -447,6 +447,10 @@ IfExist, settings.ini
 		If RunAsAdmin
 			RunAsAdminAfterLock:=1
 	}
+
+	If hotkeysInFullscreen=2
+		SetTimer, HotkeysSuspendCheck, 500
+
 	LogTime(0)
 	GoSub GetLatestVersion
 	GoSub ButtonsLabel
@@ -668,6 +672,7 @@ IniReads:
 	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
 	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
+	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption

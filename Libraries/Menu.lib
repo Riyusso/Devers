@@ -158,6 +158,8 @@ OtherSettingsLabel:
 	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
 	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
+	Gui, Add, DropDownList, % "x+20 w65 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 
 	Gui, Add, Text, % "x0 w" Width " y+35 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
@@ -210,7 +212,11 @@ otherbutton:
 	Tried:=false
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
+	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
 	SetTimer, KeepTrans, 12000
+
+	If hotkeysInFullscreen=2
+		SetTimer, HotkeysSuspendCheck, 500
 
 	FadeOut(OtherHWND)
 return
