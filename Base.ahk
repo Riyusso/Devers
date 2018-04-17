@@ -33,7 +33,7 @@ RunScript: ; This is the beginning of the script
 GoSub VolTR
 GoSub IniReads
 IniRead, LockPwHash, settings.ini, settings, LockPwHash ; keep in a separate thread with passwordhash decryption
-if LockPwHash!=ERROR || LockPwHas ; keep in a separate thread with passwordhash decryption
+if LockPwHash!=ERROR || LockPwHash ; keep in a separate thread with passwordhash decryption
 LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3) ; keep in a separate thread with passwordhash decryption
 SetTimer, CheckBreakLoop, -2500
 SetTimer, UpdateCheck, 200
