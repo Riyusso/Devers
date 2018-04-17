@@ -36,9 +36,9 @@ IfExist, settings.ini
 }
 DetectHiddenWindows, on
 #Include %A_ScriptDir%
+GoSub defaultsettings
 GoSub MenuInit
 GoSub RunScript
-GoSub defaultsettings
 #Include *i Libraries/developer.lib
 return
 
@@ -123,8 +123,6 @@ Loop, Parse, keysArray, `|
 	{
 		Hotkey, %assignedKeyRSWeb%, RSWeb
 		Hotkey, %assignedKeyRSWeb%, RSWeb, On
-		Hotkey, % assignedKeyRSWeb . " & SC029", RSWebFocused
-		Hotkey, % assignedKeyRSWeb . " & SC029", RSWebFocused, On
 		Loop, 8
 		{
 			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%
@@ -560,7 +558,6 @@ defaultsettings:
 	Formula=0
 	ItsMeHaha=0
 	vh:=A_ScreenHeight-92
-	musique=0
 	AlreadyLogged=0
 ;	SetTimer, LabelCheckTrigger, 200 ; if needed to recognise if particular windows are open
 	idletimer=1000
