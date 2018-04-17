@@ -627,7 +627,8 @@ CalculatedProtection:
 					Gosub RSGuard
 					return
 				}
-				SetTimer, CFullScreen, 30
+				if (idleseconds<150000) && (idletimer>idleseconds+180000)
+					SetTimer, CFullScreen, 30
 				Return
 			}
 		}
