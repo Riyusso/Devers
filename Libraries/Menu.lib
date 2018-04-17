@@ -7,12 +7,7 @@
 	inputw := (Width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
-
-	IniRead, seconds, settings.ini, settings, seconds
-	IniRead, email, settings.ini, settings, email
-	IniRead, passwordhash, settings.ini, settings, passwordhash
-	password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3)
-
+	
 	Gui, settings:New, +hwndScriptOptions
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -138,7 +133,7 @@ OtherSettingsLabel:
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu
+	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	taskbarsave=%TransparentStartMenu%
 	SetTimer, KeepTrans, Off
 
@@ -351,14 +346,8 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ProtectionSettings:
-	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock
-	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock
-	IniRead, BreakLoop, settings.ini, settings, BreakLoop
-	IniRead, seconds, settings.ini, settings, seconds
-	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 0
-	IniRead, AfterFS, settings.ini, settings, AfterFS
-	IniRead, AfterWU, settings.ini, settings, AfterWU
-	IniRead, logging, settings.ini, settings, LoggingLockTimes
+	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock ; keep these here
+	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock ; keep these here
 
 	If BreakLoop=1
 	ChooseBL=1
@@ -877,11 +866,10 @@ mnuScriptReload:
 Return
 
 mnuUninstall:
-	FadeOut(ScriptOptionsFirst)
-	FadeOut(DefaultHWND)
-	FadeOut(ScriptOptions)
-	FadeOut(OtherHWND)
 	FadeOut(UninstallPrompt)
+	FadeOut(OtherHWND)
+	FadeOut(ScriptOptions)
+	FadeOut(DefaultHWND)
 	RSNotify("Uninstalling")
 	Loop, Files, *.ahk
 	{

@@ -28,3 +28,19 @@ NoUpdate:
 	IniWrite, %UpdateVersion%, build.ini, build, PromptVersion
 	FadeOut(UpdatePrompt)
 return
+
+UpdateFiles:
+	FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
+	FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
+	FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
+	FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
+	FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
+	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
+	FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+
+	GoSub Migrations
+	IniWrite, %FileVersion%, build.ini, build, FileVersion
+return
+
+Migrations:
+return

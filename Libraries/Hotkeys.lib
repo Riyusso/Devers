@@ -1,0 +1,320 @@
+;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
+;=====------======------=====------======------=====------======-------KEYS-------======------=====------======------=====------======------
+;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
+
+#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1)
+~$LAlt Up::
+	GetKeyState, state, Shift
+	If state=D
+	{
+		Send {LAlt Down}{LShift Up}{LAlt Up}
+		return
+	}
+	KeyWait, LAlt, U
+	KeyWait, LAlt, D, T0.2
+	If (ErrorLevel = 0) && A_PriorKey = "LAlt"
+	IfWinNotActive, ahk_class WorkerW
+	WinMinimize, A
+return
+#If
+
+~CapsLock::RapidHotkey("email", 2, 0.2, 1)
+email:
+	SendInput {Raw}%email%
+return
+
+#CapsLock::RapidHotkey("pw", 2, 0.2, 1)
+pw:
+	If password
+	{
+		If !Authorized
+		{
+			WinGet, activeWindowForPassword, ID, A
+			GoSub Authorization
+			return
+		}
+		SendInput {Raw}%password%
+	}
+return
+
+#If (!A_IsCompiled)
+~!SC013::
+		IntentReload:=true
+		Reload
+return
+#If
+
+#If (A_IsCompiled)
+~#!SC013::
+	IntentReload:=true
+	Reload
+return
+#If
+
+~#!SC01F:: ; Win+Alt+S Suspends the script
+	Suspend, Permit
+	GoSub SuspendScriptToggle
+return
+
+ButtonsLabel:
+keysArray=keyLock|keyplay|keyprev|keynext|keyVolUp|keyVolDown|keyRSWeb
+
+Loop, Parse, keysArray, `|
+	If (assigned%A_LoopField%="" || assigned%A_LoopField%="None" || assigned%A_LoopField%="ERROR")
+		assigned%A_LoopField%=None
+
+#If !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
+	Hotkey, If, !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
+	If (assignedKeyLock!="None")
+	{
+		Hotkey, %assignedKeyLock%, LockNow
+		Hotkey, %assignedKeyLock%, LockNow, On
+	}
+	If (assignedKeyRSWeb!="None")
+	{
+		Hotkey, %assignedKeyRSWeb%, RSWeb
+		Hotkey, %assignedKeyRSWeb%, RSWeb, On
+		Loop, 8
+		{
+			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%
+			Hotkey, % assignedKeyRSWeb . " & " . A_index, ws%A_Index%, On
+		}
+	}
+	If (assignedKeyPlay!="None")
+	{
+		Hotkey, %assignedKeyPlay%, playpause
+		Hotkey, %assignedKeyPlay%, playpause, On
+	}
+	If (assignedKeyPrev!="None")
+	{
+		Hotkey, %assignedKeyPrev%, PrevSong
+		Hotkey, %assignedKeyPrev%, PrevSong, On
+	}
+	If (assignedKeyNext!="None")
+	{
+		Hotkey, %assignedKeyNext%, NextSong
+		Hotkey, %assignedKeyNext%, NextSong, On
+	}
+	If (assignedKeyVolUp!="None")
+	{
+		Hotkey, %assignedKeyVolUp%, vol_up
+		Hotkey, %assignedKeyVolUp%, vol_up, On
+	}
+	If (assignedKeyVolDown!="None")
+	{
+		Hotkey, %assignedKeyVolDown%, vol_down
+		Hotkey, %assignedKeyVolDown%, vol_down, On
+	}
+return
+
+#If (ItsLocked = 1)
+	RButton::Return
+	LAlt::Return
+	RAlt::Return
+	F1::
+		GoSub fadeinclock
+		SetTimer, MinuteUpdate, 15000
+	return
+	F2::Return
+	F3::Return
+	F4::Return
+	F5::Return
+	F6::Return
+	F7::Return
+	F8::Return
+	F10::Return
+	CapsLock::Return
+	LCtrl::Return
+	RCtrl::Return
+	Esc::Return
+	Up::Return
+	Down::Return
+	Left::Return
+	Right::Return
+	Pause::Return
+	LWin::return
+	RWin::Return
+	!F4::Return
+	!SC013::Return ; Win+R
+	#SC020::Return ; Win+ D
+	!Tab::Return
+	NumpadSub:: ; Initiates developer lock if the username is riyusso and its not locked by the developer yet.
+	Suspend, Permit
+	IniRead, username, settings.ini, settings, username
+	if (username="Riyusso" && !devlock)
+	{
+		pwcover=
+		Formula=0
+		GuiControl, ProtectionAgainstZombies:Hide, LTxt
+		GuiControl, ProtectionAgainstZombies:Show, TATxt
+		GuiControl,  ProtectionAgainstZombies:, TATxt, Developer Lock.
+		devlock:=True
+	}
+	return
+	NumPad1::
+	Suspend, Permit
+	GoSub plus1
+	return
+	NumPad2::
+	Suspend, Permit
+	GoSub plus2
+	return
+	NumPad3::
+	Suspend, Permit
+	GoSub plus3
+	return
+	NumPad4::
+	Suspend, Permit
+	GoSub plus4
+	return
+	NumPad5::
+	Suspend, Permit
+	GoSub plus5
+	return
+	NumPad6::
+	Suspend, Permit
+	GoSub plus6
+	return
+	NumPad7::
+	Suspend, Permit
+	GoSub plus7
+	return
+	NumPad8::
+	Suspend, Permit
+	GoSub plus8
+	return
+	NumPad9::
+	Suspend, Permit
+	GoSub plus9
+	return
+	NumPad0::
+	Suspend, Permit
+	GoSub plus0
+	return
+	Delete::
+	Suspend, Permit
+	GoSub FormulaNull
+	return
+	NumpadDot::
+	Suspend, Permit
+	GoSub FormulaNull
+	return
+	~Enter::
+	~NumpadEnter::
+	If !Disablekeys
+	{
+		Suspend, Permit
+		GoSub TryPw
+	}
+	return
+	SC00E::
+	Suspend, Permit
+	GoSub FormulaNull
+	return
+#If
+
+#If (VolumeTR=1)
+	WheelUp::
+	GoSub vol_up
+	return
+	WheelDown::
+	GoSub vol_down
+	return
+#If
+
+#If (ChoosingWebsite=1) && !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit) && ItsLocked!=1
+	1::
+	GoSub ws1
+	return
+	2::
+	GoSub ws2
+	return
+	3::
+	GoSub ws3
+	return
+	4::
+	GoSub ws4
+	return
+	5::
+	GoSub ws5
+	return
+	6::
+	GoSub ws6
+	return
+	7::
+	GoSub ws7
+	return
+	8::
+	GoSub ws8
+	return
+	~LButton Up::
+			MouseGetPos, , , id, control
+			if (id!=WebL && id!=WebEdit)
+			SetTimer, WebLGuiEscape, -100
+	return
+	SC029:: 	; While RSWeb is opened, press the ` key to focus the search bar.
+	WinActivate, ahk_id %WebL%
+	return
+	Esc::
+	SetTimer, WebLGuiEscape, -100
+	return
+#If
+
+#If WinActive("ahk_id" . WebL) && (SearchBased)
+~*SC00E::
+Gui, WebL:Submit, NoHide
+If !websearchvar
+{
+	GuiControl, WebL:Move, websearchvar, % "x16 w" guiw-85
+	GuiControl, WebL:Hide, GoogleSearchLabel
+	FastSearching:=false
+}
+return
+Tab::
+return
+~Space::
+If !FastSearching
+{
+	Gui, WebL:Submit, NoHide
+	If websearchvar=g
+	{
+		SendInput {BS 2}
+		FastSearching:=true
+		GuiControl, WebL:Move, websearchvar, % "x90 w" guiw-155
+		GuiControl, WebL:Show, GoogleSearchLabel
+	}
+}
+return
+#If
+
+#If FastSearchWanted=1 && ItsLocked!=1
+RAlt::
+LCtrl & RAlt::
+	SearchBased:=true
+	GoSub RSWeb
+return
+#If
+
+#If (OopsMistake)
+LALt::
+Send +{Home}
+Send {Delete}
+return
+#If
+
+#If (DefaultFader=1)
+~LButton Up::
+Suspend, Permit
+MouseGetPos, , , id, control
+WinGetClass, class, ahk_id %id%
+if (class!="AutoHotkeyGUI" && class!="#32769")
+	GoSub ExitDefMenu
+return
+~RButton Up::
+Suspend, Permit
+MouseGetPos, , , id, control
+WinGetClass, class, ahk_id %id%
+if (class!="AutoHotkeyGUI")
+GoSub ExitDefMenu
+return
+#If

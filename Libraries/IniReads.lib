@@ -1,0 +1,63 @@
+Initiation:
+
+	ws1=www.facebook.com
+	ws2=www.youtube.com
+	ws3=www.reddit.com
+	ws4=www.gmail.com
+	ws5=%A_MyDocuments%
+	ws6=https://www.twitch.tv
+	ws7=https://open.spotify.com/browse
+	ws8=https://alpha.wallhaven.cc/
+
+	WebNames=Facebook|YouTube|Reddit|Gmail|Documents|Twitch|Spotify|WallHaven
+	IniWrite, %WebNames%, settings.ini, Web, WebNames
+
+	Loop, 8
+		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
+
+	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
+	Loop, Parse, keysArray, `|
+		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
+
+IniReads:
+	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
+	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
+	IniRead, assignedKeyRSWeb, settings.ini, settings, keyRSWeb, F4
+	IniRead, assignedKeyPlay, settings.ini, settings, keyPlay, F9
+	IniRead, assignedKeyPrev, settings.ini, settings, keyPrev, F11
+	IniRead, assignedKeyNext, settings.ini, settings, keyNext, F12
+	IniRead, assignedKeyVolUp, settings.ini, settings, keyVolUp, PgUp
+	IniRead, assignedKeyVolDown, settings.ini, settings, keyVolDown, PgDn
+	IniRead, assignedKeyLock, settings.ini, settings, keyLock, ScrollLock
+
+	IniRead, ClockWanted, settings.ini, settings, ClockWanted, 1
+	IniRead, BreakLoop, settings.ini, settings, BreakLoop, 2
+	IniRead, email, settings.ini, settings, email, %A_Space%
+	IniRead, seconds, settings.ini, settings, seconds, 120
+	IniRead, StartWithWindows, settings.ini, settings, StartWithWindows, 1
+	IniRead, logging, settings.ini, settings, LoggingLockTimes, 2
+	IniRead, AfterFS, settings.ini, settings, AfterFS, 1
+	IniRead, AfterWU, settings.ini, settings, AfterWU, 1
+	IniRead, CreateATask, settings.ini, settings, CreateATask, 0
+	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
+	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
+	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
+	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
+	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
+	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
+	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
+	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
+
+	idleseconds:=1000*(seconds)
+
+	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
+	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption
+	    password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3) ; keep in a separate thread with lockpwhash decryption
+
+    IniRead, WebNames, settings.ini, Web, WebNames
+	Loop, Parse, WebNames, `|
+	    WebName%A_Index%=%A_LoopField%
+	Loop, 8
+		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
+
+return

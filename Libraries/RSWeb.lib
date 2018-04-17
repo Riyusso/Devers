@@ -1,9 +1,5 @@
 ﻿RSWeb:
 	ChoosingWebsite:=true
-	IniRead, WebNames, settings.ini, Web, WebNames
-	Loop, Parse, WebNames, `|
-	WebName%A_Index%=%A_LoopField%
-
 	Loop, 8
 	{
 		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
@@ -189,7 +185,7 @@ ExitWebsites:
 return
 
 EditWebsites:
- Gui, Submit, NoHide
+	Gui, Submit, NoHide
 	Loop, 8
 	{
 		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
