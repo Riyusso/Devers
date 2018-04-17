@@ -331,6 +331,16 @@ If FastSearchWanted=1
 else
 	GuiControl, Functions:, RAltVar, Off
 
+If AltMinimizeWanted=1
+	GuiControl, Functions:, AltMinimizeVar, Alt x 2
+else
+	GuiControl, Functions:, AltMinimizeVar, Off
+
+If VolumeOTWanted=1
+	GuiControl, Functions:, VolumeOTVar, Scroll Over Tray
+else
+	GuiControl, Functions:, VolumeOTVar, Off
+
 FadeOut(ExtHWND)
 return
 
@@ -559,7 +569,6 @@ ScriptFunctions:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search
 	Gui, Font, s8 c%lightc%, Tahoma
-
 	If FastSearchWanted=1
 	Gui, Add, Text, % "x+1 w" (Width/2) " Center vRAltVar", Right Alt
 	else
@@ -568,14 +577,20 @@ ScriptFunctions:
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2) " Center",  Alt x 2
+	If AltMinimizeWanted=1
+	Gui, Add, Text, % "x+0 w" (Width/2) " Center vAltMinimizeVar",  Alt x 2
+	Else
+	Gui, Add, Text, % "x+0 w" (Width/2) " Center vAltMinimizeVar",  Off
 
 	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Scroll Over Tray
+	If VolumeOTWanted=1
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center vVolumeOTVar", Scroll Over Tray
+	Else
+	Gui, Add, Text, % "x+1 w" (Width/2) " Center vVolumeOTVar", Off
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
