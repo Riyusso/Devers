@@ -145,7 +145,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 #Include Libraries/Hotkeys.lib
-#Include Libraries/Settings.lib
+#Include Libraries/IniReads.lib
 #Include Libraries/Functions.lib
 #Include Libraries/Library.lib
 #Include Libraries/RandomLabels.lib
