@@ -139,51 +139,13 @@ InstallFiles:
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
 
-;--------------------------------------------------------------------------------------------------------------
-
-defaultsettings:
-	ListLines Off
-	FileEncoding, UTF-8
-	Process, Priority, , H
-	SetBatchLines, -1
-	SetTitleMatchMode 2
-	SetTitleMatchMode Fast
-	SetKeyDelay, -1, -1, Play
-	SetMouseDelay, -1
-	Enabled := ComObjError(false)
-	ComObjError(false)
-	SetWinDelay, 0
-	SetControlDelay, 0
-	SendMode Event
-	global logging
-	global dpi:=DpiFactor()
-	DetectHiddenWindows, on
-	OSVer := GetOSVersion()
-	anvar = %A_MyDocuments%\%ScriptName%\rsanimation.mp4 ; location of gif you want to show
-	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<img src=""" anvar """ width=""" awsize """ height=""" ahsize """>'n</center>`n</body>`n</html>"
-	Formula=0
-	vh:=A_ScreenHeight-92
-	AlreadyLogged=0
-;	SetTimer, LabelCheckTrigger, 200 ; if needed to recognise if particular windows are open
-	idletimer=1000
-	LB_SETCURSEL := 0x186
-	CB_SETCURSEL := 0x14E
-	Red   := "FF0000"
-	Green := "00C000"
-	Blue  := "0000FF"
-	Pink  := "FF20FF"
-	darkerc=D0D0D0
-	lightc=F6F6F6
-	ItsLocked=0
-return
-
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------LABELS END-======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 
 ;--------------------------------------------------------------------------------------------------------------
 #Include Libraries/Hotkeys.lib
-#Include Libraries/IniReads.lib
+#Include Libraries/Settings.lib
 #Include Libraries/Functions.lib
 #Include Libraries/Library.lib
 #Include Libraries/RandomLabels.lib

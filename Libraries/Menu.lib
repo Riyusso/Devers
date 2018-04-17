@@ -1359,14 +1359,14 @@ If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Update to v%UpdateVersion%?
-	Gui, Add, Button, x8 y30 w55 +default gUpdate hwndBut1 +Center, Yeah
+	Gui, Add, Button, x8 y30 w55 +default gUpdate hwndButUp1 +Center, Yeah
 
-	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndBut2 +Center,Nope
+	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndButUp2 +Center,Nope
 
 	width:=width*dpi
 	height:=height*dpi
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ButUp1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ButUp2, Opt1, Opt2, "", Opt4)
 	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UpdatePrompt%
 	Gui, Show, w%width% h%height% , Update Prompt
 	FadeIn(UpdatePrompt)
