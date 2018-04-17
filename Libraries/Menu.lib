@@ -169,7 +169,7 @@ OtherSettingsLabel:
 	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+15 w" (Width*0.80) " h37 gmnuUninstall hwndBut1 +Center", Uninstall
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+15 w" (Width*0.80) " h37 gUninstallPrompt hwndBut1 +Center", Uninstall
 
 	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gotherbutton hwndBut2 +Center +Default", Apply
 
@@ -638,7 +638,7 @@ ScriptFunctions:
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", Protection
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gPrInfo hwndBut2 +Center", Protection Info
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut3 +Center", About
 
@@ -880,6 +880,8 @@ mnuUninstall:
 	FadeOut(ScriptOptionsFirst)
 	FadeOut(DefaultHWND)
 	FadeOut(ScriptOptions)
+	FadeOut(OtherHWND)
+	FadeOut(UninstallPrompt)
 	RSNotify("Uninstalling")
 	Loop, Files, *.ahk
 	{
@@ -1384,3 +1386,40 @@ Else
 return
 
 ;--------------------------------------------------------------------------------------------------------------
+
+UninstallPrompt:
+	width=135
+	height=130
+	Gui, UninstallPrompt:New, +hwndUninstallPrompt
+	Gui, +LastFound +ToolWindow
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 008383
+	Gui, Font, s10 Bold, Tahoma
+	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
+	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Select your choice
+	Gui, Add, Button, x0 y+10 w%width% +default gmnuUninstall hwndBut1 +Center, Uninstall
+
+	Gui, Add, Button, x0 y+2 w%width% gReinstall hwndBut2 +Center, Repair
+
+	Gui, Add, Button, x0 y+2 w%width% gCancelUninstall  hwndBut3 +Center, Cancel
+
+	width:=width*dpi
+	height:=height*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UninstallPrompt%
+	Gui, Show, w%width% h%height% , Update Prompt
+	FadeIn(UninstallPrompt)
+return
+
+UninstallPromptGuiEscape:
+CancelUninstall:
+	FadeOut(UninstallPrompt)
+return

@@ -44,6 +44,11 @@ GoSub RSRunScript
 return
 
 Reinstall:
+	FadeOut(UninstallPrompt)
+	FadeOut(OtherHWND)
+	FadeOut(ScriptOptions)
+	FadeOut(DefaultHWND)
+	GoSub UpdateFiles
 	FileDelete, settings.ini
 	Reload
 return

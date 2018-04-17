@@ -496,8 +496,6 @@ UpdateFiles:
 	FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
 	FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
 
-	IfExist, Runner.exe
-		FileDelete, Runner.exe
 	GoSub Migrations
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
