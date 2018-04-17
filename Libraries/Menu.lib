@@ -69,6 +69,8 @@
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But6, Opt1, Opt2, "", Opt4)
+	ShAutoComplete(Edit6)
+	ShAutoComplete(Edit7)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width , Script Options
