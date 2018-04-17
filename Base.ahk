@@ -452,7 +452,7 @@ IfExist, settings.ini
 		SetTimer, HotkeysSuspendCheck, 500
 
 	LogTime(0)
-	GoSub GetLatestVersion
+	SetTimer, GetLatestVersion, -60000
 	GoSub ButtonsLabel
 }
 IfNotExist, settings.ini
