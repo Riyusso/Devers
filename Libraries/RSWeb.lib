@@ -200,11 +200,6 @@ EditWebsites:
 	FadeOut(WebEdit)
 return
 
-RSWebFocused:
-	RSWebWithSearchFocused:=true
-	GoSub RSWeb
-return
-
 StartSearch:
 	Gui, Submit, NoHide
 	websearchvar:=StrReplace(websearchvar, "#", "%23")
