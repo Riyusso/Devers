@@ -208,12 +208,14 @@ StartSearch:
 	If (A_LoopField="." && !InStr(websearchvar," ") && !FastSearching)
 	{
 		Run, http:%websearchvar%
+		GoSub GetBrowserNameAndActivate
 		websearchvar=
 		GoSub RSWeb
 		return
 	}
 	websearchvar:="https://www.google.bg/search?q=" websearchvar
 	Run, %websearchvar%,, UseErrorLevel
+	GoSub GetBrowserNameAndActivate
 	websearchvar=
 	GoSub RSWeb
 return

@@ -261,6 +261,18 @@ PutUni(DataIn)
 
 ;--------------------------------------------------------------------------------------------------------------
 
+Browser() ; thanks to gt57 @ https://autohotkey.com/board/topic/84785-default-browser-path-and-executable/
+{
+    RegRead, BrowserKeyName, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice, Progid
+    RegRead, BrowserFullCommand, HKEY_CLASSES_ROOT, %BrowserKeyName%\shell\open\command
+    StringGetPos, pos, BrowserFullCommand, ",,1
+    pos := --pos
+    StringMid, BrowserPathandEXE, BrowserFullCommand, 2, %pos%
+    Return BrowserPathandEXE
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
 RunAsAdmin()
 {
 	Loop, %0%  ; For each parameter:

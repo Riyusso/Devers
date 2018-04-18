@@ -19,6 +19,7 @@ return
 GoToWebsite:
 	website:="https://riyusso.github.io"
 	Run, %website%
+	GoSub GetBrowserNameAndActivate
 return
 
 RunAsAdmin:
@@ -77,43 +78,58 @@ playpause:
 	RSNotify("Play/Pause")
 return
 
+GetBrowserNameAndActivate:
+	SplitPath, % Browser(), BrowserName
+	WinWait ahk_exe %BrowserName%
+	WinActivate
+return
+
+
 ws1:
 Run, %ws1%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws2:
 Run, %ws2%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws3:
 Run, %ws3%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws4:
 Run, %ws4%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws5:
 Run, %ws5%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws6:
 Run, %ws6%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws7:
 Run, %ws7%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
 ws8:
 Run, %ws8%
+GoSub GetBrowserNameAndActivate
 SetTimer, WebLGuiEscape, -100
 return
 
