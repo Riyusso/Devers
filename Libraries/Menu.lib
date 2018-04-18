@@ -84,7 +84,6 @@ button:
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
-	idleseconds:=1000*(seconds)
 	FadeOut(ScriptOptions)
 	RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
@@ -379,7 +378,10 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
 	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
 
-	Gui, Add, Text, % "x8 y+22 w147 Center", Lock After Full Screen ›
+	Gui, Add, Text, % "x8 y+13 w147 Center", Delay in videos ›
+	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
+
+	Gui, Add, Text, % "x8 y+22 w147 Center", Lock After Videos End ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
 
 	Gui, Add, Text, % "x8 y+14 w147 Center", Lock After Wake Up ›
@@ -392,6 +394,7 @@ ProtectionSettings:
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
 	Gui, Add, Hotkey, % "x+8 w87 Center vassignedKeyLock" , %keyLock%
+
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
@@ -497,10 +500,10 @@ protectionbutton:
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
 
-	idleseconds:=1000*(seconds)
 	FadeOut(ProtectionSettings)
 	RSNotify("Applied")
 	IniWrite, %seconds%, settings.ini, settings, seconds
+	IniWrite, %delayseconds%, settings.ini, settings, delayseconds
 	If BreakLoop=1
 		Gosub Protection
 	If (keyLock!="None" && keyLock!="" and keyLock!=assignedKeyLock)
@@ -1183,7 +1186,7 @@ PrInfo:
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", after the amount of time or not.
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You can still lock it with the select key
 			Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Full Screen -
+	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Videos End -
 			Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This option controls whether the PC
 	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", will lock itself after you exit full screen.

@@ -47,8 +47,7 @@ IniReads:
 	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
 	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
-
-	idleseconds:=1000*(seconds)
+	InIRead, delaySeconds, settings.ini, settings, delaySeconds, 60
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption

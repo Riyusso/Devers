@@ -599,7 +599,7 @@ CalculatedProtection:
 	{
 
 		; IMPORTANT
-		if ((A_TickCount - StartTime > 7500) && AfterWU=1) or (A_TickCount - StartTime > idleseconds)
+		if ((A_TickCount - StartTime > 7500) && AfterWU=1) or (A_TickCount - StartTime > (seconds*1000))
 		{
 			LogTime(1)
 			DontShowRS:=true
@@ -612,7 +612,7 @@ CalculatedProtection:
 		if (A_TimeIdle> 3000)
 		{
 			idletimer+=1001
-			if (idletimer>idleseconds)
+			if (idletimer>(seconds*1000))
 			{
 				isFullScreen := isWindowFullScreen( "A" )
 				If isFullScreen=0
@@ -627,7 +627,7 @@ CalculatedProtection:
 					Gosub RSGuard
 					return
 				}
-				if (idleseconds<150000) && (idletimer>idleseconds+180000)
+				if (idletimer>(seconds*1000)+(delayseconds*1000))
 					SetTimer, CFullScreen, 30
 				Return
 			}
