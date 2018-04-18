@@ -207,6 +207,8 @@ return
 
 StartSearch:
 	Gui, Submit, NoHide
+	websearchvar:=StrReplace(websearchvar, "#", "%23")
+	websearchvar:=StrReplace(websearchvar, "&", "%26")
 	Loop, Parse, websearchvar
 	If (A_LoopField="." && !InStr(websearchvar," ") && !FastSearching)
 	{
