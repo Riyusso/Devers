@@ -23,19 +23,18 @@ email:
 	SendInput {Raw}%email%
 return
 
+#If password
 #CapsLock::RapidHotkey("pw", 2, 0.2, 1)
 pw:
-	If password
+	If !Authorized
 	{
-		If !Authorized
-		{
-			WinGet, activeWindowForPassword, ID, A
-			GoSub Authorization
-			return
-		}
-		SendInput {Raw}%password%
+		WinGet, activeWindowForPassword, ID, A
+		GoSub Authorization
+		return
 	}
+	SendInput {Raw}%password%
 return
+#If
 
 #If (!A_IsCompiled)
 ~!SC013::
