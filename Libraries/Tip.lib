@@ -1,0 +1,33 @@
+class Tip
+{
+	__New(){
+		this.message:="Tip"
+		this.width:="230"
+		this.height:="28"
+		this.ypos:=A_ScreenHeight/18
+		this.time:="5000"
+	}
+	Show()
+	{
+		global Tip
+		Gui, Tip:Destroy
+		Gui, Tip:New, +hwndTip
+		Gui, +LastFound +ToolWindow +AlwaysOnTop
+		WinSet, Transparent, 0
+		Gui, Margin, 0, 0
+		Gui, -Caption
+		Gui, Font, s10 Bold, Tahoma
+		Gui, Add, Progress, % "x-1 y-1 w" This.width " h" This.height " Background172326 Disabled hwndHPROG"
+		Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+		Gui, Add, Text, % "x0 y0 w" This.width " h" This.height " Center BackgroundTrans +0x200 ceeeeee gRemoveTip", % This.message
+		width:=width*dpi
+		height:=height*dpi
+		WinSet, Region,% "0-0 w" This.width " h" This.height " r3-3", ahk_id %Tip%
+		Gui, Show,% "y" This.ypos " w"This.width " h" This.height " NoActivate", Tip
+		FadeIn(Tip)
+		SetTimer, RemoveTip, % -This.time
+	}
+}
+RemoveTip:
+	FadeOut(Tip)
+return

@@ -77,6 +77,8 @@
 		ImageButton.Create(SearchBut1, Opt1, Opt2, "", Opt4)
 		buth:=(guih)/2-15
 		butw:=(guiw)/4
+		RSWebGuiWidth:=guiw
+		RSWebGuiHeight:=guih
 
 		If !SearchBased
 		{
@@ -136,6 +138,7 @@ return
 WebLClose:
 WebLGuiEscape:
  	WebLT := false
+	Gui, Tip:Destroy
 	FadeOut(WebL)
 	ChoosingWebsite:=false
 	SearchBased:=false

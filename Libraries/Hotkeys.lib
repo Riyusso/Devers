@@ -274,15 +274,46 @@ return
 ~Space::
 If !FastSearching
 {
+	sleep 10
 	Gui, WebL:Submit, NoHide
-	If websearchvar=g
+	if SubStr(websearchvar, 1, 2)="g "
 	{
-		SendInput {BS 2}
+		websearchvar:=StrReplace(websearchvar, "g ", "")
+		GuiControl, WebL:, websearchvar, %websearchvar%
 		FastSearching:=true
 		GuiControl, WebL:Move, websearchvar, % "x90 w" guiw-155
 		GuiControl, WebL:Show, GoogleSearchLabel
 	}
 }
+return
+~SC034::
+If !TipDisplayed && !FastSearching && GoogleTipDisplayed<2
+{
+	Tip := new Tip()
+	Tip.message:="Tip: You can type 'g ' at the beginning to search directly in Google.com"
+	Tip.width:=RSWebGuiWidth-9
+	WinGetPos,, pos,,A
+	Tip.ypos:=pos-40
+	Tip.Show()
+	GoogleTipDisplayed++
+	IniWrite, %GoogleTipDisplayed%, settings.ini, settings, GoogleTipDisplayed
+	TipDisplayed:=true
+	return
+}
+return
+$SC00E::
+	sleep 10
+	Gui, WebL:Submit, NoHide
+	websearchvarSave:=websearchvar
+	Send {BS}
+	sleep 10
+	Gui, WebL:Submit, NoHide
+	if (websearchvarSave)=(websearchvar)
+	{
+		GuiControl, WebL:Move, websearchvar, % "x16 w" guiw-85
+		GuiControl, WebL:Hide, GoogleSearchLabel
+		FastSearching:=false
+	}
 return
 #If
 

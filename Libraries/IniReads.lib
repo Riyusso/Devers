@@ -41,6 +41,7 @@ IniReads:
 	IniRead, CreateATask, settings.ini, settings, CreateATask, 0
 	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
+	IniRead, GoogleTipDisplayed, settings.ini, settings, GoogleTipDisplayed, 0
 	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
 	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
 	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
