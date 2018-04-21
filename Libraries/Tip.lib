@@ -9,7 +9,6 @@ class Tip
 	}
 	Show()
 	{
-		global Tip
 		Gui, Tip:Destroy
 		Gui, Tip:New, +hwndTip
 		Gui, +LastFound +ToolWindow +AlwaysOnTop
@@ -26,8 +25,9 @@ class Tip
 		Gui, Show,% "y" This.ypos " w"This.width " h" This.height " NoActivate", Tip
 		FadeIn(Tip)
 		SetTimer, RemoveTip, % -This.time
+		return
+		RemoveTip:
+			FadeOut(Tip)
+		return
 	}
 }
-RemoveTip:
-	FadeOut(Tip)
-return
