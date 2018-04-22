@@ -177,8 +177,8 @@
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
 
-		actx:=(A_ScreenWidth/2)-275*amultiplier
-		acty:=(A_ScreenHeight/2)-620*amultiplier
+		actx:=(A_ScreenWidth/2)-265*amultiplier
+		acty:=(A_ScreenHeight/2)-625*amultiplier
 		awsize:=520*amultiplier
 		ahsize:=780*amultiplier
 
