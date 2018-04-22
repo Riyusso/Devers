@@ -200,7 +200,8 @@
 			document.open()
 			document.write(html)
 			SetTimer, ShowAgain, -7000
-			DontShowRS:=false
+			If AnimationWanted=1
+				DontShowRS:=false
 		}
 
 		WinSet, Transparent,0, ahk_id %ZPHWND%

@@ -346,6 +346,7 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
+^k::
 ProtectionSettings:
 	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock ; keep these here
 	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock ; keep these here
@@ -390,6 +391,8 @@ ProtectionSettings:
 	Gui, Add, Text, % "x8 y+14 w147 Center", Security Logs ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vlogging Choose" logging " AltSubmit" , On|Off
 
+	Gui, Add, Text, % "x8 y+14 w147 Center", Animation ›
+	Gui, Add, DropDownList, % "x+8 w87 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Clock ›
 	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
 	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
@@ -499,6 +502,11 @@ protectionbutton:
 	IniWrite, %AfterFS%, settings.ini, settings, AfterFS
 	IniWrite, %AfterWU%, settings.ini, settings, AfterWU
 	IniWrite, %logging%, settings.ini, settings, LoggingLockTimes
+	IniWrite, %AnimationWanted%, settings.ini, settings, AnimationWanted
+	If AnimationWanted!=1
+		DontShowRS:=true
+	else
+		DontShowRS:=false
 
 	FadeOut(ProtectionSettings)
 	RSNotify("Applied")
