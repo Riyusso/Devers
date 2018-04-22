@@ -51,9 +51,9 @@
 			guiw:=520*amultiplier
 			guih:=47
 			Gui, Color,172326, 172326
-			Gui, Font, w1000 s13 c909090, Segoe UI Semibold
+			Gui, Font, w1000 s12 c909090, Segoe UI Bold
 			Gui, Add, Text, x16 y11 h45 w95 vGoogleSearchLabel +Hidden, Google:
-			Gui, Font, w1000 s13 cf9f9f9, Segoe UI Semibold
+			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
 			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
 			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
