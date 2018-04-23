@@ -46,19 +46,19 @@
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gExtSettings hwndBut3 +Center", Extensions
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Features
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut4 +Center", Features
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gAboutInfo hwndBut4 +Center", About
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+15 w" (Width*0.38) " h33 gbutton hwndBut5 +Center +Default", Apply
+	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h33 gbutton hwndBut5 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (Width*0.38) " h33 gdestroyset hwndBut6 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 y+0 vP"
+	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -73,7 +73,7 @@
 	ShAutoComplete(Edit7)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, % "w" Width , Script Options
+	Gui, Show, % "w" Width, Script Options
 	FadeIn(ScriptOptions)
 return
 
@@ -171,7 +171,7 @@ OtherSettingsLabel:
 
 	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut3 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 h44 vP"
+	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -276,7 +276,7 @@ ExtSettings:
 
 	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gextclose hwndBut3 +Center",Cancel
 
-	Gui, Add, Text, % "x+1 h44 vP"
+	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	H:=H*dpi
@@ -346,7 +346,6 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-^k::
 ProtectionSettings:
 	IniWrite, %assignedKeyLock%, settings.ini, settings, keyLock ; keep these here
 	IniRead, keyLock, settings.ini, settings, keyLock, ScrollLock ; keep these here
@@ -356,7 +355,7 @@ ProtectionSettings:
 	Else
 	ChooseBL=2
 
-	Width := 295
+	Width := 310
 	Gui, ProtectionMenu:New, +hwndProtectionSettings
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -369,41 +368,41 @@ ProtectionSettings:
 		Gui, Color, 008383, 333333
 		Gui, Font, s8, Tahoma
 		Gui, Font, normal
-	Gui, Add, Text, % "x8 y+25 w147 Center", Computer ›
+	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center", Computer ›
 
-	Gui, Add, DropDownList, % "x+8 w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
 
-	Gui, Add, Text, % "x8 y+22 w147 Center", Protection PIN ›
-	Gui, Add, Edit, % "x+8 w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll +Number", %LockPw%
+	Gui, Add, Text, % "x5 y+20 w" (Width/2) " Center", Protection PIN ›
+	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll +Number", %LockPw%
 
-	Gui, Add, Text, % "x8 y+13 w147 Center", Seconds until lock ›
-	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
+	Gui, Add, Text, % "x5 y+13 w" (Width/2) " Center", Seconds until lock ›
+	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
 
-	Gui, Add, Text, % "x8 y+13 w147 Center", Delay in videos ›
-	Gui, Add, Edit, % "x+8 w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
+	Gui, Add, Text, % "x5 y+13 w" (Width/2) " Center", Delay in videos ›
+	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
 
-	Gui, Add, Text, % "x8 y+22 w147 Center", Lock After Videos End ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
+	Gui, Add, Text, % "x5 y+20 w" (Width/2) " Center", Lock After Videos End ›
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
 
-	Gui, Add, Text, % "x8 y+14 w147 Center", Lock After Wake Up ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vAfterWU Choose" AfterWU " AltSubmit" , On|Off
+	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Lock After Wake Up ›
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAfterWU Choose" AfterWU " AltSubmit" , On|Off
 
-	Gui, Add, Text, % "x8 y+14 w147 Center", Security Logs ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vlogging Choose" logging " AltSubmit" , On|Off
+	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Security Logs ›
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vlogging Choose" logging " AltSubmit" , On|Off
 
-	Gui, Add, Text, % "x8 y+14 w147 Center", Animation ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
-	Gui, Add, Text, % "x8 y+14 w147 Center", Clock ›
-	Gui, Add, DropDownList, % "x+8 w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
-	Gui, Add, Text, % "x8 y+14 w147 Center", Key ›
-	Gui, Add, Hotkey, % "x+8 w87 Center vassignedKeyLock" , %keyLock%
+	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Animation ›
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
+	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Clock ›
+	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
+	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Key ›
+	Gui, Add, Hotkey, % "x+" (Width/4)-50 " w87 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", Info
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+18 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", Info
 
 	If(logging=1)
 	{
@@ -425,7 +424,7 @@ ProtectionSettings:
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, % "w295" , RS-Guard Settings
+	Gui, Show, % "w" Width , RS-Guard Settings
 	FadeIn(ProtectionSettings)
 return
 
@@ -642,9 +641,7 @@ ScriptFunctions:
 
 	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gExtSettings hwndBut2 +Center", Extensions 
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gAboutInfo hwndBut3 +Center", About
-
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut4 +Default", Exit
+	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
 
 	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
 	GuiControlGet, P, Pos
@@ -654,7 +651,6 @@ ScriptFunctions:
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, 0-0 w%Width% h%H% r6-6
 	Gui, Show, % "w" Width " NA", Functions
@@ -918,7 +914,6 @@ If A_IsSuspended
 	RSNotify("Suspended")
 	If A_IsPaused
 		Pause, Off
-	IniWrite, Suspended, settings.ini, plugins, State
 }
 If !A_IsSuspended
 {
