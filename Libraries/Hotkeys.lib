@@ -222,28 +222,28 @@ return
 #If
 
 #If (ChoosingWebsite=1) && !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit) && ItsLocked!=1
-	SC002::
+	1::
 	GoSub ws1
 	return
-	SC003::
+	2::
 	GoSub ws2
 	return
-	SC004::
+	3::
 	GoSub ws3
 	return
-	SC005::
+	4::
 	GoSub ws4
 	return
-	SC006::
+	5::
 	GoSub ws5
 	return
-	SC007::
+	6::
 	GoSub ws6
 	return
-	SC008::
+	7::
 	GoSub ws7
 	return
-	SC009::
+	8::
 	GoSub ws8
 	return
 	~LButton Up::
