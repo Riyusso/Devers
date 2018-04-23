@@ -49,6 +49,7 @@ IniReads:
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
 	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
+	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
 	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 1
 	If AnimationWanted!=1

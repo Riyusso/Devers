@@ -153,9 +153,11 @@ OtherSettingsLabel:
 
 	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
-	Gui, Add, DropDownList, % "x+20 w65 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+	Gui, Add, DropDownList, % "x+16 w77 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+20 w65 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
+	Gui, Add, DropDownList, % "x+16 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
+	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
+	Gui, Add, DropDownList, % "x+16 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Default|No Expiration|Always ask
 
 	Gui, Add, Text, % "x0 w" Width " y+35 Center", Taskbar Transparency:
 	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
@@ -209,6 +211,7 @@ otherbutton:
 	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
 	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
+	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
 	SetTimer, KeepTrans, 12000
 
 	If hotkeysInFullscreen=2
@@ -1297,22 +1300,69 @@ Authorize:
 	{
 		FadeOut(Auth)
 		Authorized:=true
-		If !NoExpiration
-		SetTimer, AuthExpirationCheck, 2000
 		SetTimer, CheckIfAuthInactive, Off
 		WinWaitNotActive, ahk_id %Auth%,,15
 		{
-			Sleep 10
+			Sleep 20
 			WinActivate, ahk_id %activeWindowForPassword%
 			SendInput {Raw}%password%
 		}
+		SetTimer, AuthExpirationCheck, 2000
+		If PasswordExpiration=1
+			RSNotify("Default Expiration")
+		else if PasswordExpiration=2
+		{
+			SetTimer, AuthExpirationCheck, Off
+			RSNotify("No Expiration")
+		}
+		else
+		{
+			GoSub ExpirationPrompt
+			SetTimer, KeepDefaultExpiration, -15000
+		}
 		StartTick:=A_TickCount
-		RSNotify("Authorized")
 		return
 	}
 	Else
 		RSNotify("Not Authorized")
 	FadeOut(Auth)
+return
+
+ExpirationPrompt:
+	width=235
+	height=125
+	Gui, ExpirationPrompt:New, +hwndExpirationPrompt
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 2b2b2a
+	Gui, Font, s10 Bold, Tahoma
+	Opt1 := [6, 0x2b2b2a, 0x2b2b2a, "White"]
+	Opt2 := [ , 0x3b3b3a, 0x3b3b3a, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 ceeeeee, Authorization ends after?
+	Gui, Font, s10 Bold ceeeeee, Tahoma
+	Gui, Add, Button, x0 y+8 w%width% h45 +default gKeepDefaultExpiration hwndBut1 +Center, 6 minutes of inactivity
+
+	Gui, Add, Button, x0 y+2 w%width% h47 gNoAuthExpiration hwndBut2 +Center, No expiration
+
+	width:=width*dpi
+	height:=height*dpi
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	WinSet, Region, 0-0 w%width% h%height% r8-8, ahk_id %ExpirationPrompt%
+	Gui, Show, % "x" (A_ScreenWidth)-Width-50 "y " (A_ScreenHeight-height-80) " w" width " h" height " NoActivate",
+	FadeIn(ExpirationPrompt)
+return
+
+NoAuthExpiration:
+SetTimer, AuthExpirationCheck, Off
+ExpirationPromptGuiEscape:
+KeepDefaultExpiration:
+IfWinExist, ahk_id %ExpirationPrompt%
+	FadeOut(ExpirationPrompt)
 return
 
 AuthExpirationCheck:
