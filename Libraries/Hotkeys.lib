@@ -222,28 +222,28 @@ return
 #If
 
 #If (ChoosingWebsite=1) && !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit) && ItsLocked!=1
-	1::
+	SC002::
 	GoSub ws1
 	return
-	2::
+	SC003::
 	GoSub ws2
 	return
-	3::
+	SC004::
 	GoSub ws3
 	return
-	4::
+	SC005::
 	GoSub ws4
 	return
-	5::
+	SC006::
 	GoSub ws5
 	return
-	6::
+	SC007::
 	GoSub ws6
 	return
-	7::
+	SC008::
 	GoSub ws7
 	return
-	8::
+	SC009::
 	GoSub ws8
 	return
 	~LButton Up::
@@ -302,11 +302,9 @@ If !TipDisplayed && !FastSearching && GoogleTipDisplayed<2
 }
 return
 $SC00E::
-	sleep 10
 	Gui, WebL:Submit, NoHide
 	websearchvarSave:=websearchvar
 	Send {BS}
-	sleep 10
 	Gui, WebL:Submit, NoHide
 	if (websearchvarSave)=(websearchvar)
 	{
