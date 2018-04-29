@@ -17,12 +17,9 @@ class Tip
 		Gui, -Caption
 		Gui, Font, s10 Bold, Tahoma
 		Gui, Add, Progress, % "x-1 y-1 w" This.width " h" This.height " Background172326 Disabled hwndHPROG"
-		Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 		Gui, Add, Text, % "x0 y0 w" This.width " h" This.height " Center BackgroundTrans +0x200 ceeeeee gRemoveTip", % This.message
-		width:=width*dpi
-		height:=height*dpi
-		WinSet, Region,% "0-0 w" This.width " h" This.height " r3-3", ahk_id %Tip%
-		Gui, Show,% "y" This.ypos " w"This.width " h" This.height " NoActivate", Tip
+		WinSet, Region,% "0-0 w" This.width*dpi " h" This.height*dpi " r3-3", ahk_id %Tip%
+		Gui, Show, % "y" This.ypos " w" This.width " h" This.height " NoActivate", Tip
 		FadeIn(Tip)
 		SetTimer, RemoveTip, % -This.time
 		return
@@ -31,3 +28,105 @@ class Tip
 		return
 	}
 }
+
+BalloonTip(tiptext="this is a tip", hwnd="")
+{
+	WinGetPos, ctrlx, ctrly,wd, hg, % "ahk_id " hwnd
+	xc:=ctrlx-3
+	yc:=ctrly+hg/2
+	If !xc || !yc
+	{
+		xc=700 	; defaults for testing purposes
+		yc=500 	; defaults for testing purposes
+	}
+	if !yc || !xc
+		return
+    Loop, Parse, tiptext, |
+        rows+=1
+
+	multiplier=0.764
+    Tip := new GUI()
+    Tip.SetTransparent("0")
+    Tip.Color := "black"
+    Tip.SetStyle("-Caption +AlwaysOnTop +ToolWindow -DPIScale +hwndBalloonTip")
+	if rows>=8
+	{
+		yc:=yc-185
+		sizew:=340*multiplier
+		sizeh:=313*multiplier
+		rowy:=sizeh/2-5-10*rows
+		tipsize=large
+	}
+	else if rows>5
+	{
+		yc:=yc-124
+		sizew:=340*multiplier
+		sizeh:=234*multiplier
+    	rowy:=sizeh/2-10*rows
+		tipsize=medium
+	}
+	else if rows<=5
+	{
+		yc:=yc-91
+		sizew:=340*multiplier
+		sizeh:=175*multiplier
+    	rowy:=sizeh/2-10*rows
+		tipsize=small
+	}
+	Gui, Add, Picture, % "x0 y0 w" sizew " h" sizeh " 0x200", Tip_%tipsize%.png
+    Gui, Font, % "w1000 cFFFFFF s" 10/dpi, Segoe UI Semibold
+
+    Loop, Parse, tiptext, |
+    {
+        Gui, Add, Text, x63 y%rowy% w180 h20 BackgroundTrans Center, %A_LoopField%
+        rowy:="+1"
+    }
+
+	Tip.Aero.Set(53,5,5,5)
+    sleep 20
+    Tip.Show("x" xc "y" yc "w" sizew " h" sizeh)
+    logofader=0
+    Loop 19
+    {
+        Tip.SetTransparent(logofader)
+        sleep 10
+        logofader:=logofader+14
+    }
+}
+
+SettingsTip1:
+	tiptext=This settings allows you|to output your email|anywhere you want by|tapping CapsLock twice.
+	BalloonTip(tiptext, SettingsTip1)
+return
+SettingsTip2:
+	tiptext=This settings allows you|to output your password|anywhere you want by|pressing the Win button|and tapping CapsLock x2|You will be asked for the| password once and after|that you will be able to|output it as many|times as you want.
+	BalloonTip(tiptext, SettingsTip2)
+return
+ProtectionTip1:
+	tiptext=A PIN is used to unlock|your PC after it has been|locked by the program.|In order to change it|you will need to verify|your previous PIN first.
+	BalloonTip(tiptext, ProtectionTip1)
+return
+ProtectionTip2:
+	tiptext=Your computer will lock|itself after you have been|inactive for a predefined|amount of seconds.
+	BalloonTip(tiptext, ProtectionTip2)
+return
+ProtectionTip3:
+	tiptext=If you have checked the|setting below this one|you can extend the|amount of time it takes|the computer to lock|itself when in fullscreen.
+	BalloonTip(tiptext, ProtectionTip3)
+return
+ProtectionTip4:
+	tiptext=Your PC will be locked|in the background if you|are watching something|in fullscreen and have|been inactive.
+	BalloonTip(tiptext, ProtectionTip4)
+return
+ProtectionTip5:
+	tiptext=Controls whether this PC|is locked by the program|when it wakes up.
+	BalloonTip(tiptext, ProtectionTip5)
+return
+ProtectionTip6:
+	tiptext=If you want to log when|this PC has been locked|or unlocked you can use|this setting and a button|will appear in this menu|to see those logs.
+	BalloonTip(tiptext, ProtectionTip6)
+return
+OtherTip1:
+	tiptext=Secure is the default one|and your password will|expire after 6 minutes|of inactivty on your PC.
+	BalloonTip(tiptext, OtherTip1)
+return

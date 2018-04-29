@@ -13,7 +13,6 @@
 		GoSub SuspendScriptToggle
 		SuspendedByFullScreen:=false
 	}
-
 return
 
 GoToWebsite:
@@ -23,24 +22,24 @@ GoToWebsite:
 return
 
 RunAsAdmin:
-RunAsAdmin=1
-IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
-FadeOut(AdminPrompt)
-GoSub Settings
+	RunAsAdmin=1
+	IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
+	FadeOut(AdminPrompt)
+	GoSub Settings
 return
 
 NotAnAdmin:
-RunAsAdmin=0
-IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
-FadeOut(AdminPrompt)
-GoSub Settings
+	RunAsAdmin=0
+	IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
+	FadeOut(AdminPrompt)
+	GoSub Settings
 return
 
 ARun:
-If RunAsAdmin
-RunAsAdmin()
-Else
-GoSub RSRunScript
+	If RunAsAdmin
+		RunAsAdmin()
+	AfterInstallation=1
+	GoSub ScriptFunctions
 return
 
 Reinstall:
@@ -53,24 +52,27 @@ Reinstall:
 	Reload
 return
 
-UpdateCheck:
-IniRead, ExitVar, build.ini, build, ExitVar
-IniRead, ReloadVar, build.ini, build, ReloadVar
-IniRead, PluginPath, build.ini, build, PluginPath
-If ExitVar=1
-	ExitApp
-If ReloadVar=1 ; Used when installing a Plugin
-{
-	If(PluginPath!=ERROR)
+RestartCheck:
+	IniRead, ExitVar, build.ini, build, ExitVar
+	IniRead, ReloadVar, build.ini, build, ReloadVar
+	IniRead, PluginPath, build.ini, build, PluginPath
+	If ExitVar=1
+		ExitApp
+	If ReloadVar=1 ; Used when installing a Plugin
 	{
-		FileCopy, %PluginPath%, PluginInstaller.exe, 1
-		FileDelete, %PluginPath%
+		If(PluginPath!=ERROR)
+		{
+			FileCopy, %PluginPath%, PluginInstaller.exe, 1
+			FileDelete, %PluginPath%
+		}
+		IniWrite, 0, build.ini, build, ReloadVar
+		Sleep 100
+		Reload
 	}
-	IniWrite, 0, build.ini, build, ReloadVar
-	RSNotify("Plugin Added")
-	Sleep 2000
-	Reload
-}
+return
+
+AllowUpdateCheckInMenu:
+	lastUpdateCheck:=3600001
 return
 
 playpause:
@@ -83,7 +85,6 @@ GetBrowserNameAndActivate:
 	WinWait ahk_exe %BrowserName%
 	WinActivate
 return
-
 
 ws1:
 Run, %ws1%
@@ -243,7 +244,7 @@ RSRunScript:
 		SetTimer, FadeRSOut, -450
 		return
 	}
-	If PluginInstalled
+	If PluginInstalled=1
 	{
 		RSNotify("Plugin Added")
 		IniDelete, settings.ini, plugins, PluginInstalled
@@ -279,14 +280,12 @@ defaultsettings:
 	SendMode Event
 	global logging
 	global dpi:=DpiFactor()
-
 	DetectHiddenWindows, on
 	OSVer := GetOSVersion()
 	anvar = %A_MyDocuments%\%ScriptName%\rsanimation.mp4 ; location of gif you want to show
 	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<img src=""" anvar """ width=""" awsize """ height=""" ahsize """>'n</center>`n</body>`n</html>"
 	Formula=0
 	vh:=A_ScreenHeight-92
-	AlreadyLogged=0
 ;	SetTimer, LabelCheckTrigger, 200 ; if needed to recognise if particular windows are open
 	idletimer=1000
 	LB_SETCURSEL := 0x186
@@ -298,6 +297,7 @@ defaultsettings:
 	darkerc=D0D0D0
 	lightc=F6F6F6
 	ItsLocked=0
+	lastUpdateCheck:=3600001
 return
 
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------

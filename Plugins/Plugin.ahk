@@ -19,6 +19,10 @@ Function:
 return
 
 ; -------------- HOTKEY PROMPT ----------------
+#Include Libraries\Functions.lib
+#Include Libraries\RSNotify.lib
+#Include Libraries\Library.lib
+
 ChooseHotkey:
 	width=235
 	height=80
@@ -33,21 +37,17 @@ ChooseHotkey:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Choose your desired hotkey!
 	Gui, Add, Hotkey, % "x" Width/10 " y+18 w" (Width/2) " Center vHotkey ",
     Gui, Add, Button, x+12 w70 h25 +default gSubmitButton hwndBut1 +Center, Ready
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	width:=width*dpi
-	height:=height*dpi
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r6-6"
 	Gui, Show, w%width% h%height%, Desired hotkey?
-	WinSet, Region, 0-0 w%width% h%height% r6-6, ahk_id %ChooseHotkey%
 	FadeIn(ChooseHotkey)
 return
 SubmitButton:
     Gui, Submit, NoHide
-    If (Hotkey!="None" && Hotkey!="" && Hotkey!=UNASSIGNED)
-    {
+    If (Hotkey!="None" && Hotkey!="" && Hotkey!=UNASSIGNED) {
         FadeOut(ChooseHotkey)
         GoSub AssignHotkey
     }
@@ -65,7 +65,3 @@ AssignHotkey:
     IniWrite, %Hotkey%, plugin-settings.ini, %PluginName%, key
     Hotkey, %Hotkey%, Function
 return
-
-#Include Libraries\Functions.lib
-#Include Libraries\RSNotify.lib
-#Include Libraries\Library.lib

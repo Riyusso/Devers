@@ -2,9 +2,9 @@
 	if FirstRun
 		GoSub Initiation
 
-	Width := 285
-	labelsx := (Width/7)
-	inputw := (Width/2)
+	width := 285
+	labelsx := (width/8)-3
+	inputw := (width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 	
@@ -13,67 +13,67 @@
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y7 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y7 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 
 		Gui, Color, 008383, 252525
 		Gui, Font, s9
 		Gui, Font, normal
 
-	Gui, Add, Text, % "x" labelsx " y+25", Start with Windows
-	Gui, Add, DropDownList, % "x" Width-105 " w75 y44 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
+	Gui, Add, Text, % "x" labelsx " w142 y+25", Start with Windows
+	Gui, Add, DropDownList, % "x+0 w75 yp-3 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
 
 	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
 	Gui, Font, s9 cDFDFDF
 	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
 	Gui, Font, s9 cFFFFFF
 
-	Gui, Add, Text, % "x" labelsx " y+12", Email:
-	Gui, Add, Edit, % "x+38 w" inputw " h15 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
+	Gui, Add, Text, % "x" labelsx " w75 y+12", Email:
+	Gui, Add, Edit, % "x+0 yp-1 w" inputw " h16 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
 	SetEditCueBanner(Edit6, "CapsLock x2")
-	Gui, Add, Text, % "x" labelsx " y+10", Password:
-	Gui, Add, Edit, % "x+17 w" inputw " h15 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
+	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTip1 hwndSettingsTip1 -TabStop +Center", ?
+	Gui, Add, Text, % "x" labelsx " w75 y+10", Password:
+	Gui, Add, Edit, % "x+0 yp-1 w" inputw " h16 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
 	SetEditCueBanner(Edit7, "Win + CapsLock x2")
-
+	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTip2 hwndSettingsTip2 -TabStop +Center", ?
 
 	Gui, Font, s10 w600
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+19 w" (Width*0.80) " gProtectionSettings h37 hwndBut1 +Center", Protection Settings
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+29 w" (width*0.80) " h36 gOtherSettingsLabel hwndBut1 +Center", Other Settings
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gOtherSettingsLabel hwndBut2 +Center", Other Settings
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gExtSettings hwndBut2 +Center", Extensions
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gScriptFunctions hwndBut3 +Center", Features
-
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+2 w" (Width*0.80) " h37 gAboutInfo hwndBut4 +Center", About
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gScriptFunctions hwndBut3 +Center", Features
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h33 gbutton hwndBut5 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gbutton hwndBut4 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h33 gdestroyset hwndBut6 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gdestroyset hwndBut5 +Center", Cancel
 
-	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
+	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But6, Opt1, Opt2, "", Opt4)
+	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(SettingsTip1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SettingsTip2, Opt1, Opt2, "", Opt4)
 	ShAutoComplete(Edit6)
 	ShAutoComplete(Edit7)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, % "w" Width, Script Options
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, % "w" width, Script Options
 	FadeIn(ScriptOptions)
 return
 
@@ -94,9 +94,9 @@ button:
 		If A_IsCompiled=1
 		{
 			IfNotExist, %LinkFile%
-			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+				FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 			IfNotExist, %StartMenuFile%
-			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+				FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
 			If FirstRun
 				IniWrite, 1, settings.ini, settings, CreateATask
 			else
@@ -110,6 +110,7 @@ button:
 	}
 	If FirstRun
 	{
+		IniWrite, 1, settings.ini, settings, AfterInstallation
 		SetTimer, ARun, -1600
 		FirstRun:=false
 	}
@@ -128,9 +129,9 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 OtherSettingsLabel:
-	Width := 255
-	labelsx := (Width/7)+30
-	inputw := (Width/2)
+	width := 260
+	labelsx := (width/7)+30
+	inputw := (width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
@@ -143,47 +144,51 @@ OtherSettingsLabel:
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Misc    -
+	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
-	Gui, Add, DropDownList, % "x+16 w77 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+	Gui, Add, DropDownList, % "x+16 w77 yp-3 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+16 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
+	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
-	Gui, Add, DropDownList, % "x+16 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Default|No Expiration|Always ask
+	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|No Expiration|Always ask
+	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTip1 hwndOtherTip1 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x0 w" Width " y+35 Center", Taskbar Transparency:
-	Gui, Add, Slider, % "x40 w" Width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
+	Gui, Add, Text, % "x0 w" width " y+35 Center", Taskbar Transparency:
+	Gui, Add, Slider, % "x40 w" width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+15 w" (Width*0.80) " h37 gUninstallPrompt hwndBut1 +Center", Uninstall
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gProtectionSettings hwndBut1 +Center", Protection Settings
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gotherbutton hwndBut2 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gUninstallPrompt hwndBut2 +Center", Uninstall
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gotherclose hwndBut3 +Center",Cancel
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center",Cancel
+
+	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x3e3e3e, 0x3f3f3f, 0xffffff]
+	ImageButton.Create(OtherTip1, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w%Width%, Other Settings
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, w%width%, Other Settings
 	FadeIn(OtherHWND)
 return
 
@@ -228,9 +233,9 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ExtSettings:
-	Width := 255
-	labelsx := (Width/7)+30
-	inputw := (Width/2)
+	width := 255
+	labelsx := (width/7)+30
+	inputw := (width/2)
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
@@ -239,57 +244,63 @@ ExtSettings:
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Extensions
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Extensions
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 
-	Gui, Add, Text, % "x0 y+25 w" Width " Center", -    Built in    -
+	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Built in    -
 
-	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", Fast Search 
-	Gui, Add, DropDownList, % "x+20 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
-	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", LAlt to Minimize
-	Gui, Add, DropDownList, % "x+20 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
-	Gui, Add, Text, % "x5 y+15 w" (Width/2) " Center ", Volume Over Tray
-	Gui, Add, DropDownList, % "x+20 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Fast Search 
+	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", LAlt to Minimize
+	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Volume Over Tray
+	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
 
 	IfExist, *.ahk
 	{
-		Gui, Add, Text, % "x0 y+25 w" Width " Center", -   Others   -
+		Gui, Add, Text, % "x0 y+25 w" width " Center", -   Others   -
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
+
+			If RegExMatch(PluginName, "\W")
+			{
+				PluginName:=StrReplace(PluginName, A_Space, "_")
+				PluginName := RegExReplace(PluginName, "\W")
+				FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+			}
+
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
-			Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", %PluginName% ›
-			Gui, Add, DropDownList, % "x+20 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
+			PluginNameNoUnderscores:=StrReplace(PluginName, "_", A_Space)
+			Gui, Add, Text, % "x5 y+14 w" (width/2) " Center", %PluginNameNoUnderscores% ›
+			Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.80)/2) " y+20 w" (Width*0.80) " h37 gGoToWebsite hwndBut1 +Center", Get More
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+18 w" (width*0.80) " h33 gGoToWebsite hwndBut1 +Center", Get More
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gextclose hwndBut3 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut3 +Center", Cancel
 
-	Gui, Add, Text, % "x7 y+12 w" (Width-14) " h2 vP"
+	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w%Width%, Extensions
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, w%width%, Extensions
 	FadeIn(ExtHWND)
 
 return
@@ -301,10 +312,18 @@ IfExist, *.ahk
 	Loop, Files, *.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
+
+		If RegExMatch(PluginName, "\W")
+		{
+			PluginName:=StrReplace(PluginName, A_Space, "_")
+			PluginName := RegExReplace(PluginName, "\W")
+			FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+		}
+
 		If % PluginState%PluginName%=1
 		{
 			IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-			Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			Run, %A_MyDocuments%\%ScriptName%\Extensions %A_MyDocuments%\%ScriptName%\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 		}
 		else if % PluginState%PluginName%=2
 		{
@@ -358,76 +377,88 @@ ProtectionSettings:
 	Else
 	ChooseBL=2
 
-	Width := 310
+	width := 310
 	Gui, ProtectionMenu:New, +hwndProtectionSettings
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Color, 808080
 	Gui, Margin, 0, 0
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Protection Settings
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Protection Settings
 		Gui, Color, 008383, 333333
 		Gui, Font, s8, Tahoma
 		Gui, Font, normal
-	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center", Computer ›
+	Gui, Add, Text, % "x0 y+25 w" (width/2) " Center", Computer ›
 
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vBreakLoop Choose" ChooseBL " AltSubmit" , Protected|Unprotected
 
-	Gui, Add, Text, % "x5 y+20 w" (Width/2) " Center", Protection PIN ›
-	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll +Number", %LockPw%
+	Gui, Add, Text, % "x0 y+20 w" (width/2) " Center", Protection PIN ›
+	Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll +Number", %LockPw%
+	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip1 hwndProtectionTip1 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+13 w" (Width/2) " Center", Seconds until lock ›
-	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
+	Gui, Add, Text, % "x0 y+13 w" (width/2) " Center", Seconds until lock ›
+	Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
+	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip2 hwndProtectionTip2 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+13 w" (Width/2) " Center", Delay in videos ›
-	Gui, Add, Edit, % "x+" (Width/4)-50 " w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
+	Gui, Add, Text, % "x0 y+13 w" (width/2) " Center", Fullscreen delay ›
+	Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
+	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip3 hwndProtectionTip3 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+20 w" (Width/2) " Center", Lock After Videos End ›
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
+	Gui, Add, Text, % "x0 y+19 w" (width/2) " Center", Lock After Videos End ›
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip4 hwndProtectionTip4 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Lock After Wake Up ›
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAfterWU Choose" AfterWU " AltSubmit" , On|Off
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Lock After Wake Up ›
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAfterWU Choose" AfterWU " AltSubmit" , On|Off
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip5 hwndProtectionTip5 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Security Logs ›
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vlogging Choose" logging " AltSubmit" , On|Off
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Security Logs ›
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vlogging Choose" logging " AltSubmit" , On|Off
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip6 hwndProtectionTip6 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Animation ›
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
-	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Clock ›
-	Gui, Add, DropDownList, % "x+" (Width/4)-50 " w87 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
-	Gui, Add, Text, % "x5 y+14 w" (Width/2) " Center", Key ›
-	Gui, Add, Hotkey, % "x+" (Width/4)-50 " w87 Center vassignedKeyLock" , %keyLock%
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Animation ›
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Clock ›
+	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vClockWanted Choose" ClockWanted " AltSubmit" , On|Off
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Key ›
+	Gui, Add, Hotkey, % "x+" (width/4)-50 " w87 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, "White"]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+18 w" (Width*0.64) " h37 gPrInfo hwndBut1 +Center", Info
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+16 w" (width*0.64) " h33 gPrInfo hwndBut1 +Center", Info
 
 	If(logging=1)
 	{
-		Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gSecurityLoggingLabel hwndBut2 +Center", Show Logs
+		Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h33 gSecurityLoggingLabel hwndBut2 +Center", Show Logs
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	}
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+10 w" (Width*0.38) " h31 gprotectionbutton hwndBut3 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gprotectionbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gdestroyprot hwndBut4 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gdestroyprot hwndBut4 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
+	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(ProtectionTip1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTip2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTip3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTip4, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTip5, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTip6, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, % "w" Width , RS-Guard Settings
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, % "w" width , RS-Guard Settings
 	FadeIn(ProtectionSettings)
 return
 
@@ -511,7 +542,6 @@ protectionbutton:
 		DontShowRS:=false
 
 	FadeOut(ProtectionSettings)
-	RSNotify("Applied")
 	IniWrite, %seconds%, settings.ini, settings, seconds
 	IniWrite, %delayseconds%, settings.ini, settings, delayseconds
 	If BreakLoop=1
@@ -524,139 +554,148 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ScriptFunctions:
-	Width := 350
+	width := 350
 	Gui, Functions:New, +hwndSFunctions
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Color, 008383
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cD0D0D0 Bold
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h66 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y0 w" Width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Features
-	Gui, Font, s8 c228a96, Tahoma
-	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Some hotkeys/features are configurable
-	Gui, Add, Text, % "x-2 y+2 w" (Width) " Center BackgroundTrans", Check "Configure Hotkeys"
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h67 Background1F2326 Disabled hwndHPROG"
+	If AfterInstallation=1
+	{
+		Gui, Add, Text, % "x0 y1 w" width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Welcome!
+		Gui, Font, s8 c228a96, Tahoma
+		Gui, Add, Text, % "x0 y+0 w" (width) " Center BackgroundTrans", Here are all the functions that are available to you.
+		Gui, Add, Text, % "x0 y+2 w" (width) " Center BackgroundTrans", You can download extensions from our website.
+		IniWrite, 0, settings.ini, settings, AfterInstallation
+		AfterInstallation=0
+	}
+	else
+	{
+		Gui, Add, Text, % "x0 y0 w" width " h30 BackgroundTrans Center 0x200 gGuiMove vCaption", Features
+		Gui, Font, s8 c228a96, Tahoma
+		Gui, Add, Text, % "x-2 y+0 w" (width) " Center BackgroundTrans", Some hotkeys/features are configurable
+		Gui, Add, Text, % "x-2 y+2 w" (width) " Center BackgroundTrans", Check "Configure Hotkeys"
+	}
 	Gui, Font, s10 c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 y+15 w" (Width/2) " Center BackgroundTrans", Function
+	Gui, Add, Text, % "x0 y+15 w" (width/2) " Center BackgroundTrans", Function
 	Gui, Font, s10 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+2 w" (Width/2) " Center BackgroundTrans", Keys
+	Gui, Add, Text, % "x+2 w" (width/2) " Center BackgroundTrans", Keys
 
-	Gui, Add, Text, % "x0 y+0 w" Width " h3 Center ",
+	Gui, Add, Text, % "x0 y+0 w" width " h3 Center ",
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Speed Dial
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2) " vassignedKeyRSWebVar Center", %assignedKeyRSWeb%
+	Gui, Add, Text, % "x+0 w" (width/2) " vassignedKeyRSWebVar Center", %assignedKeyRSWeb%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Speed Dial a website
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Speed Dial a website
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyRSWeb2Var Center", %assignedKeyRSWeb% + 1/2/3...8
 	
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Play/Pause:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyPlayVar Center", %assignedKeyPlay%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyPlayVar Center", %assignedKeyPlay%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Previous:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyPrevVar Center", %assignedKeyPrev%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyPrevVar Center", %assignedKeyPrev%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Next:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyNextVar Center", %assignedKeyNext%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyNextVar Center", %assignedKeyNext%
 
-	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Fast Search
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Fast Search
 	Gui, Font, s8 c%lightc%, Tahoma
 	If FastSearchWanted=1
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center vRAltVar", Right Alt
+		Gui, Add, Text, % "x+1 w" (width/2) " Center vRAltVar", Right Alt
 	else
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center vRAltVar", Off
+		Gui, Add, Text, % "x+1 w" (width/2) " Center vRAltVar", Off
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x3 y+6 w" (Width/2) " Center ", Minimize Current App:
+	Gui, Add, Text, % "x3 y+6 w" (width/2) " Center ", Minimize Current App:
 	Gui, Font, s8 c%lightc%, Tahoma
 	If AltMinimizeWanted=1
-	Gui, Add, Text, % "x+0 w" (Width/2) " Center vAltMinimizeVar",  Alt x 2
+		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar",  Alt x 2
 	Else
-	Gui, Add, Text, % "x+0 w" (Width/2) " Center vAltMinimizeVar",  Off
+		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar",  Off
 
-	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+6 w" (Width/2) " Center ", Volume Control:
+	Gui, Add, Text, % "x0 y+6 w" (width/2) " Center ", Volume Control:
 	Gui, Font, s8 c%lightc%, Tahoma
 	If VolumeOTWanted=1
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center vVolumeOTVar", Scroll Over Tray
+		Gui, Add, Text, % "x+1 w" (width/2) " Center vVolumeOTVar", Scroll Over Tray
 	Else
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center vVolumeOTVar", Off
+		Gui, Add, Text, % "x+1 w" (width/2) " Center vVolumeOTVar", Off
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Up:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyVolUpVar Center", %assignedKeyVolUp%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyVolUpVar Center", %assignedKeyVolUp%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Down:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyVolDownVar Center", %assignedKeyVolDown%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyVolDownVar Center", %assignedKeyVolDown%
 
-	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
+	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+12 w" (Width/2) " Center ", Lock Now:
+	Gui, Add, Text, % "x0 y+12 w" (width/2) " Center ", Lock Now:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " vassignedKeyLockVar Center", %assignedKeyLock%
+	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyLockVar Center", %assignedKeyLock%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Email:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Input Email:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", CapsLock x 2
+	Gui, Add, Text, % "x+1 w" (width/2) " Center", CapsLock x 2
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Input Password:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Input Password:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + CapsLock x 2
+	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + CapsLock x 2
 
-	Gui, Add, Text, % "x0 y+0 w" Width " h11 Center ",
-
-	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Reload Script:
-	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + R
+	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Suspend Script:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Reload Script:
 	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (Width/2) " Center", Win + Alt + S
+	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + R
+
+	Gui, Font, s8 c%darkerc%, Tahoma
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Suspend Script:
+	Gui, Font, s8 c%lightc%, Tahoma
+	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + S
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+15 w" (Width*0.64) " h37 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+19 w" (width*0.64) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gExtSettings hwndBut2 +Center", Extensions 
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gAboutInfo hwndBut2 +Center", About Us
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+2 w" (Width*0.64) " h37 gsubit +hwndBut3 +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gsubit +hwndBut3 +Default", Exit
 
-	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
+	Gui, Add, Text, % "x7 y+10 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, % "w" Width " NA", Functions
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, % "w" width " NA", Functions
 	GoSub SetButtons
 	FadeIn(SFunctions)
 return
@@ -697,61 +736,58 @@ ChangeHotkeys:
 		IniRead, %A_LoopField%, settings.ini, settings, %A_LoopField%
 	}
 	
-	Width := 280
+	width := 280
 	Gui, ChangeHotkeys:New, +hwndChangeHotkeys
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y8 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Press Delete on a hotkey to disable it
-	Gui, Add, Text, % "x0 y+20 w" (Width/2) " vLabelSP Center ", Speed Dial
+	Gui, Add, Text, % "x0 y+25 w" (width) " Center ", Press Delete on a hotkey to disable it
+	Gui, Add, Text, % "x0 y+20 w" (width/2) " vLabelSP Center ", Speed Dial
 	Gui, Add, Hotkey, % "x+30 w72 Center gRSWebKeyModifiersCheck vassignedKeyRSWeb" , %keyRSWeb%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Play/Pause
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Play/Pause
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPlay" , %keyPlay%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Previous
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Previous
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPrev" , %keyPrev%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Next
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Next
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyNext" , %keyNext%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Up
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Up
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolUp" , %keyVolUp%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Volume Down
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Down
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
-	Gui, Add, Text, % "x0 y+8 w" (Width/2) " Center ", Lock
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Lock
 	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (Width/2)-(Width*0.38)-2 " y+25 w" (Width*0.38) " h31 gchangebutton hwndBut1 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+25 w" (width*0.38) " h31 gchangebutton hwndBut1 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (Width*0.38) " h31 gchangeclose hwndBut2 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gchangeclose hwndBut2 +Center",Cancel
 
 	Gui, Add, Text, % "x+1 h44 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r6-6
-	Gui, Show, w%Width%, Change Hotkeys
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
+	Gui, Show, w%width%, Change Hotkeys
 	GuiControl, Focus, LabelSP
 	FadeIn(ChangeHotkeys)
 return
@@ -790,53 +826,53 @@ AboutInfo:
 	Gui, Color, 2e2e2e
 	Gui, Font, s10 Bold, Tahoma
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3e3e3e, 0xffffff]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background272727 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 c%darkerc%, About
 
 	Gui, Font, s9 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Version
+	Gui, Add, Text, % "x5 y+28 w" (width/2) " Center ", Version
 	Gui, Font, c%lightc%, Tahoma
 	InVersionVar:= (InstalledVersion=1.0) ? "Unknown" : "v" . InstalledVersion
-	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", %InVersionVar%
+	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", %InVersionVar%
 	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Newest
+	Gui, Add, Text, % "x5 y+12 w" (width/2) " Center ", Newest
 	Gui, Font, c%lightc%, Tahoma
-	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion
-	Gui, Add, Text, % "x+0 w" (Width/2.5) " vUpVersionVar Center", %UpVersionVar%
+	UpVersionVar:= (UpdateVersion=1.0) ? "Retrieving" : "v" . UpdateVersion
+	Gui, Add, Text, % "x+0 w" (width/2.5) " vUpVersionVar Center", %UpVersionVar%
 	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+25 w" (Width/2) " Center ", Creator
+	Gui, Add, Text, % "x5 y+25 w" (width/2) " Center ", Creator
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", Riyusso
+	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", Riyusso
 	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+12 w" (Width/2) " Center ", Tester
+	Gui, Add, Text, % "x5 y+12 w" (width/2) " Center ", Tester
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (Width/2.5) " Center", physic
+	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", physic
 	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Website
+	Gui, Add, Text, % "x0 y+25 w" (width) " Center ", Website
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", github.com/Riyusso/Devers
+	Gui, Add, Text, % "x0 w" (width) " y+8 Center", riyusso.github.io
 	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (Width) " Center ", Email
+	Gui, Add, Text, % "x0 y+25 w" (width) " Center ", Email
 	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 w" (Width) " y+11 Center", Riyusso@gmx.us
+	Gui, Add, Text, % "x0 w" (width) " y+8 Center", Riyusso@gmx.us
 
 	Gui, Font, s10 Bold, Tahoma
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " w" (Width*0.64) "  y+25 h34 gAboutExit +hwndBut1 +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y+25 h33 gAboutExit +hwndBut1 +Default", Exit
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Text, % "x7 y+10 w" (Width-14) " h2 vP"
+	Gui, Add, Text, % "x7 y+10 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
-	WinSet, Region, 0-0 w%width% h%H% r6-6, ahk_id %AboutInfo%
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6", ahk_id %AboutInfo%
 	Gui, Show, w%width% h%H%, About
 	FadeIn(AboutInfo)
 	WinSet, Transparent, 247
-	GoSub GetLatestVersion
+
+	if lastUpdateCheck>=3600000
+		GoSub GetLatestVersion
+
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion
 	GuiControl, AboutInfo:, UpVersionVar, %UpVersionVar%
@@ -886,6 +922,14 @@ mnuUninstall:
 	Loop, Files, *.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
+
+		If RegExMatch(PluginName, "\W")
+		{
+			PluginName:=StrReplace(PluginName, A_Space, "_")
+			PluginName := RegExReplace(PluginName, "\W")
+			FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+		}
+
 		IfWinExist, % "ahk_pid" PID%PluginName%
 			WinKill, % "ahk_pid" PID%PluginName%
 	}
@@ -906,6 +950,14 @@ Suspend, Toggle
 Loop, Files, *.ahk
 {
 	SplitPath, A_LoopFileLongPath,,,, PluginName
+
+	If RegExMatch(PluginName, "\W")
+	{
+		PluginName:=StrReplace(PluginName, A_Space, "_")
+		PluginName := RegExReplace(PluginName, "\W")
+		FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+	}
+
 	IfWinExist, % "ahk_pid" PID%PluginName%
 		PostMessage, 0x111, 65305,,, %PluginName%.ahk - AutoHotkey ; Suspend plugins.
 }
@@ -915,8 +967,6 @@ If A_IsSuspended
 	Menu, TRAY, Icon, RSStopped.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Suspended")
-	If A_IsPaused
-		Pause, Off
 }
 If !A_IsSuspended
 {
@@ -924,8 +974,6 @@ If !A_IsSuspended
 	Menu, TRAY, Icon, OptionsIcon.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Released")
-	If A_IsPaused
-		Pause, Off
 }
 return
 
@@ -942,6 +990,14 @@ ExitAppL:
 	Loop, Files, *.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
+		
+		If RegExMatch(PluginName, "\W")
+		{
+			PluginName:=StrReplace(PluginName, A_Space, "_")
+			PluginName := RegExReplace(PluginName, "\W")
+			FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+		}
+
 		IfWinExist, % "ahk_pid" PID%PluginName%
 			WinKill, % "ahk_pid" PID%PluginName%
 	}
@@ -986,11 +1042,11 @@ DefaultMenu:
 		}
 
 		Gui, Font, s%zfont% cFFFFFF Bold q5
-			guiw:=880*amultiplier
-			guih:=56*amultiplier
-			buth:=(guih)+2
-			butw:=((guiw-30)/8)
-			guipos:=A_ScreenHeight-164
+		guiw:=880*amultiplier
+		guih:=56*amultiplier
+		buth:=(guih)+2
+		butw:=((guiw-30)/8)
+		guipos:=A_ScreenHeight-164
 
 		Opt1 := [6, 0x232323, 0x232323, "White"]
 		Opt2 := [ , 0x292929, 0x282828, 0xffffff]
@@ -1013,8 +1069,6 @@ DefaultMenu:
 		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut8 +Center",  Quit
 
 		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut9 ", ×
-		guiw:=guiw*dpi
-		guih:=guih*dpi
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
@@ -1024,15 +1078,17 @@ DefaultMenu:
 		ImageButton.Create(But7, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But8, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But9, Opt1, Opt2, "", Opt4)
-		WinSet, Region, 0-0 w%guiw% h%guih% r50-50, ahk_id %DefaultHWND%
-		guiw:=guiw/dpi
-		guih:=guih/dpi
+		WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r50-50", ahk_id %DefaultHWND%
 		Gui, Show, h%guih% w%guiw% y%guipos%, Menu
 		FadeIn(DefaultHWND)
 
 		IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 		IniRead, InstalledVersion, build.ini, build, Version, 1.0
 		IniRead, PromptVersion, build.ini, build, PromptVersion
+
+		if lastUpdateCheck>=3600000
+			GoSub GetLatestVersion
+
 		If % VersionCompare(UpdateVersion, InstalledVersion)=1
 		{		
 			If(PromptVersion!=UpdateVersion)
@@ -1061,28 +1117,27 @@ SecurityLoggingLabel:
 	elcount:=Array.MaxIndex() ; get the count of the lines in the log file
 	calccount:=elcount-20 ; get the index of the last 20
 
-	Width :=330
+	width :=330
 	Gui, SecLogs:New, +hwndSecLogs
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
 	Gui, Color, 2e2e2e
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 
 	Loop, 20
 	{
 		element:=Array[calccount+A_Index]
 		if(A_Index=1 and element="")
 		continue
-		Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", %element%
+		Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", %element%
 	}
 
 	Gui, Color, 2e2e2e
 	Gui, Font, s11 cFFFFFF Bold, Segoe UI
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+22 w" (Width*0.64) " gdestroySecLogs hwndBut1 +Center +Default", Close
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+22 w" (width*0.64) " gdestroySecLogs hwndBut1 +Center +Default", Close
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -1090,12 +1145,10 @@ SecurityLoggingLabel:
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r12-12
-	Gui, Show, % "w" Width  , Security Logs
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12"
+	Gui, Show, % "w" width  , Security Logs
 	FadeIn(SecLogs)
 return
 
@@ -1106,44 +1159,41 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 WarningGUI:
-	Width :=220
+	width :=220
 	Gui, WarningGUI:New, +hwndWarningGUI
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
 	Gui, Color, 2e2e2e
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cRed Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background2e2e2e Disabled hwndHPROG"
 
 	If(ProtectionWarning)
 	{
-		Gui, Add, Text, % "x0 y15 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade", Protection : Error
+		Gui, Add, Text, % "x0 y15 w" width " r1 BackgroundTrans Center 0x200 gGuiFade", Protection : Error
 		Gui, Font, s8 cFFFFFF Bold, Tahoma
-		Gui, Add, Text, % "x0 y+20 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", For the Protection to work:
-		Gui, Add, Text, % "x0 y+0 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0 h5",
+		Gui, Add, Text, % "x0 y+20 w" width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", For the Protection to work:
+		Gui, Add, Text, % "x0 y+0 w" width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0 h5",
 		ProtectionWarning=0
 	}
 	Gui, Font, s8 cFFFFFF Bold, Tahoma
 
 	If(Warning)
-		Gui, Add, Text, % "x0 y+5 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", %Warning%
+		Gui, Add, Text, % "x0 y+5 w" width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", %Warning%
 
 	Loop, 10
 	If(Warning%A_Index%)
 	{
-		Gui, Add, Text, % "x0 y+6 w" Width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", % Warning%A_Index%
+		Gui, Add, Text, % "x0 y+6 w" width " r1 BackgroundTrans Center 0x200 gGuiFade cD0D0D0", % Warning%A_Index%
 		Warning%A_Index%=
 	}
 
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r12-12
-	Gui, Show, % "w" Width  , Warning
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12"
+	Gui, Show, % "w" width  , Warning
 	FadeIn(WarningGUI)
 	If(Warning) ; If it's just a simple warning (Warning variable is used)
 	{
@@ -1162,51 +1212,50 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 PrInfo:
-	Width :=330
+	width :=330
 	Gui, PrInfo:New, +hwndPrInfo
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
 	Gui, Color, 2e2e2e
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (Width+2) " h31 Background2e2e2e Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, % "x0 y16 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", RS-Guard is designed to protect your PC.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", It is going to lock the computer after
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", the amount of time you have set.
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background2e2e2e Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y16 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", RS-Guard is designed to protect your PC.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", It is going to lock the computer after
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", the amount of time you have set.
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- How to use it ---
+	Gui, Add, Text, % "x0 y+22 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- How to use it ---
 		Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Set a password.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Wait or press the lock button.
-			Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", --- Requirements ---
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Set a password.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Wait or press the lock button.
+		Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+22 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", --- Requirements ---
 		Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", The password needs to be a number.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You MUST set seconds and a password.
-			Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+22 w" Width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- What some settings do ---
-	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Protected/Unprotected Dropdown -
-			Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0",  Toggles whether RS-Guard will lock the PC
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", after the amount of time or not.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You can still lock it with the select key
-			Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Videos End -
-			Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This option controls whether the PC
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", will lock itself after you exit full screen.
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This is useful when you are watching a movie.
-			Gui, Font, s11 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+10 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Clock -
-			Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", Controls whether a clock is displayed
-	Gui, Add, Text, % "x0 y+4 w" Width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", on the lock screen.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", The password needs to be a number.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You MUST set seconds and a password.
+		Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+22 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- What some settings do ---
+	Gui, Add, Text, % "x0 y+10 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Protected/Unprotected Dropdown -
+		Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0",  Toggles whether RS-Guard will lock the PC
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", after the amount of time or not.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You can still lock it with the select key
+		Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+10 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Lock After Videos End -
+		Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This option controls whether the PC
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", will lock itself after you exit full screen.
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", This is useful when you are watching a movie.
+		Gui, Font, s11 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+10 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Clock -
+		Gui, Font, s9 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", Controls whether a clock is displayed
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", on the lock screen.
 
 		Gui, Color, 2e2e2e
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
 
-	Gui, Add, Button, % "x" (Width/2)-((Width*0.64)/2) " y+18 w" (Width*0.64) " gdestroyPrInfo hwndBut1 +Center +Default", Got it
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+18 w" (width*0.64) " gdestroyPrInfo hwndBut1 +Center +Default", Got it
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -1215,11 +1264,9 @@ PrInfo:
 	Gui, Add, Text, % "x+1 h46 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	H:=H*dpi
-	Width:=Width*dpi
 	Gui, -Caption
-	WinSet, Region, 0-0 w%Width% h%H% r12-12
-	Gui, Show, % "w" Width  , RS-Guard Settings
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12"
+	Gui, Show, % "w" width  , RS-Guard Settings
 	FadeIn(PrInfo)
 
 return
@@ -1231,10 +1278,10 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 AdminPrompt:
-	width=135
+	width=144
 	height=66
 	Gui, AdminPrompt:New, +hwndAdminPrompt
-	Gui, +LastFound
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
@@ -1244,17 +1291,14 @@ AdminPrompt:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Are you an admin?
-	Gui, Add, Button, x8 y30 w55 +default gRunAsAdmin hwndBut1 +Center, Yeah
+
+	Gui, Add, Button, % "x10 y30 w" Width/2-10 " +default gRunAsAdmin hwndBut1 +Center", Yeah
+	Gui, Add, Button, % "x+0 y30 w" Width/2-10 " gNotAnAdmin hwndBut2 +Center", Nope
+
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-
-	Gui, Add, Button, x71 y30 w55 gNotAnAdmin hwndBut2 +Center,Nope
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-
-	width:=width*dpi
-	height:=height*dpi
-	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %AdminPrompt%
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %AdminPrompt%
 	Gui, Show, w%width% h%height% , Are you an admin?
 	FadeIn(AdminPrompt)
 return
@@ -1270,7 +1314,6 @@ Authorization:
 	Gui, Color, 2b2b2a, 2b2b2a
 	Gui, Font, s10 Bold c00afaf, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w200 h26 Background1f1f1f Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w200 Center BackgroundTrans +0x200 cb1b1b1, Please authorize yourself.
 
 	Gui, Font, w700 s12 c00afaf, Segoe UI Black
@@ -1285,10 +1328,10 @@ Authorization:
 	Gui, Add, Button, x+0 w45 h25 +default gAuthorize hwndBut1 +Center, Go
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	scaledw:=200*dpi
-	scaledh:=70*dpi
+	scaledw:=200
+	scaledh:=70
 	SHAutoComplete(Edit265)
-	WinSet, Region, 0-0 w%scaledw% h%scaledh% r12-12, ahk_id %Auth%
+	WinSet, Region, % "0-0 w" scaledw*dpi " h" scaledh*dpi " r12-12", ahk_id %Auth%
 	Gui, Show, w%scaledw% h%scaledh%, Authorization
 	FadeIn(Auth)
 	SetTimer, CheckIfAuthInactive, 200
@@ -1309,7 +1352,7 @@ Authorize:
 		}
 		SetTimer, AuthExpirationCheck, 2000
 		If PasswordExpiration=1
-			RSNotify("Default Expiration")
+			RSNotify(" Secure ")
 		else if PasswordExpiration=2
 		{
 			SetTimer, AuthExpirationCheck, Off
@@ -1330,7 +1373,7 @@ return
 
 ExpirationPrompt:
 	width=235
-	height=125
+	height=123
 	Gui, ExpirationPrompt:New, +hwndExpirationPrompt
 	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
@@ -1346,14 +1389,12 @@ ExpirationPrompt:
 	Gui, Font, s10 Bold ceeeeee, Tahoma
 	Gui, Add, Button, x0 y+8 w%width% h45 +default gKeepDefaultExpiration hwndBut1 +Center, 6 minutes of inactivity
 
-	Gui, Add, Button, x0 y+2 w%width% h47 gNoAuthExpiration hwndBut2 +Center, No expiration
+	Gui, Add, Button, x0 y+0 w%width% h47 gNoAuthExpiration hwndBut2 +Center, No expiration
 
-	width:=width*dpi
-	height:=height*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	WinSet, Region, 0-0 w%width% h%height% r8-8, ahk_id %ExpirationPrompt%
-	Gui, Show, % "x" (A_ScreenWidth)-Width-50 "y " (A_ScreenHeight-height-80) " w" width " h" height " NoActivate",
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r12-12", ahk_id %ExpirationPrompt%
+	Gui, Show, % "x" (A_ScreenWidth)-width-50 "y " (A_ScreenHeight-height-80) " w" width " h" height " NoActivate",
 	FadeIn(ExpirationPrompt)
 return
 
@@ -1400,10 +1441,10 @@ IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
 If % VersionCompare(UpdateVersion, InstalledVersion)=1
 {
-	width=135
+	width=150
 	height=66
 	Gui, UpdatePrompt:New, +hwndUpdatePrompt
-	Gui, +LastFound +ToolWindow
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
@@ -1413,17 +1454,14 @@ If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Update to v%UpdateVersion%?
-	Gui, Add, Button, x8 y30 w55 +default gUpdate hwndButUp1 +Center, Yeah
 
-	Gui, Add, Button, x71 y30 w55 gNoUpdate hwndButUp2 +Center,Nope
+	Gui, Add, Button, x8 y30 w65 +default gUpdate hwndButUp1 +Center, Yeah
+	Gui, Add, Button, x+5 y30 w65 gNoUpdate hwndButUp2 +Center, Nope
 
-	width:=width*dpi
-	height:=height*dpi
 	ImageButton.Create(ButUp1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(ButUp2, Opt1, Opt2, "", Opt4)
-	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UpdatePrompt%
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %UpdatePrompt%
 	Gui, Show, w%width% h%height% , Update Prompt
 	FadeIn(UpdatePrompt)
 }
@@ -1434,10 +1472,10 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 UninstallPrompt:
-	width=135
-	height=130
+	width=145
+	height=126
 	Gui, UninstallPrompt:New, +hwndUninstallPrompt
-	Gui, +LastFound +ToolWindow
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
@@ -1447,7 +1485,6 @@ UninstallPrompt:
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Select your choice
 	Gui, Add, Button, x0 y+10 w%width% +default gmnuUninstall hwndBut1 +Center, Uninstall
 
@@ -1455,12 +1492,10 @@ UninstallPrompt:
 
 	Gui, Add, Button, x0 y+2 w%width% gCancelUninstall  hwndBut3 +Center, Cancel
 
-	width:=width*dpi
-	height:=height*dpi
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-	WinSet, Region, 0-0 w%width% h%height% r3-3, ahk_id %UninstallPrompt%
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %UninstallPrompt%
 	Gui, Show, w%width% h%height% , Update Prompt
 	FadeIn(UninstallPrompt)
 return

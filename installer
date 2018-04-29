@@ -61,7 +61,7 @@ UpdateIt:
 		IniWrite, 0, build.ini, build, ExitVar
 		IniWrite, %UpdateVersion%, build.ini, build, Version
 		IsUpdated:=true
-		Sleep 1250
+		Sleep 500
 return
 
 DPIFactor()

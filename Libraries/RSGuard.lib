@@ -26,7 +26,7 @@
 		LockPw=
 		return
 	}
-
+	
 	zph=%A_ScreenHeight%
 	zpw=%A_ScreenWidth%
 	zfont=20
@@ -60,8 +60,6 @@
 		calculatedsize:=54
 		amultiplier=0.80
 	}
-	DllCall( "AddFontResource", Str,"SEGOEUI.TTF" )
-	SendMessage,  0x1D,,,, ahk_id 0xFFFF
 	czpw:=(A_ScreenWidth/2)-calculatedsize/2
 	czph:=(A_ScreenHeight/2)-calculatedsize/2
 	ch1:=czph-calculatedsize-1
@@ -122,8 +120,8 @@
 		else
 		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
 
-		Opt1 := [6, 0x007e89, 0x007e89, "Black"]
-		Opt2 := [ , 0x008a96, 0x008a96, 0x111111]
+		Opt1 := [6, 0x007b80, 0x007b80, "Black"]
+		Opt2 := [ , 0x008489, 0x008489, 0x111111]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 		Hidden:=(!DontShowRS) ? "+Hidden" : "" ; important
@@ -158,7 +156,7 @@
 
 		Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% %Hidden%, 0
 		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
 
@@ -167,17 +165,17 @@
 		else
 			Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
 		Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
-		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT11, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, hwndSCHYT12 vSCH12 gTryPw x%cw2% y%rh1% w%halfw% h%rch1% %Hidden%, ›
 		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-		Opt2 := [ , 0x13444A, 0x1B5F67, 0xD7D7D7]
+		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 		ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
 
-		actx:=(A_ScreenWidth/2)-265*amultiplier
+		actx:=(A_ScreenWidth/2)-280*amultiplier
 		acty:=(A_ScreenHeight/2)-625*amultiplier
 		awsize:=520*amultiplier
 		ahsize:=780*amultiplier
@@ -193,18 +191,22 @@
 			document.open()
 			document.write(html)
 		}
-		else
+		else if AnimationWanted=1
 		{
 			Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB +Hidden, %convertie%
 			document := WB.Document
 			document.open()
 			document.write(html)
 			SetTimer, ShowAgain, -7000
-			If AnimationWanted=1
-				DontShowRS:=false
+			DontShowRS:=false
+		}
+		else
+		{
+			Disablekeys:=false
 		}
 
-		WinSet, Transparent,0, ahk_id %ZPHWND%
+		WinSet, Transparent, 0, ahk_id %ZPHWND%
+		sleep 40	; add the ilusion it loads a bit slower
 		Gui, Show, x0 y0 h%zph% w%zpw%
 		GoSub TransProtection
 		SetTimer, FadeClock, -3000
@@ -297,7 +299,7 @@ If TimeStrSave!=TimeString
 return
 
 ShowAgain:
-If (A_TimeIdle>5000 && !RSAnimationShown)
+If (A_TimeIdle>5000 && !RSAnimationShown && AnimationWanted=1)
 {
 	GoSub deleteLTxt
 	Control, Hide,,, ahk_id %SCHYT1%
@@ -335,12 +337,16 @@ UnlockPC:
 		VolumeTR:=false
 		sleep 35
 		AuthReq:=false
+		BlockKeyBoardInputs("Off")
 		SetTimer, fadeinclock, Off
 		SetTimer, SecondDisplayProtection, Off
 		SetTimer, KeepOnTop, Off
-		SetTimer ShowAgain, Off
+		SetTimer, ShowAgain, Off
 		SetTimer, CheckAuth, Off
-		BlockKeyBoardInputs("Off")
+		SetTimer, MinuteUpdate, Off
+		SetTimer, deleteLTxt, Off
+		SetTimer, CFullScreen, Off
+		OnMessage(0x200, "")
 		SetTimer, FadeClock, Off
 		GoSub TransProtectionReverse
 		LogTime(5)
@@ -395,16 +401,15 @@ ProtectionAgainstZombiesGuiClose:
 return
 
 SecondDisplayProtection:
-MouseGetPos, MouseX, MouseY
+	MouseGetPos, MouseX, MouseY
 
-confiney:= A_ScreenHeight
-confinex:= A_ScreenWidth
+	confiney:= A_ScreenHeight
+	confinex:= A_ScreenWidth
 
-If (confiney < MouseY) || (confinex < MouseX) || (MouseX < 0) || (MouseY < 0)
-{
-	MouseMove, 50 , 50
-}
-
+	If (confiney < MouseY) || (confinex < MouseX) || (MouseX < 0) || (MouseY < 0)
+	{
+		MouseMove, 50 , 50
+	}
 return
 
 TransProtection:
@@ -445,30 +450,30 @@ PasswordCover:
 return
 
 FormulaNull:
-LogTime(6)
-pwcover=
-Formula=0
-GuiControl,Show, LTxt
-GuiControl,, LTxt,
-GoSub deleteLTxt
+	LogTime(6)
+	pwcover=
+	Formula=0
+	GuiControl,Show, LTxt
+	GuiControl,, LTxt,
+	GoSub deleteLTxt
 return
 
 TransProtectionReverse:
-UnlockDelay:=true
-ReverseTransCalc=245
-Loop, 32
-{
-	ReverseTransCalc:=ReverseTransCalc-(4+(A_Index*0.23))
-	If (ReverseTransCalc<10)
+	UnlockDelay:=true
+	ReverseTransCalc=245
+	Loop, 32
 	{
-		WinSet, Transparent, 5, ahk_id %ZPHWND%
-		break
+		ReverseTransCalc:=ReverseTransCalc-(4+(A_Index*0.23))
+		If (ReverseTransCalc<10)
+		{
+			WinSet, Transparent, 5, ahk_id %ZPHWND%
+			break
+		}
+		WinSet, Transparent, %ReverseTransCalc%, ahk_id %ZPHWND%
+		sleep, 2
 	}
-	WinSet, Transparent, %ReverseTransCalc%, ahk_id %ZPHWND%
-	sleep, 2
-}
-Gui, ProtectionAgainstZombies:Destroy
-SetTimer, RevTrans, -500
+	Gui, ProtectionAgainstZombies:Destroy
+	SetTimer, RevTrans, -500
 return
 
 RevTrans:
@@ -477,16 +482,16 @@ RevTrans:
 return
 
 CheckAuth:
-IfWinActive, ahk_id %ZPHWND%
-	GoSub AuthExpire
+	IfWinActive, ahk_id %ZPHWND%
+		GoSub AuthExpire
 return
 
 LockNow:
-If ItsLocked=0
-{
-	LogTime(2)
-	Gosub RSGuard
-}
+	If ItsLocked=0
+	{
+		LogTime(2)
+		Gosub RSGuard
+	}
 return
 
 WM_RMVPIC(wParam, lParam, Msg, Hwnd)
@@ -602,15 +607,15 @@ CalculatedProtection:
 		; IMPORTANT
 		if ((A_TickCount - StartTime > 7500) && AfterWU=1) or (A_TickCount - StartTime > (seconds*1000))
 		{
-			LogTime(1)
 			DontShowRS:=true
 			GoSub RSGuard
+			LogTime(1)
 		}
 
 		; IMPORTANT
 		StartTime:=A_TickCount
 
-		if (A_TimeIdle> 3000)
+		if (A_TimeIdle>3000)
 		{
 			idletimer+=1001
 			if (idletimer>(seconds*1000))
@@ -618,14 +623,14 @@ CalculatedProtection:
 				isFullScreen := isWindowFullScreen( "A" )
 				If isFullScreen=0
 				{
-					LogTime(1)
 					Gosub RSGuard
+					LogTime(1)
 					return
 				}
 				IfWinActive, ahk_exe explorer.exe
 				{
-					LogTime(1)
 					Gosub RSGuard
+					LogTime(1)
 					return
 				}
 				if (idletimer>(seconds*1000)+(delayseconds*1000))
@@ -649,10 +654,10 @@ CFullScreen:
 	}
 	If (isFullScreen=0 && AfterFS=1)
 	{
-		LogTime(3)
-		IniWrite, 1, settings.ini, settings, LockAfterRestart
 		DontShowRS:=true
 		authCheckDelay:=true
 		Gosub RSGuard
+		LogTime(3)
+		IniWrite, 1, settings.ini, settings, LockAfterRestart
 	}
 return

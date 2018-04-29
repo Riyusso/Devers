@@ -1,11 +1,14 @@
 ﻿RSWeb:
+	If (ItsLocked=1) 
+		return
+
 	ChoosingWebsite:=true
 	Loop, 8
 	{
 		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
 	}
 
-	websearchvar=
+	webSearchVar=
 	FastSearching:=false
 	WebLT := WebLT ? false : true
 
@@ -52,9 +55,9 @@
 			guih:=47
 			Gui, Color,172326, 172326
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
-			Gui, Add, Text, x16 y11 h45 w95 vGoogleSearchLabel +Hidden, Google:
+			Gui, Add, Text, x16 y11 h45 w95 vSearchLabel +Hidden, Google:
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
-			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebsearchvar -E0x200 -VScroll", %websearchvar%
+			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
 			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]
@@ -67,7 +70,7 @@
 			Gui, Color,1e1e1e, 333333
 			Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
 			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
-			Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebsearchvar -E0x200 +Center -VScroll", %websearchvar%
+			Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebSearchVar -E0x200 +Center -VScroll", %webSearchVar%
 			Gui, Add, Button, % "x+0 h25 w45 gStartSearch hwndSearchBut1 +Default", Go
 			Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0]
 			Opt2 := [ , 0x333333, 0x333333, 0xffffff]
@@ -110,20 +113,17 @@
 			ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
 		}
 
-		guih:=guih*dpi
-		guiw:=guiw*dpi
 		If SearchBased
 		{
 			WinSet, Transparent, 245
-			WinSet, Region, 0-0 w%guiw% h%guih% r12-12, ahk_id %WebL%
+			WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r12-12", ahk_id %WebL%
 		}
 		else
 		{
-			WinSet, Region, 0-0 w%guiw% h%guih% r18-18, ahk_id %WebL%
 			WinSet, Transparent, 0
+			WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r18-18", ahk_id %WebL%
 		}
-		guiw:=guiw/dpi
-		guih:=guih/dpi
+
 		If RSWebWithSearchFocused || SearchBased
 			Gui, Show, h%guih% w%guiw%, %ScriptName% Speed Dial
 		else
@@ -146,7 +146,8 @@ WebLGuiEscape:
 return
 
 WebLGuiContextMenu:
-
+	width=300
+	height=110
 	Loop, 8
 	{
 		If A_GuiControl=webname%A_Index%
@@ -160,9 +161,8 @@ WebLGuiContextMenu:
 	Gui, -Caption
 	Gui, Color, 252525, 333333
 	Gui, Font, s10 Bold cEEEEEE, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w300 h26 Background1f1f1f Disabled hwndHPROG"
-	Control, ExStyle, -0x20000, , ahk_id %HPROG% ; propably only needed on Win XP
-	Gui, Add, Text, x0 y4 w300 Center BackgroundTrans +0x200 cb1b1b1, Edit Website
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1f1f1f Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, Edit Website
 
 	Opt1 := [6, 0x252525, 0x252525, "White"]
 	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
@@ -171,15 +171,15 @@ WebLGuiContextMenu:
 	Gui, Add, Edit, % "x29 y+12 w242 h16 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
 	Gui, Add, Edit, % "x29 y+6 w242 h16 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
 
-	Gui, Add, Button, x50 y70 w95 +default gEditWebsites hwndBut1 +Center, Save
+	Gui, Add, Button, x50 y+6 w95 +default h27 gEditWebsites hwndBut1 +Center, Save
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, x+10 y70 w95 gExitWebsites hwndBut2 +Center, Cancel
+	Gui, Add, Button, x+10 w95 h27 gExitWebsites hwndBut2 +Center, Cancel
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ShAutoComplete(Edit264)
 	ShAutoComplete(Edit265)
-	WinSet, Region, 0-0 w300 h100 r12-12, ahk_id %WebEdit%
-	Gui, Show, % "w300 h100 y" A_ScreenHeight/2+204*amultiplier/2+20 , Web Edit
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r12-12", ahk_id %WebEdit%
+	Gui, Show, % "w" width " h" height " y" A_ScreenHeight/2+204*amultiplier/2+20 , Web Edit
 	FadeIn(WebEdit)
 return
 
@@ -205,20 +205,21 @@ return
 
 StartSearch:
 	Gui, Submit, NoHide
-	websearchvar:=StrReplace(websearchvar, "#", "%23")
-	websearchvar:=StrReplace(websearchvar, "&", "%26")
-	Loop, Parse, websearchvar
-	If (A_LoopField="." && !InStr(websearchvar," ") && !FastSearching)
+	webSearchVar:=StrReplace(webSearchVar, "#", "%23")
+	webSearchVar:=StrReplace(webSearchVar, "&", "%26")
+	Loop, Parse, webSearchVar
+	If (A_LoopField="." && !InStr(webSearchVar," ") && !FastSearching)
 	{
-		Run, http:%websearchvar%
+		Run, http:%webSearchVar%
 		GoSub GetBrowserNameAndActivate
-		websearchvar=
+		webSearchVar=
 		GoSub RSWeb
 		return
 	}
-	websearchvar:="https://www.google.bg/search?q=" websearchvar
-	Run, %websearchvar%,, UseErrorLevel
+	url:="https://www.google.bg/search?q={query}"
+	webSearchVar:=StrReplace(url, "{query}", webSearchVar)
+	Run, %webSearchVar%,, UseErrorLevel
 	GoSub GetBrowserNameAndActivate
-	websearchvar=
+	webSearchVar=
 	GoSub RSWeb
 return

@@ -1,5 +1,5 @@
 VolTr:
-Volume_Delay:=750
+Volume_Delay=800
 BG_color=222222
 Text_color=009393
 Bar_color=008383
@@ -17,15 +17,8 @@ return
 Volume_Show_OSD:
 If (ItsLocked!=1)
 {
-	if (Volume_OSD_Center)
-	{
-		mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165
-	}
-	else
-	{
-		SysGet m, MonitorWorkArea, 1
-		mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165
-	}
+	SysGet m, MonitorWorkArea, 1
+	mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165*dpi
 	SoundGet, Volume
 	if (!Volume_OSD_c)
 	{
@@ -34,20 +27,21 @@ If (ItsLocked!=1)
 		Volume_OSD_c:=!Volume_OSD_c
 	}
 	WinSet, Transparent, 225, vol_Progress
-	if !A_IsPaused
 	Progress Show
-	Progress % Volume := Round(Volume), %Volume% `%
+	Progress % Volume := Round(Volume), ` %Volume% `%
 	WinSet, AlwaysOnTop, On, vol_Progress
 	scaledw:=330*dpi+1
-	scaledh:=52*dpi
+	if dpi > 1
+		scaledh:=52*(dpi*0.9)
+	else
+		scaledh=52
 	WinSet, Region, 0-0 w%scaledw% h%scaledh% r3-3, vol_Progress
-	SetTimer, Remove_Show_OSD, %Volume_Delay%
+	SetTimer, Remove_Show_OSD, -%Volume_Delay%
 }
 return
 
 Remove_Show_OSD:
 	Volume_OSD_c2:=!Volume_OSD_c2
-	SetTimer, Remove_Show_OSD, Off
 	WinSet, Transparent, 225, vol_Progress
 	sleep 10
 	WinSet, Transparent, 210, vol_Progress

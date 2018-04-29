@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.2.0
+FileVersion=2.0.8.1
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -36,7 +36,8 @@ IniRead, LockPwHash, settings.ini, settings, LockPwHash ; keep in a separate thr
 if LockPwHash!=ERROR || LockPwHash ; keep in a separate thread with passwordhash decryption
 LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3) ; keep in a separate thread with passwordhash decryption
 SetTimer, CheckBreakLoop, -2500
-SetTimer, UpdateCheck, 200
+SetTimer, RestartCheck, 800
+SetTimer, AllowUpdateCheckInMenu, 3600000
 IfExist, settings.ini
 {
 	If RunAsAdmin && !LockAfterRestart
@@ -48,13 +49,10 @@ IfExist, settings.ini
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
 	}
-	If CreateATask=1
+	If CreateATask=1 && (A_IsCompiled)
 	{
-		If A_IsCompiled
-		{
 			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
 			IniWrite, 0, settings.ini, settings, CreateATask
-		}
 	}
 	
 	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
@@ -81,14 +79,22 @@ IfExist, settings.ini
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
+
+			If RegExMatch(PluginName, "\W")
+			{
+				PluginName:=StrReplace(PluginName, A_Space, "_")
+				PluginName := RegExReplace(PluginName, "\W")
+				FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
+			}
+
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			If(PluginState=1)
-				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_LoopFileLongPath%,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_MyDocuments%\%ScriptName%\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 		}
 	}
 
 	GoSub InstallFiles
-	If !LockAfterRestart && (A_IsCompiled)
+	If !LockAfterRestart && (A_IsCompiled) && !AfterInstallation
 			SetTimer, RSRunScript, -25
 	
 	If LockAfterRestart=1
@@ -102,8 +108,9 @@ IfExist, settings.ini
 		SetTimer, HotkeysSuspendCheck, 500
 
 	LogTime(0)
-	SetTimer, GetLatestVersion, -60000
 	GoSub ButtonsLabel
+	If AfterInstallation=1
+		GoSub ScriptFunctions
 }
 IfNotExist, settings.ini
 	Gosub Installation
@@ -124,8 +131,6 @@ return
 InstallFiles:
 	IfNotExist, launcher.exe
 		FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
-	IfNotExist, segoeui.ttf
-		FileInstall, Base/segoeui.ttf, %A_MyDocuments%\%ScriptName%\segoeui.ttf, 1
 	IfNotExist, RS.png
 		FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
 	IfNotExist, RSAnimation.mp4
@@ -136,6 +141,12 @@ InstallFiles:
 		FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
 	IfNotExist, Extensions
 			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+	IfNotExist, Tip_small.png
+		FileInstall, Base/Tip_small.png, %A_MyDocuments%\%ScriptName%\Tip_small.png, 1
+	IfNotExist, Tip_medium.png
+		FileInstall, Base/Tip_medium.png, %A_MyDocuments%\%ScriptName%\Tip_medium.png, 1
+	IfNotExist, Tip_large.png
+		FileInstall, Base/Tip_large.png, %A_MyDocuments%\%ScriptName%\Tip_large.png, 1
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
 

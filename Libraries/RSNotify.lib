@@ -30,8 +30,8 @@ RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 	Else
 		TCW:=controlwidth*dpi
 
-	vhc:=A_ScreenHeight-106*dpi
-	averagex:=A_ScreenWidth-120*dpi-(tcw*0.75)
+	vhc:=A_ScreenHeight-115*dpi
+	averagex:=A_ScreenWidth-108*dpi-(tcw*0.75)
 	whc:=whc*dpi
 
 	WinSet, Region, 0-0 h%whc% w%TCW% r3-3
