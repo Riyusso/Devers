@@ -174,7 +174,7 @@ OtherSettingsLabel:
 
 	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center",Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center", Cancel
 
 	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos

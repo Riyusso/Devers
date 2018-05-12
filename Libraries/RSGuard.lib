@@ -1,12 +1,8 @@
 ﻿RSGuard:
-	If authCheckDelay
-	{
-		SetTimer, CheckAuth, -5000
-		authCheckDelay:=false
-	}
-	else
+	if authExpireWithLock
 	{
 		GoSub AuthExpire
+		authExpireWithLock:=false
 	}
 	If !LockPw
 	{
@@ -94,6 +90,7 @@
 	If !ItsLocked
 	{
 		ItsLocked=1
+		SetTimer, CheckAuth, -90000
 		Gui, ProtectionAgainstZombies:New    ; ZPScreen
 		Gui, +hwndZPHWND -DPIScale
 		Gui, Font, w670 s31 q4, Segoe UI
@@ -489,6 +486,7 @@ return
 LockNow:
 	If ItsLocked=0
 	{
+		authExpireWithLock:=true
 		LogTime(2)
 		Gosub RSGuard
 	}
@@ -655,7 +653,6 @@ CFullScreen:
 	If (isFullScreen=0 && AfterFS=1)
 	{
 		DontShowRS:=true
-		authCheckDelay:=true
 		Gosub RSGuard
 		LogTime(3)
 		IniWrite, 1, settings.ini, settings, LockAfterRestart
