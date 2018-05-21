@@ -88,7 +88,7 @@ button:
 	RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\Devers.lnk
+	StartMenuFile=%A_StartMenu%\Programs\%ScrptName%.lnk
 	If StartWithWindows=2
 	{
 		If A_IsCompiled=1
@@ -936,7 +936,7 @@ mnuUninstall:
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\Devers.lnk
+	StartMenuFile=%A_StartMenu%\Programs\%ScrptName%.lnk
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
@@ -1319,7 +1319,6 @@ Authorization:
 	Gui, Font, w700 s12 c00afaf, Segoe UI Black
 	Gui, Add, Edit, % "x0 y+13 w155 h25 hwndEdit265 vorigpass -E0x200 +Center -VScroll +password",
 
-	
 	Gui, Font, w700 s11 ceeeeee, Segoe UI Black
 	Opt1 := [6, 0x2b2b2a, 0x2b2b2a, 0xD0D0D0]
 	Opt2 := [ , 0x2b2b2a, 0x2b2b2a, 0xffffff]
@@ -1364,11 +1363,14 @@ Authorize:
 			SetTimer, KeepDefaultExpiration, -15000
 		}
 		StartTick:=A_TickCount
+		FadeOut(Auth)
 		return
 	}
 	Else
+	{
+		GuiControl, Auth:, origpass
 		RSNotify("Not Authorized")
-	FadeOut(Auth)
+	}
 return
 
 ExpirationPrompt:

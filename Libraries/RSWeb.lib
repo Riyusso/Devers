@@ -210,16 +210,16 @@ StartSearch:
 	Loop, Parse, webSearchVar
 	If (A_LoopField="." && !InStr(webSearchVar," ") && !FastSearching)
 	{
+		GoSub WebLClose
 		Run, http:%webSearchVar%
 		GoSub GetBrowserNameAndActivate
 		webSearchVar=
-		GoSub RSWeb
 		return
 	}
+	GoSub WebLClose
 	url:="https://www.google.bg/search?q={query}"
 	webSearchVar:=StrReplace(url, "{query}", webSearchVar)
 	Run, %webSearchVar%,, UseErrorLevel
 	GoSub GetBrowserNameAndActivate
 	webSearchVar=
-	GoSub RSWeb
 return

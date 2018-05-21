@@ -2,7 +2,7 @@
 ;=====------======------=====------======------=====------======-------KEYS-------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1)
+#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1) && !isWindowFullScreen("A")
 ~$LAlt Up::
 	GetKeyState, state, Shift
 	If state=D
