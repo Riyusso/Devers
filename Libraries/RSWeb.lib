@@ -217,9 +217,11 @@ StartSearch:
 		return
 	}
 	GoSub WebLClose
-	url:="https://www.google.bg/search?q={query}"
+	if !FastSearching || !url
+		url:="https://www.google.bg/search?q={query}"
 	webSearchVar:=StrReplace(url, "{query}", webSearchVar)
 	Run, %webSearchVar%,, UseErrorLevel
 	GoSub GetBrowserNameAndActivate
 	webSearchVar=
+	url=
 return

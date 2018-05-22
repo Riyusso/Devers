@@ -53,6 +53,22 @@ IniReads:
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
+	defaultKeywords=y|g
+	IniRead, yLabel, settings.ini, urls, % A_LoopField . "Label", % "YouTube:"
+	IniRead, yurl, settings.ini, urls, % A_LoopField . "url", % "https://www.youtube.com/results?search_query={query}"
+	IniRead, gLabel, settings.ini, urls, % A_LoopField . "Label", % "Google:"
+	IniRead, gurl, settings.ini, urls, % A_LoopField . "url", % "https://www.google.bg/search?q={query}"
+
+	IniRead, urlkeywords, settings.ini, urls, urlkeywords
+	Loop, Parse, urlkeywords, |
+	{
+		IniRead, %A_LoopField%Label, settings.ini, urls, % A_LoopField . "Label"
+		IniRead, %A_LoopField%url, settings.ini, urls, % A_LoopField . "url"
+	}
+	if urlkeywords
+		urlkeywords:="|" . urlkeywords
+	urlkeywords:=defaultKeywords . urlkeywords
+
 	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 1
 	If AnimationWanted!=1
 		DontShowRS:=true

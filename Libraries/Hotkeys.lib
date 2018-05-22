@@ -264,14 +264,21 @@ If !FastSearching
 {
 	sleep 10
 	Gui, WebL:Submit, NoHide
-	if SubStr(webSearchVar, 1, 2)="g "
+	Loop, Parse, urlkeywords, |
 	{
-		webSearchVar:=StrReplace(webSearchVar, "g ", "")
-		GuiControl, WebL:, webSearchVar, %webSearchVar%
-		FastSearching:=true
-		GuiControl, WebL:Move, webSearchVar, % "x90 w" guiw-155
-		GuiControl, WebL:Show, SearchLabel
+		if SubStr(webSearchVar, 1, 2)=A_LoopField . " "
+		{
+			url= % %A_LoopField%url
+			searchLabelText= % %A_LoopField%Label
+			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
+			GuiControl, WebL:, webSearchVar, %webSearchVar%
+			GuiControl, WebL:Move, webSearchVar, % "x90 w" guiw-155
+			GuiControl, WebL:, SearchLabel, %searchLabelText%
+			GuiControl, WebL:Show, SearchLabel
+			FastSearching:=true
+		}
 	}
+
 }
 return
 ~SC034::
