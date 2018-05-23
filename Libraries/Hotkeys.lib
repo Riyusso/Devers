@@ -2,59 +2,6 @@
 ;=====------======------=====------======------=====------======-------KEYS-------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------======------======------=====------======------=====------======------
 
-#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1) && !isWindowFullScreen("A")
-~$LAlt Up::
-	GetKeyState, state, Shift
-	If state=D
-	{
-		Send {LAlt Down}{LShift Up}{LAlt Up}
-		return
-	}
-	KeyWait, LAlt, U
-	KeyWait, LAlt, D, T0.2
-	If (ErrorLevel = 0) && A_PriorKey = "LAlt"
-		IfWinNotActive, ahk_class WorkerW
-			WinMinimize, A
-return
-#If
-
-~CapsLock::RapidHotkey("email", 2, 0.2, 1)
-email:
-	SendInput {Raw}%email%
-return
-
-#If password
-#CapsLock::RapidHotkey("pw", 2, 0.2, 1)
-pw:
-	If !Authorized
-	{
-		WinGet, activeWindowForPassword, ID, A
-		GoSub Authorization
-		return
-	}
-	SendInput {Raw}%password%
-return
-#If
-
-#If (!A_IsCompiled)
-~!SC013::
-	IntentReload:=true
-	Reload
-return
-#If
-
-#If (A_IsCompiled)
-~#!SC013::
-	IntentReload:=true
-	Reload
-return
-#If
-
-~#!SC01F:: ; Win+Alt+S Suspends the script
-	Suspend, Permit
-	GoSub SuspendScriptToggle
-return
-
 ButtonsLabel:
 keysArray=keyLock|keyplay|keyprev|keynext|keyVolUp|keyVolDown|keyRSWeb
 
@@ -104,6 +51,59 @@ Loop, Parse, keysArray, `|
 		Hotkey, %assignedKeyVolDown%, vol_down
 		Hotkey, %assignedKeyVolDown%, vol_down, On
 	}
+return
+
+#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1) && !isWindowFullScreen("A")
+~$LAlt Up::
+	GetKeyState, state, Shift
+	If state=D
+	{
+		Send {LAlt Down}{LShift Up}{LAlt Up}
+		return
+	}
+	KeyWait, LAlt, U
+	KeyWait, LAlt, D, T0.2
+	If (ErrorLevel = 0) && A_PriorKey = "LAlt"
+		If !WinActive("ahk_class WorkerW")
+			WinMinimize, A
+return
+#If
+
+~CapsLock::RapidHotkey("email", 2, 0.2, 1)
+email:
+	SendInput {Raw}%email%
+return
+
+#If password
+#CapsLock::RapidHotkey("pw", 2, 0.2, 1)
+pw:
+	If !Authorized
+	{
+		WinGet, activeWindowForPassword, ID, A
+		GoSub Authorization
+		return
+	}
+	SendInput {Raw}%password%
+return
+#If
+
+#If (!A_IsCompiled)
+~!SC013::
+	IntentReload:=true
+	Reload
+return
+#If
+
+#If (A_IsCompiled)
+~#!SC013::
+	IntentReload:=true
+	Reload
+return
+#If
+
+~#!SC01F:: ; Win+Alt+S Suspends the script
+	Suspend, Permit
+	GoSub SuspendScriptToggle
 return
 
 #If (ItsLocked = 1)
@@ -249,24 +249,25 @@ return
 
 #If WinActive("ahk_id" . WebL) && (SearchBased)
 ~*SC00E::
-Gui, WebL:Submit, NoHide
-If !webSearchVar
-{
-	GuiControl, WebL:Move, webSearchVar, % "x16 w" guiw-85
-	GuiControl, WebL:Hide, SearchLabel
-	FastSearching:=false
-}
+	Gui, WebL:Submit, NoHide
+	If !webSearchVar
+	{
+		GuiControl, WebL:Move, webSearchVar, % "x16 w" guiw-85
+		GuiControl, WebL:Hide, SearchLabel
+		FastSearching:=false
+	}
 return
 Tab::
 return
 ~Space::
-If !FastSearching
-{
+	If FastSearching
+		return
+		
 	sleep 10
 	Gui, WebL:Submit, NoHide
 	Loop, Parse, urlkeywords, |
 	{
-		if SubStr(webSearchVar, 1, 2)=A_LoopField . " "
+		if SubStr(webSearchVar, 1, StrLen(A_LoopField)+1)=A_LoopField . " "
 		{
 			url= % %A_LoopField%url
 			searchLabelText= % %A_LoopField%Label
@@ -276,25 +277,23 @@ If !FastSearching
 			GuiControl, WebL:, SearchLabel, %searchLabelText%
 			GuiControl, WebL:Show, SearchLabel
 			FastSearching:=true
+			return
 		}
 	}
-
-}
 return
 ~SC034::
-If !DotTipDisplayed && !FastSearching && GoogleTipDisplayed<2
-{
-	Tip := new Tip()
-	Tip.message:="Tip: You can type 'g ' at the beginning to search directly in Google.com"
-	Tip.width:=RSWebGuiWidth-9
-	WinGetPos,, pos,,A
-	Tip.ypos:=pos-40
-	Tip.Show()
-	GoogleTipDisplayed++
-	IniWrite, %GoogleTipDisplayed%, settings.ini, settings, GoogleTipDisplayed
-	DotTipDisplayed:=true
-	return
-}
+	If !DotTipDisplayed && !FastSearching && GoogleTipDisplayed<2
+	{
+		Tip := new Tip()
+		Tip.message:="Tip: You can type 'g ' at the beginning to search directly in Google.com"
+		Tip.width:=RSWebGuiWidth-9
+		WinGetPos,, pos,,A
+		Tip.ypos:=pos-40
+		Tip.Show()
+		GoogleTipDisplayed++
+		IniWrite, %GoogleTipDisplayed%, settings.ini, settings, GoogleTipDisplayed
+		DotTipDisplayed:=true
+	}
 return
 $SC00E::
 	Gui, WebL:Submit, NoHide
@@ -325,7 +324,7 @@ return
 return
 #If
 
-#If WinExist("ahk_class AutoHotkeyGUI") && !WinActive("ahk_id" . ChangeHotkeys) ; fixes gui freeze when pressing Alt
+#If WinExist("ahk_class AutoHotkeyGUI") && !WinActive("ahk_id" . ChangeHotkeys) && !WinActive("ahk_id" . Auth) ; fixes gui freeze when pressing Alt
 ~LAlt Up::
 return
 #If

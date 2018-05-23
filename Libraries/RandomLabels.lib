@@ -294,6 +294,7 @@ defaultsettings:
 	Green := "00C000"
 	Blue  := "0000FF"
 	Pink  := "FF20FF"
+	doublequote=`"
 	darkerc=D0D0D0
 	lightc=F6F6F6
 	ItsLocked=0

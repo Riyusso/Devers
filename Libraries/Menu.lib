@@ -1068,7 +1068,7 @@ DefaultMenu:
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut8 +Center",  Quit
 
-		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut9 ", ×
+		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut9", ×
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
@@ -1079,7 +1079,7 @@ DefaultMenu:
 		ImageButton.Create(But8, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But9, Opt1, Opt2, "", Opt4)
 		WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r50-50", ahk_id %DefaultHWND%
-		Gui, Show, h%guih% w%guiw% y%guipos%, Menu
+		Gui, Show, h%guih% w%guiw% y%guipos% NoActivate, Menu
 		FadeIn(DefaultHWND)
 
 		IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
@@ -1306,6 +1306,9 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 Authorization:
+	If WinActive("ahk_id" . Auth)
+		return
+
 	Gui, Auth:New, +hwndAuth
 	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
@@ -1331,7 +1334,10 @@ Authorization:
 	scaledh:=70
 	SHAutoComplete(Edit265)
 	WinSet, Region, % "0-0 w" scaledw*dpi " h" scaledh*dpi " r12-12", ahk_id %Auth%
-	Gui, Show, w%scaledw% h%scaledh%, Authorization
+	; NoActivate fixes weird bug with not being able to switch language
+	Gui, Show, w%scaledw% h%scaledh% NoActivate, Authorization
+	WinActivate	
+	; -----------------
 	FadeIn(Auth)
 	SetTimer, CheckIfAuthInactive, 200
 return
@@ -1351,7 +1357,7 @@ Authorize:
 		}
 		SetTimer, AuthExpirationCheck, 2000
 		If PasswordExpiration=1
-			RSNotify(" Secure ")
+			RSNotify("Secure")
 		else if PasswordExpiration=2
 		{
 			SetTimer, AuthExpirationCheck, Off
@@ -1440,6 +1446,12 @@ UpdatePrompt:
 GoSub GetLatestVersion
 IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 IniRead, InstalledVersion, build.ini, build, Version, 1.0
+
+If StillDownloading
+{
+	RSNotify("Still Downloading")
+	return
+}
 
 If % VersionCompare(UpdateVersion, InstalledVersion)=1
 {
