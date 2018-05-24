@@ -55,7 +55,7 @@
 			guih:=47
 			Gui, Color,172326, 172326
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
-			Gui, Add, Text, x16 y11 h45 w95 vSearchLabel +Hidden, Google:
+			Gui, Add, Text, x16 y11 h45 w150 vSearchLabel +Hidden, Google:
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
 			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
@@ -125,7 +125,10 @@
 		}
 
 		If RSWebWithSearchFocused || SearchBased
-			Gui, Show, h%guih% w%guiw%, %ScriptName% Speed Dial
+		{
+			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
+			WinActivate
+		}
 		else
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 		ShAutoComplete(WebSearch)
@@ -146,12 +149,17 @@ WebLGuiEscape:
 return
 
 WebLGuiContextMenu:
+	if !A_GuiControl || (A_GuiControl="SearchLabel")
+		return
+
 	width=300
-	height=110
 	Loop, 8
 	{
 		If A_GuiControl=webname%A_Index%
+		{
 			wnumb=%A_Index%
+			break
+		}
 	}
 
  	Gui, WebEdit:New, +hwndWebEdit
@@ -168,18 +176,23 @@ WebLGuiContextMenu:
 	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Edit, % "x29 y+12 w242 h16 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
-	Gui, Add, Edit, % "x29 y+6 w242 h16 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
+	Gui, Add, Edit, % "x29 y+12 w242 h18 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
+	Gui, Add, Edit, % "x29 y+6 w242 h18 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
 
-	Gui, Add, Button, x50 y+6 w95 +default h27 gEditWebsites hwndBut1 +Center, Save
+	Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, x+10 w95 h27 gExitWebsites hwndBut2 +Center, Cancel
+	Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+
+	Gui, Add, Text, % "y+5 w" (width-14) " h2 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
 	ShAutoComplete(Edit264)
 	ShAutoComplete(Edit265)
-	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r12-12", ahk_id %WebEdit%
-	Gui, Show, % "w" width " h" height " y" A_ScreenHeight/2+204*amultiplier/2+20 , Web Edit
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
+	Gui, Show, % "w" width " y" A_ScreenHeight/2+204*amultiplier/2+20, Web Edit
+	GuiControl, Focus, SaveBtn
 	FadeIn(WebEdit)
 return
 

@@ -273,7 +273,7 @@ return
 			searchLabelText= % %A_LoopField%Label
 			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
 			GuiControl, WebL:, webSearchVar, %webSearchVar%
-			GuiControl, WebL:Move, webSearchVar, % "x90 w" guiw-155
+			GuiControl, WebL:Move, webSearchVar, % "x" StrLen(searchLabelText)*12 " w" guiw-(StrLen(searchLabelText)*12)-65
 			GuiControl, WebL:, SearchLabel, %searchLabelText%
 			GuiControl, WebL:Show, SearchLabel
 			FastSearching:=true
@@ -324,7 +324,7 @@ return
 return
 #If
 
-#If WinExist("ahk_class AutoHotkeyGUI") && !WinActive("ahk_id" . ChangeHotkeys) && !WinActive("ahk_id" . Auth) ; fixes gui freeze when pressing Alt
+#If WinExist("ahk_class AutoHotkeyGUI") && !WinActive("ahk_id" . ChangeHotkeys) && !WinActive("ahk_id" . Auth) && !WinActive("ahk_id" . WebL) ; fixes gui freeze when pressing Alt
 ~LAlt Up::
 return
 #If
