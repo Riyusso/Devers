@@ -2,7 +2,6 @@
 	If (ItsLocked=1) 
 		return
 
-	ChoosingWebsite:=true
 	Loop, 8
 	{
 		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
@@ -11,6 +10,8 @@
 	webSearchVar=
 	FastSearching:=false
 	WebLT := WebLT ? false : true
+
+	ChoosingWebsite:= (SearchBased) ? false : true
 
 	If WebLT=0
 	{
@@ -52,12 +53,12 @@
 		If SearchBased
 		{
 			guiw:=520*amultiplier
-			guih:=47
+			guih:=46
 			Gui, Color,172326, 172326
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
 			Gui, Add, Text, x16 y11 h45 w150 vSearchLabel +Hidden, Google:
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
-			Gui, Add, Edit, % "x16 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
+			Gui, Add, Edit, % "x15 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
 			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]
@@ -128,18 +129,25 @@
 		{
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 			WinActivate
+			SetTimer, CheckFastSearchInactive, 20
 		}
 		else
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 		ShAutoComplete(WebSearch)
 		If !SearchBased
 			FadeIn(WebL)
-		ChoosingWebsite:=true
+		HideFocusBorder(WebL)
 	}
+return
+
+CheckFastSearchInactive:
+	If !WinActive("ahk_id" . WebL)
+		GoSub WebLClose
 return
 
 WebLClose:
 WebLGuiEscape:
+	SetTimer, CheckFastSearchInactive, Off
  	WebLT := false
 	Gui, Tip:Destroy
 	FadeOut(WebL)
@@ -231,11 +239,14 @@ StartSearch:
 		return
 	}
 	GoSub WebLClose
-	if !FastSearching || !url
-		url:="https://www.google.bg/search?q={query}"
-	webSearchVar:=StrReplace(url, "{query}", webSearchVar)
-	Run, %webSearchVar%,, UseErrorLevel
-	GoSub GetBrowserNameAndActivate
-	webSearchVar=
-	url=
+	if webSearchVar
+	{
+		if !FastSearching || !url
+			url:="https://www.google.bg/search?q={query}"
+		webSearchVar:=StrReplace(url, "{query}", webSearchVar)
+		Run, %webSearchVar%,, UseErrorLevel
+		GoSub GetBrowserNameAndActivate
+		webSearchVar=
+		url=
+	}
 return

@@ -1443,15 +1443,14 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 UpdatePrompt:
-GoSub GetLatestVersion
-IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-IniRead, InstalledVersion, build.ini, build, Version, 1.0
-
 If StillDownloading
 {
 	RSNotify("Still Downloading")
 	return
 }
+GoSub GetLatestVersion
+IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
 If % VersionCompare(UpdateVersion, InstalledVersion)=1
 {

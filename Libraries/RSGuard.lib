@@ -479,7 +479,7 @@ RevTrans:
 return
 
 CheckAuth:
-	IfWinActive, ahk_id %ZPHWND%
+	If WinActive("ahk_id" . ZPHWND)
 		GoSub AuthExpire
 return
 
