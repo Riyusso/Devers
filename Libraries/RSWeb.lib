@@ -58,7 +58,7 @@
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
 			Gui, Add, Text, x16 y11 h45 w150 vSearchLabel +Hidden, Google:
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
-			Gui, Add, Edit, % "x15 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
+			Gui, Add, Edit, % "x14 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
 			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]

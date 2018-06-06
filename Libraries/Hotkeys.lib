@@ -252,7 +252,7 @@ return
 	Gui, WebL:Submit, NoHide
 	If !webSearchVar
 	{
-		GuiControl, WebL:Move, webSearchVar, % "x15 w" guiw-85
+		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
 		GuiControl, WebL:Hide, SearchLabel
 		FastSearching:=false
 	}
@@ -269,11 +269,12 @@ return
 	{
 		if SubStr(webSearchVar, 1, StrLen(A_LoopField)+1)=A_LoopField . " "
 		{
-			url= % %A_LoopField%url
-			searchLabelText= % %A_LoopField%Label
+			url = % %A_LoopField%url
+			searchLabelText = % %A_LoopField%Label
+			searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
 			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
 			GuiControl, WebL:, webSearchVar, %webSearchVar%
-			GuiControl, WebL:Move, webSearchVar, % "x" StrLen(searchLabelText)*12+3 " w" guiw-(StrLen(searchLabelText)*12)-65
+			GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
 			GuiControl, WebL:, SearchLabel, %searchLabelText%
 			GuiControl, WebL:Show, SearchLabel
 			FastSearching:=true
@@ -302,7 +303,7 @@ $SC00E::
 	Gui, WebL:Submit, NoHide
 	if (webSearchVarSave)=(webSearchVar)
 	{
-		GuiControl, WebL:Move, webSearchVar, % "x16 w" guiw-85
+		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
 		GuiControl, WebL:Hide, SearchLabel
 		FastSearching:=false
 	}

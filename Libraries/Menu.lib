@@ -1082,12 +1082,12 @@ DefaultMenu:
 		Gui, Show, h%guih% w%guiw% y%guipos% NoActivate, Menu
 		FadeIn(DefaultHWND)
 
+		if lastUpdateCheck>=3600000
+			GoSub GetLatestVersion
+
 		IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 		IniRead, InstalledVersion, build.ini, build, Version, 1.0
 		IniRead, PromptVersion, build.ini, build, PromptVersion
-
-		if lastUpdateCheck>=3600000
-			GoSub GetLatestVersion
 
 		If % VersionCompare(UpdateVersion, InstalledVersion)=1
 		{		

@@ -53,11 +53,17 @@ IniReads:
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
-	defaultKeywords=y|g
-	IniRead, yLabel, settings.ini, Search, % A_LoopField . "Label", % "YouTube:"
-	IniRead, yurl, settings.ini, Search, % A_LoopField . "url", % "https://www.youtube.com/results?search_query={query}"
-	IniRead, gLabel, settings.ini, Search, % A_LoopField . "Label", % "Google:"
-	IniRead, gurl, settings.ini, Search, % A_LoopField . "url", % "https://www.google.bg/search?q={query}"
+	defaultKeywords=y|g|tr|maps
+	IniRead, yLabel, settings.ini, Search, yLabel, % "YouTube:"
+	IniRead, yurl, settings.ini, Search, yurl, % "https://www.youtube.com/results?search_query={query}"
+	IniRead, gLabel, settings.ini, Search, gLabel, % "Google:"
+	IniRead, gurl, settings.ini, Search, gurl, % "https://www.google.bg/search?q={query}"
+	IniRead, trLabel, settings.ini, Search, trLabel, % "Translate:"
+	IniRead, trurl, settings.ini, Search, trurl, % "https://translate.google.com/#auto/bg/{query}"
+	IniRead, mapsLabel, settings.ini, Search, mapsLabel, % "Maps:"
+	IniRead, mapsurl, settings.ini, Search, mapsurl, % "http://maps.google.com/?q={query}"
+
+	
 
 	IniRead, urlkeywords, settings.ini, Search, urlkeywords
 	Loop, Parse, urlkeywords, |
