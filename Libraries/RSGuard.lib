@@ -1,9 +1,10 @@
 ﻿RSGuard:
-	if authExpireWithLock
+	if forcedLockAuthExpire
 	{
 		GoSub AuthExpire
-		authExpireWithLock:=false
+		forcedLockAuthExpire:=false
 	}
+
 	If !LockPw
 	{
 		IniDelete, settings.ini, settings, LockPwHash
@@ -87,136 +88,141 @@
 	pwcover=
 	pwadd=•
 
-	If !ItsLocked
-	{
-		ItsLocked=1
-		SetTimer, CheckAuth, -90000
-		Gui, ProtectionAgainstZombies:New    ; ZPScreen
-		Gui, +hwndZPHWND -DPIScale
-		Gui, Font, w670 s31 q4, Segoe UI
-		Gui, Color, 000000
-		Gui, -Border -Caption +AlwaysOnTop +ToolWindow
-		HideFocusBorder(ZPHWND)
-		BlockKeyBoardInputs("On")
-		Formula=0
-		VolumeTR:=true
-		Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
-		Gui, Add, Text, c000000 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
-		Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
-		Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
-		If ClockWanted=1
-			SetTimer, fadeinclock, -5000
+	If ItsLocked
+		return
 
-		Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
-		Gui, Color, 000000
-		Gui, Add, Text, vLTxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
+	ItsLocked=1
+	Gui, ProtectionAgainstZombies:New    ; ZPScreen
+	Gui, +hwndZPHWND -DPIScale
+	Gui, Font, w670 s31 q4, Segoe UI
+	Gui, Color, 000000
+	Gui, -Border -Caption +AlwaysOnTop +ToolWindow
+	HideFocusBorder(ZPHWND)
+	BlockKeyBoardInputs("On")
+	Formula=0
+	VolumeTR:=true
+	Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
+	Gui, Add, Text, c000000 x%timpos% w300 h45 +Center y31 hwndTimeUPD vTimeStr +Hidden, %TimeString%
+	Gui, Font, % "w630 s" 14/dpi  " q4", Segoe UI
+	Gui, Add, Text, c000000 x%timpos% w300 +Center y76 hwndDateUPD vDateStr +Hidden, %DateString%
+	If ClockWanted=1
+		SetTimer, fadeinclock, -5000
 
-		Gui, Font, w1000 s%zfont% q4, Segoe UI ; Try Again. with different font
-		If AuthReq
+	Gui, Font, w900 s%zfont%, Courier New ; pwcover with nice font
+	Gui, Color, 000000
+	Gui, Add, Text, vLTxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
+
+	Gui, Font, w1000 s%zfont% q4, Segoe UI ; Try Again. with different font
+	If AuthReq
 		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center, Please authorize yourself first.
-		else
+	else
 		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
 
-		Opt1 := [6, 0x007b80, 0x007b80, "Black"]
-		Opt2 := [ , 0x008489, 0x008489, 0x111111]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Opt1 := [6, 0x007b80, 0x007b80, "Black"]
+	Opt2 := [ , 0x008489, 0x008489, 0x111111]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Hidden:=(!DontShowRS) ? "+Hidden" : "" ; important
+	Hidden:=(!DontShowRS) ? "+Hidden" : "" ; important
 
-		Gui, Add, Button, hwndSCHYT1 vSCH1 gplus7 x%halfcw% y%halfch% w%halfw% h%halfh% %Hidden%, 7
+	Gui, Add, Button, hwndSCHYT1 vSCH1 gplus7 x%halfcw% y%halfch% w%halfw% h%halfh% %Hidden%, 7
 
-		Gui, Add, Button, hwndSCHYT2 vSCH2 gplus8 x%czpw% y%ch1% w%calculatedsize% h%calculatedsize% %Hidden%, 8
+	Gui, Add, Button, hwndSCHYT2 vSCH2 gplus8 x%czpw% y%ch1% w%calculatedsize% h%calculatedsize% %Hidden%, 8
 
-		Gui, Add, Button, hwndSCHYT3 vSCH3 gplus9 x%cw2% y%halfch% w%halfw% h%halfh% %Hidden%, 9
+	Gui, Add, Button, hwndSCHYT3 vSCH3 gplus9 x%cw2% y%halfch% w%halfw% h%halfh% %Hidden%, 9
 
-		Gui, Add, Button, hwndSCHYT4 vSCH4 gplus4 x%cw1% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 4
+	Gui, Add, Button, hwndSCHYT4 vSCH4 gplus4 x%cw1% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 4
 
-		Gui, Add, Button, hwndSCHYT5 vSCH5 gplus5 x%czpw% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 5
+	Gui, Add, Button, hwndSCHYT5 vSCH5 gplus5 x%czpw% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 5
 
-		Gui, Add, Button, hwndSCHYT6 vSCH6 gplus6 x%cw2% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 6
+	Gui, Add, Button, hwndSCHYT6 vSCH6 gplus6 x%cw2% y%czph% w%calculatedsize% h%calculatedsize% %Hidden%, 6
 
-		Gui, Add, Button, hwndSCHYT7 vSCH7 gplus1 x%halfcw% y%halfch2% w%halfw% h%halfh% %Hidden%, 1
+	Gui, Add, Button, hwndSCHYT7 vSCH7 gplus1 x%halfcw% y%halfch2% w%halfw% h%halfh% %Hidden%, 1
 
-		Gui, Add, Button, hwndSCHYT8 vSCH8 gplus2 x%czpw% y%ch2% w%calculatedsize% h%calculatedsize% %Hidden%, 2
+	Gui, Add, Button, hwndSCHYT8 vSCH8 gplus2 x%czpw% y%ch2% w%calculatedsize% h%calculatedsize% %Hidden%, 2
 
-		Gui, Add, Button, hwndSCHYT9 vSCH9 gplus3 x%cw2% y%halfch2% w%halfw% h%halfh% %Hidden%, 3
+	Gui, Add, Button, hwndSCHYT9 vSCH9 gplus3 x%cw2% y%halfch2% w%halfw% h%halfh% %Hidden%, 3
 
-		ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
-		ImageButton.Create(SCHYT9, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT4, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT5, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT6, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT7, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SCHYT9, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% %Hidden%, 0
-		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% %Hidden%, 0
+	Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
+	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
 
-		If AuthReq
-			Gui, Add, Button, hwndSCHYT11 vSCH11 gCancelPasswordChange x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, Cancel
-		else
-			Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
-		Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
-		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		ImageButton.Create(SCHYT11, Opt1, Opt2, "", Opt4)
+	If AuthReq
+		Gui, Add, Button, hwndSCHYT11 vSCH11 gCancelPasswordChange x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, Cancel
+	else
+		Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
+	Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
+	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(SCHYT11, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, hwndSCHYT12 vSCH12 gTryPw x%cw2% y%rh1% w%halfw% h%rch1% %Hidden%, ›
-		Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-		Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
-		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-		ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
+	Gui, Add, Button, hwndSCHYT12 vSCH12 gTryPw x%cw2% y%rh1% w%halfw% h%rch1% %Hidden%, ›
+	Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
+	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
 
-		actx:=(A_ScreenWidth/2)-280*amultiplier
-		acty:=(A_ScreenHeight/2)-625*amultiplier
-		awsize:=520*amultiplier
-		ahsize:=780*amultiplier
+	actx:=(A_ScreenWidth/2)-280*amultiplier
+	acty:=(A_ScreenHeight/2)-625*amultiplier
+	awsize:=520*amultiplier
+	ahsize:=780*amultiplier
 
-		RegRead, IE_VER, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Internet Explorer\Version Vector, IE
-		html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
-		convertie:="about:<!DOCTYPE html><meta http-equiv=""X-UA-Compatible"" content=""IE=" Floor(IE_VER) """ >"
+	RegRead, IE_VER, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Internet Explorer\Version Vector, IE
+	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
+	convertie:="about:<!DOCTYPE html><meta http-equiv=""X-UA-Compatible"" content=""IE=" Floor(IE_VER) """ >"
 
-		If !DontShowRS
-		{
-			Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB, %convertie%
-			document := WB.Document
-			document.open()
-			document.write(html)
-		}
-		else if AnimationWanted=1
-		{
-			Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB +Hidden, %convertie%
-			document := WB.Document
-			document.open()
-			document.write(html)
-			SetTimer, ShowAgain, -7000
-			DontShowRS:=false
-		}
-		else
-		{
-			Disablekeys:=false
-		}
-
-		WinSet, Transparent, 0, ahk_id %ZPHWND%
-		sleep 40	; add the ilusion it loads a bit slower
-		Gui, Show, x0 y0 h%zph% w%zpw%
-		GoSub TransProtection
-		SetTimer, FadeClock, -3000
-		SetTimer, KeepOnTop, 270
-		OnMessage(0x200, "WM_RMVPIC")
-		SetTimer, SecondDisplayProtection, 200
-		If ClockWanted=1
-		{
-			GoSub MinuteUpdate
-			SetTimer, MinuteUpdate, 15000
-		}
-		IniWrite, 1, settings.ini, settings, LockAfterRestart
+	If !DontShowRS
+	{
+		Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB, %convertie%
+		document := WB.Document
+		document.open()
+		document.write(html)
 	}
+	else if AnimationWanted=1
+	{
+		Gui, Add, ActiveX, x%actx% y%acty% w%awsize% h%A_ScreenHeight% vWB hwndRSWB +Hidden, %convertie%
+		document := WB.Document
+		document.open()
+		document.write(html)
+		SetTimer, ShowAgain, -7000
+		DontShowRS:=false
+	}
+	else
+	{
+		Disablekeys:=false
+	}
+
+	WinSet, Transparent, 0, ahk_id %ZPHWND%
+	sleep 40	; add the ilusion it loads a bit slower
+	Gui, Show, x0 y0 h%zph% w%zpw%
+	GoSub TransProtection
+	SetTimer, FadeClock, -3000
+	SetTimer, KeepOnTop, 270
+	OnMessage(0x200, "WM_RMVPIC")
+	SetTimer, SecondDisplayProtection, 200
+
+	If ClockWanted=1
+	{
+		GoSub MinuteUpdate
+		SetTimer, MinuteUpdate, 15000
+	}
+	If PasswordExpiration!=2
+	{
+		SetTimer, CheckAuth, -90000
+	}
+	
+	IniWrite, 1, settings.ini, settings, LockAfterRestart
 return
 
 fadeinclock:
@@ -486,7 +492,7 @@ return
 LockNow:
 	If ItsLocked=0
 	{
-		authExpireWithLock:=true
+		forcedLockAuthExpire:=true
 		LogTime(2)
 		Gosub RSGuard
 	}

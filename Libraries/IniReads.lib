@@ -63,7 +63,6 @@ IniReads:
 	IniRead, mapsLabel, settings.ini, Search, mapsLabel, % "Maps:"
 	IniRead, mapsurl, settings.ini, Search, mapsurl, % "http://maps.google.com/?q={query}"
 
-	
 
 	IniRead, urlkeywords, settings.ini, Search, urlkeywords
 	Loop, Parse, urlkeywords, |

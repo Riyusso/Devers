@@ -897,9 +897,9 @@ Else
 	Menu, TRAY, Icon, OptionsIcon.ico
 }
 If A_IsCompiled
-Menu, Tray, Tip, %ScriptName%
+	Menu, Tray, Tip, %ScriptName%. Make everyday tasks effortless.
 Else
-Menu, Tray, Tip, %ScriptName% Uncompiled
+	Menu, Tray, Tip, Uncompiled
 Menu, Tray, NoStandard
 Menu, Tray, ADD, Menu, DefaultMenu
 Menu, Tray, ADD, Reload, mnuScriptReload
