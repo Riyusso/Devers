@@ -88,11 +88,12 @@ button:
 	RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\%ScrptName%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
 	If StartWithWindows=2
 	{
 		If A_IsCompiled=1
 		{
+			MsgBox, %LinkFile% %StartMenuFile%
 			IfNotExist, %LinkFile%
 				FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 			IfNotExist, %StartMenuFile%
@@ -936,7 +937,8 @@ mnuUninstall:
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
-	StartMenuFile=%A_StartMenu%\Programs\%ScrptName%.lnk
+	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
+	MsgBox, %StartMenuFile%
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
 	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
