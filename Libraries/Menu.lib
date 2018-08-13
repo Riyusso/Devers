@@ -1469,7 +1469,7 @@ If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Update to v%UpdateVersion%?
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96 gGuiMove, Update to v%UpdateVersion%?
 
 	Gui, Add, Button, x8 y30 w65 +default gUpdate hwndButUp1 +Center, Yeah
 	Gui, Add, Button, x+5 y30 w65 gNoUpdate hwndButUp2 +Center, Nope

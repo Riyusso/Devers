@@ -202,10 +202,10 @@ return
 
 #If (VolumeTR=1)
 WheelUp::
-GoSub vol_up
+	GoSub vol_up
 return
 WheelDown::
-GoSub vol_down
+	GoSub vol_down
 return
 #If
 
@@ -248,15 +248,6 @@ return
 #If
 
 #If WinActive("ahk_id" . WebL) && (SearchBased)
-~*SC00E::
-	Gui, WebL:Submit, NoHide
-	If !webSearchVar
-	{
-		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
-		GuiControl, WebL:Hide, SearchLabel
-		FastSearching:=false
-	}
-return
 Tab::
 return
 ~Space::
@@ -296,6 +287,15 @@ return
 		DotTipDisplayed:=true
 	}
 return
+~*SC00E::
+	Gui, WebL:Submit, NoHide
+	If !webSearchVar
+	{
+		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
+		GuiControl, WebL:Hide, SearchLabel
+		FastSearching:=false
+	}
+return
 $SC00E::
 	Gui, WebL:Submit, NoHide
 	webSearchVarSave:=webSearchVar
@@ -307,6 +307,11 @@ $SC00E::
 		GuiControl, WebL:Hide, SearchLabel
 		FastSearching:=false
 	}
+return
+*Up::
+	webSearchVar:=previousSearch
+	GuiControl, WebL:, webSearchVar, %webSearchVar%
+	Send {End}
 return
 #If
 
