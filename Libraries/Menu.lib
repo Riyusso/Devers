@@ -16,7 +16,7 @@
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, % "x0 y7 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 
-		Gui, Color, 008383, 252525
+		Gui, Color, %guicolor%, 252525
 		Gui, Font, s9
 		Gui, Font, normal
 
@@ -38,8 +38,8 @@
 	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTip2 hwndSettingsTip2 -TabStop +Center", ?
 
 	Gui, Font, s10 w600
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+29 w" (width*0.80) " h36 gOtherSettingsLabel hwndBut1 +Center", Other Settings
@@ -64,7 +64,7 @@
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
-	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SettingsTip1, Opt1, Opt2, "", Opt4)
@@ -387,7 +387,7 @@ ProtectionSettings:
 	Gui, Font, s9 cFFFFFF Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Protection Settings
-		Gui, Color, 008383, 333333
+		Gui, Color, %guicolor%, 333333
 		Gui, Font, s8, Tahoma
 		Gui, Font, normal
 	Gui, Add, Text, % "x0 y+25 w" (width/2) " Center", Computer ›
@@ -426,8 +426,8 @@ ProtectionSettings:
 	Gui, Add, Hotkey, % "x+" (width/4)-50 " w87 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+16 w" (width*0.64) " h33 gPrInfo hwndBut1 +Center", Info
@@ -448,7 +448,7 @@ ProtectionSettings:
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-	Opt1 := [6, 0x008383, 0x008383, "White"]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(ProtectionTip1, Opt1, Opt2, "", Opt4)
@@ -559,7 +559,7 @@ ScriptFunctions:
 	Gui, Functions:New, +hwndSFunctions
 	Gui, +LastFound
 	WinSet, Transparent, 0
-	Gui, Color, 008383
+	Gui, Color, %guicolor%
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cD0D0D0 Bold
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h67 Background1F2326 Disabled hwndHPROG"
@@ -678,8 +678,8 @@ ScriptFunctions:
 	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + S
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x008383, 0x008383, 0xEEEEEE]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, 0xEEEEEE]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+19 w" (width*0.64) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
@@ -1287,10 +1287,10 @@ AdminPrompt:
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, 008383
+	Gui, Color, %guicolor%
 	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Are you an admin?
@@ -1463,10 +1463,10 @@ If % VersionCompare(UpdateVersion, InstalledVersion)=1
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, 008383
+	Gui, Color, %guicolor%
 	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96 gGuiMove, Update to v%UpdateVersion%?
@@ -1494,10 +1494,10 @@ UninstallPrompt:
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, 008383
+	Gui, Color, %guicolor%
 	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Select your choice

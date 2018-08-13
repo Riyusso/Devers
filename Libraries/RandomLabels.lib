@@ -290,6 +290,8 @@ defaultsettings:
 	idletimer=1000
 	LB_SETCURSEL := 0x186
 	CB_SETCURSEL := 0x14E
+	guicolor := "07868f"
+	btnhovercolor := "01a1ab"
 	Red   := "FF0000"
 	Green := "00C000"
 	Blue  := "0000FF"

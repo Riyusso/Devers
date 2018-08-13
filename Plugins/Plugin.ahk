@@ -31,10 +31,10 @@ ChooseHotkey:
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, 008383
+	Gui, Color, %guicolor%
 	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, 0x008383, 0x008383, "White"]
-	Opt2 := [ , 0x008383, 0x00a3a3, 0xffffff]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Choose your desired hotkey!
