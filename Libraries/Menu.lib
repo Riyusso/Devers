@@ -93,11 +93,8 @@ button:
 	{
 		If A_IsCompiled=1
 		{
-			MsgBox, %LinkFile% %StartMenuFile%
-			IfNotExist, %LinkFile%
-				FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
-			IfNotExist, %StartMenuFile%
-				FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
 			If FirstRun
 				IniWrite, 1, settings.ini, settings, CreateATask
 			else
