@@ -59,10 +59,10 @@
 	}
 	czpw:=(A_ScreenWidth/2)-calculatedsize/2
 	czph:=(A_ScreenHeight/2)-calculatedsize/2
-	ch1:=czph-calculatedsize-1
-	ch2:=czph+calculatedsize+1
-	cw1:=czpw-calculatedsize-1
-	cw2:=czpw+calculatedsize+1
+	ch1:=czph-(calculatedsize+1)
+	ch2:=czph+(calculatedsize+1)
+	cw1:=czpw-(calculatedsize+1)
+	cw2:=czpw+(calculatedsize+1)
 	halfw:=calculatedsize*0.94
 	halfh:=calculatedsize*0.88
 	halfch:=czph-halfh
@@ -95,10 +95,10 @@
 	Gui, ProtectionAgainstZombies:New    ; ZPScreen
 	Gui, +hwndZPHWND -DPIScale
 	Gui, Font, w670 s31 q4, Segoe UI
-	Gui, Color, 000000
+
 	Gui, -Border -Caption +AlwaysOnTop +ToolWindow
 	HideFocusBorder(ZPHWND)
-	BlockKeyBoardInputs("On")
+
 	Formula=0
 	VolumeTR:=true
 	Gui, Font, % "w670 s" 31/dpi " q4", Segoe UI
@@ -118,8 +118,11 @@
 	else
 		Gui, Add, Text, vTATxt x0 y%tpos% w%zpw% c009595 +Center +Hidden
 
-	Opt1 := [6, 0x007b80, 0x007b80, "Black"]
-	Opt2 := [ , 0x008489, 0x008489, 0x111111]
+	btncolor=19616e
+	btncolor_hover=1c6d7c
+
+	Opt1 := [6, "0x" . btncolor , "0x" . btncolor , "Black"]
+	Opt2 := [ , "0x" . btncolor_hover, "0x" . btncolor_hover, 0x111111]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 	Hidden:=(!DontShowRS) ? "+Hidden" : "" ; important
@@ -154,7 +157,7 @@
 
 	Gui, Add, Button, hwndSCHYT10 vSCH10 gplus0 x%zeropos% y%rh1% w%halfw% h%rch1% %Hidden%, 0
 	Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt2 := [ , 0x19616e, 0x19616e, 0xD7D7D7]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SCHYT10, Opt1, Opt2, "", Opt4)
 
@@ -163,13 +166,13 @@
 	else
 		Gui, Add, Button, hwndSCHYT11 vSCH11 gFormulaNull x%nullpos% y%nypos% w%calculatedsize% h%rch1% %Hidden%, ×
 	Opt1 := [6, 0x13444A, 0x13444A, "Silver"]
-	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt2 := [ , 0x19616e, 0x19616e, 0xD7D7D7]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SCHYT11, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Button, hwndSCHYT12 vSCH12 gTryPw x%cw2% y%rh1% w%halfw% h%rch1% %Hidden%, ›
 	Opt1 := [6, 0x13444A, 0x13444A, "Gray"]
-	Opt2 := [ , 0x1B5F67, 0x1B5F67, 0xD7D7D7]
+	Opt2 := [ , 0x19616e, 0x19616e, 0xD7D7D7]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SCHYT12, Opt1, Opt2, "", Opt4)
 

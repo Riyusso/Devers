@@ -2,8 +2,6 @@
 #NoTrayIcon
 SetWorkingDir %A_ScriptDir%
 
-; Important note : folder(Compile) cannot be renamed to (Compiler) or the default compiler installed with autohotkey will be used
-
 IfExist, Base.exe
 	FileDelete, Base.exe
 IfExist, Devers-install.exe

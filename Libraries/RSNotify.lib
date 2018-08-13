@@ -15,7 +15,6 @@ RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 	Gui, Font, s13 w720, Verdana
 	Gui, -Border -Caption +AlwaysOnTop +ToolWindow +E0x20
 
-
 	Gui, Add, Text,cffffff hwndTHWND y9 +Hidden +Center, %Text% 	; Fake text to get the width so the x can be calculated beforehand
 	GuiControlGet, TC, Pos, %THWND% 	; Get the pos/size of the text into the TC variable, you can use the width of the text control with the variable 'TCW'
 	if(controlwidth!=0)
