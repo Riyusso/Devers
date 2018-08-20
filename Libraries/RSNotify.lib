@@ -1,5 +1,6 @@
 RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 {
+	global notifyDpi:=DpiFactor()
 	global SmartFade=0
     SetTimer, SmartAppear, Off
     SetTimer, SmartFade, Off
@@ -25,13 +26,13 @@ RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 	Gui, Add, Text,cffffff x%xcalc% y10 +Center, %Text%
 
 	If controlwidth=0
-		TCW:=(TCW+26)*dpi
+		TCW:=(TCW+26)*notifyDpi
 	Else
-		TCW:=controlwidth*dpi
+		TCW:=controlwidth*notifyDpi
 
-	vhc:=A_ScreenHeight-115*dpi
-	averagex:=A_ScreenWidth-108*dpi-(tcw*0.75)
-	whc:=whc*dpi
+	vhc:=A_ScreenHeight-115*notifyDpi
+	averagex:=A_ScreenWidth-108*notifyDpi-(tcw*0.75)
+	whc:=whc*notifyDpi
 
 	WinSet, Region, 0-0 h%whc% w%TCW% r3-3
 	Gui, Show, x%averagex% y%vhc% h%whc% w%TCW% NoActivate
