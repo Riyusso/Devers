@@ -1,5 +1,4 @@
 Initiation:
-
 	ws1=www.facebook.com
 	ws2=www.youtube.com
 	ws3=www.reddit.com
@@ -20,7 +19,10 @@ Initiation:
 		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
 
 	GoSub ButtonsLabel
-IniReads:
+	GoSub Config
+return
+
+Config:
 	IniRead, RunAsAdmin, settings.ini, settings, RunAsAdmin, 0
 	IniRead, LockAfterRestart, settings.ini, settings, LockAfterRestart, 0
 	IniRead, assignedKeyRSWeb, settings.ini, settings, keyRSWeb, F4

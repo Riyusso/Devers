@@ -29,8 +29,8 @@ return
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 
 RunScript: ; This is the beginning of the script
-GoSub VolTR
-GoSub IniReads
+GoSub Config
+GoSub VolumeTray
 IniRead, LockPwHash, settings.ini, settings, LockPwHash ; keep in a separate thread with passwordhash decryption
 if LockPwHash!=ERROR || LockPwHash ; keep in a separate thread with passwordhash decryption
 LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3) ; keep in a separate thread with passwordhash decryption
@@ -70,8 +70,8 @@ IfExist, settings.ini
 			FileCreateDir, Libraries
 		IfNotExist, %A_WorkingDir%/Libraries/Functions.lib
 			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
-		IfNotExist, %A_WorkingDir%/Libraries/Library.lib
-			FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
+		IfNotExist, %A_WorkingDir%/Libraries/Packages.lib
+			FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
 
 		Loop, Files, *.ahk
 		{
@@ -152,14 +152,14 @@ return
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 
 ;--------------------------------------------------------------------------------------------------------------
-#Include Libraries/Tip.lib
-#Include Libraries/Hotkeys.lib
-#Include Libraries/IniReads.lib
+#Include Libraries/Config.lib
 #Include Libraries/Functions.lib
-#Include Libraries/Library.lib
-#Include Libraries/RandomLabels.lib
-#Include Libraries/updater.lib
+#Include Libraries/Hotkeys.lib
+#Include Libraries/Labels.lib
+#Include Libraries/Menu.lib
+#Include Libraries/Packages.lib
 #Include Libraries/RSGuard.lib
 #Include Libraries/RSWeb.lib
-#Include Libraries/Menu.lib
-#Include Libraries/Voltr.lib
+#Include Libraries/Tip.lib
+#Include Libraries/Updates.lib
+#Include Libraries/VolumeTray.lib

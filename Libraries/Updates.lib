@@ -48,7 +48,7 @@ UpdateFiles:
 		IfNotExist, Libraries
 			FileCreateDir, Libraries
 
-		FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
+		FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
 		FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
 	}
 
