@@ -5,7 +5,6 @@ IniRead, UpdateVersion, install.ini, build, Version
 FileDelete, install.ini
 SendMode Input
 ScriptName=Devers
-global dpi:=DpiFactor()
 
 IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 {
@@ -64,35 +63,4 @@ UpdateIt:
 		Sleep 500
 return
 
-DPIFactor()
-{
-RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
-; the reg key was not found - it means default settings
-; 96 is the default font size setting
-if (errorlevel=1) OR (DPI_value=96 )
-	return 1
-else
-	Return  DPI_Value/96
-}
-
-; VersionCompare function by boiler at ahkscript.org
-; Returns 1 if version1 is more recent, 2 if version 2 is more recent, 0 if they are the same.
-VersionCompare(version1, version2)
-{
-	StringSplit, verA, version1, .
-	StringSplit, verB, version2, .
-	Loop, % (verA0> verB0 ? verA0 : verB0)
-	{
-		if (verA0 < A_Index)
-			verA%A_Index% := "0"
-		if (verB0 < A_Index)
-			verB%A_Index% := "0"
-		if (verA%A_Index% > verB%A_Index%)
-			return 1
-		if (verB%A_Index% > verA%A_Index%)
-			return 2
-	}
-	return 0
-}
-
-#Include Libraries\RSNotify.lib
+#Include Libraries\Functions.lib

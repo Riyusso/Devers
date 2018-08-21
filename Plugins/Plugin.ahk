@@ -3,10 +3,11 @@
 #SingleInstance FORCE
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-GoSub AssignHotkey
+Plugin.Properties()
+Plugin.AssignHotkey()
 return
 
-#Include Libraries\RSPlugin.lib
+#Include *i Libraries\RSPlugin.lib
 
 ; ----------- User functions here -------------
 

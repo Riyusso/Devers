@@ -1409,6 +1409,7 @@ NoAuthExpiration:
 SetTimer, AuthExpirationCheck, Off
 ExpirationPromptGuiEscape:
 KeepDefaultExpiration:
+PasswordExpiration=2
 IfWinExist, ahk_id %ExpirationPrompt%
 	FadeOut(ExpirationPrompt)
 return

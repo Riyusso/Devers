@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.8.6
+FileVersion=2.0.8.7
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -22,7 +22,6 @@ IfExist, settings.ini
 GoSub defaultsettings
 GoSub MenuInit
 GoSub RunScript
-#Include *i Libraries/developer.lib
 return
 
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
@@ -69,13 +68,12 @@ IfExist, settings.ini
 
 		IfNotExist, Libraries
 			FileCreateDir, Libraries
-		IfNotExist, %A_WorkingDir%/Libraries/RSNotify.lib
-			FileInstall, Libraries/RSNotify.lib, %A_MyDocuments%\%ScriptName%\Libraries\RSNotify.lib, 1
 		IfNotExist, %A_WorkingDir%/Libraries/Functions.lib
 			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
 		IfNotExist, %A_WorkingDir%/Libraries/Library.lib
 			FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
-			
+		IfNotExist, %A_WorkingDir%/Libraries/RSPlugin.lib
+			FileInstall, Libraries/RSPlugin.lib, %A_MyDocuments%\%ScriptName%\Libraries\RSPlugin.lib, 1
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
@@ -162,7 +160,6 @@ return
 #Include Libraries/Library.lib
 #Include Libraries/RandomLabels.lib
 #Include Libraries/updater.lib
-#Include Libraries/RSNotify.lib
 #Include Libraries/RSGuard.lib
 #Include Libraries/RSWeb.lib
 #Include Libraries/Menu.lib
