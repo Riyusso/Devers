@@ -469,7 +469,8 @@ class Plugin
 	static guicolor := "07868f"
 	static btnhovercolor := "01a1ab"
 
-	Properties() {
+	Properties() 
+	{
 		Menu, Tray, Icon, OptionsIcon.ico
 	}
 
@@ -522,13 +523,16 @@ class Plugin
 }
 CHSubmitButton:
     Gui, Submit, NoHide
-    If (Hotkey!="None" && Hotkey!="" && Hotkey!=UNASSIGNED) {
+    If (Hotkey!="None" && Hotkey!="" && Hotkey!=UNASSIGNED) 
+	{
         FadeOut(ChooseHotkeyGUI)
 		IniWrite, %Hotkey%, plugin-settings.ini, %PluginName%, key
         Plugin.AssignHotkey()
     }
     else
+	{
         RSNotify("Not possible")
+	}
 return
 ChooseHotkeyGUIGuiEscape:
 	FileDelete, %A_ScriptFullPath%
