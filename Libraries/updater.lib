@@ -50,7 +50,6 @@ UpdateFiles:
 
 		FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
 		FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
-		FileInstall, Libraries/RSPlugin.lib, %A_MyDocuments%\%ScriptName%\Libraries\RSPlugin.lib, 1
 	}
 
 	GoSub Migrations

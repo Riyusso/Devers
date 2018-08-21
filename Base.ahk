@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.8.7
+FileVersion=2.0.8.9
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -72,8 +72,7 @@ IfExist, settings.ini
 			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
 		IfNotExist, %A_WorkingDir%/Libraries/Library.lib
 			FileInstall, Libraries/Library.lib, %A_MyDocuments%\%ScriptName%\Libraries\Library.lib, 1
-		IfNotExist, %A_WorkingDir%/Libraries/RSPlugin.lib
-			FileInstall, Libraries/RSPlugin.lib, %A_MyDocuments%\%ScriptName%\Libraries\RSPlugin.lib, 1
+
 		Loop, Files, *.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName

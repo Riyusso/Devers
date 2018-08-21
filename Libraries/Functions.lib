@@ -1,9 +1,9 @@
 ﻿RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 {
 	global notifyDpi:=DpiFactor()
-	global SmartFade=0
-    SetTimer, SmartAppear, Off
-    SetTimer, SmartFade, Off
+	global SmartTransparancy=0
+    SetTimer, NotificationAppear, Off
+    SetTimer, NotificationFade, Off
 	Gui, RSNotify:Destroy
 	Gui,RSNotify:New, +hwndRSNotify
 	Gui, +LastFound +ToolWindow
@@ -36,25 +36,25 @@
 
 	WinSet, Region, 0-0 h%whc% w%TCW% r3-3
 	Gui, Show, x%averagex% y%vhc% h%whc% w%TCW% NoActivate
-	GoSub SmartAppear
-	SetTimer, SmartFade, -%Timed%
+	GoSub NotificationAppear
+	SetTimer, NotificationFade, -%Timed%
 	return
 }
-SmartAppear:
-	SmartFade:=SmartFade+8
-	WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
-	SetTimer, SmartAppear, -8
-	If (SmartFade>204)
-		SetTimer, SmartAppear, Off
+NotificationAppear:
+	SmartTransparancy:=SmartTransparancy+8
+	WinSet, Transparent, %SmartTransparancy%, ahk_id %RSNotify%
+	SetTimer, NotificationAppear, -8
+	If (SmartTransparancy>204)
+		SetTimer, NotificationAppear, Off
 return
-SmartFade:
-		SmartFade:=SmartFade-8
-		WinSet, Transparent, %SmartFade%, ahk_id %RSNotify%
-		SetTimer, SmartFade, -8
-		If (SmartFade<9)
+NotificationFade:
+		SmartTransparancy:=SmartTransparancy-8
+		WinSet, Transparent, %SmartTransparancy%, ahk_id %RSNotify%
+		SetTimer, NotificationFade, -8
+		If (SmartTransparancy<9)
 		{
 			Gui, RSNotify:Destroy
-			SetTimer, SmartFade, Off
+			SetTimer, NotificationFade, Off
 		}
 return
 
