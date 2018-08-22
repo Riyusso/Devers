@@ -256,7 +256,7 @@ return
 		
 	sleep 10
 	Gui, WebL:Submit, NoHide
-	Loop, Parse, urlkeywords, |
+	Loop, Parse, customQueries, |
 	{
 		if SubStr(webSearchVar, 1, StrLen(A_LoopField)+1)=A_LoopField . " "
 		{
