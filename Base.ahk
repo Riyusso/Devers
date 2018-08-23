@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.9.0
+FileVersion=2.0.9.1
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -144,6 +144,7 @@ InstallFiles:
 		FileInstall, Base/Tip_medium.png, %A_MyDocuments%\%ScriptName%\Tip_medium.png, 1
 	IfNotExist, Tip_large.png
 		FileInstall, Base/Tip_large.png, %A_MyDocuments%\%ScriptName%\Tip_large.png, 1
+
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
 
