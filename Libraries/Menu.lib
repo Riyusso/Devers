@@ -98,7 +98,7 @@ button:
 			If FirstRun
 				IniWrite, 1, settings.ini, settings, CreateATask
 			else
-				Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+				Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%.exe, , HIDE
 		}
 	}
 	If StartWithWindows=1

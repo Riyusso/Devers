@@ -50,7 +50,7 @@ IfExist, settings.ini
 	}
 	If CreateATask=1 && (A_IsCompiled)
 	{
-			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\launcher.exe, , HIDE
+			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%.exe, , HIDE
 			IniWrite, 0, settings.ini, settings, CreateATask
 	}
 	
@@ -126,8 +126,6 @@ Installation:
 return
 
 InstallFiles:
-	IfNotExist, launcher.exe
-		FileInstall, Base/launcher.exe, %A_MyDocuments%\%ScriptName%\launcher.exe, 1
 	IfNotExist, RS.png
 		FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
 	IfNotExist, RSAnimation.mp4
