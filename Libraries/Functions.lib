@@ -483,7 +483,7 @@ class Plugin
 		If withTrayIcon = 1
 			Menu, Tray, Icon
 
-		Menu, Tray, Icon, OptionsIcon.ico
+		Menu, Tray, Icon, Assets\OptionsIcon.ico
 	}
 
 	AssignHotkey() 

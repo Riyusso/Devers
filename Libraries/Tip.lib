@@ -73,7 +73,7 @@ BalloonTip(tiptext="this is a tip", hwnd="")
     	rowy:=sizeh/2-10*rows
 		tipsize=small
 	}
-	Gui, Add, Picture, % "x0 y0 w" sizew " h" sizeh " 0x200", Tip_%tipsize%.png
+	Gui, Add, Picture, % "x0 y0 w" sizew " h" sizeh " 0x200", Assets\Tip_%tipsize%.png
     Gui, Font, % "w1000 cFFFFFF s" 10/dpi, Segoe UI Semibold
 
     Loop, Parse, tiptext, |

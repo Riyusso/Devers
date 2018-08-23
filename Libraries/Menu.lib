@@ -883,16 +883,16 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MenuInit:
-IfExist OptionsIcon.ico
+IfExist Assets\OptionsIcon.ico
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, OptionsIcon.ico
+	Menu, TRAY, Icon, Assets\OptionsIcon.ico
 }
 Else
 {
-	FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
+	FileInstall, Base\OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\OptionsIcon.ico, 1
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, OptionsIcon.ico
+	Menu, TRAY, Icon, Assets\OptionsIcon.ico
 }
 If A_IsCompiled
 	Menu, Tray, Tip, %ScriptName%. Make everyday tasks effortless.
@@ -963,14 +963,14 @@ Loop, Files, *.ahk
 If A_IsSuspended
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, RSStopped.ico,,1
+	Menu, TRAY, Icon, Assets\RSStopped.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Suspended")
 }
 If !A_IsSuspended
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, OptionsIcon.ico,,1
+	Menu, TRAY, Icon, Assets\OptionsIcon.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Released")
 }

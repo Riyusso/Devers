@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.9.1
+FileVersion=2.0.9.2
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -121,27 +121,30 @@ Installation:
 	sleep 1350
 	GoSub InstallFiles
 	Menu, Tray, Icon
-	Menu, Tray, Icon, OptionsIcon.ico
+	Menu, Tray, Icon, Assets\OptionsIcon.ico
 	GoSub AdminPrompt
 return
 
 InstallFiles:
-	IfNotExist, RS.png
-		FileInstall, Base/RS.png, %A_MyDocuments%\%ScriptName%\RS.png, 1
-	IfNotExist, RSAnimation.mp4
-		FileInstall, Base/RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\RSAnimation.mp4, 1
-	IfNotExist, RSStopped.ico
-		FileInstall, Base/RSStopped.ico, %A_MyDocuments%\%ScriptName%\RSStopped.ico, 1
-	IfNotExist, OptionsIcon.ico
-		FileInstall, Base/OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\OptionsIcon.ico, 1
 	IfNotExist, Extensions
-			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
-	IfNotExist, Tip_small.png
-		FileInstall, Base/Tip_small.png, %A_MyDocuments%\%ScriptName%\Tip_small.png, 1
-	IfNotExist, Tip_medium.png
-		FileInstall, Base/Tip_medium.png, %A_MyDocuments%\%ScriptName%\Tip_medium.png, 1
-	IfNotExist, Tip_large.png
-		FileInstall, Base/Tip_large.png, %A_MyDocuments%\%ScriptName%\Tip_large.png, 1
+		FileInstall, Base\Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+
+	IfNotExist, Assets
+		FileCreateDir, Assets
+	IfNotExist, Assets\RS.png
+		FileInstall, Base\RS.png, %A_MyDocuments%\%ScriptName%\Assets\RS.png, 1
+	IfNotExist, Assets\RSAnimation.mp4
+		FileInstall, Base\RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\Assets\RSAnimation.mp4, 1
+	IfNotExist, Assets\RSStopped.ico
+		FileInstall, Base\RSStopped.ico, %A_MyDocuments%\%ScriptName%\Assets\RSStopped.ico, 1
+	IfNotExist, Assets\OptionsIcon.ico
+		FileInstall, Base\OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\OptionsIcon.ico, 1
+	IfNotExist, Assets\Tip_small.png
+		FileInstall, Base\Tip_small.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_small.png, 1
+	IfNotExist, Assets\Tip_medium.png
+		FileInstall, Base\Tip_medium.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_medium.png, 1
+	IfNotExist, Assets\Tip_large.png
+		FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
 
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return

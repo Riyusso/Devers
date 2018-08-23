@@ -182,7 +182,7 @@
 	ahsize:=780*amultiplier
 
 	RegRead, IE_VER, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Internet Explorer\Version Vector, IE
-	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
+	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<video width=""" awsize """ height=""" ahsize """ autoplay>`n <source src=""" A_WorkingDir "\Assets\RSanimation.mp4"" type=video/mp4>`n</video>`n</center>`n</body>`n</html>"
 	convertie:="about:<!DOCTYPE html><meta http-equiv=""X-UA-Compatible"" content=""IE=" Floor(IE_VER) """ >"
 
 	If !DontShowRS
