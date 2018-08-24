@@ -263,12 +263,7 @@ return
 			currentKeyword:=A_LoopField
 			url = % %A_LoopField%url
 			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
-			searchLabelText = % %A_LoopField%Label
-			searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
-			GuiControl, WebL:, webSearchVar, %webSearchVar%
-			GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
-			GuiControl, WebL:, SearchLabel, %searchLabelText%
-			GuiControl, WebL:Show, SearchLabel
+			SetSearchLabelText(%A_LoopField%Label, webSearchVar, guiw)
 			FastSearching:=true
 			return
 		}

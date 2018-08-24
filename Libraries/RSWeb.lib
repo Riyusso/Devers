@@ -256,12 +256,7 @@ EditWebsites:
 
 		url:=newUrl
 
-		searchLabelText:=newLabel
-		searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
-		GuiControl, WebL:, webSearchVar, %webSearchVar%
-		GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
-		GuiControl, WebL:, SearchLabel, %searchLabelText%
-		GuiControl, WebL:Show, SearchLabel
+		SetSearchLabelText(newLabel, webSearchVar, guiw)
 	}
 	else
 	{
@@ -326,3 +321,13 @@ StartSearch:
 		url=
 	}
 return
+
+SetSearchLabelText(newLabel = "Default:", webSearchVar = "", guiw = 540)
+{
+	searchLabelText := newLabel
+	searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
+	GuiControl, WebL:, webSearchVar, %webSearchVar%
+	GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
+	GuiControl, WebL:, SearchLabel, %searchLabelText%
+	GuiControl, WebL:Show, SearchLabel
+}
