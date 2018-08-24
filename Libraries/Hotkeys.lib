@@ -260,6 +260,7 @@ return
 	{
 		if SubStr(webSearchVar, 1, StrLen(A_LoopField)+1)=A_LoopField . " "
 		{
+			currentKeyword:=A_LoopField
 			url = % %A_LoopField%url
 			searchLabelText = % %A_LoopField%Label
 			searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")

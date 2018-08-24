@@ -157,10 +157,20 @@ WebLGuiEscape:
 return
 
 WebLGuiContextMenu:
-	if !A_GuiControl || (A_GuiControl="SearchLabel")
+	if !A_GuiControl
 		return
+	
+	if (currentKeyword="g") || (currentKeyword="y") || (currentKeyword="maps") || (currentKeyword="tr")
+	{
+		RSNotify("Not possible")
+		return
+	}
 
-	width=300
+	if FastSearching
+		width=400
+	else
+		width=300
+
 	Loop, 8
 	{
 		If A_GuiControl=webname%A_Index%
@@ -178,28 +188,51 @@ WebLGuiContextMenu:
 	Gui, Color, 252525, 333333
 	Gui, Font, s10 Bold cEEEEEE, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1f1f1f Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, Edit Website
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, % (FastSearching) ? "Edit Quick Search Query" : "Edit Website"
 
 	Opt1 := [6, 0x252525, 0x252525, "White"]
 	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Edit, % "x29 y+12 w242 h18 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
-	Gui, Add, Edit, % "x29 y+6 w242 h18 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
+	if FastSearching
+	{
+		Gui, Add, Edit, % "x29 y+10 w60 h20 hwndEdit265 -E0x200 vnewkeyword +Center -VScroll", %currentKeyword%
+		Gui, Add, Edit, % "x+5 w" width-58-65 " h20 hwndEdit264 -E0x200 vnewLabel +Center -VScroll", % %currentKeyword%Label
+		Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll", % %currentKeyword%url
 
-	Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteQuery hwndBut1 +Center +Default", Delete
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gExitWebsites hwndBut2 +Center", Cancel
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	}
+	else
+	{
+		Gui, Add, Edit, % "x29 y+12 w242 h18 hwndEdit264 v" A_GuiControl " -E0x200 +Center -VScroll", % %A_GuiControl%
+		Gui, Add, Edit, % "x29 y+6 w242 h18 hwndEdit265 vws" wnumb " -E0x200 +Center -VScroll", % ws%wnumb%
+
+		Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+		Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	}
+
 
 	Gui, Add, Text, % "y+5 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	ShAutoComplete(Edit264)
 	ShAutoComplete(Edit265)
+
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
-	Gui, Show, % "w" width " y" A_ScreenHeight/2+204*amultiplier/2+20, Web Edit
+	If FastSearching
+		Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
+	else
+		Gui, Show, % "w" width " y" A_ScreenHeight/2+204*amultiplier/2+20, Web Edit
 	GuiControl, Focus, SaveBtn
 	FadeIn(WebEdit)
 return
@@ -210,18 +243,43 @@ return
 
 EditWebsites:
 	Gui, Submit, NoHide
-	Loop, 8
+
+	if FastSearching
 	{
-		IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
+		IniDelete, keywords.ini, %currentKeyword%
+
+		IniWrite, %newUrl%, keywords.ini, %newkeyword%, Url
+		IniWrite, %newLabel%, keywords.ini, %newkeyword%, Label
+
+		IniRead, customQueries, keywords.ini
+		StringReplace, customQueries, customQueries, `n, |, All
+
+		Loop, Parse, customQueries, |
+		{
+			IniRead, %A_LoopField%Label, keywords.ini, % A_LoopField, Label
+			IniRead, %A_LoopField%url, keywords.ini, % A_LoopField, Url
+		}
+		
+		customQueries:= (customQueries) ? (defaultKeywords . "|" . customQueries) : (defaultKeywords)
 	}
-	WebNames:= WebName1 "|" WebName2 "|" WebName3 "|" WebName4 "|" WebName5 "|" WebName6 "|" WebName7 "|" WebName8
-	IniWrite, %WebNames%, settings.ini, Web, WebNames
-	If ChoosingWebsite=1
+	else
 	{
-		WebLT:=WebLT ? false : true
-		GoSub RSWeb
+		Loop, 8
+		{
+			IniWrite, % ws%A_Index% , settings.ini, Web, ws%A_Index%
+		}
+		WebNames:= WebName1 "|" WebName2 "|" WebName3 "|" WebName4 "|" WebName5 "|" WebName6 "|" WebName7 "|" WebName8
+		IniWrite, %WebNames%, settings.ini, Web, WebNames
+		If ChoosingWebsite=1
+		{
+			WebLT:=WebLT ? false : true
+			GoSub RSWeb
+		}
 	}
 	FadeOut(WebEdit)
+return
+
+DeleteQuery:
 return
 
 StartSearch:
