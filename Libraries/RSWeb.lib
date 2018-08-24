@@ -141,7 +141,7 @@
 return
 
 CheckFastSearchInactive:
-	If !WinActive("ahk_id" . WebL)
+	If !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit)
 		GoSub WebLClose
 return
 
