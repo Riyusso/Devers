@@ -60,7 +60,8 @@
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
 			Gui, Add, Edit, % "x14 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
-			Gui, Add, Button, % "x+2 y-5 h45 w55 gStartSearch hwndSearchBut1 +Default", •••
+			Gui, Add, Button, % "x+2 y-5 h45 w55 gAddCustomQuery hwndSearchBut1", •••
+			Gui, Add, Button, % "x0 h45 w55 gStartSearch +Hidden hwndSearchBut2 +Default", Default
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]
 			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
 		}
@@ -272,6 +273,79 @@ EditWebsites:
 			GoSub RSWeb
 		}
 	}
+	FadeOut(WebEdit)
+return
+
+AddCustomQuery:
+	width=400
+
+	Gui, WebEdit:New, +hwndWebEdit
+	Gui, +LastFound
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 252525, 333333
+	Gui, Font, s10 Bold cEEEEEE, Segoe UI
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1f1f1f Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, Add New Search Query
+
+	Opt1 := [6, 0x252525, 0x252525, "White"]
+	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Edit, % "x29 y+10 w60 h20 hwndEdit264 -E0x200 vnewkeyword +Center -VScroll",
+	SetEditCueBanner(Edit264, "keyword")
+	Gui, Add, Edit, % "x+5 w" width-58-65 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll",
+	SetEditCueBanner(Edit265, "Label")
+	Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll",
+	SetEditCueBanner(Edit266, "url here (use {query} where the input should be)")
+
+	Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gSaveNewQuery hwndBut1 vSaveBtn +Center +Default", Save
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+
+	Gui, Add, Text, % "y+5 w" (width-14) " h2 vP"
+	GuiControlGet, P, Pos
+	H := PY + PH
+	ShAutoComplete(Edit264)
+	ShAutoComplete(Edit265)
+
+	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
+
+	Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
+	GuiControl, Focus, SaveBtn
+	FadeIn(WebEdit)
+return
+
+SaveNewQuery:
+	Gui, Submit, NoHide
+
+	If !newUrl || !newkeyword
+	{
+		RSNotify("Field validation error.")
+		return
+	}
+	else if !InStr(newUrl, "{query}")
+	{
+		RSNotify("{query} required.")
+		return
+	}
+	else
+	{
+		RSNotify("Successful")
+	}
+
+	IniWrite, %newUrl%, keywords.ini, %newkeyword%, Url
+	IniWrite, %newLabel%, keywords.ini, %newkeyword%, Label
+
+	GoSub LoadCustomQueries
+
+	url:=newUrl
+
+	SetSearchLabelText(newLabel, webSearchVar, guiw)
+
 	FadeOut(WebEdit)
 return
 
