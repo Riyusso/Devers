@@ -44,6 +44,7 @@ UpdateFiles:
 	FileInstall, Base\Tip_small.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_small.png, 1
 	FileInstall, Base\Tip_medium.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_medium.png, 1
 	FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
+	FileInstall, Base\SinglePlugin.ico,  %A_MyDocuments%\%ScriptName%\Assets\SinglePlugin.ico, 1
 	
 	IfExist, *.ahk ; Update libraries aswell
 	{

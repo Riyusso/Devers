@@ -65,16 +65,7 @@ Config:
 	IniRead, mapsLabel, keywords.ini, Search, mapsLabel, % "Maps:"
 	IniRead, mapsurl, keywords.ini, Search, mapsurl, % "http://maps.google.com/?q={query}"
 
-	IniRead, customQueries, keywords.ini
-	StringReplace, customQueries, customQueries, `n, |, All
-
-	Loop, Parse, customQueries, |
-	{
-		IniRead, %A_LoopField%Label, keywords.ini, % A_LoopField, Label
-		IniRead, %A_LoopField%url, keywords.ini, % A_LoopField, Url
-	}
-	
-	customQueries:= (customQueries) ? (defaultKeywords . "|" . customQueries) : (defaultKeywords)
+	GoSub LoadCustomQueries
 
 	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 1
 	If AnimationWanted!=1
@@ -90,4 +81,17 @@ Config:
 	Loop, 8
 		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
 
+return
+
+LoadCustomQueries:
+	IniRead, customQueries, keywords.ini
+	StringReplace, customQueries, customQueries, `n, |, All
+
+	Loop, Parse, customQueries, |
+	{
+		IniRead, %A_LoopField%Label, keywords.ini, % A_LoopField, Label
+		IniRead, %A_LoopField%url, keywords.ini, % A_LoopField, Url
+	}
+	
+	customQueries:= (customQueries) ? (defaultKeywords . "|" . customQueries) : (defaultKeywords)
 return

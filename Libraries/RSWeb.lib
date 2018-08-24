@@ -54,9 +54,9 @@
 		{
 			guiw:=520*amultiplier
 			guih:=46
-			Gui, Color,172326, 172326
+			Gui, Color, 172326, 172326
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
-			Gui, Add, Text, x16 y11 h45 w150 vSearchLabel +Hidden, Google:
+			Gui, Add, Text, x16 y11 h45 w440 vSearchLabel +Hidden, Google:
 			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
 			Gui, Add, Edit, % "x14 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
@@ -68,7 +68,7 @@
 		{
 			guiw:=720*amultiplier
 			guih:=204*amultiplier-25
-			Gui, Color,1e1e1e, 333333
+			Gui, Color, 1e1e1e, 333333
 			Gui, Font, w700 s%zfont% ceeeeee, Segoe UI Black
 			Gui, Add, Progress, % "x-1 y-1 w" guiw " h22 Background333333 Disabled hwndHPROG"
 			Gui, Add, Edit, % "x0 y4 w" guiw-45 " h25 hwndWebSearch vwebSearchVar -E0x200 +Center -VScroll", %webSearchVar%
@@ -151,6 +151,7 @@ WebLGuiEscape:
  	WebLT := false
 	Gui, Tip:Destroy
 	FadeOut(WebL)
+	currentKeyword=
 	ChoosingWebsite:=false
 	SearchBased:=false
 	RSWebWithSearchFocused:=false
@@ -203,7 +204,7 @@ WebLGuiContextMenu:
 		Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteQuery hwndBut1 +Center +Default", Delete
+		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteCustomQuery hwndBut1 +Center +Default", Delete
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gExitWebsites hwndBut2 +Center", Cancel
@@ -251,16 +252,16 @@ EditWebsites:
 		IniWrite, %newUrl%, keywords.ini, %newkeyword%, Url
 		IniWrite, %newLabel%, keywords.ini, %newkeyword%, Label
 
-		IniRead, customQueries, keywords.ini
-		StringReplace, customQueries, customQueries, `n, |, All
+		GoSub LoadCustomQueries
 
-		Loop, Parse, customQueries, |
-		{
-			IniRead, %A_LoopField%Label, keywords.ini, % A_LoopField, Label
-			IniRead, %A_LoopField%url, keywords.ini, % A_LoopField, Url
-		}
-		
-		customQueries:= (customQueries) ? (defaultKeywords . "|" . customQueries) : (defaultKeywords)
+		url:=newUrl
+
+		searchLabelText:=newLabel
+		searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
+		GuiControl, WebL:, webSearchVar, %webSearchVar%
+		GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
+		GuiControl, WebL:, SearchLabel, %searchLabelText%
+		GuiControl, WebL:Show, SearchLabel
 	}
 	else
 	{
@@ -279,7 +280,22 @@ EditWebsites:
 	FadeOut(WebEdit)
 return
 
-DeleteQuery:
+DeleteCustomQuery:
+	Gui, Submit, NoHide
+
+	If !currentKeyword
+		return
+
+	IniDelete, keywords.ini, %currentKeyword%
+	url=
+
+	GoSub LoadCustomQueries
+
+	GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
+	GuiControl, WebL:Hide, SearchLabel
+	FastSearching:=false
+
+	FadeOut(WebEdit)
 return
 
 StartSearch:

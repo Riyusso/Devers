@@ -145,6 +145,8 @@ InstallFiles:
 		FileInstall, Base\Tip_medium.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_medium.png, 1
 	IfNotExist, Assets\Tip_large.png
 		FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
+	IfNotExist, Assets\SinglePlugin.ico
+		FileInstall, Base\SinglePlugin.ico, %A_MyDocuments%\%ScriptName%\Assets\SinglePlugin.ico, 1
 
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return
