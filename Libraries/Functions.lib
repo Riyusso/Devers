@@ -469,9 +469,21 @@ class Plugin
 	static guicolor := "07868f"
 	static btnhovercolor := "01a1ab"
 
-	Properties() 
+	Properties(withTrayIcon = 0) 
 	{
-		Menu, Tray, Icon, OptionsIcon.ico
+		If A_IsCompiled
+		{
+			SplitPath, A_ScriptName,,,, PluginName
+			Menu, Tray, Tip, %PluginName%
+			Menu, Tray, Icon
+			return
+		}
+
+		#NoTrayIcon
+		If withTrayIcon = 1
+			Menu, Tray, Icon
+
+		Menu, Tray, Icon, Assets\OptionsIcon.ico
 	}
 
 	AssignHotkey() 

@@ -231,7 +231,7 @@ RSRunScript:
 		RunScript.SetTransparent("0")
 		RunScript.Color := "black"
 		RunScript.SetStyle("-Caption +AlwaysOnTop -Border +ToolWindow -DPIScale")
-		Gui, Add, Picture, x0 y0 w447 h523 vKC0, RS.png
+		Gui, Add, Picture, x0 y0 w447 h523 vKC0, Assets\RS.png
 		RunScript.Aero.Set(500,500,0,0)
 		sleep 50
 		RunScript.Show("x" xc "y" yc "w447 h523")
@@ -370,7 +370,7 @@ defaultsettings:
 	global dpi:=DpiFactor()
 	DetectHiddenWindows, on
 	OSVer := GetOSVersion()
-	anvar = %A_MyDocuments%\%ScriptName%\rsanimation.mp4 ; location of gif you want to show
+	anvar = %A_MyDocuments%\%ScriptName%\Assets\RSAnimation.mp4 ; location of gif you want to show
 	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<img src=""" anvar """ width=""" awsize """ height=""" ahsize """>'n</center>`n</body>`n</html>"
 	Formula=0
 	vh:=A_ScreenHeight-92
