@@ -158,18 +158,20 @@ WebLGuiEscape:
 	RSWebWithSearchFocused:=false
 return
 
+AddCustomQuery:
+AddNewCustomQuery:=true
 WebLGuiContextMenu:
-	if !A_GuiControl
+	if !A_GuiControl && !AddNewCustomQuery
 		return
 	
-	if (currentKeyword="g") || (currentKeyword="y") || (currentKeyword="maps") || (currentKeyword="tr")
+	if ((currentKeyword="g") || (currentKeyword="y") || (currentKeyword="maps") || (currentKeyword="tr")) && !AddNewCustomQuery
 	{
 		RSNotify("Not possible")
 		return
 	}
 
-	if FastSearching
-		width=400
+	if FastSearching || AddNewCustomQuery
+		width=465
 	else
 		width=300
 
@@ -182,30 +184,62 @@ WebLGuiContextMenu:
 		}
 	}
 
+	If SearchBased || AddNewCustomQuery
+	{
+		WebLGuiColor := "172326"
+		WebLButtonColor := "27393e"
+		WebLEditBackground := "283437" 
+		WebLStatusColor := "131e21"
+		WebLStatusBarText := AddNewCustomQuery ? "Add Custom Search Query" : "Edit Custom Search Query"
+	}
+	else
+	{
+		WebLGuiColor := "252525"
+		WebLButtonColor := "444444"
+		WebLEditBackground := "333333"
+		WebLStatusColor := "1f1f1f"
+		WebLStatusBarText := "Edit Website"
+	}
+
  	Gui, WebEdit:New, +hwndWebEdit
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, 252525, 333333
+	Gui, Color, %WebLGuiColor%, %WebLEditBackground%
 	Gui, Font, s10 Bold cEEEEEE, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1f1f1f Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, % (FastSearching) ? "Edit Quick Search Query" : "Edit Website"
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background" WebLStatusColor " Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, %WebLStatusBarText%
 
-	Opt1 := [6, 0x252525, 0x252525, "White"]
-	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
+	Opt1 := [6, "0x" . WebLGuiColor, "0x" . WebLGuiColor, "White"]
+	Opt2 := [ , "0x" . WebLGuiColor, "0x" . WebLButtonColor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	if FastSearching
+	if FastSearching || AddNewCustomQuery
 	{
-		Gui, Add, Edit, % "x29 y+10 w60 h20 hwndEdit265 -E0x200 vnewkeyword +Center -VScroll", %currentKeyword%
-		Gui, Add, Edit, % "x+5 w" width-58-65 " h20 hwndEdit264 -E0x200 vnewLabel +Center -VScroll", % %currentKeyword%Label
-		Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll", % %currentKeyword%url
+		If AddNewCustomQuery
+		{
+			Gui, Add, Edit, % "x29 y+10 w70 h20 hwndEdit264 -E0x200 vnewkeyword +Center -VScroll",
+			Gui, Add, Edit, % "x+5 w" width-58-75 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll",
+			Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll",
+			Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gSaveNewQuery hwndBut1 vSaveBtn +Center +Default", Save
+		}
+		else
+		{
+			Gui, Add, Edit, % "x29 y+10 w70 h20 hwndEdit264 -E0x200 vnewkeyword +Center -VScroll", %currentKeyword%
+			Gui, Add, Edit, % "x+5 w" width-58-75 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll", % %currentKeyword%Label
+			Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll", % %currentKeyword%url
+			Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
 
-		Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
+		}
+
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
-		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteCustomQuery hwndBut1 +Center +Default", Delete
+		SetEditCueBanner(Edit264, "keyword")
+		SetEditCueBanner(Edit265, "Label")
+		SetEditCueBanner(Edit266, "URL HERE - use {query} where the input should be")
+
+		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteCustomQuery hwndBut1 +Center", Delete
 		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gExitWebsites hwndBut2 +Center", Cancel
@@ -231,11 +265,12 @@ WebLGuiContextMenu:
 	ShAutoComplete(Edit265)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
-	If FastSearching
+	If FastSearching || AddNewCustomQuery
 		Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
 	else
 		Gui, Show, % "w" width " y" A_ScreenHeight/2+204*amultiplier/2+20, Web Edit
 	GuiControl, Focus, SaveBtn
+	AddNewCustomQuery:=false
 	FadeIn(WebEdit)
 return
 
@@ -276,49 +311,6 @@ EditWebsites:
 	FadeOut(WebEdit)
 return
 
-AddCustomQuery:
-	width=400
-
-	Gui, WebEdit:New, +hwndWebEdit
-	Gui, +LastFound
-	WinSet, Transparent, 0
-	Gui, Margin, 0, 0
-	Gui, -Caption
-	Gui, Color, 252525, 333333
-	Gui, Font, s10 Bold cEEEEEE, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1f1f1f Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cb1b1b1, Add New Search Query
-
-	Opt1 := [6, 0x252525, 0x252525, "White"]
-	Opt2 := [ , 0x252525, 0x444444, 0xffffff]
-	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-
-	Gui, Add, Edit, % "x29 y+10 w60 h20 hwndEdit264 -E0x200 vnewkeyword +Center -VScroll",
-	SetEditCueBanner(Edit264, "keyword")
-	Gui, Add, Edit, % "x+5 w" width-58-65 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll",
-	SetEditCueBanner(Edit265, "Label")
-	Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll",
-	SetEditCueBanner(Edit266, "url here (use {query} where the input should be)")
-
-	Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gSaveNewQuery hwndBut1 vSaveBtn +Center +Default", Save
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-
-	Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-
-	Gui, Add, Text, % "y+5 w" (width-14) " h2 vP"
-	GuiControlGet, P, Pos
-	H := PY + PH
-	ShAutoComplete(Edit264)
-	ShAutoComplete(Edit265)
-
-	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
-
-	Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
-	GuiControl, Focus, SaveBtn
-	FadeIn(WebEdit)
-return
-
 SaveNewQuery:
 	Gui, Submit, NoHide
 
@@ -343,6 +335,8 @@ SaveNewQuery:
 	GoSub LoadCustomQueries
 
 	url:=newUrl
+	FastSearching:=true
+	currentKeyword:=newkeyword
 
 	SetSearchLabelText(newLabel, webSearchVar, guiw)
 
@@ -398,6 +392,8 @@ return
 
 SetSearchLabelText(newLabel = "Default:", webSearchVar = "", guiw = 540)
 {
+	if !newLabel
+		newLabel := "Default:"
 	searchLabelText := newLabel
 	searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
