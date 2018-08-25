@@ -1059,7 +1059,7 @@ DefaultMenu:
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut4 +Center",  Lock
 
-		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gUpdatePrompt hwndBut5 +Center", Update
+		Gui, Add, Button, % "x+0 y-2 h" buth " w" butw+9 " gManualCheck hwndBut5 +Center", Update
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut6 +Center", Features
 
@@ -1092,7 +1092,7 @@ DefaultMenu:
 		{		
 			If(PromptVersion!=UpdateVersion)
 				GoSub UpdatePrompt
-			else
+			else if !StillDownloading
 				RSNotify("Update Available")
 		}
 
@@ -1442,44 +1442,49 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
+ManualCheck:
+	ManualUpdateCheck:=true
+
 UpdatePrompt:
-If StillDownloading
-{
-	RSNotify("Still Downloading")
-	return
-}
-GoSub GetLatestVersion
-IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-IniRead, InstalledVersion, build.ini, build, Version, 1.0
+	If StillDownloading {
+		RSNotify("Still Downloading")
+		return
+	}
+	If ManualUpdateCheck {
+		GoSub GetLatestVersion
+		ManualUpdateCheck:=false
+	}
+	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
+	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 
-If % VersionCompare(UpdateVersion, InstalledVersion)=1
-{
-	width=150
-	height=66
-	Gui, UpdatePrompt:New, +hwndUpdatePrompt
-	Gui, +LastFound +ToolWindow +AlwaysOnTop
-	WinSet, Transparent, 0
-	Gui, Margin, 0, 0
-	Gui, -Caption
-	Gui, Color, %guicolor%
-	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
-	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
-	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96 gGuiMove, Update to v%UpdateVersion%?
+	If % VersionCompare(UpdateVersion, InstalledVersion)=1
+	{
+		width=150
+		height=66
+		Gui, UpdatePrompt:New, +hwndUpdatePrompt
+		Gui, +LastFound +ToolWindow +AlwaysOnTop
+		WinSet, Transparent, 0
+		Gui, Margin, 0, 0
+		Gui, -Caption
+		Gui, Color, %guicolor%
+		Gui, Font, s10 Bold, Tahoma
+		Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
+		Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+		Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
+		Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96 gGuiMove, Update to v%UpdateVersion%?
 
-	Gui, Add, Button, x8 y30 w65 +default gUpdate hwndButUp1 +Center, Yeah
-	Gui, Add, Button, x+5 y30 w65 gNoUpdate hwndButUp2 +Center, Nope
+		Gui, Add, Button, x8 y30 w65 +default gUpdate hwndButUp1 +Center, Yeah
+		Gui, Add, Button, x+5 y30 w65 gNoUpdate hwndButUp2 +Center, Nope
 
-	ImageButton.Create(ButUp1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ButUp2, Opt1, Opt2, "", Opt4)
-	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %UpdatePrompt%
-	Gui, Show, w%width% h%height% , Update Prompt
-	FadeIn(UpdatePrompt)
-}
-Else
-	RSNotify("No new versions")
+		ImageButton.Create(ButUp1, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(ButUp2, Opt1, Opt2, "", Opt4)
+		WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %UpdatePrompt%
+		Gui, Show, w%width% h%height% , Update Prompt
+		FadeIn(UpdatePrompt)
+	}
+	Else
+		RSNotify("No new versions")
 return
 
 ;--------------------------------------------------------------------------------------------------------------
