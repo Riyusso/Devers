@@ -810,11 +810,15 @@ LearnMore:
 
 	LearnMoreDefaultControls("Fast Search")
 
-	Gui, Add, Text, % "x15 y+18 r16 w" width-30 " Center", % "The Fast Search bar can be" 
+	Gui, Add, Text, % "x15 y+18 r11 w" width-30 " Center", % "The Fast Search bar can be" 
 	. " accessed by pressing the Right Alt key. To search within Google.com just type directly into the search bar and press Enter. " 
 	. "To search elsewhere, you can use keywords at the beginning of your search query. Typing in a keyword, followed by pressing Space will display a label"
 	. " corresponding to the website. To clear it press Backspace."
-	. "`n`nThe default keywords are:`ng  y  tr  maps`n`nTo add a new one click on the 3 dots.`nTo edit an existing keyword just Right Click on the website's label."
+	. "`n`nThe default keywords are:"
+
+	Gui, Add, Text, % "x15 y+0 r2 w" width-30 " Center c" guicolor, % "'g'    'y'    'tr'    'maps'"
+	Gui, Add, Text, % "x15 y+0 r5 w" width-30 " Center", % "To add a new one click on the 3 dots.`nTo edit an existing keyword just Right Click on the website's label."
+
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab2 +Default", Exit
 
