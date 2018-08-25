@@ -884,7 +884,7 @@ return
 
 LearnMoreDefaultControls(label, width=310, height=400)
 {
-	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, 0xD0D0D0, 10, 0x2e2e2e,, 4]
+	Opt1 := [6, 0x343434, 0x343434, 0xD0D0D0, 10, 0x2e2e2e,, 4]
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
@@ -893,7 +893,7 @@ LearnMoreDefaultControls(label, width=310, height=400)
 	Gui, Add, Button, % "x25 y+20 w35 h24 gLearnMorePrev hwndLearnMorePrevTab -TabStop +Center", <
 	Gui, Font, s10 cD0D0D0, Tahoma
 	Gui, Add, Text, % "x" (width/2)-(width*0.58/2)  " yp+5 w" (width*0.58) " Center ", %label%
-	Gui, Add, Button, % "x" width-55 " w35 yp-5 h24 gLearnMoreNext hwndLearnMoreNextTab -TabStop +Center", >
+	Gui, Add, Button, % "x" width-55 " w34 yp-5 h24 gLearnMoreNext hwndLearnMoreNextTab -TabStop +Center", >
 
 	ImageButton.Create(LearnMorePrevTab, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(LearnMoreNextTab, Opt1, Opt2, "", Opt4)
