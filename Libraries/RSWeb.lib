@@ -222,7 +222,11 @@ WebLGuiContextMenu:
 			Gui, Add, Edit, % "x29 y+10 w70 h20 hwndEdit264 -E0x200 vnewkeyword +Center -VScroll",
 			Gui, Add, Edit, % "x+5 w" width-58-75 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll",
 			Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll",
-			Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gSaveNewQuery hwndBut1 vSaveBtn +Center +Default", Save
+			Gui, Add, Button, % "x30 y+6 w" width/2-30 " +default h27 gSaveNewQuery hwndBut1 vSaveBtn +Center +Default", Save
+			Gui, Add, Button, % "x+0 w" width/2-30 " h27 gExitWebsites hwndBut2 +Center", Cancel
+
+			ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+			ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 		}
 		else
 		{
@@ -230,20 +234,17 @@ WebLGuiContextMenu:
 			Gui, Add, Edit, % "x+5 w" width-58-75 " h20 hwndEdit265 -E0x200 vnewLabel +Center -VScroll", % %currentKeyword%Label
 			Gui, Add, Edit, % "x29 y+6 w" width-58 " h20 hwndEdit266 -E0x200 vnewUrl" " +Center -VScroll", % %currentKeyword%url
 			Gui, Add, Button, % "x30 y+6 w" width/3-20 " +default h27 gEditWebsites hwndBut1 vSaveBtn +Center +Default", Save
+			Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteCustomQuery hwndBut2 +Center", Delete
+			Gui, Add, Button, % "x+0 w" width/3-20 " h27 gExitWebsites hwndBut3 +Center", Cancel
 
+			ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+			ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+			ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 		}
-
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 
 		SetEditCueBanner(Edit264, "keyword")
 		SetEditCueBanner(Edit265, "Label")
 		SetEditCueBanner(Edit266, "URL HERE - use {query} where the input should be")
-
-		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gDeleteCustomQuery hwndBut1 +Center", Delete
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-
-		Gui, Add, Button, % "x+0 w" width/3-20 " h27 gExitWebsites hwndBut2 +Center", Cancel
-		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	}
 	else
 	{

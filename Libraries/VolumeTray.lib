@@ -1,8 +1,8 @@
 VolumeTray:
 Volume_Delay=800
 BG_color=222222
-Text_color=009393
-Bar_color=%guicolor%
+Text_color=007f8b
+Bar_color=006d77
 Volume_OSD_Center:=1
 vol_up = WheelUp
 vol_down = WheelDown
