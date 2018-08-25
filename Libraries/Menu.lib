@@ -653,7 +653,7 @@ ScriptFunctions:
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+19 w" (width*0.64) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gAboutInfo hwndBut2 +Center", About Us
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gLearnMore hwndBut2 +Center", Learn More
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gsubit +hwndBut3 +Default", Exit
 
@@ -784,60 +784,94 @@ RSWebKeyModifiersCheck:    ; Prevents the HotKey box from accepting any combinat
 Return
 ;--------------------------------------------------------------------------------------------------------------
 
-AboutInfo:
+LearnMore:
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
-	width=260
-	Gui, AboutInfo:New, +hwndAboutInfo +ToolWindow
-	Gui, +LastFound
+	width=310
+	height=400
+	TabIndex=1
+	Gui, LearnMore:New, +hwndLearnMore +ToolWindow +LastFound -Caption
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
-	Gui, -Caption
 	Gui, Color, 2e2e2e
 	Gui, Font, s10 Bold, Tahoma
+
+	Gui, Add, Tab3,% "x-10 y-50 vttab h" height+60 , 1|2|3|4|5
+	Gui, Tab, 1
+	LearnMoreDefaultControls("Speed Dial")
+
+	Gui, Add, Text, % "x15 y+28 r16 w" width-30 " Center", % "Speed Dial is designed to make accessing websites, folders or files easier."
+	. "`n`nYou can open the Speed Dial interface by pressing the assigned hotkey. `n`nTo go to an item directly, without displaying the interface, just use a combination of your hotkey(" assignedKeyRSWeb ")"
+	. "+ a number from 1 to 8.`n`nTo edit a Speed Dial entry, right click`non it from the interface. Add files and folders as absolute paths(file explorer)."
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab1 +Default", Exit
+
+	Gui, Tab, 2
+
+	LearnMoreDefaultControls("Fast Search")
+
+	Gui, Add, Text, % "x15 y+18 r16 w" width-30 " Center", % "The Fast Search bar can be" 
+	. " accessed by pressing the Right Alt key. To search within Google.com just type directly into the search bar and press Enter. " 
+	. "To search elsewhere, you can use keywords at the beginning of your search query. Typing in a keyword, followed by pressing Space will display a label"
+	. " corresponding to the website. To clear it press Backspace."
+	. "`n`nThe default keywords are:`ng  y  tr  maps`n`nTo add a new one click on the 3 dots.`nTo edit an existing keyword just Right Click on the website's label."
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab2 +Default", Exit
+
+	Gui, Tab, 3
+
+	LearnMoreDefaultControls("Volume Control")
+
+	Gui, Add, Text, % "x15 y+28 r16 w" width-30 " Center", % "Speed Dial is designed to make accessing websites, folders or files easier."
+	. "`n`nYou can open the Speed Dial interface by pressing the assigned hotkey. `n`nTo open an item directly, without displaying the interface,"
+	. " just use a combination of your hotkey(" assignedKeyRSWeb ") + a number from 1 to 8."
+	. "`n`nTo edit a Speed Dial entry, right click`non it from the interface. Add files and folders as absolute paths."
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab3 +Default", Exit
+
+	Gui, Tab, 4
+	
+	LearnMoreDefaultControls("Extensions")
+
+	Gui, Add, Text, % "x15 y+28 r16 w" width-30 " Center", % "You can find extensions on our website. Most of them provide functionality which is very useful to some, but not necessary for the everyday user."
+	. "`n`nIn addition, you can create your own by heading over to the Extensions settings. `n`nThe library Functions.lib provides integrating functions like Notifications and more. Check out what is available to you in the files within 'Libraries'."
+	. "`n`nWhen done, just reload the program and it will be in effect."
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab4 +Default", Exit
+
+	Gui, Tab, 5
+	
+	LearnMoreDefaultControls("About Us")
+
+	Gui, Add, Text, % "x15 y+25 w" (width/2) " Center c" darkerc, Version
+	InVersionVar:= (InstalledVersion=1.0) ? "Unknown" : "v" . InstalledVersion
+	Gui, Add, Text, % "x+0 w" (width/3.2) " Center c" lightc, %InVersionVar%
+	Gui, Add, Text, % "x15 y+9 w" (width/2) " Center c" darkerc, Newest
+	UpVersionVar:= (UpdateVersion=1.0) ? "Retrieving" : "v" . UpdateVersion
+	Gui, Add, Text, % "x+0 w" (width/3.2) " vUpVersionVar Center c" lightc, %UpVersionVar%
+	Gui, Add, Text, % "x15 y+25 w" (width/2) " Center c" darkerc, Creator
+	Gui, Add, Text, % "x+0 w" (width/3.2) " Center c" lightc, Riyusso
+	Gui, Add, Text, % "x15 y+9 w" (width/2) " Center c" darkerc, Tester
+	Gui, Add, Text, % "x+0 w" (width/3.2) " Center c" lightc, physic
+	Gui, Add, Text, % "x0 y+30 w" (width) " Center c" darkerc, Website
+	Gui, Add, Text, % "x0 w" (width) " y+8 Center c" lightc, riyusso.github.io
+	Gui, Add, Text, % "x0 y+25 w" (width) " Center c" darkerc, Email
+	Gui, Add, Text, % "x0 w" (width) " y+8 Center c" lightc, Riyusso@gmx.us
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab5 +Default", Exit
+
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background272727 Disabled hwndHPROG"
-	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 c%darkerc%, About
+	ImageButton.Create(ExitButtonTab1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ExitButtonTab2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ExitButtonTab3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ExitButtonTab4, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ExitButtonTab5, Opt1, Opt2, "", Opt4)
 
-	Gui, Font, s9 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+28 w" (width/2) " Center ", Version
-	Gui, Font, c%lightc%, Tahoma
-	InVersionVar:= (InstalledVersion=1.0) ? "Unknown" : "v" . InstalledVersion
-	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", %InVersionVar%
-	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+12 w" (width/2) " Center ", Newest
-	Gui, Font, c%lightc%, Tahoma
-	UpVersionVar:= (UpdateVersion=1.0) ? "Retrieving" : "v" . UpdateVersion
-	Gui, Add, Text, % "x+0 w" (width/2.5) " vUpVersionVar Center", %UpVersionVar%
-	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+25 w" (width/2) " Center ", Creator
-	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", Riyusso
-	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x5 y+12 w" (width/2) " Center ", Tester
-	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x+0 w" (width/2.5) " Center", physic
-	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (width) " Center ", Website
-	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 w" (width) " y+8 Center", riyusso.github.io
-	Gui, Font, c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+25 w" (width) " Center ", Email
-	Gui, Font, c%lightc%, Tahoma
-	Gui, Add, Text, % "x0 w" (width) " y+8 Center", Riyusso@gmx.us
-
-	Gui, Font, s10 Bold, Tahoma
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y+25 h33 gAboutExit +hwndBut1 +Default", Exit
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-
-	Gui, Add, Text, % "x7 y+10 w" (width-14) " h2 vP"
-	GuiControlGet, P, Pos
-	H := PY + PH
-	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6", ahk_id %AboutInfo%
-	Gui, Show, w%width% h%H%, About
-	FadeIn(AboutInfo)
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r6-6", ahk_id %LearnMore%
+	Gui, Show, w%width% h%height%, LearnMore
+	FadeIn(LearnMore)
 	WinSet, Transparent, 247
 
 	if lastUpdateCheck>=3600000
@@ -845,11 +879,46 @@ AboutInfo:
 
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
 	UpVersionVar:= (UpdateVersion=1.0) ? "Offline" : "v" . UpdateVersion
-	GuiControl, AboutInfo:, UpVersionVar, %UpVersionVar%
+	GuiControl, LearnMore:, UpVersionVar, %UpVersionVar%
 return
 
-AboutExit:
-	FadeOut(AboutInfo)
+LearnMoreDefaultControls(label, width=310, height=400)
+{
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, 0xD0D0D0, 10, 0x2e2e2e,, 4]
+	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background272727 Disabled hwndHPROG"
+	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 gGuiMove cD0D0D0, Learn More
+	Gui, Add, Button, % "x25 y+20 w35 h24 gLearnMorePrev hwndLearnMorePrevTab -TabStop +Center", <
+	Gui, Font, s10 cD0D0D0, Tahoma
+	Gui, Add, Text, % "x" (width/2)-(width*0.58/2)  " yp+5 w" (width*0.58) " Center ", %label%
+	Gui, Add, Button, % "x" width-55 " w35 yp-5 h24 gLearnMoreNext hwndLearnMoreNextTab -TabStop +Center", >
+
+	ImageButton.Create(LearnMorePrevTab, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(LearnMoreNextTab, Opt1, Opt2, "", Opt4)
+}
+
+LearnMoreNext:
+If TabIndex < 5
+	TabIndex++
+else
+	TabIndex=1
+
+GuiControl, LearnMore:Choose, ttab, %TabIndex%
+return
+
+LearnMorePrev:
+If TabIndex > 1
+	TabIndex--
+else
+	TabIndex=5
+
+GuiControl, LearnMore:Choose, ttab, %TabIndex%
+return
+
+LearnMoreExit:
+	FadeOut(LearnMore)
 return
 
 ;--------------------------------------------------------------------------------------------------------------
