@@ -281,19 +281,6 @@ GoSubSafe(mySub)
 		GoSub %mySub%
 }
 
-;-------------------------------------------------------------------------------------------------------------
-
-KeepTrans: ; keep both KeepTrans and TaskBarSet
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
-	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
-return
-
-TaskBarSet: ; keep both KeepTrans and TaskBarSet
-	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
-return
-
-;--------------------------------------------------------------------------------------------------------------
-
 ;--------------------------------------------------------------------------------------------------------------
 GuiSize:
    If (A_EventInfo != 1)

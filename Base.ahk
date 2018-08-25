@@ -54,9 +54,6 @@ IfExist, settings.ini
 			IniWrite, 0, settings.ini, settings, CreateATask
 	}
 	
-	WinSet, Transparent, %TransparentStartMenu%, ahk_class Shell_TrayWnd
-	SetTimer, KeepTrans, 12000
-	
 	OnExit, ExitAppL
 
 	; How to use the plugin system :

@@ -133,10 +133,6 @@ OtherSettingsLabel:
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 
-	IniRead, TransparentStartMenu, settings.ini, settings, TransparentStartMenu, 255
-	taskbarsave=%TransparentStartMenu%
-	SetTimer, KeepTrans, Off
-
 	Gui, OtherMenu:New, +hwndOtherHWND
 	Gui, +LastFound
 	WinSet, Transparent, 0
@@ -158,19 +154,16 @@ OtherSettingsLabel:
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|No Expiration|Always ask
 	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTip1 hwndOtherTip1 -TabStop +Center", ?
 
-	Gui, Add, Text, % "x0 w" width " y+35 Center", Taskbar Transparency:
-	Gui, Add, Slider, % "x40 w" width-80 " h45 Range0-255 y+15 hwndEdit8 vTransparentStartMenu gTaskbarSet Thick19", %TransparentStartMenu%
-
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gProtectionSettings hwndBut1 +Center", Protection Settings
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+20 w" (width*0.80) " h33 gProtectionSettings hwndBut1 +Center", Protection Settings
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gUninstallPrompt hwndBut2 +Center", Uninstall
 
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+14 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center", Cancel
 
@@ -193,29 +186,9 @@ return
 otherbutton:
 	Gui, Submit, NoHide
 
-	If(TransparentStartMenu<12)
-	{
-		If !Tried
-		{
-		Warning:="Careful!"
-		Warning2:="The taskbar will be invisible."
-		GoSub WarningGUI
-		Tried:=true
-		return
-		}
-		else
-		{
-			Warning:="Don't say I didn't warn you!"
-			GoSub WarningGUI
-		}
-	}
-
-	Tried:=false
-	IniWrite, %TransparentStartMenu%, settings.ini, settings, TransparentStartMenu
 	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
 	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
 	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
-	SetTimer, KeepTrans, 12000
 
 	If hotkeysInFullscreen=2
 		SetTimer, HotkeysSuspendCheck, 500
@@ -224,7 +197,6 @@ otherbutton:
 return
 
 otherclose:
-WinSet, Transparent, %taskbarsave%, ahk_class Shell_TrayWnd
 FadeOut(OtherHWND)
 return
 
