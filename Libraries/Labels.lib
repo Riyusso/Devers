@@ -354,7 +354,7 @@ Defaults:
 	SetControlDelay, 0
 	SendMode Event
 	global logging
-	global dpi:=DpiFactor()
+	global dpi := DpiFactor()
 	DetectHiddenWindows, on
 	OSVer := GetOSVersion()
 	anvar = %A_MyDocuments%\%ScriptName%\Assets\RSAnimation.mp4 ; location of gif you want to show

@@ -263,7 +263,7 @@ return
 			currentKeyword:=A_LoopField
 			url = % %A_LoopField%url
 			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
-			SetSearchLabelText(%A_LoopField%Label, webSearchVar, guiw)
+			SetSearchLabelText(%A_LoopField%Label, currentKeyword, webSearchVar, guiw)
 			FastSearching:=true
 			return
 		}

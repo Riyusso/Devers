@@ -264,6 +264,7 @@ WebLGuiContextMenu:
 	H := PY + PH
 	ShAutoComplete(Edit264)
 	ShAutoComplete(Edit265)
+	ShAutoComplete(Edit266)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
 	If FastSearching || AddNewCustomQuery
@@ -282,6 +283,22 @@ return
 EditWebsites:
 	Gui, Submit, NoHide
 
+	If !newUrl || !newkeyword
+	{
+		RSNotify("Field validation error.")
+		return
+	}
+	else if RegExMatch(newkeyword, "\W")
+	{
+		RSNotify("Invalid keyword")
+		return
+	}
+	else if !InStr(newUrl, "{query}")
+	{
+		RSNotify("{query} not found.")
+		return
+	}
+
 	if FastSearching
 	{
 		IniDelete, keywords.ini, %currentKeyword%
@@ -292,8 +309,9 @@ EditWebsites:
 		GoSub LoadCustomQueries
 
 		url:=newUrl
+		currentKeyword := newkeyword
 
-		SetSearchLabelText(newLabel, webSearchVar, guiw)
+		SetSearchLabelText(newLabel, currentKeyword, webSearchVar, guiw)
 	}
 	else
 	{
@@ -309,6 +327,8 @@ EditWebsites:
 			GoSub RSWeb
 		}
 	}
+
+	GuiControl, WebL:Focus, webSearchVar
 	FadeOut(WebEdit)
 return
 
@@ -319,10 +339,15 @@ SaveNewQuery:
 	{
 		RSNotify("Field validation error.")
 		return
+	}	
+	else if RegExMatch(newkeyword, "\W")
+	{
+		RSNotify("Invalid keyword")
+		return
 	}
 	else if !InStr(newUrl, "{query}")
 	{
-		RSNotify("{query} required.")
+		RSNotify("{query} not found.")
 		return
 	}
 	else
@@ -339,8 +364,9 @@ SaveNewQuery:
 	FastSearching:=true
 	currentKeyword:=newkeyword
 
-	SetSearchLabelText(newLabel, webSearchVar, guiw)
+	SetSearchLabelText(newLabel, currentKeyword, webSearchVar, guiw)
 
+	GuiControl, WebL:Focus, webSearchVar
 	FadeOut(WebEdit)
 return
 
@@ -391,10 +417,10 @@ StartSearch:
 	}
 return
 
-SetSearchLabelText(newLabel = "Default:", webSearchVar = "", guiw = 540)
+SetSearchLabelText(newLabel = "", keyword = "" ,webSearchVar = "", guiw = 540)
 {
 	if !newLabel
-		newLabel := "Default:"
+		newLabel := keyword . ":"
 	searchLabelText := newLabel
 	searchLabelMeasured := MeasureText(searchLabelText, "s12", "Segoe UI Bold")
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
