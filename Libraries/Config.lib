@@ -56,7 +56,7 @@ Config:
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
-	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 0
+	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 2
 	If AnimationWanted!=1
 		DontShowRS:=true
 

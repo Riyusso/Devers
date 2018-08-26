@@ -812,7 +812,7 @@ LearnMore:
 	Gui, Color, 2e2e2e
 	Gui, Font, s10 Bold, Tahoma
 
-	Gui, Add, Tab3,% "x-10 y-50 vttab h" height+60 , 1|2|3|4|5
+	Gui, Add, Tab3,% "x-10 y-50 vttab h" height+60 , 1|2|3|4|5|6
 	Gui, Tab, 1
 	LearnMoreDefaultControls("Speed Dial")
 
@@ -850,16 +850,26 @@ LearnMore:
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab3 +Default", Exit
 
 	Gui, Tab, 4
+
+	LearnMoreDefaultControls("Protection")
+
+	Gui, Add, Text, % "x15 y+28 r16 w" width-30 " Center", % "Аdd a layer of protection to your personal computer. Being inactive for some period of time will result in your computer locking itself automatically."
+	. "`n`nTo set it up, head over to the Protection Settings menu. You can customize the amount of time it takes, your PIN and much more! Locking is not possible without setting up your PIN first.`n`n"
+	. "You can turn off the automatic locking by choosing 'Unprotected', but you will still be able to manually lock your PC if you have a hotkey set up."
+
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab4 +Default", Exit
+
+	Gui, Tab, 5
 	
 	LearnMoreDefaultControls("Extensions")
 
 	Gui, Add, Text, % "x15 y+28 r16 w" width-30 " Center", % "You can find extensions on our website. Most of them provide functionality which is very useful to some, but not necessary for the everyday user."
-	. "`n`nIn addition, you can create your own by heading over to the Extensions settings. `n`nThe library Functions.lib provides integrating functions like Notifications and more. Check out what is available to you in the files within 'Libraries'."
+	. "`n`nIn addition, you can create your own by heading over to the Extensions menu. `n`nThe library Functions.lib provides integrating functions like Notifications and more. Check out what is available to you in the files within 'Libraries'."
 	. "`n`nWhen done, just reload the program and it will be in effect."
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab4 +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab5 +Default", Exit
 
-	Gui, Tab, 5
+	Gui, Tab, 6
 	
 	LearnMoreDefaultControls("About Us")
 
@@ -878,7 +888,7 @@ LearnMore:
 	Gui, Add, Text, % "x0 y+25 w" (width) " Center c" darkerc, Email
 	Gui, Add, Text, % "x0 w" (width) " y+8 Center c" lightc, Riyusso@gmx.us
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab5 +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab6 +Default", Exit
 
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
@@ -888,6 +898,7 @@ LearnMore:
 	ImageButton.Create(ExitButtonTab3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(ExitButtonTab4, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(ExitButtonTab5, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ExitButtonTab6, Opt1, Opt2, "", Opt4)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r6-6", ahk_id %LearnMore%
 	Gui, Show, w%width% h%height%, Learn More
@@ -904,7 +915,7 @@ return
 
 LearnMoreDefaultControls(label, width=310, height=400)
 {
-	Opt1 := [6, 0x343434, 0x343434, 0xD0D0D0, 10, 0x2e2e2e,, 4]
+	Opt1 := [6, 0x343434, 0x343434, 0xD0D0D0, 10, 0x2e2e2e]
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
@@ -921,7 +932,7 @@ LearnMoreDefaultControls(label, width=310, height=400)
 }
 
 LearnMoreNext:
-If TabIndex < 5
+If TabIndex < 6
 	TabIndex++
 else
 	TabIndex=1
@@ -933,7 +944,7 @@ LearnMorePrev:
 If TabIndex > 1
 	TabIndex--
 else
-	TabIndex=5
+	TabIndex=6
 
 GuiControl, LearnMore:Choose, ttab, %TabIndex%
 return
