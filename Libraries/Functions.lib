@@ -469,21 +469,20 @@ class Plugin
 	static guicolor := "07868f"
 	static btnhovercolor := "01a1ab"
 
-	Properties(withTrayIcon = 0) 
+	Properties(withTrayIcon = false) 
 	{
-		If A_IsCompiled
-		{
-			SplitPath, A_ScriptName,,,, PluginName
-			Menu, Tray, Tip, %PluginName%
-			Menu, Tray, Icon
-			return
-		}
-
 		#NoTrayIcon
-		If withTrayIcon = 1
-			Menu, Tray, Icon
+		#SingleInstance FORCE
+		SetWinDelay, 0
+		
+		SplitPath, A_ScriptName,,,, PluginName
+		Menu, Tray, Tip, %PluginName%  - Devers Plugin
 
-		Menu, Tray, Icon, Assets\OptionsIcon.ico
+		If A_IsCompiled || withTrayIcon
+		{
+			Menu, Tray, Icon
+			Menu, Tray, Icon, Assets\SinglePlugin.ico
+		}
 	}
 
 	AssignHotkey() 
