@@ -54,6 +54,10 @@ Config:
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
+	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 0
+	If AnimationWanted!=1
+		DontShowRS:=true
+
 	defaultKeywords=y|g|tr|maps
 	IniRead, yLabel, keywords.ini, Search, yLabel, % "YouTube:"
 	IniRead, yurl, keywords.ini, Search, yurl, % "https://www.youtube.com/results?search_query={query}"
@@ -65,10 +69,6 @@ Config:
 	IniRead, mapsurl, keywords.ini, Search, mapsurl, % "http://maps.google.com/?q={query}"
 
 	GoSub LoadCustomQueries
-
-	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 1
-	If AnimationWanted!=1
-		DontShowRS:=true
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption

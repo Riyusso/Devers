@@ -806,7 +806,7 @@ LearnMore:
 	width=310
 	height=400
 	TabIndex=1
-	Gui, LearnMore:New, +hwndLearnMore +ToolWindow +LastFound -Caption
+	Gui, LearnMore:New, +hwndLearnMore +LastFound -Caption
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Color, 2e2e2e
@@ -890,7 +890,7 @@ LearnMore:
 	ImageButton.Create(ExitButtonTab5, Opt1, Opt2, "", Opt4)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r6-6", ahk_id %LearnMore%
-	Gui, Show, w%width% h%height%, LearnMore
+	Gui, Show, w%width% h%height%, Learn More
 	FadeIn(LearnMore)
 	WinSet, Transparent, 247
 
