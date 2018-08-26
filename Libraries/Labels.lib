@@ -339,7 +339,7 @@ Return
 
 ;-------------------------------------------------------------------------------------------------------------
 
-defaultsettings:
+Defaults:
 	ListLines Off
 	FileEncoding, UTF-8
 	Process, Priority, , H

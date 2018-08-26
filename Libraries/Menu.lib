@@ -14,7 +14,7 @@
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", % (FirstRun) ? "Setup" : "Script Options"
 
 		Gui, Color, %guicolor%, 252525
 		Gui, Font, s9
@@ -52,7 +52,7 @@
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gbutton hwndBut4 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gMainMenuApply hwndBut4 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gdestroyset hwndBut5 +Center", Cancel
 
@@ -77,7 +77,7 @@
 	FadeIn(ScriptOptions)
 return
 
-button:
+MainMenuApply:
 	Gui, Submit, NoHide
 
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
@@ -109,7 +109,6 @@ button:
 	}
 	If FirstRun
 	{
-		IniWrite, 1, settings.ini, settings, AfterInstallation
 		SetTimer, ARun, -1600
 		FirstRun:=false
 	}
@@ -953,7 +952,7 @@ IfExist Assets\OptionsIcon.ico
 }
 Else
 {
-	FileInstall, Base\OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\OptionsIcon.ico, 1
+	GoSub InstallFiles
 	Menu, Tray, Icon
 	Menu, TRAY, Icon, Assets\OptionsIcon.ico
 }

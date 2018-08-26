@@ -19,7 +19,7 @@ IfExist, settings.ini
 		GoSub UpdateFiles
 }
 #Include %A_ScriptDir%
-GoSub defaultsettings
+GoSub Defaults
 GoSub MenuInit
 GoSub RunScript
 return
