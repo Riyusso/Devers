@@ -1,0 +1,67 @@
+#NoEnv
+#SingleInstance FORCE
+SendMode Input
+SetWorkingDir %A_ScriptDir%
+Plugin.Properties() ; Pass true as a parameter if you wish to have a tray icon.
+return
+
+#Include *i Libraries\Functions.lib
+
+; ----------- User functions here ------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ; --------------- HELP --------------------
+
+AutoHotkey is a very intuitive language once you get the hang of it!
+Use the documentation from the links below. There are a lot of examples provided for basic things.
+
+
+Here are some pages that might help get you started:
+
+https://autohotkey.com/docs/Tutorial.htm#s3
+https://autohotkey.com/docs/Tutorial.htm#s6
+https://autohotkey.com/docs/Hotkeys.htm
+https://autohotkey.com/docs/Hotstrings.htm
+https://autohotkey.com/docs/commands/index.htm
+https://autohotkey.com/docs/misc/WinTitle.htm
+https://autohotkey.com/docs/commands/Math.htm
+
+
+Try to keep the Plugin.Properties line at the beginning of the script. Everything else you can change!
+
+Head over to the Libraries folder within the installation folder(My Documents) to see what is available to you.
+I've included the Functions.lib file which consists of many integrating functions.
+
+You will find functions like RSNotify(text), which is basically notifications at the bottom of your screen.
+
+- Hotkey creation example -
+Let's register F7 as a hotkey that sets the active window to be always on top. 
+If that window is already set to stay on top, we will toggle it off.
+
+F7::
+    WinSet, AlwaysOnTop, Toggle, A
+    WinGet, ExStyle, ExStyle, A
+    if (ExStyle & 0x8)
+        RSNotify("AlwaysOnTop: Off")
+    else
+        RSNotify("AlwaysOnTop: On")
+return
+
+Always reload the main program in order to start the plugins correctly.
+
+*/

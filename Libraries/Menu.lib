@@ -5,7 +5,7 @@
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 	
-	Gui, settings:New, +hwndScriptOptions
+	Gui, Settings:New, +hwndScriptOptions
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
@@ -257,32 +257,103 @@ ExtSettings:
 			CustomExtensionNames.Insert("Button" SubStr(EXTControls, 0), PluginName)
 			ImageButton.Create(PluginEditButton, Opt1, Opt2, "", Opt4)
 
+			ExtensionButtonsExist := true
 			Gui, Add, DropDownList, % "xs+0 yp+0 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
-	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+18 w" (width*0.80) " h33 gGoToWebsite hwndBut1 +Center", Get More
+	Gui, Add, Button, % "x" (width/2)-((width*0.50)/2) " y+20 w" (width*0.50) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
 
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+10 w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+20 w" (width*0.38) " h31 gextbutton hwndBut3 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut3 +Center", Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut4 +Center", Cancel
 
 	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+
+	If ExtensionButtonsExist
+	{
+		Opt1 := [6, 0x2e2e2e, 0x2e2e2e, 0xD0D0D0, 10, 0x2e2e2e]
+		ExtensionButtonsExist := false
+	}
+	else
+		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e]
+	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, w%width%, Extensions
 	FadeIn(ExtHWND)
+return
 
+CreateExtensionGUI:
+	FadeOut(ExtHWND)
+
+	Gui, CreateExtensionGUI:New, +hwndCreateExtensionGUI +LastFound +ToolWindow +AlwaysOnTop
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 2b2b2a, 2b2b2a
+	Gui, Font, s10 Bold c00afaf, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w200 h26 Background1f1f1f Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w200 Center BackgroundTrans +0x200 cb1b1b1, Name your new extension
+
+	Gui, Font, w700 s11 cD0D0D0, Segoe UI Black
+	Gui, Add, Edit, % "x0 y+13 w155 h25 hwndEdit265 vnewPluginName -E0x200 +Center -VScroll",
+
+	Gui, Font, w700 s11 ceeeeee, Segoe UI Black
+	Opt1 := [6, 0x2b2b2a, 0x2b2b2a, 0xD0D0D0]
+	Opt2 := [ , 0x2b2b2a, 0x2b2b2a, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, x+0 w45 h25 +default gCreateExtension hwndBut1 +Center, Go
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	scaledw:=200
+	scaledh:=70
+	SHAutoComplete(Edit265)
+	WinSet, Region, % "0-0 w" scaledw*dpi " h" scaledh*dpi " r12-12", ahk_id %CreateExtensionGUI%
+	; NoActivate fixes weird bug with not being able to switch language
+	Gui, Show, w%scaledw% h%scaledh% NoActivate, Authorization
+	WinActivate	
+	; -----------------
+	FadeIn(CreateExtensionGUI)
+return
+
+CreateExtensionGUIGuiEscape:
+FadeOut(CreateExtensionGUI)
+GoSub ExtSettings
+return
+
+CreateExtension:
+	Gui, Submit, NoHide
+
+	newPluginName := RegExReplace(newPluginName, "\W")
+	if !newPluginName
+	{
+		RSNotify("Name is required.")
+		return
+	}
+
+	FadeOut(CreateExtensionGUI)
+
+	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\%newPluginName%.ahk, 0
+	GoSub ExtSettings
+	Sleep 70
+	Run, edit %A_WorkingDir%\%newPluginName%.ahk
 return
 
 EditPlugin:
@@ -1340,7 +1411,6 @@ PrInfo:
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12"
 	Gui, Show, % "w" width  , RS-Guard Settings
 	FadeIn(PrInfo)
-
 return
 
 destroyPrInfo:

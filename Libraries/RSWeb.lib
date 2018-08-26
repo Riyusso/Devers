@@ -283,24 +283,24 @@ return
 EditWebsites:
 	Gui, Submit, NoHide
 
-	If !newUrl || !newkeyword
-	{
-		RSNotify("Field validation error.")
-		return
-	}
-	else if RegExMatch(newkeyword, "\W")
-	{
-		RSNotify("Invalid keyword")
-		return
-	}
-	else if !InStr(newUrl, "{query}")
-	{
-		RSNotify("{query} not found.")
-		return
-	}
-
 	if FastSearching
 	{
+		If !newUrl
+		{
+			RSNotify("Field validation error.")
+			return
+		}
+		else if RegExMatch(newkeyword, "\W") || !newkeyword
+		{
+			RSNotify("Invalid keyword")
+			return
+		}
+		else if !InStr(newUrl, "{query}")
+		{
+			RSNotify("{query} not found.")
+			return
+		}
+
 		IniDelete, keywords.ini, %currentKeyword%
 
 		IniWrite, %newUrl%, keywords.ini, %newkeyword%, Url
@@ -335,12 +335,12 @@ return
 SaveNewQuery:
 	Gui, Submit, NoHide
 
-	If !newUrl || !newkeyword
+	If !newUrl
 	{
 		RSNotify("Field validation error.")
 		return
 	}	
-	else if RegExMatch(newkeyword, "\W")
+	else if RegExMatch(newkeyword, "\W") || !newkeyword
 	{
 		RSNotify("Invalid keyword")
 		return
