@@ -13,8 +13,8 @@
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y7 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Script Options
 
 		Gui, Color, %guicolor%, 252525
 		Gui, Font, s9
@@ -137,9 +137,9 @@ OtherSettingsLabel:
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
-	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
@@ -159,11 +159,11 @@ OtherSettingsLabel:
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+20 w" (width*0.80) " h33 gProtectionSettings hwndBut1 +Center", Protection Settings
+	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+28 w" (width*0.80) " h33 gProtectionSettings hwndBut1 +Center", Protection Settings
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gUninstallPrompt hwndBut2 +Center", Uninstall
 
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+14 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+16 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center", Cancel
 
@@ -213,9 +213,9 @@ ExtSettings:
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
-	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Extensions
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Extensions
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
@@ -369,9 +369,9 @@ ProtectionSettings:
 	WinSet, Transparent, 0
 	Gui, Color, 808080
 	Gui, Margin, 0, 0
-	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Protection Settings
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Protection Settings
 		Gui, Color, %guicolor%, 333333
 		Gui, Font, s8, Tahoma
 		Gui, Font, normal
@@ -727,9 +727,9 @@ ChangeHotkeys:
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
-	Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y8 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
+	Gui, Font, s10 cFFFFFF Bold, Segoe UI
+	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Change Hotkeys
 
 	Gui, Color, 2e2e2e, 333333
 	Gui, Font, s8, Tahoma
@@ -908,8 +908,9 @@ LearnMoreDefaultControls(label, width=310, height=400)
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background272727 Disabled hwndHPROG"
-	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 gGuiMove cD0D0D0, Learn More
+	Gui, Add, Progress, % "x-1 y-1 w" width " h32 Background272727 Disabled hwndHPROG"
+	Gui, Font, s10 cFFFFFF Bold, Tahoma
+	Gui, Add, Text, x0 y7 w%width% Center BackgroundTrans +0x200 gGuiMove cD0D0D0, Learn More
 	Gui, Add, Button, % "x25 y+20 w35 h24 gLearnMorePrev hwndLearnMorePrevTab -TabStop +Center", <
 	Gui, Font, s10 cD0D0D0, Tahoma
 	Gui, Add, Text, % "x" (width/2)-(width*0.58/2)  " yp+5 w" (width*0.58) " Center ", %label%
