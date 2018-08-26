@@ -48,9 +48,9 @@ IfExist, settings.ini
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
 	}
-	If CreateATask=1 && (A_IsCompiled)
+	If CreateATask=1 && (A_IsCompiled) && A_IsAdmin
 	{
-			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%.exe, , HIDE
+			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%".exe, , HIDE
 			IniWrite, 0, settings.ini, settings, CreateATask
 	}
 	

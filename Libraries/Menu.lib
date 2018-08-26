@@ -97,14 +97,15 @@ button:
 			FileCreateShortcut, %A_ScriptFullPath%, %StartMenuFile%
 			If FirstRun
 				IniWrite, 1, settings.ini, settings, CreateATask
-			else
-				Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%.exe, , HIDE
+			else if A_IsAdmin
+				Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%".exe, , HIDE
 		}
 	}
-	If StartWithWindows=1
+	else if StartWithWindows=1
 	{
 		FileDelete, %LinkFile%
-		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
+		if A_IsAdmin
+			Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	}
 	If FirstRun
 	{
@@ -997,10 +998,10 @@ mnuUninstall:
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
-	MsgBox, %StartMenuFile%
 	FileDelete, %StartMenuFile%
 	FileDelete, %LinkFile%
-	Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
+	If A_IsAdmin
+		Run, %comspec% /c SchTasks /F /Delete /TN RSRunScript, , HIDE
 	FileInstall, Base\uninstaller.exe, %A_Temp%\uninstaller.exe, 1
 	Run, %A_Temp%\uninstaller.exe,, HIDE
 	ExitApp
