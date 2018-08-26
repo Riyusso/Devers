@@ -224,14 +224,19 @@ ExtSettings:
 	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Built in    -
 
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Fast Search 
-	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, DropDownList, % "x" width*0.75-34 " yp-3 w65 Center Section vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", LAlt to Minimize
-	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Volume Over Tray
-	Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
 
 	IfExist, *.ahk
 	{
+		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e,, 4]
+		Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
+		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+		CustomExtensionNames := {}
 		Gui, Add, Text, % "x0 y+25 w" width " Center", -   Others   -
 		Loop, Files, *.ahk
 		{
@@ -246,8 +251,13 @@ ExtSettings:
 
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			PluginNameNoUnderscores:=StrReplace(PluginName, "_", A_Space)
-			Gui, Add, Text, % "x5 y+14 w" (width/2) " Center", %PluginNameNoUnderscores% ›
-			Gui, Add, DropDownList, % "x+20 yp-3 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
+			Gui, Add, Button, % "x" width/4-(width/6)+5 " y+14 w" (width/3) " gEditPlugin hwndPluginEditButton Center", %PluginNameNoUnderscores% ›
+			; !POSITION IMPORTANT! Keep after the button creation. Get the last character of the variable EXTControls which is the number of the button created. 
+			WinGet, EXTControls, ControlList, ahk_id %ExtHWND% 
+			CustomExtensionNames.Insert("Button" SubStr(EXTControls, 0), PluginName)
+			ImageButton.Create(PluginEditButton, Opt1, Opt2, "", Opt4)
+
+			Gui, Add, DropDownList, % "xs+0 yp+0 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
 		}
 	}
 
@@ -273,6 +283,12 @@ ExtSettings:
 	Gui, Show, w%width%, Extensions
 	FadeIn(ExtHWND)
 
+return
+
+EditPlugin:
+	ControlGetFocus, ChosenPluginClassNN, A
+	pluginPath:=A_WorkingDir . "\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
+	Run, edit %pluginPath%
 return
 
 extbutton:
