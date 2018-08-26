@@ -1,7 +1,4 @@
-﻿settings:
-	if FirstRun
-		GoSub Initiation
-
+﻿Settings:
 	width := 285
 	labelsx := (width/8)-3
 	inputw := (width/2)
@@ -14,7 +11,7 @@
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", % (FirstRun) ? "Setup" : "Script Options"
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Options
 
 		Gui, Color, %guicolor%, 252525
 		Gui, Font, s9
@@ -52,7 +49,7 @@
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gMainMenuApply hwndBut4 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gMainMenuApply hwndBut4 +Center +Default", % (FirstRun) ? "Install" : "Apply"
 
 	Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gdestroyset hwndBut5 +Center", Cancel
 
@@ -85,7 +82,10 @@ MainMenuApply:
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	FadeOut(ScriptOptions)
-	RSNotify("Applied")
+	If FirstRun
+		RSNotify("Installed")
+	else
+		RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
 	StartMenuFile=%A_StartMenu%\Programs\%ScriptName%.lnk
@@ -147,7 +147,7 @@ OtherSettingsLabel:
 
 	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Misc    -
 	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
-	Gui, Add, DropDownList, % "x+16 w77 yp-3 Center vShowRSRunScript Choose" ShowRSRunScript " AltSubmit" , Yes|No
+	Gui, Add, DropDownList, % "x+16 w77 yp-3 Center vShowStartUpLogo Choose" ShowStartUpLogo " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
@@ -183,10 +183,10 @@ OtherSettingsLabel:
 	FadeIn(OtherHWND)
 return
 
-otherbutton:
+OtherButton:
 	Gui, Submit, NoHide
 
-	IniWrite, %ShowRSRunScript%, settings.ini, settings, ShowRSRunScript
+	IniWrite, %ShowStartUpLogo%, settings.ini, settings, ShowStartUpLogo
 	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
 	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
 

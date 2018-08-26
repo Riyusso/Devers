@@ -222,7 +222,7 @@ return
 ;-------------------------------------------------------------------------------------------------------------
 
 RSRunScript:
-	If (ShowRSRunScript=1) && !PluginInstalled
+	If (ShowStartUpLogo=1) && !PluginInstalled
 	{
 		logofader=0
 		xc:=A_ScreenWidth/2-223

@@ -112,6 +112,7 @@ return
 
 Installation:
 	FirstRun:=true
+	GoSub Initiation
 	FileCreateDir, %A_MyDocuments%\%ScriptName%
 	SetWorkingDir, %A_MyDocuments%\%ScriptName%
 	RSNotify("Installing",,750)

@@ -48,7 +48,7 @@ Config:
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	IniRead, GoogleTipDisplayed, settings.ini, settings, GoogleTipDisplayed, 0
 	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0
-	IniRead, ShowRSRunScript, settings.ini, settings, ShowRSRunScript, 1
+	IniRead, ShowStartUpLogo, settings.ini, settings, ShowStartUpLogo, 1
 	IniRead, FastSearchWanted, settings.ini, settings, FasttSearchWanted, 1
 	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
