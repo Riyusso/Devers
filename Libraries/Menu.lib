@@ -914,10 +914,9 @@ LearnMore:
 	Gui, Add, Text, % "x15 y+0 r2 w" width-30 " vTab22 +Hidden Center c" guicolor, % "'g'    'y'    'tr'    'maps'"
 	Gui, Add, Text, % "x15 y+0 r5 w" width-30 " vTab23 +Hidden Center", % "To add a new one click on the 3 dots.`nTo edit an existing keyword just Right Click on the website's label."
 
-	Gui, Add, Text, % "x15 ys+45 r16 w" width-30 " Center vTab31 +Hidden", % "Speed Dial is designed to make accessing websites, folders or files easier."
-	. "`n`nYou can open the Speed Dial interface by pressing the assigned hotkey. `n`nTo open an item directly, without displaying the interface,"
-	. " just use a combination of your hotkey(" assignedKeyRSWeb ") + a number from 1 to 8."
-	. "`n`nTo edit a Speed Dial entry, right click`non it from the interface. Add files and folders as absolute paths."
+	Gui, Add, Text, % "x15 ys+45 r16 w" width-30 " Center vTab31 +Hidden", % "Use your mouse to control the system volume by hovering over the taskbar."
+	. "`n`nTo take advantage of this feature, put your mouse above the taskbar and scroll up or down to increase/decrease your sound volume.You will notice a bar that indicates the volume state."
+	. "`n`nNote:`n'Taskbar' is a strip, usually positioned the bottom of your screen, where all your windows go when minimized. It also holds your Start button and the system clock."
 
 	Gui, Add, Text, % "x15 ys+40 r16 w" width-30 " Center vTab41 +Hidden", % "Аdd a layer of protection to your personal computer. Being inactive for some period of time will result in your computer locking itself automatically."
 	. "`n`nTo set it up, head over to the Protection Settings menu. You can customize the amount of time it takes, your PIN and much more! Locking is not possible without setting up your PIN first.`n`n"
