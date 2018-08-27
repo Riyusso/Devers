@@ -399,7 +399,7 @@ StartSearch:
 	If (A_LoopField="." && !InStr(webSearchVar," ") && !FastSearching)
 	{
 		GoSub WebLClose
-		Run, http:%webSearchVar%
+		Run, % InStr(webSearchVar, "http") ? webSearchVar : "http:" . webSearchVar
 		GoSub GetBrowserNameAndActivate
 		webSearchVar=
 		return

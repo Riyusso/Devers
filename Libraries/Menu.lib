@@ -266,9 +266,9 @@ ExtSettings:
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.50)/2) " y+20 w" (width*0.50) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
 
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+20 w" (width*0.38) " h31 gextbutton hwndBut3 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+20 w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
 
-	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut4 +Center", Cancel
+	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut3 +Center", Cancel
 
 	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
@@ -292,7 +292,6 @@ ExtSettings:
 	
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, w%width%, Extensions
@@ -734,7 +733,7 @@ ScriptFunctions:
 	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + S
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, 0xEEEEEE]
+	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
@@ -883,7 +882,7 @@ LearnMore:
 	Gui, Color, 2e2e2e
 	Gui, Font, s10 Bold, Tahoma
 
-	Gui, Add, Tab3,% "x-10 y-50 vttab h" height+60 , 1|2|3|4|5|6
+	Gui, Add, Tab3, % "x-10 y-50 vttab h" height+60 , 1|2|3|4|5|6
 	Gui, Tab, 1
 	LearnMoreDefaultControls("Speed Dial")
 
@@ -905,7 +904,6 @@ LearnMore:
 
 	Gui, Add, Text, % "x15 y+0 r2 w" width-30 " Center c" guicolor, % "'g'    'y'    'tr'    'maps'"
 	Gui, Add, Text, % "x15 y+0 r5 w" width-30 " Center", % "To add a new one click on the 3 dots.`nTo edit an existing keyword just Right Click on the website's label."
-
 
 	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab2 +Default", Exit
 
