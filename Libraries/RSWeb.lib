@@ -194,8 +194,8 @@ WebLGuiContextMenu:
 	}
 	else
 	{
-		WebLGuiColor := "252525"
-		WebLButtonColor := "444444"
+		WebLGuiColor := "262626"
+		WebLButtonColor := "3a3a3a"
 		WebLEditBackground := "333333"
 		WebLStatusColor := "1f1f1f"
 		WebLStatusBarText := "Edit Website"
