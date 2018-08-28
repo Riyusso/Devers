@@ -18,8 +18,6 @@ Initiation:
 	Loop, Parse, keysArray, `|
 		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%
 
-	IniWrite, 1, settings.ini, settings, AfterInstallation
-
 	GoSub ButtonsLabel
 	GoSub Config
 return

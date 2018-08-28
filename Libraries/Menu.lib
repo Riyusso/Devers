@@ -83,7 +83,10 @@ MainMenuApply:
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	FadeOut(ScriptOptions)
 	If FirstRun
+	{
 		RSNotify("Installed")
+		IniWrite, 1, settings.ini, settings, AfterInstallation
+	}
 	else
 		RSNotify("Applied")
 	SplitPath, A_Scriptname, , , , OutNameNoExt
