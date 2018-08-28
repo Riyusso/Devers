@@ -870,7 +870,6 @@ RSWebKeyModifiersCheck:    ; Prevents the HotKey box from accepting any combinat
 Return
 ;--------------------------------------------------------------------------------------------------------------
 
-F6::
 LearnMore:
 	IniRead, InstalledVersion, build.ini, build, Version, 1.0
 	IniRead, UpdateVersion, build_update.ini, build, Version, 1.0
