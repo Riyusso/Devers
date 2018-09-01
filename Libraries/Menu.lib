@@ -886,7 +886,7 @@ LearnMore:
 
 	TabIndex=1
 	TabCount=6
-	LearnMoreLabels := ["Speed Dial", "Extensions", "Volume Control", "Protection", "Extensions", "About Us"]
+	LearnMoreLabels := ["Speed Dial", "Search Bar", "Volume Control", "Protection", "Extensions", "About Us"]
 
 	Opt1 := [6, 0x343434, 0x343434, 0xD0D0D0, 10, 0x2e2e2e]
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
