@@ -361,7 +361,7 @@ return
 EditPlugin:
 	ControlGetFocus, ChosenPluginClassNN, A
 	pluginPath:=A_WorkingDir . "\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
-	Run, edit %pluginPath%
+	DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 return
 
 extbutton:

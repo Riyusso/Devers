@@ -87,49 +87,49 @@ GetBrowserNameAndActivate:
 return
 
 ws1:
-Run, % InStr(ws1, ":\") || InStr(ws1, "http:") ? ws1 : "http:" . ws1
+Run, % InStr(ws1, ":\") || InStr(ws1, "://") ? ws1 : "http:" . ws1
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws2:
-Run, % InStr(ws2, ":\") || InStr(ws2, "http:") ? ws2 : "http:" . ws2
+Run, % InStr(ws2, ":\") || InStr(ws2, "://") ? ws2 : "http:" . ws2
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws3:
-Run, % InStr(ws3, ":\") || InStr(ws3, "http:") ? ws3 : "http:" . ws3
+Run, % InStr(ws3, ":\") || InStr(ws3, "://") ? ws3 : "http:" . ws3
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws4:
-Run, % InStr(ws4, ":\") || InStr(ws4, "http:") ? ws4 : "http:" . ws4
+Run, % InStr(ws4, ":\") || InStr(ws4, "://") ? ws4 : "http:" . ws4
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws5:
-Run, % InStr(ws5, ":\") || InStr(ws5, "http:") ? ws5 : "http:" . ws5
+Run, % InStr(ws5, ":\") || InStr(ws5, "://") ? ws5 : "http:" . ws5
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws6:
-Run, % InStr(ws6, ":\") || InStr(ws6, "http:") ? ws6 : "http:" . ws6
+Run, % InStr(ws6, ":\") || InStr(ws6, "://") ? ws6 : "http:" . ws6
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws7:
-Run, % InStr(ws7, ":\") || InStr(ws7, "http:") ? ws7 : "http:" . ws7
+Run, % InStr(ws7, ":\") || InStr(ws7, "://") ? ws7 : "http:" . ws7
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
 
 ws8:
-Run, % InStr(ws8, ":\") || InStr(ws8, "http:") ? ws8 : "http:" . ws8
+Run, % InStr(ws8, ":\") || InStr(ws8, "://") ? ws8 : "http:" . ws8
 GoSub GetBrowserNameAndActivate
 SetTimer, WebLClose, -50
 return
