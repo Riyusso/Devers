@@ -101,6 +101,9 @@ return
 return
 #If
 
+~#!SC017::
+	GoSub OpenLearnMoreTabAbout
+return
 ~#!SC01F:: ; Win+Alt+S Suspends the script
 	Suspend, Permit
 	GoSub SuspendScriptToggle

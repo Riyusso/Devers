@@ -15,6 +15,11 @@
 	}
 return
 
+OpenLearnMoreTabAbout:
+	LearnMoreTabAbout:=true
+	GoSub LearnMore
+return
+
 GoToWebsite:
 	website:="https://riyusso.github.io"
 	Run, %website%

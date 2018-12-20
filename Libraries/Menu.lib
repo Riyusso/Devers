@@ -951,6 +951,13 @@ LearnMore:
 	ImageButton.Create(ExitButtonTab, Opt1, Opt2, "", Opt4)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r6-6", ahk_id %LearnMore%
+
+	If (LearnMoreTabAbout=1)
+	{
+		GoSub LearnMorePrev
+		LearnMoreTabAbout:=false
+	}
+
 	Gui, Show, w%width% h%height%, Learn More
 	FadeIn(LearnMore)
 	WinSet, Transparent, 247
@@ -1018,6 +1025,7 @@ Else
 	Menu, Tray, Tip, Uncompiled
 Menu, Tray, NoStandard
 Menu, Tray, ADD, Menu, DefaultMenu
+Menu, Tray, ADD, About, OpenLearnMoreTabAbout
 Menu, Tray, ADD, Reload, mnuScriptReload
 Menu, Tray, ADD, Quit, mnuExit
 Menu, Tray, Default, Menu
@@ -1118,6 +1126,7 @@ ExitAppL:
 		IfWinExist, % "ahk_pid" PID%PluginName%
 			WinKill, % "ahk_pid" PID%PluginName%
 	}
+	Send {LAlt Up}{LShift Up} ; Needed incase a key was stuck
 	ExitApp
 return
 
