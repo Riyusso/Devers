@@ -76,6 +76,11 @@ return
 vol_up:
 	Suspend, Permit
 	SoundSet, +2
+
+	SoundGet, muteState, , mute
+	if (muteState == "On") && !ErrorLevel
+		SoundSet, +1, , Mute
+
 	gosub, Volume_Show_OSD
 return
 
