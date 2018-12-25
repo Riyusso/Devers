@@ -111,6 +111,7 @@ return
 
 #If (ItsLocked = 1)
 	RButton::Return
+	Space::Return
 	LAlt::Return
 	RAlt::Return
 	F1::
