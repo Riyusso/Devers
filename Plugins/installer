@@ -1,6 +1,5 @@
 ﻿; Installs the plugin in the user's program directory
-; Just compile, zip and send
-; Don't forget to rename the PluginInstaller.exe to whatever the plugin name is going to be.
+; Put your code in a "Plugin.ahk" file and drag and drop a plugin on top of compile.ahk
 
 #NoEnv
 #NoTrayIcon
@@ -28,7 +27,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 }
 else
 {
-	MsgBox, Devers is not installed on your computer.
+	MsgBox, %ScriptName% is not installed on your computer.
 }
 
 ExitApp
