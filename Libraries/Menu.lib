@@ -154,7 +154,7 @@ OtherSettingsLabel:
 	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
-	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|No Expiration|Always ask
+	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|Never|Always Ask
 	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTip1 hwndOtherTip1 -TabStop +Center", ?
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
@@ -192,6 +192,12 @@ OtherButton:
 	IniWrite, %ShowStartUpLogo%, settings.ini, settings, ShowStartUpLogo
 	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
 	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
+
+	If PasswordExpiration!=2
+	{
+		Authorized:=false
+		IniDelete, settings.ini, settings, passwordNoExpirationHash
+	}
 
 	If hotkeysInFullscreen=2
 		SetTimer, HotkeysSuspendCheck, 500
@@ -1469,7 +1475,7 @@ return
 
 Authorize:
 	Gui, Submit, NoHide
-	If (origpass=password and StrLen(origpass)>0)
+	If (origpass=password && StrLen(origpass)>0)
 	{
 		FadeOut(Auth)
 		Authorized:=true
@@ -1487,6 +1493,8 @@ Authorize:
 		{
 			SetTimer, AuthExpirationCheck, Off
 			RSNotify("No Expiration")
+			passwordNoExpirationHash := Crypt.Encrypt.StrEncrypt(passwordhash, password, 7, 3)
+			IniWrite, %passwordNoExpirationHash%, settings.ini, settings, passwordNoExpirationHash
 		}
 		else
 		{
@@ -1505,7 +1513,7 @@ Authorize:
 return
 
 ExpirationPrompt:
-	width=235
+	width=255
 	height=123
 	Gui, ExpirationPrompt:New, +hwndExpirationPrompt
 	Gui, +LastFound +ToolWindow +AlwaysOnTop
@@ -1520,9 +1528,9 @@ ExpirationPrompt:
 	Gui, Add, Progress, % "x-1 y-1 w" width " h30 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, x0 y6 w%width% Center BackgroundTrans +0x200 ceeeeee, Authorization ends after?
 	Gui, Font, s10 Bold ceeeeee, Tahoma
-	Gui, Add, Button, x0 y+8 w%width% h45 +default gKeepDefaultExpiration hwndBut1 +Center, 6 minutes of inactivity
+	Gui, Add, Button, x0 y+8 w%width% h45 +default gKeepDefaultExpiration hwndBut1 +Center, 6 Minutes of inactivity
 
-	Gui, Add, Button, x0 y+0 w%width% h47 gNoAuthExpiration hwndBut2 +Center, No expiration
+	Gui, Add, Button, x0 y+0 w%width% h47 gUntilRestartAuthExpiration hwndBut2 +Center, Until Restart
 
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
@@ -1531,11 +1539,10 @@ ExpirationPrompt:
 	FadeIn(ExpirationPrompt)
 return
 
-NoAuthExpiration:
+UntilRestartAuthExpiration:
 SetTimer, AuthExpirationCheck, Off
 ExpirationPromptGuiEscape:
 KeepDefaultExpiration:
-PasswordExpiration=2
 IfWinExist, ahk_id %ExpirationPrompt%
 	FadeOut(ExpirationPrompt)
 return

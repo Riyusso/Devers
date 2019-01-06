@@ -72,7 +72,17 @@ Config:
 
 	IniRead, passwordhash, settings.ini, settings, passwordhash ; keep in a separate thread with lockpwhash decryption
 	if passwordhash!=ERROR || passwordhash ; keep in a separate thread with lockpwhash decryption
-	    password:=Crypt.Encrypt.StrDecrypt(passwordhash,"KktgC3l0wR",7,3) ; keep in a separate thread with lockpwhash decryption
+	    password:=Crypt.Encrypt.StrDecrypt(passwordhash, "KktgC3l0wR", 7, 3) ; keep in a separate thread with lockpwhash decryption
+
+	if PasswordExpiration=2
+	{
+		IniRead, passwordNoExpirationHash, settings.ini, settings, passwordNoExpirationHash ; keep in a separate thread with lockpwhash decryption
+		if passwordNoExpirationHash!=ERROR || passwordNoExpirationHash ; keep in a separate thread with lockpwhash decryption
+			passwordNoExpirationHash:=Crypt.Encrypt.StrDecrypt(passwordNoExpirationHash, password , 7, 3) ; keep in a separate thread with lockpwhash decryption
+
+		if (passwordNoExpirationHash = passwordhash)
+			Authorized:=true
+	}
 
     IniRead, WebNames, settings.ini, Web, WebNames
 	Loop, Parse, WebNames, `|
