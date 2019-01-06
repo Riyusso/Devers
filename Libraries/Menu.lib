@@ -149,8 +149,6 @@ OtherSettingsLabel:
 	Gui, Font, normal
 
 	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Misc    -
-	Gui, Add, Text, % "x15 y+14 w120 Center", Start up logo ›
-	Gui, Add, DropDownList, % "x+16 w77 yp-3 Center vShowStartUpLogo Choose" ShowStartUpLogo " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
@@ -189,7 +187,6 @@ return
 OtherButton:
 	Gui, Submit, NoHide
 
-	IniWrite, %ShowStartUpLogo%, settings.ini, settings, ShowStartUpLogo
 	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
 	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
 
@@ -523,7 +520,7 @@ ProtectionSettings:
 	ImageButton.Create(ProtectionTip6, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
-	Gui, Show, % "w" width , RS-Guard Settings
+	Gui, Show, % "w" width , Protection Settings
 	FadeIn(ProtectionSettings)
 return
 
@@ -1014,16 +1011,16 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 MenuInit:
-IfExist Assets\OptionsIcon.ico
+IfExist Assets\TrayIcon.ico
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\OptionsIcon.ico
+	Menu, TRAY, Icon, Assets\TrayIcon.ico
 }
 Else
 {
 	GoSub InstallFiles
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\OptionsIcon.ico
+	Menu, TRAY, Icon, Assets\TrayIcon.ico
 }
 If A_IsCompiled
 	Menu, Tray, Tip, %ScriptName%. Make everyday tasks effortless.
@@ -1095,14 +1092,14 @@ Loop, Files, *.ahk
 If A_IsSuspended
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\RSStopped.ico,,1
+	Menu, TRAY, Icon, Assets\TrayIconSuspended.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Suspended")
 }
 If !A_IsSuspended
 {
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\OptionsIcon.ico,,1
+	Menu, TRAY, Icon, Assets\TrayIcon.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Released")
 }
@@ -1110,8 +1107,6 @@ return
 
 mnuExit:
 	FadeOut(DefaultHWND)
-	GoSub RSRunScript
-	sleep 1000
 	GoSub ExitAppL
 Return
 
@@ -1344,7 +1339,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 PrInfo:
-	width :=330
+	width :=360
 	Gui, PrInfo:New, +hwndPrInfo
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
@@ -1352,7 +1347,7 @@ PrInfo:
 	Gui, Margin, 0, 0
 	Gui, Font, s11 cFFFFFF Bold, Tahoma
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h31 Background2e2e2e Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y16 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", RS-Guard is designed to protect your PC.
+	Gui, Add, Text, % "x0 y16 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  Devers-Guard is designed to protect your PC.
 	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", It is going to lock the computer after
 	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", the amount of time you have set.
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
@@ -1369,7 +1364,7 @@ PrInfo:
 	Gui, Add, Text, % "x0 y+22 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0",  --- What some settings do ---
 	Gui, Add, Text, % "x0 y+10 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", - Protected/Unprotected Dropdown -
 		Gui, Font, s9 cFFFFFF Bold, Tahoma
-	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0",  Toggles whether RS-Guard will lock the PC
+	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0",  Toggles whether Devers-Guard will lock the PC
 	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", after the amount of time or not.
 	Gui, Add, Text, % "x0 y+4 w" width " r1 BackgroundTrans  Center 0x200 gGuiMove cD0D0D0", You can still lock it with the select key
 		Gui, Font, s11 cFFFFFF Bold, Tahoma
@@ -1398,7 +1393,7 @@ PrInfo:
 	H := PY + PH
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12"
-	Gui, Show, % "w" width  , RS-Guard Settings
+	Gui, Show, % "w" width  , Protection Settings
 	FadeIn(PrInfo)
 return
 

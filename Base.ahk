@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.9.8
+FileVersion=2.0.9.9
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -44,7 +44,6 @@ IfExist, settings.ini
 
 	If Reloaded=1
 	{
-		If !A_IsCompiled
 		RSNotify("Reloaded")
 		IniDelete, settings.ini, settings, Reloaded
 	}
@@ -88,9 +87,11 @@ IfExist, settings.ini
 	}
 
 	GoSub InstallFiles
-	If !LockAfterRestart && (A_IsCompiled) && !AfterInstallation
-			SetTimer, RSRunScript, -25
-	
+	If PluginInstalled=1
+	{
+		RSNotify("Plugin Added")
+		IniDelete, settings.ini, plugins, PluginInstalled
+	}
 	If LockAfterRestart=1
 	{
 		GoSub RSGuard
@@ -119,7 +120,7 @@ Installation:
 	sleep 1350
 	GoSub InstallFiles
 	Menu, Tray, Icon
-	Menu, Tray, Icon, Assets\OptionsIcon.ico
+	Menu, Tray, Icon, Assets\TrayIcon.ico
 	GoSub AdminPrompt
 return
 
@@ -129,14 +130,12 @@ InstallFiles:
 
 	IfNotExist, Assets
 		FileCreateDir, Assets
-	IfNotExist, Assets\RS.png
-		FileInstall, Base\RS.png, %A_MyDocuments%\%ScriptName%\Assets\RS.png, 1
-	IfNotExist, Assets\RSAnimation.mp4
-		FileInstall, Base\RSAnimation.mp4, %A_MyDocuments%\%ScriptName%\Assets\RSAnimation.mp4, 1
-	IfNotExist, Assets\RSStopped.ico
-		FileInstall, Base\RSStopped.ico, %A_MyDocuments%\%ScriptName%\Assets\RSStopped.ico, 1
-	IfNotExist, Assets\OptionsIcon.ico
-		FileInstall, Base\OptionsIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\OptionsIcon.ico, 1
+	IfNotExist, Assets\Animation.mp4
+		FileInstall, Base\Animation.mp4, %A_MyDocuments%\%ScriptName%\Assets\Animation.mp4, 1
+	IfNotExist, Assets\TrayIconSuspended.ico
+		FileInstall, Base\TrayIconSuspended.ico, %A_MyDocuments%\%ScriptName%\Assets\TrayIconSuspended.ico, 1
+	IfNotExist, Assets\TrayIcon.ico
+		FileInstall, Base\TrayIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\TrayIcon.ico, 1
 	IfNotExist, Assets\Tip_small.png
 		FileInstall, Base\Tip_small.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_small.png, 1
 	IfNotExist, Assets\Tip_medium.png

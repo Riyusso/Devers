@@ -224,50 +224,6 @@ GuiFade:
 	FadeOut(WarningGUI)
 return
 
-;-------------------------------------------------------------------------------------------------------------
-
-RSRunScript:
-	If (ShowStartUpLogo=1) && !PluginInstalled
-	{
-		logofader=0
-		xc:=A_ScreenWidth/2-223
-		yc:=A_ScreenHeight/2-261
-		RunScript := new GUI()
-		RunScript.SetTransparent("0")
-		RunScript.Color := "black"
-		RunScript.SetStyle("-Caption +AlwaysOnTop -Border +ToolWindow -DPIScale")
-		Gui, Add, Picture, x0 y0 w447 h523 vKC0, Assets\RS.png
-		RunScript.Aero.Set(500,500,0,0)
-		sleep 50
-		RunScript.Show("x" xc "y" yc "w447 h523")
-		Loop 19
-		{
-			RunScript.SetTransparent(logofader)
-			sleep 10
-			logofader:=logofader+13
-		}
-		SetTimer, FadeRSOut, -450
-		return
-	}
-	If PluginInstalled=1
-	{
-		RSNotify("Plugin Added")
-		IniDelete, settings.ini, plugins, PluginInstalled
-	}
-return
-
-FadeRSOut:
-logofader=247
-Loop 19
-{
-	RunScript.SetTransparent(logofader)
-	sleep 10
-	logofader:=logofader-13
-}
-RunScript.Destroy()
-return
-
-
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 ;=====------======------=====------======------=====------======------TRIGGERS-----======------======------=====------======------=====----
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
@@ -362,7 +318,7 @@ Defaults:
 	global dpi := DpiFactor()
 	DetectHiddenWindows, on
 	OSVer := GetOSVersion()
-	anvar = %A_MyDocuments%\%ScriptName%\Assets\RSAnimation.mp4 ; location of gif you want to show
+	anvar = %A_MyDocuments%\%ScriptName%\Assets\Animation.mp4 ; location of gif you want to show
 	html := "<html>`n<title>whateverrrr</title>`n<body bgcolor=black>`n<center>'n<img src=""" anvar """ width=""" awsize """ height=""" ahsize """>'n</center>`n</body>`n</html>"
 	Formula=0
 	vh:=A_ScreenHeight-92
