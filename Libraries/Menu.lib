@@ -386,6 +386,7 @@ IfExist, *.ahk
 		{
 			IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
 			Run, %A_MyDocuments%\%ScriptName%\Extensions %A_MyDocuments%\%ScriptName%\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			RunningPlugins.Push("PID" PluginName)
 		}
 		else if % PluginState%PluginName%=2
 		{
@@ -1046,20 +1047,9 @@ mnuUninstall:
 	FadeOut(ScriptOptions)
 	FadeOut(DefaultHWND)
 	RSNotify("Uninstalling")
-	Loop, Files, *.ahk
-	{
-		SplitPath, A_LoopFileLongPath,,,, PluginName
+	
+	GoSub StopRunningPlugins
 
-		If RegExMatch(PluginName, "\W")
-		{
-			PluginName:=StrReplace(PluginName, A_Space, "_")
-			PluginName := RegExReplace(PluginName, "\W")
-			FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
-		}
-
-		IfWinExist, % "ahk_pid" PID%PluginName%
-			WinKill, % "ahk_pid" PID%PluginName%
-	}
 	Sleep 2000
 	SplitPath, A_Scriptname, , , , OutNameNoExt
 	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
@@ -1113,22 +1103,19 @@ Return
 ExitAppL:
 	If IntentReload=1
 		IniWrite, %IntentReload%, settings.ini, settings, Reloaded
-	Loop, Files, *.ahk
-	{
-		SplitPath, A_LoopFileLongPath,,,, PluginName
-		
-		If RegExMatch(PluginName, "\W")
-		{
-			PluginName:=StrReplace(PluginName, A_Space, "_")
-			PluginName := RegExReplace(PluginName, "\W")
-			FileMove, %A_LoopFileLongPath%, %PluginName%.ahk, 1
-		}
 
-		IfWinExist, % "ahk_pid" PID%PluginName%
-			WinKill, % "ahk_pid" PID%PluginName%
-	}
+	GoSub StopRunningPlugins
+
 	Send {LAlt Up}{LShift Up} ; Needed incase a key was stuck
 	ExitApp
+return
+
+StopRunningPlugins:
+	for index, element in RunningPlugins
+	{
+		IfWinExist, % "ahk_pid" %element%
+			WinKill, % "ahk_pid" %element%
+	}
 return
 
 DefaultMenu:
