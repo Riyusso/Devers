@@ -62,7 +62,7 @@ BalloonTip(tiptext="this is a tip", hwnd="")
 		yc:=yc-124
 		sizew:=340*multiplier
 		sizeh:=234*multiplier
-    	rowy:=sizeh/2-10*rows
+    	rowy:=sizeh/2-10*rows-3
 		tipsize=medium
 	}
 	else if rows<=5
@@ -102,28 +102,34 @@ SettingsTip2:
 	tiptext=This settings allows you|to output your password|anywhere you want by|pressing the Win button|and tapping CapsLock x2|You will be asked for the| password once and after|that you will be able to|output it as many|times as you want.
 	BalloonTip(tiptext, SettingsTip2)
 return
+ProtectionTip0:
+	tiptext=Controls whether your|PC will automatically lock|when you are away.|If this setting is OFF|you can still lock with|the Force Lock Key, but|set a PIN first.
+	BalloonTip(tiptext, ProtectionTip0)
+return
 ProtectionTip1:
 	tiptext=A PIN is used to unlock|your PC after it has been|locked by the program.|In order to change it|you will need to verify|your previous PIN first.
 	BalloonTip(tiptext, ProtectionTip1)
 return
 ProtectionTip2:
-	tiptext=Your computer will lock|itself after you have been|inactive for a predefined|amount of seconds.
+	tiptext=Your computer will lock|itself after you have been|inactive for this|many seconds.
 	BalloonTip(tiptext, ProtectionTip2)
 return
 ProtectionTip3:
 	tiptext=If you have checked the|setting below this one|you can extend the|amount of time it takes|the computer to lock|itself when in fullscreen.
 	BalloonTip(tiptext, ProtectionTip3)
 return
+F8::
 ProtectionTip4:
-	tiptext=Your PC will be locked|in the background if you|are watching something|in fullscreen and have|been inactive.
+	tiptext=Instead of your computer|locking itself while you|are watching a movie|or a video, it will lock|after you are done.|Keep in mind it only|works in fullscreen mode.
+	tiptext=Set this to ON if you|don't want your PC to|lock during a movie or|a video. Instead it will|lock after you are done.|Keep in mind it only|works in fullscreen mode.
 	BalloonTip(tiptext, ProtectionTip4)
 return
 ProtectionTip5:
-	tiptext=Controls whether this PC|is locked by the program|when it wakes up.
+	tiptext=Set this to ON if|you want the lock screen|to appear when your PC|wakes up from sleep.
 	BalloonTip(tiptext, ProtectionTip5)
 return
 ProtectionTip6:
-	tiptext=If you want to log when|this PC has been locked|or unlocked you can use|this setting and a button|will appear in this menu|to see those logs.
+	tiptext=Use this setting if you|want to know when|this PC has been locked|or unlocked. A button|will appear in this menu|to see those logs.
 	BalloonTip(tiptext, ProtectionTip6)
 return
 OtherTip1:

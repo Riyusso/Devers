@@ -436,7 +436,7 @@ FadeIn(id)
 	{
 		WinSet, Transparent, %localvar% , ahk_id %id%
 		sleep 20
-		localvar:=localvar+3
+		localvar:=localvar+4
 	}
 	loop, 9
 	{
@@ -460,6 +460,17 @@ MouseIsOver(WinTitle)
 {
 	MouseGetPos,,, Win
 	return WinExist(WinTitle . " ahk_id " . Win)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+FirstTimeOpenedAction(Window, Method)
+{
+	IniRead, %Window%FirstTime, settings.ini, settings, %Window%FirstTime, 1
+	IniWrite, 0, settings.ini, settings, %Window%FirstTime
+
+	If (%Window%FirstTime)=1
+		GoSub %Method%
 }
 
 ;--------------------------------------------------------------------------------------------------------------

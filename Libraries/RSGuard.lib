@@ -493,7 +493,7 @@ CheckAuth:
 return
 
 LockNow:
-	If ItsLocked=0
+	If (ItsLocked=0)
 	{
 		forcedLockAuthExpire:=true
 		LogTime(2)

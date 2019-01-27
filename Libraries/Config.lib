@@ -50,7 +50,7 @@ Config:
 	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
 	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
-	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 60
+	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 200
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
 
 	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 2
