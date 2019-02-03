@@ -268,16 +268,23 @@ WebLGuiContextMenu:
 
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
 	If FastSearching || AddNewCustomQuery
+	{
 		Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
+		GuiControl, Focus, SaveBtn
+	}
 	else
+	{
 		Gui, Show, % "w" width " y" A_ScreenHeight/2+204*amultiplier/2+20, Web Edit
-	GuiControl, Focus, SaveBtn
+		Send {End}
+	}
+
 	AddNewCustomQuery:=false
 	FadeIn(WebEdit)
 return
 
 ExitWebsites:
- 	FadeOut(WebEdit)
+	FadeOut(WebEdit)
+	WinActivate, ahk_class Shell_TrayWnd
 return
 
 EditWebsites:
@@ -312,6 +319,7 @@ EditWebsites:
 		currentKeyword := newkeyword
 
 		SetSearchLabelText(newLabel, currentKeyword, webSearchVar, guiw)
+		GuiControl, WebL:Focus, webSearchVar
 	}
 	else
 	{
@@ -328,7 +336,6 @@ EditWebsites:
 		}
 	}
 
-	GuiControl, WebL:Focus, webSearchVar
 	FadeOut(WebEdit)
 return
 
