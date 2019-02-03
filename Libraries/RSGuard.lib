@@ -1,5 +1,5 @@
 ﻿RSGuard:
-	if forcedLockAuthExpire
+	if (forcedLockAuthExpire) && (PasswordExpiration!=2)
 	{
 		GoSub AuthExpire
 		forcedLockAuthExpire:=false
@@ -365,6 +365,9 @@ return
 
 TryPw:
 	Gui, Submit, NoHide
+	if (Formula=0)
+		return
+
 	cryptpw := Crypt.Encrypt.StrDecrypt("YdlL3J0g220Dl2xbfLpV0w==",Formula,7,3) ; This one unlocks the OS by default
 	If (Formula=cryptpw)
 	{
