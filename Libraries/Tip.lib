@@ -94,45 +94,44 @@ BalloonTip(tiptext="this is a tip", hwnd="")
     }
 }
 
-SettingsTip1:
+SettingsTipEmail:
 	tiptext=This settings allows you|to output your email|anywhere you want by|tapping CapsLock twice.
-	BalloonTip(tiptext, SettingsTip1)
+	BalloonTip(tiptext, SettingsTipEmail)
 return
-SettingsTip2:
+SettingsTipPassword:
 	tiptext=This settings allows you|to output your password|anywhere you want by|pressing the Win button|and tapping CapsLock x2|You will be asked for the| password once and after|that you will be able to|output it as many|times as you want.
-	BalloonTip(tiptext, SettingsTip2)
+	BalloonTip(tiptext, SettingsTipPassword)
 return
-ProtectionTip0:
+ProtectionTipBreakLoop:
 	tiptext=Controls whether your|PC will automatically lock|when you are away.|If this setting is OFF|you can still lock with|the Force Lock Key, but|set a PIN first.
-	BalloonTip(tiptext, ProtectionTip0)
+	BalloonTip(tiptext, ProtectionTipBreakLoop)
 return
-ProtectionTip1:
+ProtectionTipNewLockPw:
 	tiptext=A PIN is used to unlock|your PC after it has been|locked by the program.|In order to change it|you will need to verify|your previous PIN first.
-	BalloonTip(tiptext, ProtectionTip1)
+	BalloonTip(tiptext, ProtectionTipNewLockPw)
 return
-ProtectionTip2:
+ProtectionTipSeconds:
 	tiptext=Your computer will lock|itself after you have been|inactive for this|many seconds.
-	BalloonTip(tiptext, ProtectionTip2)
+	BalloonTip(tiptext, ProtectionTipSeconds)
 return
-ProtectionTip3:
+ProtectionTipDelaySeconds:
 	tiptext=If you have checked the|setting below this one|you can extend the|amount of time it takes|the computer to lock|itself when in fullscreen.
-	BalloonTip(tiptext, ProtectionTip3)
+	BalloonTip(tiptext, ProtectionTipDelaySeconds)
 return
-F8::
-ProtectionTip4:
+ProtectionTipAfterFS:
 	tiptext=Instead of your computer|locking itself while you|are watching a movie|or a video, it will lock|after you are done.|Keep in mind it only|works in fullscreen mode.
 	tiptext=Set this to ON if you|don't want your PC to|lock during a movie or|a video. Instead it will|lock after you are done.|Keep in mind it only|works in fullscreen mode.
-	BalloonTip(tiptext, ProtectionTip4)
+	BalloonTip(tiptext, ProtectionTipAfterFS)
 return
-ProtectionTip5:
+ProtectionTipAfterWU:
 	tiptext=Set this to ON if|you want the lock screen|to appear when your PC|wakes up from sleep.
-	BalloonTip(tiptext, ProtectionTip5)
+	BalloonTip(tiptext, ProtectionTipAfterWU)
 return
-ProtectionTip6:
+ProtectionTipLogging:
 	tiptext=Use this setting if you|want to know when|this PC has been locked|or unlocked. A button|will appear in this menu|to see those logs.
-	BalloonTip(tiptext, ProtectionTip6)
+	BalloonTip(tiptext, ProtectionTipLogging)
 return
-OtherTip1:
+OtherTipPasswordExpiration:
 	tiptext=Secure is the default one|and your password will|expire after 6 minutes|of inactivty on your PC.
-	BalloonTip(tiptext, OtherTip1)
+	BalloonTip(tiptext, OtherTipPasswordExpiration)
 return

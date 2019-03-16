@@ -28,11 +28,11 @@
 	Gui, Add, Text, % "x" labelsx " w75 y+12", Email:
 	Gui, Add, Edit, % "x+0 yp-1 w" inputw " h16 hwndEdit6 vemail -E0x200 +Center -VScroll", %email%
 	SetEditCueBanner(Edit6, "CapsLock x2")
-	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTip1 hwndSettingsTip1 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTipEmail hwndSettingsTipEmail -TabStop +Center", ?
 	Gui, Add, Text, % "x" labelsx " w75 y+10", Password:
 	Gui, Add, Edit, % "x+0 yp-1 w" inputw " h16 hwndEdit7 vpassword +password -E0x200 +Center -VScroll", %password%
 	SetEditCueBanner(Edit7, "Win + CapsLock x2")
-	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTip2 hwndSettingsTip2 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTipPassword hwndSettingsTipPassword -TabStop +Center", ?
 
 	Gui, Font, s10 w600
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
@@ -64,8 +64,8 @@
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	ImageButton.Create(SettingsTip1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(SettingsTip2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SettingsTipEmail, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(SettingsTipPassword, Opt1, Opt2, "", Opt4)
 	ShAutoComplete(Edit6)
 	ShAutoComplete(Edit7)
 	Gui, -Caption
@@ -153,7 +153,7 @@ OtherSettingsLabel:
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
 	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
 	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|Never|Always Ask
-	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTip1 hwndOtherTip1 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTipPasswordExpiration hwndOtherTipPasswordExpiration -TabStop +Center", ?
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
@@ -177,7 +177,7 @@ OtherSettingsLabel:
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x3e3e3e, 0x3f3f3f, 0xffffff]
-	ImageButton.Create(OtherTip1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(OtherTipPasswordExpiration, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, w%width%, Other Settings
@@ -366,6 +366,7 @@ CreateExtension:
 	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\%newPluginName%.ahk, 0
 	GoSub ExtSettings
 	Sleep 70
+	GoSub ExitDefMenu
 	Run, edit %A_WorkingDir%\%newPluginName%.ahk
 return
 
@@ -373,6 +374,7 @@ EditPlugin:
 	ControlGetFocus, ChosenPluginClassNN, A
 	pluginPath:=A_WorkingDir . "\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
 	DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
+	GoSub ExitDefMenu
 return
 
 extbutton:
@@ -465,14 +467,14 @@ ProtectionSettings:
 	Gui, Font, normal
 
 	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center gGrayOutControls vBreakLoop Choose" ChooseBL " AltSubmit" , On|Off
-	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip0 hwndProtectionTip0 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTipBreakLoop hwndProtectionTipBreakLoop -TabStop +Center", ?
 
 	Gui, Font, s8 cFFFFFF Bold, Segoe UI
 	Gui, Add, Text, % "x0 y+19 w" (width/2) " Center", PIN ›
 	Gui, Font, s8, Tahoma
 	Gui, Font, normal
 	Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 vNewLockPw hwndEdit8 +password -E0x200 +Center -VScroll +Number", %LockPw%
-	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip1 hwndProtectionTip1 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTipNewLockPw hwndProtectionTipNewLockPw -TabStop +Center", ?
 
 	Gui, Font, s8 cFFFFFF Bold, Segoe UI
 	Gui, Add, Text, % "x0 y+13 w" (width/2) " Center", Seconds Until Lock ›
@@ -481,23 +483,23 @@ ProtectionSettings:
 	Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 hwndEdit1 vseconds -E0x200 +Center -VScroll +Number", %seconds%
 	Gui, Add, Progress, % "yp-0 w87 h15 vSecondsUntilLockReplacement Background3a3a3a Disabled hwndHPROG"
 
-	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip2 hwndProtectionTip2 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTipSeconds hwndProtectionTipSeconds -TabStop +Center", ?
 
 	; Gui, Add, Text, % "x0 y+13 w" (width/2) " Center", Fullscreen delay ›
 	; Gui, Add, Edit, % "x+" (width/4)-50 " w87 h15 hwndEdit1 vdelayseconds -E0x200 +Center -VScroll +Number", %delayseconds%
-	; Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTip3 hwndProtectionTip3 -TabStop +Center", ?
+	; Gui, Add, Button, % "x+2 yp-1 w22 h17 gProtectionTipDelaySeconds hwndProtectionTipDelaySeconds -TabStop +Center", ?
 
-	Gui, Add, Text, % "x0 y+20 w" (width/2) " Center", Lock After Sleep ›
+	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Lock After Sleep ›
 	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAfterWU Choose" AfterWU " AltSubmit" , On|Off
-	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip5 hwndProtectionTip5 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTipAfterWU hwndProtectionTipAfterWU -TabStop +Center", ?
 
 	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Lock After Videos ›
 	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAfterFS Choose" AfterFS " AltSubmit" , On|Off
-	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip4 hwndProtectionTip4 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTipAfterFS hwndProtectionTipAfterFS -TabStop +Center", ?
 
 	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Security Logs ›
 	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vlogging Choose" logging " AltSubmit" , On|Off
-	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTip6 hwndProtectionTip6 -TabStop +Center", ?
+	Gui, Add, Button, % "x+2 yp-1 w22 h23 gProtectionTipLogging hwndProtectionTipLogging -TabStop +Center", ?
 
 	Gui, Add, Text, % "x0 y+14 w" (width/2) " Center", Animation ›
 	Gui, Add, DropDownList, % "x+" (width/4)-50 " w87 yp-3 Center vAnimationWanted Choose" AnimationWanted " AltSubmit" , On|Off
@@ -537,13 +539,13 @@ ProtectionSettings:
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	ImageButton.Create(ProtectionTip0, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip2, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip3, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip4, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip5, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(ProtectionTip6, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipBreakLoop, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipNewLockPw, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipSeconds, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipDelaySeconds, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipAfterFS, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipAfterWU, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(ProtectionTipLogging, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, % "w" width , Protection Settings
