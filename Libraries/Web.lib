@@ -152,6 +152,7 @@ WebLGuiEscape:
  	WebLT := false
 	Gui, Tip:Destroy
 	FadeOut(WebL)
+	Gui, WebL:Destroy
 	currentKeyword=
 	ChoosingWebsite:=false
 	SearchBased:=false

@@ -1,4 +1,4 @@
-﻿RSGuard:
+﻿Lockscreen:
 	if (forcedLockAuthExpire) && (PasswordExpiration!=2)
 	{
 		GoSub AuthExpire
@@ -500,7 +500,7 @@ LockNow:
 	{
 		forcedLockAuthExpire:=true
 		LogTime(2)
-		Gosub RSGuard
+		Gosub Lockscreen
 	}
 return
 
@@ -618,7 +618,7 @@ CalculatedProtection:
 		if ((A_TickCount - StartTime > 7500) && AfterWU=1) or (A_TickCount - StartTime > (seconds*1000))
 		{
 			DontShowRS:=true
-			GoSub RSGuard
+			GoSub Lockscreen
 			LogTime(1)
 		}
 
@@ -633,13 +633,13 @@ CalculatedProtection:
 				isFullScreen := isWindowFullScreen( "A" )
 				If isFullScreen=0
 				{
-					Gosub RSGuard
+					Gosub Lockscreen
 					LogTime(1)
 					return
 				}
 				IfWinActive, ahk_exe explorer.exe
 				{
-					Gosub RSGuard
+					Gosub Lockscreen
 					LogTime(1)
 					return
 				}
@@ -665,7 +665,7 @@ CFullScreen:
 	If (isFullScreen=0 && AfterFS=1)
 	{
 		DontShowRS:=true
-		Gosub RSGuard
+		Gosub Lockscreen
 		LogTime(3)
 		IniWrite, 1, settings.ini, settings, LockAfterRestart
 	}

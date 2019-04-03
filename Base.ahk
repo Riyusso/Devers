@@ -30,7 +30,7 @@ return
 
 RunScript: ; This is the beginning of the script
 GoSub Config
-GoSub VolumeTray
+GoSub Volume
 IniRead, LockPwHash, settings.ini, settings, LockPwHash ; keep in a separate thread with passwordhash decryption
 if LockPwHash!=ERROR || LockPwHash ; keep in a separate thread with passwordhash decryption
 LockPw:=Crypt.Encrypt.StrDecrypt(LockPwHash,"KktgC3l0wR",7,3) ; keep in a separate thread with passwordhash decryption
@@ -98,7 +98,7 @@ IfExist, settings.ini
 	}
 	If LockAfterRestart=1
 	{
-		GoSub RSGuard
+		GoSub Lockscreen
 		If RunAsAdmin
 			RunAsAdminAfterLock:=1
 	}
@@ -163,8 +163,8 @@ return
 #Include Libraries/Labels.lib
 #Include Libraries/Menu.lib
 #Include Libraries/Packages.lib
-#Include Libraries/RSGuard.lib
-#Include Libraries/RSWeb.lib
+#Include Libraries/Protection.lib
+#Include Libraries/Web.lib
 #Include Libraries/Tip.lib
 #Include Libraries/Updates.lib
-#Include Libraries/VolumeTray.lib
+#Include Libraries/Volume.lib

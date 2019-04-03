@@ -1,4 +1,4 @@
-VolumeTray:
+Volume:
 Volume_Delay=800
 BG_color=222222
 Text_color=168993
@@ -9,10 +9,10 @@ vol_down = WheelDown
 
 #If (VolumeOTWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"))
 Hotkey, If, (VolumeOTWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"))
-
 	Hotkey,%vol_up%,vol_up
 	Hotkey,%vol_down%,vol_down
 return
+
 
 Volume_Show_OSD:
 If (ItsLocked!=1)
