@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.0.9.9
+FileVersion=2.0.1.1
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -123,8 +123,8 @@ Installation:
 	RSNotify("Installing",,750)
 	sleep 1350
 	GoSub InstallFiles
-	Menu, Tray, Icon
 	Menu, Tray, Icon, Assets\TrayIcon.ico
+	Menu, Tray, Icon
 	GoSub AdminPrompt
 return
 

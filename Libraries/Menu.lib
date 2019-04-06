@@ -1068,14 +1068,14 @@ return
 MenuInit:
 IfExist Assets\TrayIcon.ico
 {
+	Menu, Tray, Icon, Assets\TrayIcon.ico
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\TrayIcon.ico
 }
 Else
 {
 	GoSub InstallFiles
+	Menu, Tray, Icon, Assets\TrayIcon.ico
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\TrayIcon.ico
 }
 If A_IsCompiled
 	Menu, Tray, Tip, %ScriptName%. Make everyday tasks effortless.
@@ -1135,15 +1135,15 @@ Loop, Files, *.ahk
 }
 If A_IsSuspended
 {
+	Menu, Tray, Icon, Assets\TrayIconSuspended.ico,,1
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\TrayIconSuspended.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Suspended")
 }
 If !A_IsSuspended
 {
+	Menu, Tray, Icon, Assets\TrayIcon.ico,,1
 	Menu, Tray, Icon
-	Menu, TRAY, Icon, Assets\TrayIcon.ico,,1
 	If !SuspendedByFullScreen
 	RSNotify("Released")
 }
@@ -1247,7 +1247,7 @@ DefaultMenu:
 		WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r50-50", ahk_id %DefaultHWND%
 		Gui, Show, h%guih% w%guiw% y%guipos% NoActivate, Menu
 		FadeIn(DefaultHWND)
-
+		
 		if lastUpdateCheck>=3600000
 			GoSub GetLatestVersion
 
