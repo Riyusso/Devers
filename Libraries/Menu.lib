@@ -149,7 +149,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ExtSettings:
-	width := 278
+	width := 265
 	labelsx := (width/7)+30
 	inputw := (width/2)
 	lpwwidth:=56
@@ -218,9 +218,9 @@ ExtSettings:
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.60)/2) " y+20 w" (width*0.60) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
+	Gui, Add, Button, % "x" (width/2)-((width*0.55)/2) " y+" (21+!ExtensionButtonsExist*6) " w" (width*0.55) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
 
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+16 w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+" (15+!ExtensionButtonsExist*2) " w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
 
 	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gextclose hwndBut3 +Center", Cancel
 
