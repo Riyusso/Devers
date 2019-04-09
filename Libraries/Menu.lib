@@ -17,8 +17,8 @@
 		Gui, Font, s9
 		Gui, Font, normal
 
-	Gui, Add, Text, % "x" labelsx " w142 y+25", Start with Windows
-	Gui, Add, DropDownList, % "x+0 w75 yp-3 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
+	Gui, Add, Text, % "x" labelsx " w137 y+25", Start with Windows
+	Gui, Add, DropDownList, % "x+0 w80 yp-3 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
 
 	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
 	Gui, Font, s9 cDFDFDF
@@ -34,38 +34,49 @@
 	SetEditCueBanner(Edit7, "Win + CapsLock x2")
 	Gui, Add, Button, % "x+2 yp-1 w21 h17 gSettingsTipPassword hwndSettingsTipPassword -TabStop +Center", ?
 
+	Gui, Add, Text, % "x" labelsx " w120 y+18", Password expiration ›
+	Gui, Add, DropDownList, % "x+17 w80 yp-3 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|Never|Always Ask
+	Gui, Add, Button, % "x+2 yp-0 w23 h23 gOtherTipPasswordExpiration hwndOtherTipPasswordExpiration -TabStop +Center", ?
+
 	Gui, Font, s10 w600
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+29 w" (width*0.80) " h36 gOtherSettingsLabel hwndBut1 +Center", Other Settings
+	if (!FirstRun)
+	{
+		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+22 w" (width*0.80) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gExtSettings hwndBut2 +Center", Extensions
-
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gScriptFunctions hwndBut3 +Center", Features
+		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gUninstallPrompt hwndBut2 +Center", Uninstall
+	}
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+18 w" (width*0.38) " h30 gMainMenuApply hwndBut4 +Center +Default", % (FirstRun) ? "Install" : "Apply"
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+" (FirstRun ? "30" : "12") " w" (width*0.38) " h30 gMainMenuApply hwndBut3 +Center +Default", % (FirstRun) ? "Install" : "Apply"
 
-	Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gdestroyset hwndBut5 +Center", Cancel
+	if (FirstRun)
+		Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gmnuUninstall hwndBut4 +Center", Cancel
+	else
+		Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gdestroyset hwndBut4 +Center", Cancel	
 
 	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	if !FirstRun
+	{
+		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	}
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But5, Opt1, Opt2, "", Opt4)
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
 	Opt2 := [ , 0x009494, 0x009494, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	ImageButton.Create(SettingsTipEmail, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(SettingsTipPassword, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(OtherTipPasswordExpiration, Opt1, Opt2, "", Opt4)
 	ShAutoComplete(Edit6)
 	ShAutoComplete(Edit7)
 	Gui, -Caption
@@ -81,6 +92,14 @@ MainMenuApply:
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
+	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
+
+	If PasswordExpiration!=2
+	{
+		Authorized:=false
+		IniDelete, settings.ini, settings, passwordNoExpirationHash
+	}
+
 	FadeOut(ScriptOptions)
 	If FirstRun
 	{
@@ -129,87 +148,8 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
-OtherSettingsLabel:
-	width := 260
-	labelsx := (width/7)+30
-	inputw := (width/2)
-	lpwwidth:=56
-	lpwpos:=(inputw/2)-(lpwwidth/2)+18
-
-	Gui, OtherMenu:New, +hwndOtherHWND
-	Gui, +LastFound
-	WinSet, Transparent, 0
-	Gui, Margin, 0, 0
-	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Other Settings
-
-	Gui, Color, 2e2e2e, 333333
-	Gui, Font, s8, Tahoma
-	Gui, Font, normal
-
-	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Misc    -
-	Gui, Add, Text, % "x15 y+14 w120 Center", Hotkeys in Fullscreen ›
-	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
-	Gui, Add, Text, % "x15 y+14 w120 Center", Password expiration ›
-	Gui, Add, DropDownList, % "x+16 yp-3 w77 Center vPasswordExpiration Choose" PasswordExpiration " AltSubmit" , Secure|Never|Always Ask
-	Gui, Add, Button, % "x+2 yp-1 w20 h23 gOtherTipPasswordExpiration hwndOtherTipPasswordExpiration -TabStop +Center", ?
-
-	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
-	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+28 w" (width*0.80) " h33 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
-
-	Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+3 w" (width*0.80) " h33 gUninstallPrompt hwndBut2 +Center", Uninstall
-
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+16 w" (width*0.38) " h31 gotherbutton hwndBut3 +Center +Default", Apply
-
-	Gui, Add, Button, % "x+5 w" (width*0.38) " h31 gotherclose hwndBut4 +Center", Cancel
-
-	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
-	GuiControlGet, P, Pos
-	H := PY + PH
-	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
-	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
-	Opt2 := [ , 0x3e3e3e, 0x3f3f3f, 0xffffff]
-	ImageButton.Create(OtherTipPasswordExpiration, Opt1, Opt2, "", Opt4)
-	Gui, -Caption
-	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
-	Gui, Show, w%width%, Other Settings
-	FadeIn(OtherHWND)
-return
-
-OtherButton:
-	Gui, Submit, NoHide
-
-	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
-	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
-
-	If PasswordExpiration!=2
-	{
-		Authorized:=false
-		IniDelete, settings.ini, settings, passwordNoExpirationHash
-	}
-
-	If hotkeysInFullscreen=2
-		SetTimer, HotkeysSuspendCheck, 500
-
-	FadeOut(OtherHWND)
-return
-
-otherclose:
-FadeOut(OtherHWND)
-return
-
-;--------------------------------------------------------------------------------------------------------------
-
 ExtSettings:
-	width := 255
+	width := 278
 	labelsx := (width/7)+30
 	inputw := (width/2)
 	lpwwidth:=56
@@ -783,12 +723,12 @@ ScriptFunctions:
 	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Reload Script:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Restart program:
 	Gui, Font, s8 c%lightc%, Tahoma
 	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + R
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Suspend Script:
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Suspend hotkeys:
 	Gui, Font, s8 c%lightc%, Tahoma
 	Gui, Add, Text, % "x+1 w" (width/2) " Center", Win + Alt + S
 
@@ -797,18 +737,15 @@ ScriptFunctions:
 	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+19 w" (width*0.64) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+19 w" (width*0.64) " h36 gLearnMore hwndBut1 +Center", Learn More
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gLearnMore hwndBut2 +Center", Learn More
-
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gsubit +hwndBut3 +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+2 w" (width*0.64) " h36 gsubit +hwndBut2 +Default", Close
 
 	Gui, Add, Text, % "x7 y+10 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, % "w" width " NA", Functions
@@ -865,28 +802,31 @@ ChangeHotkeys:
 	Gui, Font, s8, Tahoma
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+32 w" (width) " Center ", Press Delete on a hotkey to disable it
+	Gui, Add, Text, % "x14 y+28 w" (width/2) " Center ", Hotkeys in Fullscreen ›
+	Gui, Add, DropDownList, % "x+20 w72 yp-3 Center vhotkeysInFullScreen Choose" hotkeysInFullScreen " AltSubmit" , Yes|No
+
+	Gui, Add, Text, % "x0 y+26 w" (width) " Center ", Press Delete on a hotkey to disable it
 
 	Gui, Add, Text, % "x0 y+26 w" (width/2) " vLabelSP Center ", Speed Dial
-	Gui, Add, Hotkey, % "x+30 w72 Center gRSWebKeyModifiersCheck vassignedKeyRSWeb" , %keyRSWeb%
+	Gui, Add, Hotkey, % "x+34 w72 Center gRSWebKeyModifiersCheck vassignedKeyRSWeb" , %keyRSWeb%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Play/Pause
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPlay" , %keyPlay%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyPlay" , %keyPlay%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Previous
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyPrev" , %keyPrev%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyPrev" , %keyPrev%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Next
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyNext" , %keyNext%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyNext" , %keyNext%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Up
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolUp" , %keyVolUp%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyVolUp" , %keyVolUp%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Down
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyVolDown" , %keyVolDown%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Lock
-	Gui, Add, Hotkey, % "x+30 w72 Center vassignedKeyLock" , %keyLock%
+	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyLock" , %keyLock%
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
@@ -919,6 +859,10 @@ ChangeButton:
 			Hotkey, % %A_LoopField%, Off
 	}
 	GoSub ButtonsLabel
+
+	IniWrite, %hotkeysInFullScreen%, settings.ini, settings, hotkeysInFullScreen
+	If hotkeysInFullscreen=2
+		SetTimer, HotkeysSuspendCheck, 500
 ChangeClose:
 	GoSub SetButtons
 	FadeOut(ChangeHotkeys)
@@ -1001,7 +945,7 @@ LearnMore:
 	Gui, Add, Text, % "x0 y+25 w" (width) " vTab611 +Hidden Center c" darkerc, Email
 	Gui, Add, Text, % "x0 w" (width) " vTab612 +Hidden y+8 Center c" lightc, Riyusso@gmx.us
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab +Default", Exit
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab +Default", Close
 
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
@@ -1100,7 +1044,9 @@ mnuUninstall:
 	FadeOut(OtherHWND)
 	FadeOut(ScriptOptions)
 	FadeOut(DefaultHWND)
-	RSNotify("Uninstalling")
+	
+	if !FirstRun
+		RSNotify("Uninstalling")
 	
 	GoSub StopRunningPlugins
 
@@ -1175,6 +1121,7 @@ return
 DefaultMenu:
 	if(!DefaultFader)
 	{
+		DefaultFader:=true
 		FadeOut(DefaultHWND)
 		Gui, DefaultMenu:New, +hwndDefaultHWND
 		Gui, +LastFound +AlwaysOnTop -Caption +ToolWindow
@@ -1210,29 +1157,29 @@ DefaultMenu:
 		}
 
 		Gui, Font, s%zfont% cFFFFFF Bold q5
-		guiw:=830*amultiplier
+		guiw:=910*amultiplier
 		guih:=56*amultiplier
 		buth:=(guih)+2
-		butw:=((guiw-30)/7)
-		guipos:=A_ScreenHeight-164
+		butw:=((guiw-60)/7)
+		guipos:=(A_ScreenHeight)-(A_ScreenHeight/7+20)
 
 		Opt1 := [6, 0x232323, 0x232323, "White"]
 		Opt2 := [ , 0x292929, 0x282828, 0xffffff]
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-		Gui, Add, Button, % "x+0 y-1 h" buth " w" butw " gSuspendScriptToggle hwndBut1 +Center", Suspend
+		Gui, Add, Button, % "x+0 y-1 h" buth " w" butw " gmnuScriptReload hwndBut1 +Center", Restart
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw " gmnuScriptReload hwndBut2 +Center", Reload
+		Gui, Add, Button, % "x+0 h" buth " w" butw " gSuspendScriptToggle hwndBut2 +Center", Suspend
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw " gLockNow hwndBut3 +Center",  Lock
+		Gui, Add, Button, % "x+0 h" buth " w" butw+9 " gManualCheck hwndBut3 +Center", Update
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw+9 " gManualCheck hwndBut4 +Center", Update
+		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut4 +Center", Features
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw+7 " gScriptFunctions hwndBut5 +Center", Features
+		Gui, Add, Button, % "x+0 h" buth " w" butw+28 " gExtSettings hwndBut5 +Center", Extensions
 
 		Gui, Add, Button, % "x+0 h" buth " w" butw " gsettings hwndBut6 +Center", Settings
 
-		Gui, Add, Button, % "x+0 h" buth " w" butw-37 " gmnuExit hwndBut7 +Center",  Quit
+		Gui, Add, Button, % "x+0 h" buth " w" butw-35 " gmnuExit hwndBut7 +Center",  Quit
 
 		Gui, Add, Button, % "x+0 h" buth " w53 gExitDefMenu hwndBut8", ×
 
@@ -1262,8 +1209,6 @@ DefaultMenu:
 			else if !StillDownloading
 				RSNotify("Update Available")
 		}
-
-		DefaultFader:=true
 	}
 Return
 
@@ -1403,7 +1348,7 @@ PrInfo:
 	Gui, Color, 2e2e2e
 	Gui, Font, s11 cFFFFFF Bold, Tahoma
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+18 w" (width*0.64) " gdestroyPrInfo hwndBut1 +Center +Default", Got it
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " y+18 w" (width*0.64) " gdestroyPrInfo hwndBut1 +Center +Default", Close
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x444444, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
@@ -1639,25 +1584,25 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 UninstallPrompt:
-	width=145
-	height=126
+	width=155
+	height=134
 	Gui, UninstallPrompt:New, +hwndUninstallPrompt
 	Gui, +LastFound +ToolWindow +AlwaysOnTop
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
 	Gui, -Caption
-	Gui, Color, %guicolor%
+	Gui, Color, 2e2e2e
 	Gui, Font, s10 Bold, Tahoma
-	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
-	Opt2 := [ , "0x" . guicolor, "0x" . btnhovercolor, 0xffffff]
+	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
+	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 c228a96, Select your choice
-	Gui, Add, Button, x0 y+10 w%width% +default gmnuUninstall hwndBut1 +Center, Uninstall
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cD0D0D0, Select your choice
+	Gui, Add, Button, x0 y+7 h33 w%width% +default gmnuUninstall hwndBut1 +Center, Uninstall
 
-	Gui, Add, Button, x0 y+2 w%width% gReinstall hwndBut2 +Center, Repair
+	Gui, Add, Button, x0 y+2 h33 w%width% gReinstall hwndBut2 +Center, Repair
 
-	Gui, Add, Button, x0 y+2 w%width% gCancelUninstall  hwndBut3 +Center, Cancel
+	Gui, Add, Button, x0 y+2 h33 w%width% gCancelUninstall  hwndBut3 +Center, Cancel
 
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)

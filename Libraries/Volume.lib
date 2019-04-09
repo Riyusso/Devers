@@ -15,7 +15,7 @@ return
 
 
 Volume_Show_OSD:
-If (ItsLocked!=1)
+If (ItsLocked!=1 && !DefaultFader) 
 {
 	SysGet m, MonitorWorkArea, 1
 	mY := (A_ScreenHeight)-(A_ScreenHeight/6), mX := (A_ScreenWidth/2)-165*dpi

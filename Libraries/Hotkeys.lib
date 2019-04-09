@@ -337,7 +337,7 @@ return
 return
 #If
 
-#If (DefaultFader=1)
+#If (DefaultFader)
 ~LButton::
 	Suspend, Permit
 	MouseGetPos, , , id, control
