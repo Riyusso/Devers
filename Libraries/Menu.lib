@@ -5,7 +5,7 @@
 	lpwwidth:=56
 	lpwpos:=(inputw/2)-(lpwwidth/2)+18
 	
-	Gui, Settings:New, +hwndScriptOptions
+	Gui, Settings:New, +hwndGeneralSettings
 	Gui, +LastFound
 	WinSet, Transparent, 0
 	Gui, Margin, 0, 0
@@ -82,7 +82,7 @@
 	Gui, -Caption
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, % "w" width, Script Options
-	FadeIn(ScriptOptions)
+	FadeIn(GeneralSettings)
 return
 
 MainMenuApply:
@@ -100,7 +100,7 @@ MainMenuApply:
 		IniDelete, settings.ini, settings, passwordNoExpirationHash
 	}
 
-	FadeOut(ScriptOptions)
+	FadeOut(GeneralSettings)
 	If FirstRun
 	{
 		RSNotify("Installed")
@@ -143,7 +143,7 @@ destroyset:
 		SetTimer, ARun, -1600
 	}
 	FirstRun:=false
-	FadeOut(ScriptOptions)
+	FadeOut(GeneralSettings)
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -1042,7 +1042,7 @@ Return
 mnuUninstall:
 	FadeOut(UninstallPrompt)
 	FadeOut(OtherHWND)
-	FadeOut(ScriptOptions)
+	FadeOut(GeneralSettings)
 	FadeOut(DefaultHWND)
 	
 	if !FirstRun

@@ -50,7 +50,7 @@ return
 Reinstall:
 	FadeOut(UninstallPrompt)
 	FadeOut(OtherHWND)
-	FadeOut(ScriptOptions)
+	FadeOut(GeneralSettings)
 	FadeOut(DefaultHWND)
 	GoSub UpdateFiles
 	FileDelete, settings.ini
