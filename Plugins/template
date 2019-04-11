@@ -2,7 +2,7 @@
 #SingleInstance FORCE
 SendMode Input
 SetWorkingDir %A_ScriptDir%
-Plugin.Properties() ; Pass true as a parameter if you wish to have a tray icon.
+Plugin.Properties()
 return
 
 #Include *i Libraries\Functions.lib
@@ -56,7 +56,7 @@ If that window is already set to stay on top, we will toggle it off.
 F7::
     WinSet, AlwaysOnTop, Toggle, A
     WinGet, ExStyle, ExStyle, A
-    if (ExStyle & 0x8)
+    if !(ExStyle & 0x8)
         RSNotify("AlwaysOnTop: Off")
     else
         RSNotify("AlwaysOnTop: On")
