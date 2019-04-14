@@ -43,13 +43,13 @@ Loop, Parse, keysArray, `|
 	}
 	If (assignedKeyVolUp!="None")
 	{
-		Hotkey, %assignedKeyVolUp%, vol_up
-		Hotkey, %assignedKeyVolUp%, vol_up, On
+		Hotkey, %assignedKeyVolUp%, VolumeIncrease
+		Hotkey, %assignedKeyVolUp%, VolumeIncrease, On
 	}
 	If (assignedKeyVolDown!="None")
 	{
-		Hotkey, %assignedKeyVolDown%, vol_down
-		Hotkey, %assignedKeyVolDown%, vol_down, On
+		Hotkey, %assignedKeyVolDown%, VolumeDecrease
+		Hotkey, %assignedKeyVolDown%, VolumeDecrease, On
 	}
 return
 
@@ -206,10 +206,10 @@ return
 
 #If (VolumeTR=1)
 WheelUp::
-	GoSub vol_up
+	GoSub VolumeIncrease
 return
 WheelDown::
-	GoSub vol_down
+	GoSub VolumeDecrease
 return
 #If
 

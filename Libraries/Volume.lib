@@ -4,13 +4,14 @@ BG_color=222222
 Text_color=168993
 Bar_color=006d77
 Volume_OSD_Center:=1
-vol_up = WheelUp
-vol_down = WheelDown
+volumeOffset=2
+VolumeIncrease = WheelUp
+VolumeDecrease = WheelDown
 
 #If (VolumeOTWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"))
 Hotkey, If, (VolumeOTWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman") || MouseIsOver("ahk_class WorkerW"))
-	Hotkey,%vol_up%,vol_up
-	Hotkey,%vol_down%,vol_down
+	Hotkey,%VolumeIncrease%,VolumeIncrease
+	Hotkey,%VolumeDecrease%,VolumeDecrease
 return
 
 
@@ -22,13 +23,13 @@ If (ItsLocked!=1 && !DefaultFader)
 	SoundGet, Volume
 	if (!Volume_OSD_c)
 	{
-		Volume_ProgressbarOpts=CW%BG_color% CT%Text_color% CB%Bar_color% x%mX% y%mY% w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11 B
+		Volume_ProgressbarOpts=CW%BG_color% CT%Text_color% CB%Bar_color% x%mX% y%mY% w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3  ZX8 C11 B 
 		Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress, Tahoma
 		Volume_OSD_c:=!Volume_OSD_c
 	}
 	WinSet, Transparent, 225, vol_Progress
 	Progress Show
-	Progress % Volume := Round(Volume), ` %Volume% `%
+	Progress % Volume := Round(Volume), %Volume% `%
 	WinSet, AlwaysOnTop, On, vol_Progress
 	scaledw:=330*dpi+1
 	if dpi > 1
@@ -73,19 +74,51 @@ Remove_Show_OSD:
 	Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress,Tahoma
 return
 
-vol_up:
+VolumeIncrease:
 	Suspend, Permit
-	SoundSet, +2
+	SoundSet, % "+" (1+1*(volumeOffset/2))
+
+	volumeOffset++
+	If (volumeOffset>10)
+	{
+		volumeOffset=10
+	}
 
 	SoundGet, muteState, , mute
 	if (muteState == "On") && !ErrorLevel
 		SoundSet, +1, , Mute
 
 	gosub, Volume_Show_OSD
+	SetTimer, LowerVolumeOffset, Off
+	SetTimer, StartLoweringVolumeOffset, -250
 return
 
-vol_down:
+VolumeDecrease:
 	Suspend, Permit
-	SoundSet, -2
+	SoundSet, % "-" (1+1*(volumeOffset/2))
+
+	volumeOffset++
+	If (volumeOffset>10)
+	{
+		volumeOffset=10
+	}
+
 	gosub, Volume_Show_OSD
+	SetTimer, LowerVolumeOffset, Off
+	SetTimer, StartLoweringVolumeOffset, -250
+return
+
+StartLoweringVolumeOffset:
+SetTimer, LowerVolumeOffset, 150
+return
+
+LowerVolumeOffset:
+If (volumeOffset-5 < 0)
+{
+	volumeOffset = 0
+	SetTimer, LowerVolumeOffset, Off
+	return
+}
+
+volumeOffset:=volumeOffset-5
 return
