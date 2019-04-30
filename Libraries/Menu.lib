@@ -49,12 +49,16 @@
 
 		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gUninstallPrompt hwndBut2 +Center", Uninstall
 	}
+	else
+	{
+		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+18 w" (width*0.80) " h36 gLearnMore hwndBut1 +Center", Learn More
+	}
 
 	Gui, Font, s9
 	Gui, Font, normal
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
-	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+" (FirstRun ? "30" : "12") " w" (width*0.38) " h30 gMainMenuApply hwndBut3 +Center +Default", % (FirstRun) ? "Install" : "Apply"
+	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+" (FirstRun ? "12" : "12") " w" (width*0.38) " h30 gMainMenuApply hwndBut3 +Center +Default", % (FirstRun) ? "Install" : "Apply"
 
 	if (FirstRun)
 		Gui, Add, Button, % "x+5 w" (width*0.38) " h30 gmnuUninstall hwndBut4 +Center", Cancel
@@ -64,9 +68,10 @@
 	Gui, Add, Text, % "x7 y+12 w" (width-14) " h2 vP"
 	GuiControlGet, P, Pos
 	H := PY + PH
+	
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 	if !FirstRun
 	{
-		ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
 		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
 	}
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
@@ -941,7 +946,7 @@ LearnMore:
 	Gui, Add, Text, % "x15 y+9 w" (width/2) " vTab67 +Hidden Center c" darkerc, Tester
 	Gui, Add, Text, % "x+0 w" (width/3.2) " vTab68 +Hidden Center c" lightc, physic
 	Gui, Add, Text, % "x0 y+30 w" (width) " vTab69 +Hidden Center c" darkerc, Website
-	Gui, Add, Text, % "x0 w" (width) " vTab610 +Hidden y+8 Center c" lightc, riyusso.github.io
+	Gui, Add, Text, % "x0 w" (width) " vTab610 +Hidden y+8 Center c" lightc, Devers.app
 	Gui, Add, Text, % "x0 y+25 w" (width) " vTab611 +Hidden Center c" darkerc, Email
 	Gui, Add, Text, % "x0 w" (width) " vTab612 +Hidden y+8 Center c" lightc, Riyusso@gmx.us
 
