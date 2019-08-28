@@ -240,6 +240,7 @@ ExtSettings:
 	}
 	else
 		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e]
+
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
@@ -312,7 +313,8 @@ CreateExtension:
 	GoSub ExtSettings
 	Sleep 70
 	GoSub ExitDefMenu
-	Run, edit %A_WorkingDir%\%newPluginName%.ahk
+	pluginPath=%A_WorkingDir%\%newPluginName%.ahk
+	DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 return
 
 EditPlugin:
