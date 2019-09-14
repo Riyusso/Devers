@@ -53,7 +53,7 @@ Loop, Parse, keysArray, `|
 	}
 return
 
-#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && (AltMinimizeWanted=1) && !isWindowFullScreen("A")
+#If (ItsLocked!=1) && !WinActive("ahk_class AutoHotkeyGUI") && !WinActive("ahk_class Windows.UI.Core.CoreWindow") && (AltMinimizeWanted=1) && !isWindowFullScreen("A")
 ~$LAlt Up::
 	GetKeyState, state, Shift
 	If state=D
