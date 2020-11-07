@@ -27,31 +27,33 @@
 	zph=%A_ScreenHeight%
 	zpw=%A_ScreenWidth%
 	zfont=20
-	If A_ScreenWidth<2000
+	calculatedsize:=90
+	amultiplier=1
+	If A_ScreenHeight<2000
 	{
 		zfont=17
 		calculatedsize:=90
 		amultiplier=1
 	}
-	If A_ScreenWidth<1800
+	If A_ScreenHeight<1800
 	{
 		zfont=15
 		calculatedsize:=82
 		amultiplier=1
 	}
-	If A_ScreenWidth<1600
+	If A_ScreenHeight<1600
 	{
 		zfont=14
 		calculatedsize:=72
 		amultiplier=0.92
 	}
-	If A_ScreenWidth<1400
+	If A_ScreenHeight<1400
 	{
 		zfont=13
 		calculatedsize:=64
 		amultiplier=0.87
 	}
-	If A_ScreenWidth<1050
+	If A_ScreenHeight<1050
 	{
 		zfont=12
 		calculatedsize:=54

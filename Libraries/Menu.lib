@@ -1136,28 +1136,30 @@ DefaultMenu:
 		Gui, Margin, 0, 0
 		Gui, Font,  cFFFFFF Bold, Segoe UI
 		Gui, Color, 232323
+		amultiplier=1
+		zfont=13
 
-		If (A_ScreenWidth<2000)
+		If (A_ScreenHeight<2000)
 		{
 			amultiplier=1
 			zfont=13
 		}
-		If (A_ScreenWidth<1800)
+		If (A_ScreenHeight<1800)
 		{
 			amultiplier=1
 			zfont=12
 		}
-		If (A_ScreenWidth<1600)
+		If (A_ScreenHeight<1600)
 		{
 			amultiplier=0.92
 			zfont=11
 		}
-		If (A_ScreenWidth<1400)
+		If (A_ScreenHeight<1400)
 		{
 			amultiplier=0.87
 			zfont=11
 		}
-		If (A_ScreenWidth<1050)
+		If (A_ScreenHeight<1050)
 		{
 			amultiplier=0.80
 			zfont=10
