@@ -154,7 +154,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 
 ExtSettings:
-	width := 265
+	width := 300
 	labelsx := (width/7)+30
 	inputw := (width/2)
 	lpwwidth:=56
@@ -210,10 +210,17 @@ ExtSettings:
 
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			PluginNameNoUnderscores:=StrReplace(PluginName, "_", A_Space)
-			Gui, Add, Button, % "x" width/4-(width/6)+5 " y+14 w" (width/3) " gEditPlugin hwndPluginEditButton Center", %PluginNameNoUnderscores% ›
+			Gui, Add, Button, % "x" width/4-(width/6)+5 " y+14 h25 w" (width/2.5) " gEditPlugin hwndPluginEditButton Center -Wrap", %PluginNameNoUnderscores% ›
+
 			; !POSITION IMPORTANT! Keep after the button creation. Get the last character of the variable EXTControls which is the number of the button created. 
-			WinGet, EXTControls, ControlList, ahk_id %ExtHWND% 
-			CustomExtensionNames.Insert("Button" SubStr(EXTControls, 0), PluginName)
+			WinGet, EXTControls, ControlList, ahk_id %ExtHWND%
+			Loop, Parse, EXTControls,  `n, `r  
+			{
+				lastLine:=A_LoopField
+			}
+			CustomExtensionNames.Insert(lastLine, PluginName)
+			
+
 			ImageButton.Create(PluginEditButton, Opt1, Opt2, "", Opt4)
 
 			ExtensionButtonsExist := true
