@@ -52,6 +52,7 @@ UpdateFiles:
 
 		FileInstall, Libraries\Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
 		FileInstall, Libraries\Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
+		FileInstall, Libraries\Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 1
 	}
 
 	GoSub Migrations

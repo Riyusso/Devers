@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.2
+FileVersion=2.3
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -68,6 +68,8 @@ IfExist, settings.ini
 			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
 		IfNotExist, %A_WorkingDir%/Libraries/Packages.lib
 			FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
+		IfNotExist, %A_WorkingDir%/Libraries/Gdip_All.lib
+			FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 1
 
 		RunningPlugins := []
 		Loop, Files, *.ahk
