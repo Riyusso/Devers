@@ -14,7 +14,6 @@ Hotkey, If, (VolumeOTWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || Mou
 	Hotkey,%VolumeDecrease%,VolumeDecrease
 return
 
-
 Volume_Show_OSD:
 If (ItsLocked!=1 && !DefaultFader) 
 {
@@ -42,7 +41,6 @@ If (ItsLocked!=1 && !DefaultFader)
 return
 
 Remove_Show_OSD:
-	Volume_OSD_c2:=!Volume_OSD_c2
 	WinSet, Transparent, 225, vol_Progress
 	sleep 10
 	WinSet, Transparent, 210, vol_Progress
@@ -72,6 +70,7 @@ Remove_Show_OSD:
 	WinSet, Transparent, 10, vol_Progress
 	sleep 10
 	Progress Hide %Volume_ProgressbarOpts%,,Volume,vol_Progress,Tahoma
+	Volume_OSD_c:=false
 return
 
 VolumeIncrease:
