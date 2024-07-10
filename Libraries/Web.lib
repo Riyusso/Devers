@@ -20,6 +20,7 @@
 	}
 	If WebLT=1
 	{
+		amultiplier=1
 		If (A_ScreenWidth<2000)
 		{
 			zfont=12

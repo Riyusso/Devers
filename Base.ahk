@@ -84,7 +84,7 @@ IfExist, settings.ini
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			If(PluginState=1)
 			{
-				Run, %A_MyDocuments%\%ScriptName%\Extensions %A_MyDocuments%\%ScriptName%\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				Run, "%A_MyDocuments%\%ScriptName%\Extensions" "%A_MyDocuments%\%ScriptName%\%PluginName%.ahk",,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 				RunningPlugins.Push("PID" PluginName)
 			}
 		}
