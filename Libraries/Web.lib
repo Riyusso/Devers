@@ -476,14 +476,17 @@ StartSearch:
 		}
 	}
 
-	GoSub WebLClose
-
-	if (isCustomCommand)
+	if (isCustomCommand && !IsUsingCustomQuery)
 	{
-		ShellRun(A_WorkingDir "\Configuration\CustomCommands.ahk", webSearchVar)
+		Run, % A_WorkingDir "\Configuration\CustomCommands.ahk " webSearchVar
+		
+		Gui, WebL:Destroy
+		GoSub WebLClose
 		return
 	}
 
+	GoSub WebLClose
+	
 	if webSearchVar
 	{
 		if !IsUsingCustomQuery || !url
