@@ -317,14 +317,16 @@ CreateExtension:
 	FadeOut(CreateExtensionGUI)
 
 	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\%newPluginName%.ahk, 0
-	GoSub ExtSettings
 	Sleep 70
 	GoSub ExitDefMenu
 	pluginPath=%A_WorkingDir%\%newPluginName%.ahk
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
-	ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " pluginPath)
+	ShellRun("OpenWith.exe", pluginPath)
+	WinWaitActive, ahk_exe OpenWith.exe,, 3
+	Sleep 100
+	Send {Tab}
 return
 
 EditPlugin:
@@ -333,7 +335,10 @@ EditPlugin:
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
-	ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " pluginPath)
+	ShellRun("OpenWith.exe", pluginPath)
+	WinWaitActive, ahk_exe OpenWith.exe,, 3
+	Sleep 100
+	Send {Tab}
 	GoSub ExitDefMenu
 return
 

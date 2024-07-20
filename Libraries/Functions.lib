@@ -383,7 +383,7 @@ RunAsAdmin()
 
 	Example 4:
 	filePath := "C:\path\to\your\file.txt"
-	ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " filePath)
+	ShellRun("OpenWith.exe", filePath) ; old way - ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " filePath)	
 */
 ShellRun(prms*)
 {
@@ -417,6 +417,25 @@ ShellRun(prms*)
         }
         ObjRelease(ptlb)
     }
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+ExplorerGetActiveFolderPath() {
+   WinGetClass, winClass, % "ahk_id" . hWnd := WinExist("A")
+   if !(winClass ~="Progman|WorkerW|(Cabinet|Explore)WClass")
+      Return
+   
+   shellWindows := ComObjCreate("Shell.Application").Windows
+   if (winClass ~= "Progman|WorkerW")  ; IShellWindows::Item:    https://goo.gl/ihW9Gm
+                                       ; IShellFolderViewDual:   https://goo.gl/gnntq3
+      shellFolderView := shellWindows.Item( ComObject(VT_UI4 := 0x13, SWC_DESKTOP := 0x8) ).Document
+   else {
+      for window in shellWindows       ; ShellFolderView object: https://goo.gl/MhcinH
+         if (hWnd = window.HWND) && (shellFolderView := window.Document)
+            break
+   }
+   Return shellFolderView.Folder.Self.Path
 }
 
 ;--------------------------------------------------------------------------------------------------------------
