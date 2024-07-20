@@ -8,7 +8,7 @@
 	}
 
 	webSearchVar=
-	FastSearching:=false
+	IsUsingCustomQuery:=false
 	WebLT := WebLT ? false : true
 
 	ChoosingWebsite:= (SearchBased) ? false : true
@@ -51,6 +51,9 @@
 		Gui, WebL:New, +hwndWebL
 		Gui, -Border -Caption +AlwaysOnTop +LastFound +ToolWindow
 
+		searchTextColor = f9f9f9
+		lastWebSearchVar=
+
 		If SearchBased
 		{
 			guiw:=520*amultiplier
@@ -58,7 +61,7 @@
 			Gui, Color, 172326, 172326
 			Gui, Font, w1000 s12 c909090, Segoe UI Bold
 			Gui, Add, Text, x16 y11 h45 w440 vSearchLabel +Hidden, Google:
-			Gui, Font, w1000 s12 cf9f9f9, Segoe UI Bold
+			Gui, Font, w1000 s12 c%searchTextColor%, Segoe UI Bold
 			Gui, Add, Edit, % "x14 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
 			Gui, Add, Button, % "x+2 y-5 h45 w55 gAddCustomQuery hwndSearchBut1", •••
@@ -131,10 +134,13 @@
 		{
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
 			WinActivate
-			SetTimer, CheckFastSearchInactive, 20
+			SetTimer, SearchBasedTimer, 20
 		}
 		else
 			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
+
+		GoSub LoadCustomCommands
+
 		ShAutoComplete(WebSearch)
 		If !SearchBased
 			FadeIn(WebL)
@@ -142,14 +148,9 @@
 	}
 return
 
-CheckFastSearchInactive:
-	If !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit)
-		GoSub WebLClose
-return
-
 WebLClose:
 WebLGuiEscape:
-	SetTimer, CheckFastSearchInactive, Off
+	SetTimer, SearchBasedTimer, Off
  	WebLT := false
 	Gui, Tip:Destroy
 	FadeOut(WebL)
@@ -172,7 +173,7 @@ WebLGuiContextMenu:
 		return
 	}
 
-	if FastSearching || AddNewCustomQuery
+	if IsUsingCustomQuery || AddNewCustomQuery
 		width=465
 	else
 		width=300
@@ -217,7 +218,7 @@ WebLGuiContextMenu:
 	Opt2 := [ , "0x" . WebLGuiColor, "0x" . WebLButtonColor, 0xffffff]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
-	if FastSearching || AddNewCustomQuery
+	if IsUsingCustomQuery || AddNewCustomQuery
 	{
 		If AddNewCustomQuery
 		{
@@ -269,7 +270,7 @@ WebLGuiContextMenu:
 	ShAutoComplete(Edit266)
 
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r12-12", ahk_id %WebEdit%
-	If FastSearching || AddNewCustomQuery
+	If IsUsingCustomQuery || AddNewCustomQuery
 	{
 		Gui, Show, % "w" width " y" A_ScreenHeight/2+20, Web Edit
 		GuiControl, Focus, SaveBtn
@@ -292,7 +293,7 @@ return
 EditWebsites:
 	Gui, Submit, NoHide
 
-	if FastSearching
+	if IsUsingCustomQuery
 	{
 		If !newUrl
 		{
@@ -370,7 +371,7 @@ SaveNewQuery:
 	GoSub LoadCustomQueries
 
 	url:=newUrl
-	FastSearching:=true
+	IsUsingCustomQuery:=true
 	currentKeyword:=newkeyword
 
 	SetSearchLabelText(newLabel, currentKeyword, webSearchVar, guiw)
@@ -392,9 +393,67 @@ DeleteCustomQuery:
 
 	GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
 	GuiControl, WebL:Hide, SearchLabel
-	FastSearching:=false
+	IsUsingCustomQuery:=false
 
 	FadeOut(WebEdit)
+return
+
+SearchBasedTimer:
+	if !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit)
+	{
+		GoSub WebLClose
+		return
+	}
+
+	Gui, WebL:Submit, NoHide
+	if (webSearchVar=lastWebSearchVar)
+		return
+
+	lastWebSearchVar:=webSearchVar
+	isCustomCommand := false
+
+	for index, element in CustomCommands
+	{
+		el=%element%
+		if (el = webSearchVar)
+		{
+			isCustomCommand := true
+		}
+	}
+
+	if (isCustomCommand && !IsUsingCustomQuery)
+	{
+		searchTextColor = 7ab048
+		GuiControl, WebL:+c%searchTextColor%, webSearchVar
+		Gui, WebL:Color
+	}
+	else
+	{
+		searchTextColor = f9f9f9
+		GuiControl, WebL:+c%searchTextColor%, webSearchVar
+		Gui, WebL:Color
+	}
+return
+
+LoadCustomCommands:
+	CustomCommands := []
+
+	if !FileExist(A_WorkingDir "\Configuration\CustomCommands.ahk")
+    	return
+
+	Loop, Read, % A_WorkingDir "\Configuration\CustomCommands.ahk"
+	{
+		Loop, Parse, A_LoopReadLine, %A_Tab%
+		{
+			if InStr(A_LoopField, "commandName")
+			{
+				StringGetPos, commandPos, A_LoopField, =, 1
+				customCommand := SubStr(A_LoopField, commandPos+2)
+				CustomCommands.Push(customCommand)
+			}
+		}
+	}
+
 return
 
 StartSearch:
@@ -406,21 +465,35 @@ StartSearch:
 	webSearchVar:=StrReplace(webSearchVar, "+", "%2B")
 	webSearchVar:=StrReplace(webSearchVar, doublequote, "")
 	Loop, Parse, webSearchVar
-	If (A_LoopField="." && !InStr(webSearchVar," ") && !FastSearching)
 	{
-		GoSub WebLClose
-		Run, % InStr(webSearchVar, "http") ? webSearchVar : "http:" . webSearchVar
-		GoSub GetBrowserNameAndActivate
-		webSearchVar=
+		if (A_LoopField="." && !InStr(webSearchVar," ") && !IsUsingCustomQuery)
+		{
+			GoSub WebLClose
+			Run, % InStr(webSearchVar, "http") ? webSearchVar : "http:" . webSearchVar
+			GoSub GetBrowserNameAndActivate
+			webSearchVar=
+			return
+		}
+	}
+
+	GoSub WebLClose
+
+	if (isCustomCommand)
+	{
+		ShellRun(A_WorkingDir "\Configuration\CustomCommands.ahk", webSearchVar)
 		return
 	}
-	GoSub WebLClose
+
 	if webSearchVar
 	{
-		if !FastSearching || !url
+		if !IsUsingCustomQuery || !url
 			url:="https://www.google.bg/search?q={query}"
 		webSearchVar:=StrReplace(url, "{query}", webSearchVar)
-		Run, %webSearchVar%,, UseErrorLevel
+
+		; old method: Run, %webSearchVar%,, UseErrorLevel
+		; Used to run without admin priviledges
+		ShellRun(webSearchVar)
+
 		GoSub GetBrowserNameAndActivate
 		webSearchVar=
 		url=

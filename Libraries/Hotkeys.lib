@@ -255,7 +255,7 @@ return
 Tab::
 return
 ~Space::
-	If FastSearching
+	If IsUsingCustomQuery
 		return
 		
 	sleep 10
@@ -268,13 +268,13 @@ return
 			url = % %A_LoopField%url
 			webSearchVar:=StrReplace(webSearchVar, A_LoopField . " ", "")
 			SetSearchLabelText(%A_LoopField%Label, currentKeyword, webSearchVar, guiw)
-			FastSearching:=true
+			IsUsingCustomQuery:=true
 			return
 		}
 	}
 return
 ~SC034::
-	If !DotTipDisplayed && !FastSearching && GoogleTipDisplayed<2
+	If !DotTipDisplayed && !IsUsingCustomQuery && GoogleTipDisplayed<2
 	{
 		Tip := new Tip()
 		Tip.message:="Tip: You can type 'g ' at the beginning to search directly in Google.com"
@@ -293,7 +293,7 @@ return
 	{
 		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
 		GuiControl, WebL:Hide, SearchLabel
-		FastSearching:=false
+		IsUsingCustomQuery:=false
 		currentKeyword=
 	}
 return
@@ -306,7 +306,7 @@ $SC00E::
 	{
 		GuiControl, WebL:Move, webSearchVar, % "x14 w" guiw-85
 		GuiControl, WebL:Hide, SearchLabel
-		FastSearching:=false
+		IsUsingCustomQuery:=false
 		currentKeyword=
 	}
 return
