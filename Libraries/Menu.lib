@@ -321,13 +321,19 @@ CreateExtension:
 	Sleep 70
 	GoSub ExitDefMenu
 	pluginPath=%A_WorkingDir%\%newPluginName%.ahk
-	DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
+	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
+
+	; Used to run without admin priviledges
+	ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " pluginPath)
 return
 
 EditPlugin:
 	ControlGetFocus, ChosenPluginClassNN, A
 	pluginPath:=A_WorkingDir . "\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
-	DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
+	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
+
+	; Used to run without admin priviledges
+	ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " pluginPath)
 	GoSub ExitDefMenu
 return
 
