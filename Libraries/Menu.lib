@@ -189,7 +189,7 @@ ExtSettings:
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Volume Over Tray
 	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
 
-	IfExist, *.ahk
+	IfExist, Extensions/*.ahk
 	{
 		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e,, 4]
 		Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
@@ -197,7 +197,7 @@ ExtSettings:
 
 		CustomExtensionNames := {}
 		Gui, Add, Text, % "x0 y+25 w" width " Center", -   Others   -
-		Loop, Files, *.ahk
+		Loop, Files, Extensions/*.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 
@@ -218,8 +218,7 @@ ExtSettings:
 			{
 				lastLine:=A_LoopField
 			}
-			CustomExtensionNames.Insert(lastLine, PluginName)
-			
+			CustomExtensionNames.Insert(lastLine, PluginName)			
 
 			ImageButton.Create(PluginEditButton, Opt1, Opt2, "", Opt4)
 
@@ -316,10 +315,10 @@ CreateExtension:
 
 	FadeOut(CreateExtensionGUI)
 
-	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\%newPluginName%.ahk, 0
+	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\Extensions\%newPluginName%.ahk, 0
 	Sleep 70
 	GoSub ExitDefMenu
-	pluginPath=%A_WorkingDir%\%newPluginName%.ahk
+	pluginPath=%A_WorkingDir%\Extensions\%newPluginName%.ahk
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
@@ -331,7 +330,7 @@ return
 
 EditPlugin:
 	ControlGetFocus, ChosenPluginClassNN, A
-	pluginPath:=A_WorkingDir . "\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
+	pluginPath:=A_WorkingDir . "\Extensions\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
@@ -344,9 +343,9 @@ return
 
 extbutton:
 Gui, Submit, NoHide
-IfExist, *.ahk
+IfExist, Extensions/*.ahk
 {
-	Loop, Files, *.ahk
+	Loop, Files, Extensions/*.ahk
 	{
 		SplitPath, A_LoopFileLongPath,,,, PluginName
 
@@ -360,7 +359,7 @@ IfExist, *.ahk
 		If % PluginState%PluginName%=1
 		{
 			IniWrite, % PluginState%PluginName%, settings.ini, plugins, PluginState%PluginName%
-			Run, %A_MyDocuments%\%ScriptName%\Extensions %A_MyDocuments%\%ScriptName%\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+			Run, %A_MyDocuments%\%ScriptName%\ExtensionsManager %A_MyDocuments%\%ScriptName%\Extensions\%PluginName%.ahk,,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 			RunningPlugins.Push("PID" PluginName)
 		}
 		else if % PluginState%PluginName%=2
@@ -374,7 +373,7 @@ IfExist, *.ahk
 			IniDelete, settings.ini, plugins, PluginState%PluginName%
 			IfWinExist, % "ahk_pid" PID%PluginName%
 				WinKill, % "ahk_pid" PID%PluginName%
-			FileDelete, %PluginName%.ahk
+			FileDelete, Extensions\%PluginName%.ahk
 		}
 	}
 }
@@ -1090,7 +1089,7 @@ return
 
 SuspendScriptToggle:
 Suspend, Toggle
-Loop, Files, *.ahk
+Loop, Files, Extensions/*.ahk
 {
 	SplitPath, A_LoopFileLongPath,,,, PluginName
 

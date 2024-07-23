@@ -16,7 +16,7 @@ Loop %0%
 
     FileMove, %PluginFullPath%, Plugins/Plugin.ahk
     
-    Run, Compiler/Compiler.exe /in "Plugins/installer" /out  "Plugins/%PluginFileName%.exe" /icon "Base/SinglePlugin.ico"
+    Run, Compiler/Compiler.exe /in "Plugins/installer" /out  "Plugins/%PluginFileName%.exe" /icon "Base/SinglePlugin.ico" /bin Compiler/AutoHotkeySC.bin
 
     While ! FileExist( "Plugins/" PluginFileName ".exe" )
 	    Sleep 150

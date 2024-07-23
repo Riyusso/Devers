@@ -5,7 +5,7 @@ SetWorkingDir %A_ScriptDir%
 Plugin.Properties()
 return
 
-#Include *i Libraries\Functions.lib
+#Include *i %A_MyDocuments%\Devers\Libraries\Functions.lib
 
 ; ----------- User functions here ------------
 

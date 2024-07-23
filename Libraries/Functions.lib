@@ -564,7 +564,7 @@ class Plugin
 	Properties() 
 	{
 		#NoTrayIcon
-		
+
 		SplitPath, A_ScriptName,,,, PluginName
 		Menu, Tray, Tip, %PluginName%  - Devers Plugin
 
@@ -576,7 +576,6 @@ class Plugin
 
 	TrayIcon()
 	{
-		Menu, Tray, Icon, Assets\SinglePlugin.ico
 		Menu, Tray, Icon
 	}
 

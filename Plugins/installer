@@ -10,7 +10,7 @@ ScriptName=Devers
 IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 {
 	SplitPath, A_ScriptName,,,, PluginName
-	IfExist, %A_MyDocuments%\%ScriptName%\%PluginName%.ahk
+	IfExist, %A_MyDocuments%\%ScriptName%\Extensions\%PluginName%.ahk
 		MsgBox, 4, Replace %PluginName%?, The plugin is already installed, do you want to reinstall it?
 
 	IfMsgBox No
@@ -20,7 +20,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\settings.ini
 	}
 
 	IniDelete, %A_MyDocuments%\%ScriptName%\plugin-settings.ini, %PluginName%
-	FileInstall, Plugin.ahk, %A_MyDocuments%\%ScriptName%\%PluginName%.ahk, 1
+	FileInstall, Plugin.ahk, %A_MyDocuments%\%ScriptName%\Extensions\%PluginName%.ahk, 1
 
 	IniWrite, 1, %A_MyDocuments%\%ScriptName%\build.ini, build, ReloadVar
 	IniWrite, 1, %A_MyDocuments%\%ScriptName%\settings.ini, plugins, PluginInstalled

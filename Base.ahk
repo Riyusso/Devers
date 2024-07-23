@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.3.1
+FileVersion=2.3.2
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -55,24 +55,21 @@ IfExist, settings.ini
 	
 	OnExit, ExitAppL
 
+	IfNotExist, Libraries
+		FileCreateDir, Libraries
+
+	FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 0
+	FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 0
+	FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 0
+	FileInstall, Base/CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
+	FileInstall, Base/ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 0
+
 	; How to use the plugin system :
-	; Just create a file with the extension .ahk in the Script directory and it will run next time you restart the script
-	IfExist, *.ahk
+	; Just create a file with the extension .ahk in the Extensions directory and it will run next time you restart the script
+	IfExist, Extensions/*.ahk
 	{
-		IfNotExist, Extensions
-			FileInstall, Base/Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
-
-		IfNotExist, Libraries
-			FileCreateDir, Libraries
-		IfNotExist, %A_WorkingDir%/Libraries/Functions.lib
-			FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
-		IfNotExist, %A_WorkingDir%/Libraries/Packages.lib
-			FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
-		IfNotExist, %A_WorkingDir%/Libraries/Gdip_All.lib
-			FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 1
-
 		RunningPlugins := []
-		Loop, Files, *.ahk
+		Loop, Files, Extensions/*.ahk
 		{
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 
@@ -86,13 +83,14 @@ IfExist, settings.ini
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			If(PluginState=1)
 			{
-				Run, "%A_MyDocuments%\%ScriptName%\Extensions" "%A_MyDocuments%\%ScriptName%\%PluginName%.ahk",,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
+				Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\Extensions\%PluginName%.ahk",,, PID%PluginName% ; PluginID is the PID for the process. Required when you need to close/uninstall the program.
 				RunningPlugins.Push("PID" PluginName)
 			}
 		}
 	}
 
 	GoSub InstallFiles
+
 	If PluginInstalled=1
 	{
 		RSNotify("Plugin Added")
@@ -131,8 +129,8 @@ Installation:
 return
 
 InstallFiles:
-	IfNotExist, Extensions
-		FileInstall, Base\Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+	IfNotExist, ExtensionsManager
+		FileInstall, Base\ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 1
 
 	IfNotExist, Assets
 		FileCreateDir, Assets

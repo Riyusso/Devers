@@ -36,7 +36,7 @@ UpdateFiles:
 	IfNotExist, Assets
 		FileCreateDir, Assets
 
-	FileInstall, Base\Extensions, %A_MyDocuments%\%ScriptName%\Extensions, 1
+	FileInstall, Base\ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 1
 	FileInstall, Base\Animation.mp4, %A_MyDocuments%\%ScriptName%\Assets\Animation.mp4, 1
 	FileInstall, Base\TrayIcon.ico, %A_MyDocuments%\%ScriptName%\Assets\TrayIcon.ico, 1
 	FileInstall, Base\TrayIconSuspended.ico, %A_MyDocuments%\%ScriptName%\Assets\TrayIconSuspended.ico, 1
@@ -44,16 +44,14 @@ UpdateFiles:
 	FileInstall, Base\Tip_medium.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_medium.png, 1
 	FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
 	FileInstall, Base\SinglePlugin.ico,  %A_MyDocuments%\%ScriptName%\Assets\SinglePlugin.ico, 1
+	FileInstall, Base\CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
 	
-	IfExist, *.ahk ; Update libraries aswell
-	{
-		IfNotExist, Libraries
-			FileCreateDir, Libraries
+	IfNotExist, Libraries
+		FileCreateDir, Libraries
 
-		FileInstall, Libraries\Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
-		FileInstall, Libraries\Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
-		FileInstall, Libraries\Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 1
-	}
+	FileInstall, Libraries\Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 1
+	FileInstall, Libraries\Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 1
+	FileInstall, Libraries\Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 1
 
 	GoSub Migrations
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
