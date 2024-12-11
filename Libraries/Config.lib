@@ -43,6 +43,7 @@ Config:
 	IniRead, AfterWU, settings.ini, settings, AfterWU, 1
 	IniRead, CreateATask, settings.ini, settings, CreateATask, 0
 	IniRead, AfterInstallation, settings.ini, settings, AfterInstallation, 0
+	IniRead, CreateExtensionAfterReload, settings.ini, settings, CreateExtensionAfterReload, 0
 	IniRead, Reloaded, settings.ini, settings, Reloaded, 0
 	IniRead, GoogleTipDisplayed, settings.ini, settings, GoogleTipDisplayed, 0
 	IniRead, PluginInstalled, settings.ini, plugins, PluginInstalled, 0

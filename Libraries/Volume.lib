@@ -75,6 +75,9 @@ Remove_Show_OSD:
 return
 
 VolumeIncrease:
+	IfExist, % A_MyDocuments "\" ScriptName "\Extensions\volumeOverTray.ahk"
+		return
+
 	Suspend, Permit
 	SoundSet, % "+" (1+1*(volumeOffset/2))
 
@@ -94,6 +97,9 @@ VolumeIncrease:
 return
 
 VolumeDecrease:
+	IfExist, % A_MyDocuments "\" ScriptName "\Extensions\volumeOverTray.ahk"
+		return
+
 	Suspend, Permit
 	SoundSet, % "-" (1+1*(volumeOffset/2))
 

@@ -41,8 +41,8 @@ return
 ARun:
 	If RunAsAdmin
 		RunAsAdmin()
-	AfterInstallation=1
-	GoSub ScriptFunctions
+	else
+		Reload
 return
 
 Reinstall:

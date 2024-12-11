@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.3.3
+FileVersion=2.3.5
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -109,8 +109,16 @@ IfExist, settings.ini
 	LogTime(0)
 	GoSub ButtonsLabel
 	SetTimer, SetupGuiPreloading, 2700000
+		
 	If AfterInstallation=1
+	{
 		GoSub ScriptFunctions
+	}
+	Else if CreateExtensionAfterReload=1
+	{
+		IniWrite, 0, settings.ini, settings, CreateExtensionAfterReload
+		GoSub CreateExtensionGUI
+	}
 }
 IfNotExist, settings.ini
 	Gosub Installation
@@ -150,6 +158,16 @@ InstallFiles:
 		FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
 	IfNotExist, Assets\SinglePlugin.ico
 		FileInstall, Base\SinglePlugin.ico, %A_MyDocuments%\%ScriptName%\Assets\SinglePlugin.ico, 1
+		
+		
+	IfNotExist, Libraries
+		FileCreateDir, Libraries
+
+	FileInstall, Libraries/Functions.lib, %A_MyDocuments%\%ScriptName%\Libraries\Functions.lib, 0
+	FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 0
+	FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 0
+	FileInstall, Base/CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
+	FileInstall, Base/ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 0
 
 	IniWrite, %FileVersion%, build.ini, build, FileVersion
 return

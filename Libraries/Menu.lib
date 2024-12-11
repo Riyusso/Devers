@@ -109,11 +109,30 @@ MainMenuApply:
 		IniDelete, settings.ini, settings, passwordNoExpirationHash
 	}
 
+	if GetKeyState("Shift") || GetKeyState("CapsLock") ; Extension exclusive installation
+	{
+		IniWrite, 0, settings.ini, settings, AfterInstallation
+		IniWrite, 2, settings.ini, settings, FastSearchWanted		
+		IniWrite, 2, settings.ini, settings, AltMinimizeWanted
+		IniWrite, 2, settings.ini, settings, VolumeOTWanted
+		IniWrite, 1, settings.ini, settings, CreateExtensionAfterReload
+		IniWrite, None, settings.ini, settings, keyRSWeb
+		IniWrite, None, settings.ini, settings, keyPlay
+		IniWrite, None, settings.ini, settings, keyPrev
+		IniWrite, None, settings.ini, settings, keyNext
+		IniWrite, None, settings.ini, settings, keyVolUp
+		IniWrite, None, settings.ini, settings, keyVolDown
+		IniWrite, None, settings.ini, settings, keyLock
+	}
+	else
+	{
+		IniWrite, 1, settings.ini, settings, AfterInstallation
+	}
+	
 	FadeOut(GeneralSettings)
 	If FirstRun
 	{
 		RSNotify("Installed")
-		IniWrite, 1, settings.ini, settings, AfterInstallation
 	}
 	else
 		RSNotify("Applied")
