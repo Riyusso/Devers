@@ -1,4 +1,4 @@
-RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
+RSNotify(Text, ControlWidth=0, Timed=1250, BackgroundColor="157996", TextColor="ffffff") ;RSNotify
 {
 	global notifyDpi:=DpiFactor()
 	global SmartTransparancy=0
@@ -8,7 +8,7 @@ RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 	Gui,RSNotify:New, +hwndRSNotify
 	Gui, +LastFound +ToolWindow
 	WinSet, Transparent, 0
-	Gui, Color, 157996
+	Gui, Color, %BackgroundColor%
 	Gui, Margin, 0, 0
 	Gui, Font, s10 Bold w640, Verdana
 	whc:=47
@@ -16,19 +16,19 @@ RSNotify(Text, controlwidth=0, Timed=1250) ;RSNotify
 	Gui, Font, s13 w720, Verdana
 	Gui, -Border -Caption +AlwaysOnTop +ToolWindow +E0x20
 
-	Gui, Add, Text,cffffff hwndTHWND y9 +Hidden +Center, %Text% 	; Fake text to get the width so the x can be calculated beforehand
+	Gui, Add, Text,c%TextColor% hwndTHWND y9 +Hidden +Center, %Text% 	; Fake text to get the width so the x can be calculated beforehand
 	GuiControlGet, TC, Pos, %THWND% 	; Get the pos/size of the text into the TC variable, you can use the width of the text control with the variable 'TCW'
-	if(controlwidth!=0)
-		xcalc:=controlwidth/2-(TCW/2)
+	if(ControlWidth!=0)
+		xcalc:=ControlWidth/2-(TCW/2)
 	else
 		xcalc=14
 
-	Gui, Add, Text,cffffff x%xcalc% y11 +Center, %Text%
+	Gui, Add, Text,c%TextColor% x%xcalc% y11 +Center, %Text%
 
-	If controlwidth=0
+	If ControlWidth=0
 		TCW:=(TCW+28)*notifyDpi
 	Else
-		TCW:=controlwidth*notifyDpi
+		TCW:=ControlWidth*notifyDpi
 
 	vhc:=A_ScreenHeight-115*notifyDpi
 	averagex:=A_ScreenWidth-108*notifyDpi-(tcw*0.75)
