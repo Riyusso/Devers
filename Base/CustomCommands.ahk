@@ -3,7 +3,7 @@
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 commandName=%1%
-GoSub RunCommand
+GoSub AutoExecute
 return
 
 #Include *i Libraries\Functions.lib
@@ -12,16 +12,20 @@ return
 Write your own AHK commands in this file. 
 They will be automatically added to your Fast Search, which you can open by pressing Right Alt.
 
-For example: 
-	"if commandName = cmd" means that whenever you type "cmd" 
-	in your search window it will be colored in green and pressing Enter will open the command prompt.
+In the example below: 
+	"if commandName = cmd" means that whenever you type "cmd" in your search window,
+	it will be colored in green and pressing Enter will open the command prompt.
 
 Note: Adding new commands does not require reloading the program.
 */
 
-RunCommand:
+AutoExecute:
 
-	if commandName = cmd
+	if commandName = config
+	{
+		OpenWithVSCode(A_ScriptFullPath)
+	}
+	else if commandName = cmd
 	{
 		folderPath := ExplorerGetActiveFolderPath()
 		run, %comspec%, % folderPath ? folderPath : "C:\Users\" A_UserName
@@ -34,12 +38,58 @@ RunCommand:
 	{
 		Run, notepad.exe C:\Windows\System32\drivers\etc\hosts
 	}
-	else if commandName = opencommands
+	else if commandName = docs
 	{
-		ShellRun("OpenWith.exe", A_ScriptFullPath)
-		WinWaitActive, ahk_exe OpenWith.exe,, 3
-		Sleep 100
-		Send {Tab}
+		changeOrOpenDir(A_MyDocuments)
 	}
-
+	
 return
+
+;-------------------- Helper functions --------------------
+
+changeOrOpenDir(path)
+{
+    WinGet, hWnd, ID, A
+	
+	if (WinActive("ahk_class Shell_TrayWnd") || WinActive("ahk_class Progman") || WinActive("ahk_class WorkerW"))
+	{
+		Run, %path%
+	}
+	else if WinActive("ahk_exe explorer.exe")
+	{
+		Send ^l
+		Sleep 20
+		ControlSetText, Edit1, %path%, ahk_id %hWnd%
+		ControlSend, Edit1, {Enter}, ahk_id %hWnd%
+	}
+	else if WinActive("ahk_class #32770")
+	{
+		Send ^l 
+		Sleep 20
+		ControlSetText, Edit2, %path%, ahk_id %hWnd%
+		ControlSend, Edit2, {Enter}, ahk_id %hWnd%
+	}
+	else
+	{
+		Run, %path%
+	}
+}
+
+CmdCommandExists(command) {
+    RunWait, %ComSpec% /c where %command%, , Hide UseErrorLevel
+    return !ErrorLevel
+}
+
+OpenWithVSCode(filePath)
+{
+	if (!CmdCommandExists("code"))
+	{
+		ShellRun("OpenWith.exe", filePath)
+		WinWaitActive, ahk_exe OpenWith.exe,, 3
+		Sleep 120
+		Send {Tab}
+		return
+	}
+	
+	Run, "code" %filePath%,,Hide
+}

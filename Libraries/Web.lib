@@ -411,17 +411,30 @@ SearchBasedTimer:
 
 	lastWebSearchVar:=webSearchVar
 	isCustomCommand := false
+	isCustomCommandExtended := false
 
 	for index, element in CustomCommands
 	{
-		el=%element%
-		if (el = webSearchVar)
+		com=%element%
+		if (com = webSearchVar)
 		{
 			isCustomCommand := true
+		}
+		else if (InStr(com, "[\s]") && RegExMatch(webSearchVar, com))
+		{
+			isCustomCommandExtended := true
+			extendedCommand := com
+			extendedCommandParam := SubStr(webSearchVar, InStr(webSearchVar, " ") + 1)
 		}
 	}
 
 	if (isCustomCommand && !IsUsingCustomQuery)
+	{
+		searchTextColor = 7ab048
+		GuiControl, WebL:+c%searchTextColor%, webSearchVar
+		Gui, WebL:Color
+	}
+	else if (isCustomCommandExtended && !IsUsingCustomQuery)
 	{
 		searchTextColor = 7ab048
 		GuiControl, WebL:+c%searchTextColor%, webSearchVar
@@ -478,8 +491,16 @@ StartSearch:
 
 	if (isCustomCommand && !IsUsingCustomQuery)
 	{
-		Run, % A_WorkingDir "\CustomCommands.ahk " webSearchVar
+		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %webSearchVar%,,, PIDCustomCommands
 		
+		Gui, WebL:Destroy
+		GoSub WebLClose
+		return
+	}
+	else if (isCustomCommandExtended && !IsUsingCustomQuery)
+	{
+		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %extendedCommand%  %extendedCommandParam%,,, PIDCustomCommands
+
 		Gui, WebL:Destroy
 		GoSub WebLClose
 		return

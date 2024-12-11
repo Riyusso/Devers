@@ -36,6 +36,7 @@ If (ItsLocked!=1 && !DefaultFader)
 	else
 		scaledh=52
 	WinSet, Region, 0-0 w%scaledw% h%scaledh% r3-3, vol_Progress
+	WinSet, Transparent, 225, vol_Progress
 	SetTimer, Remove_Show_OSD, -%Volume_Delay%
 }
 return

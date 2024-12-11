@@ -63,7 +63,7 @@ Config:
 	IniRead, gLabel, keywords.ini, Search, gLabel, % "Google:"
 	IniRead, gurl, keywords.ini, Search, gurl, % "https://www.google.bg/search?q={query}"
 	IniRead, trLabel, keywords.ini, Search, trLabel, % "Translate:"
-	IniRead, trurl, keywords.ini, Search, trurl, % "https://translate.google.com/#auto/bg/{query}"
+	IniRead, trurl, keywords.ini, Search, trurl, % "https://translate.google.com/?sl=auto&tl=bg&text={query}&op=translate"
 	IniRead, mapsLabel, keywords.ini, Search, mapsLabel, % "Maps:"
 	IniRead, mapsurl, keywords.ini, Search, mapsurl, % "http://maps.google.com/?q={query}"
 

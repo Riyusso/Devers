@@ -13,12 +13,15 @@
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
 	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Options
 
-		Gui, Color, %guicolor%, 252525
-		Gui, Font, s9
-		Gui, Font, normal
-
+	Gui, Color, %guicolor%, 252525
+	Gui, Font, s9
+	Gui, Font, normal
+		
 	Gui, Add, Text, % "x" labelsx " w137 y+25", Start with Windows
 	Gui, Add, DropDownList, % "x+0 w80 yp-3 Center vStartWithWindows 0x200 Choose" StartWithWindows " AltSubmit" , No|Yes
+			
+	Gui, Add, Text, % "x" labelsx " w137 y+12", Run As Admin
+	Gui, Add, DropDownList, % "x+0 w80 yp-3 Center vRunAsAdminTemp 0x200 Choose" RunAsAdmin+1 " AltSubmit" , No|Yes
 
 	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
 	Gui, Font, s9 cDFDFDF
@@ -94,9 +97,11 @@ MainMenuApply:
 	Gui, Submit, NoHide
 
 	passwordhash:=Crypt.Encrypt.StrEncrypt(password,"KktgC3l0wR",7,3)
+	RunAsAdmin:=RunAsAdminTemp-1
 	IniWrite, %passwordhash%, settings.ini, settings, passwordhash
 	IniWrite, %email%, settings.ini, settings, email
 	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
+	IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 	IniWrite, %PasswordExpiration%, settings.ini, settings, PasswordExpiration
 
 	If PasswordExpiration!=2
@@ -1129,6 +1134,9 @@ ExitAppL:
 		IniWrite, %IntentReload%, settings.ini, settings, Reloaded
 
 	GoSub StopRunningPlugins
+
+	IfWinExist, % "ahk_pid " PIDCustomCommands
+		WinKill, % "ahk_pid " PIDCustomCommands
 
 	Send {LAlt Up}{LShift Up} ; Needed incase a key was stuck
 	ExitApp
