@@ -108,6 +108,7 @@ IfExist, settings.ini
 
 	LogTime(0)
 	GoSub ButtonsLabel
+	SetTimer, SetupGuiPreloading, 2700000
 	If AfterInstallation=1
 		GoSub ScriptFunctions
 }
@@ -125,7 +126,8 @@ Installation:
 	GoSub InstallFiles
 	Menu, Tray, Icon, Assets\TrayIcon.ico
 	Menu, Tray, Icon
-	GoSub AdminPrompt
+	GoSub NotAnAdmin ; lite installation override
+	;GoSub AdminPrompt
 return
 
 InstallFiles:

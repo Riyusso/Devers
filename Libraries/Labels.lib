@@ -21,14 +21,18 @@ OpenLearnMoreTabAbout:
 return
 
 RunAsAdmin:
+	StartWithWindows=2
 	RunAsAdmin=1
+	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 	FadeOut(AdminPrompt)
 	GoSub Settings
 return
 
 NotAnAdmin:
+	StartWithWindows=2
 	RunAsAdmin=0
+	IniWrite, %StartWithWindows%, settings.ini, settings, StartWithWindows
 	IniWrite, %RunAsAdmin%, settings.ini, settings, RunAsAdmin
 	FadeOut(AdminPrompt)
 	GoSub Settings

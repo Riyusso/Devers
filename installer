@@ -41,7 +41,7 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 else
 {
 	FileCreateDir, %A_MyDocuments%\%ScriptName%
-	SetWorkingDir %A_MyDocuments%\%scriptname%
+	SetWorkingDir %A_MyDocuments%\%ScriptName%
 	FileInstall, Base.exe, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe, 1
 	Sleep 1250
 	IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"

@@ -11,7 +11,7 @@ Loop, Parse, keysArray, `|
 
 #If !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
 	Hotkey, If, !WinActive( "ahk_id " . ChangeHotkeys ) && !WinActive( "ahk_id " . ProtectionSettings )
-	If (assignedKeyLock!="None")
+	If (assignedKeyLock!="None" && BreakLoop=1)
 	{
 		Hotkey, %assignedKeyLock%, LockNow
 		Hotkey, %assignedKeyLock%, LockNow, On

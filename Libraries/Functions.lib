@@ -573,6 +573,19 @@ class Plugin
 			this.TrayIcon()
 		}
 	}
+	
+	StartWithWindows()
+	{
+		SplitPath, A_ScriptName, , , , OutNameNoExt
+		LinkFile=%A_Startup%\%OutNameNoExt%.lnk
+		
+		FileDelete, %LinkFile%
+		
+		If A_IsCompiled=1
+		{
+			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+		}
+	}
 
 	TrayIcon()
 	{

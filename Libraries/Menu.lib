@@ -54,7 +54,8 @@
 	}
 	else
 	{
-		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+18 w" (width*0.80) " h36 gLearnMore hwndBut1 +Center", Learn More
+		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+22 w" (width*0.80) " h36 gChangeHotkeys hwndBut1 +Center", Configure Hotkeys
+		Gui, Add, Button, % "x" (width/2)-((width*0.80)/2) " y+2 w" (width*0.80) " h36 gLearnMore hwndBut2 +Center", Learn More
 	}
 
 	Gui, Font, s9
@@ -73,10 +74,8 @@
 	H := PY + PH
 	
 	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
-	if !FirstRun
-	{
-		ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
-	}
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+
 	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
 	ImageButton.Create(But4, Opt1, Opt2, "", Opt4)
 	Opt1 := [6, "0x" . guicolor, "0x" . guicolor, "White"]
@@ -320,10 +319,12 @@ CreateExtension:
 
 	FadeOut(CreateExtensionGUI)
 
+	IfNotExist, Extensions
+		FileCreateDir, Extensions
 	FileInstall, Plugins/template, %A_MyDocuments%\%ScriptName%\Extensions\%newPluginName%.ahk, 0
 	Sleep 70
 	GoSub ExitDefMenu
-	pluginPath=%A_WorkingDir%\Extensions\%newPluginName%.ahk
+	pluginPath=%A_MyDocuments%\%ScriptName%\Extensions\%newPluginName%.ahk
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
@@ -335,7 +336,7 @@ return
 
 EditPlugin:
 	ControlGetFocus, ChosenPluginClassNN, A
-	pluginPath:=A_WorkingDir . "\Extensions\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
+	pluginPath:=A_MyDocuments . "\" . ScriptName . "\Extensions\" . CustomExtensionNames[ChosenPluginClassNN] . ".ahk"
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
@@ -705,12 +706,12 @@ ScriptFunctions:
 		Gui, Add, Text, % "x+1 w" (width/2) " Center vRAltVar", Off
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x3 y+6 w" (width/2) " Center ", Minimize Current App:
+	Gui, Add, Text, % "x1 y+6 w" (width/2) " Center ", Minimize Current App:
 	Gui, Font, s8 c%lightc%, Tahoma
 	If AltMinimizeWanted=1
-		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar",  Alt x 2
+		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar", Alt x 2
 	Else
-		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar",  Off
+		Gui, Add, Text, % "x+0 w" (width/2) " Center vAltMinimizeVar", Off
 
 	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
@@ -733,11 +734,6 @@ ScriptFunctions:
 	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyVolDownVar Center", %assignedKeyVolDown%
 
 	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
-
-	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+12 w" (width/2) " Center ", Lock Now:
-	Gui, Font, s8 c%lightc%, Tahoma
-	Gui, Add, Text, % "x+1 w" (width/2) " vassignedKeyLockVar Center", %assignedKeyLock%
 
 	Gui, Font, s8 c%darkerc%, Tahoma
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Input Email:
@@ -809,6 +805,17 @@ return
 
 ;--------------------------------------------------------------------------------------------------------------
 
+SetupGuiPreloading:
+	if WebLT
+		return
+
+	SearchBased:=true
+	preLoadingRSWeb:=true
+	GoSub RSWeb
+return
+
+;--------------------------------------------------------------------------------------------------------------
+
 ChangeHotkeys:
 
 	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
@@ -854,9 +861,6 @@ ChangeHotkeys:
 	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Volume Down
 	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyVolDown" , %keyVolDown%
 
-	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Lock
-	Gui, Add, Hotkey, % "x+34 w72 Center vassignedKeyLock" , %keyLock%
-
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
@@ -880,7 +884,7 @@ return
 
 ChangeButton:
 	Gui, Submit, NoHide
-	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown|keyLock
+	keysArray=keyRSWeb|keyPlay|keyPrev|keyNext|keyVolUp|KeyVolDown
 	Loop, Parse, keysArray, `|
 	{
 		IniWrite, % assigned%A_LoopField%, settings.ini, settings, %A_LoopField%

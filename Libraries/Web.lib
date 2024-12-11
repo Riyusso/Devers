@@ -119,7 +119,28 @@
 			ImageButton.Create(SCHYT8, Opt1, Opt2, "", Opt4)
 		}
 
-		If SearchBased
+		if preLoadingRSWeb
+		{
+			preLoadingRSWeb:=0
+			WinSet, Transparent, 0
+			WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r12-12", ahk_id %WebL%
+			GoSub LoadCustomCommands
+			ShAutoComplete(WebSearch)
+			HideFocusBorder(WebL)
+			Sleep 50
+			Gui, Show, h%guih% w%guiw% NoActivate, %ScriptName% Speed Dial
+			Sleep 100
+			SetTimer, SearchBasedTimer, Off
+			WebLT := false
+			Gui, Tip:Destroy
+			Gui, WebL:Destroy
+			currentKeyword=
+			ChoosingWebsite:=false
+			SearchBased:=false
+			RSWebWithSearchFocused:=false
+			return
+		}
+		else if SearchBased
 		{
 			WinSet, Transparent, 245
 			WinSet, Region, % "0-0 w" guiw*dpi " h" guih*dpi " r12-12", ahk_id %WebL%
