@@ -50,6 +50,8 @@ Config:
 	IniRead, FastSearchWanted, settings.ini, settings, FastSearchWanted, 1
 	IniRead, AltMinimizeWanted, settings.ini, settings, AltMinimizeWanted, 1
 	IniRead, VolumeOTWanted, settings.ini, settings, VolumeOTWanted, 1
+	IniRead, MediaOverTrayWanted, settings.ini, settings, MediaOverTrayWanted, 1
+	IniRead, MoveUpFolderWanted, settings.ini, settings, MoveUpFolderWanted, 1
 	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 200
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3

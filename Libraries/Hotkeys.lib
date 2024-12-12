@@ -353,3 +353,37 @@ return
 		GoSub ExitDefMenu
 return
 #If
+
+#If (MediaOverTrayWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman"))
+Hotkey, If, (MediaOverTrayWanted=1) && (MouseIsOver("ahk_class Shell_TrayWnd") || MouseIsOver("ahk_class Progman"))
+	MButton::
+		MouseGetPos, xbef
+	return
+
+	MButton Up::
+		MouseGetPos, xaft
+		if(xbef!=null && xbef-xaft>60)
+		{
+			Send {Media_Prev}
+			RSNotify("Previous")
+		}
+		else if(xbef!=null && xbef-xaft<-60)
+		{
+			Send {Media_Next}
+			RSNotify("Next", 95)
+		}
+		else if(xbef!=null)
+		{
+			Send {Media_Play_Pause}
+			Sleep 40
+			RSNotify("Play/Pause")
+		}
+		xbef:=null
+	return
+#If
+
+#If (MoveUpFolderWanted=1) && (MouseIsOver("ahk_class CabinetWClass") || MouseIsOver("ahk_class #32770"))
+	MButton::
+		Send !{Up}
+	return
+#If

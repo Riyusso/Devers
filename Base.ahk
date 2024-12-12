@@ -44,7 +44,7 @@ IfExist, settings.ini
 
 	If Reloaded=1
 	{
-		RSNotify("Reloaded")
+		RSNotify("Restarted")
 		IniDelete, settings.ini, settings, Reloaded
 	}
 	If (CreateATask=1 || !FirstRun) && (A_IsCompiled) && (A_IsAdmin)

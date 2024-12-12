@@ -115,6 +115,8 @@ MainMenuApply:
 		IniWrite, 2, settings.ini, settings, FastSearchWanted		
 		IniWrite, 2, settings.ini, settings, AltMinimizeWanted
 		IniWrite, 2, settings.ini, settings, VolumeOTWanted
+		IniWrite, 2, settings.ini, settings, MediaOverTrayWanted
+		IniWrite, 2, settings.ini, settings, MoveUpFolderWanted
 		IniWrite, 1, settings.ini, settings, CreateExtensionAfterReload
 		IniWrite, None, settings.ini, settings, keyRSWeb
 		IniWrite, None, settings.ini, settings, keyPlay
@@ -207,11 +209,15 @@ ExtSettings:
 
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Fast Search
 	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center Section vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
-	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", LAlt to Minimize
-	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Volume Over Tray
 	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
-
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Media Control Tray
+	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vMediaOverTrayWanted Choose" MediaOverTrayWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", LAlt to Minimize
+	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vAltMinimizeWanted Choose" AltMinimizeWanted " AltSubmit" , Enabled|Disabled
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Move Up Folder
+	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vMoveUpFolderWanted Choose" MoveUpFolderWanted " AltSubmit" , Enabled|Disabled
+	
 	IfExist, Extensions/*.ahk
 	{
 		Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e,, 4]
@@ -405,6 +411,8 @@ IfExist, Extensions/*.ahk
 IniWrite, %FastSearchWanted%, settings.ini, settings, FastSearchWanted
 IniWrite, %AltMinimizeWanted%, settings.ini, settings, AltMinimizeWanted
 IniWrite, %VolumeOTWanted%, settings.ini, settings, VolumeOTWanted
+IniWrite, %MediaOverTrayWanted%, settings.ini, settings, MediaOverTrayWanted
+IniWrite, %MoveUpFolderWanted%, settings.ini, settings, MoveUpFolderWanted
 
 If FastSearchWanted=1
 	GuiControl, Functions:, RAltVar, Right Alt
