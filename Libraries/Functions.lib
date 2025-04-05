@@ -1,3 +1,598 @@
+MouseIsOver(WinTitle)
+{
+	MouseGetPos,,, Win
+	return WinExist(WinTitle . " ahk_id " . Win)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+CheckMouseInArea(x1, y1, x2, y2) {
+    MouseGetPos, mx, my
+    return (mx >= x1 && mx <= x2 && my >= y1 && my <= y2)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+ProcessExist(Name)
+{
+	Process, Exist, %Name%
+	return Errorlevel
+}
+
+;--------------------------------------------------------------------------------------------------------------
+ 
+ExplorerGetActiveFolderPath()
+{
+	WinGetClass, winClass, % "ahk_id" . hWnd := WinExist("A")
+	if !(winClass ~="Progman|WorkerW|(Cabinet|Explore)WClass")
+		Return
+
+	shellWindows := ComObjCreate("Shell.Application").Windows
+	if (winClass ~= "Progman|WorkerW")  ; IShellWindows::Item:    https://goo.gl/ihW9Gm
+										; IShellFolderViewDual:   https://goo.gl/gnntq3
+		shellFolderView := shellWindows.Item( ComObject(VT_UI4 := 0x13, SWC_DESKTOP := 0x8) ).Document
+	else {
+		for window in shellWindows       ; ShellFolderView object: https://goo.gl/MhcinH
+			if (hWnd = window.HWND) && (shellFolderView := window.Document)
+				break
+	}
+	Return shellFolderView.Folder.Self.Path
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+GetSelectedFile()
+{
+	hwnd := WinExist("A")
+	for Window in ComObjCreate("Shell.Application").Windows
+	{
+		if (window.hwnd==hwnd) {
+			Selection := Window.Document.SelectedItems
+			for Items in Selection
+				Path_to_Selection := Items.path
+		}
+	}
+
+	return Path_to_Selection
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+GetSelectedFiles()
+{
+    hwnd := WinExist("A")
+    filesArray := []
+    Shell := ComObjCreate("Shell.Application")
+    for Window in Shell.Windows {
+        if (Window.hwnd == hwnd) {
+            SelectedItems := Window.Document.SelectedItems
+            break
+        }
+    }
+    Loop % SelectedItems.Count {
+         item := SelectedItems.Item(A_Index - 1)
+         filesArray.Push(item.Path)
+    }
+    return filesArray
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+OpenWithEditor(filePath)
+{
+	if (!CmdCommandExists("code"))
+	{
+		ShellRun("OpenWith.exe", filePath)
+		WinWaitActive, ahk_exe OpenWith.exe,, 3
+		Sleep 120
+		Send {Tab}
+		return
+	}
+	
+	Run, "code" %filePath%,,Hide
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+OpenCmd()
+{
+	folderPath := ExplorerGetActiveFolderPath() ; this function is from Libraries/Functions. Press F1 to view more
+	run, %ComSpec%, % folderPath ? folderPath : "C:\Users\" A_UserName
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+CmdCommandExists(command)
+{
+    RunWait, %ComSpec% /c where %command%, , Hide UseErrorLevel
+    return !ErrorLevel
+}
+
+ExecuteCmdCommand(command)
+{
+    Run, %ComSpec% /k %command%, % ExplorerGetActiveFolderPath()
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+ChangeOrOpenDir(path)
+{
+    WinGet, hWnd, ID, A
+	
+	if (WinActive("ahk_class Shell_TrayWnd") || WinActive("ahk_class Progman") || WinActive("ahk_class WorkerW"))
+	{
+		Run, %path%
+	}
+	else if WinActive("ahk_exe explorer.exe")
+	{
+		Send ^{SC026}
+		Sleep 20
+		ControlSetText, Edit1, %path%, ahk_id %hWnd%
+		ControlSend, Edit1, {Enter}, ahk_id %hWnd%
+	}
+	else if WinActive("ahk_class #32770")
+	{
+		Send ^{SC026}
+		Sleep 20
+		ControlSetText, Edit2, %path%, ahk_id %hWnd%
+		ControlSend, Edit2, {Enter}, ahk_id %hWnd%
+	}
+	else
+	{
+		Run, %path%
+	}
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+; WinHttp_DownloadToFile function by tmplinshi at autohotkey.com
+WinHttp_DownloadToFile(Url, FileName, EncodedAuth = "")
+{
+    whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+    whr.Open("GET", Url, True)
+
+	if (EncodedAuth != "")
+	{
+		authHeader := "Basic " . EncodedAuth
+		whr.SetRequestHeader("Authorization", authHeader)
+	}
+
+    whr.Send()
+
+    If whr.WaitForResponse()
+    {
+        ado := ComObjCreate("ADODB.Stream")
+        ado.Type := 1 ; adTypeBinary
+        ado.Open
+        ado.Write(whr.ResponseBody)
+        ado.SaveToFile(FileName, 2)
+        ado.Close
+    }
+}
+
+;--------------------------------------------------------------------------------------------------------------
+ 
+IsWindowFullScreen( winTitle )
+{
+	;checks if the specified window is full screen
+
+	winID := WinExist( winTitle )
+
+	If ( !winID )
+		Return false
+
+	WinGet style, Style, ahk_id %WinID%
+	WinGetPos ,,,winW,winH, %winTitle%
+	; 0x800000 is WS_BORDER.
+	; 0x20000000 is WS_MINIMIZE.
+	; no border and not minimized
+	Return ((style & 0x20800000) or winH < A_ScreenHeight or winW < A_ScreenWidth) ? false : true
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+Browser() ; thanks to gt57 @ https://autohotkey.com/board/topic/84785-default-browser-path-and-executable/
+{
+    RegRead, BrowserKeyName, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice, Progid
+    RegRead, BrowserFullCommand, HKEY_CLASSES_ROOT, %BrowserKeyName%\shell\open\command
+    StringGetPos, pos, BrowserFullCommand, ",,1
+    pos := --pos
+    StringMid, BrowserPathandEXE, BrowserFullCommand, 2, %pos%
+    Return BrowserPathandEXE
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+RunAsAdmin()
+{
+	Loop, %0%  ; For each parameter:
+	{
+		param := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
+		params .= A_Space . param
+	}
+	ShellExecute := A_IsUnicode ? "shell32\ShellExecute":"shell32\ShellExecuteA"
+
+	if not A_IsAdmin
+	{
+		If A_IsCompiled
+			DllCall(ShellExecute, uint, 0, str, "RunAs", str, A_ScriptFullPath , str, params , str, A_WorkingDir, int, 1)
+		Else
+			DllCall(ShellExecute, uint, 0, str, "RunAs", str, A_AhkPath, str, """" . A_ScriptFullPath . """" . A_Space . params, str, A_WorkingDir, int, 1)
+		ExitApp
+  	}
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+FadeOut(id)
+{
+	IfWinExist, ahk_id %id%
+	{
+		localvar=240
+		Loop, 14
+			{
+				localvar:=localvar-18
+				WinSet, Transparent, %localvar%, ahk_id %id%
+				sleep 10
+
+			}
+		IfWinExist, ahk_id %id%
+			Gui %id%:Destroy
+	}
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+FadeIn(id)
+{
+	localvar=0
+	loop, 10
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 10
+		localvar:=localvar+17
+	}
+	loop, 8
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+7
+	}
+	loop, 4
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+4
+	}
+	loop, 9
+	{
+		WinSet, Transparent, %localvar% , ahk_id %id%
+		sleep 20
+		localvar:=localvar+1
+	}
+	HideFocusBorder(id)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+DPIFactor()
+{
+	RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
+	; the reg key was not found - it means default settings
+	; 96 is the default font size setting
+	if (errorlevel=1) OR (DPI_value=96 )
+		return 1
+	else
+		Return  DPI_Value/96
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+; VersionCompare function by boiler at ahkscript.org
+; Returns 1 if version1 is more recent, 2 if version 2 is more recent, 0 if they are the same.
+VersionCompare(version1, version2)
+{
+	StringSplit, verA, version1, .
+	StringSplit, verB, version2, .
+	Loop, % (verA0> verB0 ? verA0 : verB0)
+	{
+		if (verA0 < A_Index)
+			verA%A_Index% := "0"
+		if (verB0 < A_Index)
+			verB%A_Index% := "0"
+		if (verA%A_Index% > verB%A_Index%)
+			return 1
+		if (verB%A_Index% > verA%A_Index%)
+			return 2
+	}
+	return 0
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+FirstTimeOpenedAction(Window, Method)
+{
+	IniRead, %Window%FirstTime, settings.ini, settings, %Window%FirstTime, 1
+	IniWrite, 0, settings.ini, settings, %Window%FirstTime
+
+	If (%Window%FirstTime)=1
+		GoSub %Method%
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+HideFocusBorder(wParam, lParam := "", uMsg := "", hWnd := "") { ; credit to "just me" - https://autohotkey.com/boards/viewtopic.php?t=9919
+	; WM_UPDATEUISTATE = 0x0128
+		Static Affected := [] ; affected controls / GUIs
+			, HideFocus := 0x00010001 ; UIS_SET << 16 | UISF_HIDEFOCUS
+			, OnMsg := OnMessage(0x0128, Func("HideFocusBorder"))
+		If (uMsg = 0x0128) { ; called by OnMessage()
+		If (wParam = HideFocus)
+			Affected[hWnd] := True
+		Else If Affected[hWnd]
+			PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %hWnd%
+	}
+	Else If DllCall("IsWindow", "Ptr", wParam, "UInt")
+		PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %wParam%
+}
+
+;--------------------------------------------------------------------------------------------------------------
+ 
+SetEditCueBanner(HWND, Cue)
+{
+	; requires AHL_L
+	Static EM_SETCUEBANNER := (0x1500 + 1)
+	Return DllCall("User32.dll\SendMessageW", "Ptr", HWND, "Uint", EM_SETCUEBANNER, "Ptr", True, "WStr", Cue)
+}
+ 
+;--------------------------------------------------------------------------------------------------------------
+
+LogTime(id)
+{
+    if(logging=1)
+	{
+        FormatTime, datenow,, MM-d-yyyy
+        FormatTime, timenow,, H:mm:ss
+        if(id=0)
+		{
+            FileAppend, `n[Program started. %datenow% %timenow%]`n, log.txt
+        }
+        else if(id=1)
+        {
+            FileAppend, Timeout lock at %timenow%.`n, log.txt
+        }
+        else if(id=2)
+        {
+            FileAppend, Forced lock at %timenow%.`n, log.txt
+        }
+		else if(id=3)
+		{
+			FileAppend, Locked after full screen at %timenow%.`n, log.txt
+		}
+        else if(id=4)
+        {
+            FileAppend, Attempted unlock at %timenow%.`n, log.txt
+        }
+        else if(id=5)
+		{
+            FileAppend, Successful unlock at %timenow%.`n, log.txt
+        }
+		else if(id=6)
+		{
+			FileAppend, Password cleared at %timenow%.`n, log.txt
+		}
+    }
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+GetOSVersion()
+{
+    Return ((r := DllCall("GetVersion") & 0xFFFF) & 0xFF) "." (r >> 8)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+IsFolderEmpty(folder)
+{
+	Loop %folder%\*.*, 0, 1
+		return false
+	return true
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+RapidHotkey(keystroke, times="2", delay=0.2, IsLabel=0)
+{
+	Pattern := Morse(delay*1000)
+	If (StrLen(Pattern) < 2 and Chr(Asc(times)) != "1")
+		Return
+	If (times = "" and InStr(keystroke, """"))
+	{
+		Loop, Parse, keystroke,""
+			If (StrLen(Pattern) = A_Index+1)
+				continue := A_Index, times := StrLen(Pattern)
+	}
+	Else if (RegExMatch(times, "^\d+$") and InStr(keystroke, """"))
+	{
+		Loop, Parse, keystroke,""
+			If (StrLen(Pattern) = A_Index+times-1)
+				times := StrLen(Pattern), continue := A_Index
+	}
+	Else if InStr(times, """")
+	{
+		Loop, Parse, times,""
+			If (StrLen(Pattern) = A_LoopField)
+				continue := A_Index, times := A_LoopField
+	}
+	Else if (times = "")
+		continue := 1, times := 2
+	Else if (times = StrLen(Pattern))
+		continue = 1
+	If !continue
+		Return
+	Loop, Parse, keystroke,""
+		If (continue = A_Index)
+			keystr := A_LoopField
+	Loop, Parse, IsLabel,""
+		If (continue = A_Index)
+			IsLabel := A_LoopField
+	hotkey := RegExReplace(A_ThisHotkey, "[\*\~\$\#\+\!\^]")
+	IfInString, hotkey, %A_Space%
+		StringTrimLeft, hotkey,hotkey,% InStr(hotkey,A_Space,1,0)
+	backspace := "{BS " times "}"
+	keywait = Ctrl|Alt|Shift|LWin|RWin
+	Loop, Parse, keywait, |
+		KeyWait, %A_LoopField%
+	If ((!IsLabel or (IsLabel and IsLabel(keystr))) and InStr(A_ThisHotkey, "~") and !RegExMatch(A_ThisHotkey
+	, "i)\^[^\!\d]|![^\d]|#|Control|Ctrl|LCtrl|RCtrl|Shift|RShift|LShift|RWin|LWin|Alt|LAlt|RAlt|Escape|BackSpace|F\d\d?|"
+	. "Insert|Esc|Escape|BS|Delete|Home|End|PgDn|PgUp|Up|Down|Left|Right|ScrollLock|CapsLock|NumLock|AppsKey|"
+	. "PrintScreen|CtrlDown|Pause|Break|Help|Sleep|Browser_Back|Browser_Forward|Browser_Refresh|Browser_Stop|"
+	. "Browser_Search|Browser_Favorites|Browser_Home|Volume_Mute|Volume_Down|Volume_Up|MButton|RButton|LButton|"
+	. "Media_Next|Media_Prev|Media_Stop|Media_Play_Pause|Launch_Mail|Launch_Media|Launch_App1|Launch_App2"))
+		Send % backspace
+	If (WinExist("AHK_class #32768") and hotkey = "RButton")
+		WinClose, AHK_class #32768
+	If !IsLabel
+		Send % keystr
+	else if IsLabel(keystr)
+		Gosub, %keystr%
+	Return
+}
+Morse(timeout = 400) ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?t=16951 (Modified to return: KeyWait %key%, T%tout%)
+{
+   tout := timeout/1000
+   key := RegExReplace(A_ThisHotKey,"[\*\~\$\#\+\!\^]")
+   IfInString, key, %A_Space%
+		StringTrimLeft, key, key,% InStr(key,A_Space,1,0)
+	If Key in Shift,Win,Ctrl,Alt
+		key1:="{L" key "}{R" key "}"
+   Loop
+   {
+      t := A_TickCount
+      KeyWait %key%, T%tout%
+		Pattern .= A_TickCount-t > timeout
+		If(ErrorLevel)
+			Return Pattern
+    If key in Capslock,LButton,RButton,MButton,ScrollLock,CapsLock,NumLock
+      KeyWait,%key%,T%tout% D
+    else if Asc(A_ThisHotkey)=36
+		KeyWait,%key%,T%tout% D
+    else
+      Input,pressed,T%tout% L1 V,{%key%}%key1%
+	If (ErrorLevel="Timeout" or ErrorLevel=1)
+		Return Pattern
+	else if (ErrorLevel="Max")
+		Return
+   }
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+PutUni(DataIn)
+{
+   SavedClip := ClipBoardAll
+
+   ClipBoard =
+   If RegExMatch(DataIn, "^[0-9a-fA-F]+$")
+   {
+      Loop % StrLen(DataIn) / 2
+         UTF8Code .= Chr("0x" . SubStr(DataIn, A_Index * 2 - 1, 2))
+   }
+   Else
+      UTF8Code := DataIn
+
+   Send %UTF8Code%
+
+   Sleep 50
+   ClipBoard := SavedClip
+   return
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+/*
+	ShellRun by Lexikos
+	requires: AutoHotkey v1.1
+	license: http://creativecommons.org/publicdomain/zero/1.0/
+
+	Credit for explaining this method goes to BrandonLive:
+	http://brandonlive.com/2008/04/27/getting-the-shell-to-run-an-application-for-you-part-2-how/
+
+	Shell.ShellExecute(File [, Arguments, Directory, Operation, Show])
+	http://msdn.microsoft.com/en-us/library/windows/desktop/gg537745
+
+	Can be used to run scripts, exes and dlls without admin priviledge if your script is running as admin.
+
+	Example 1:
+	ShellRun("chrome.exe")
+
+	Example 2:
+	ShellRun("chrome.exe", "--new-window www.google.com")
+
+	Example 3:
+	ShellRun("https://google.com")
+
+	Example 4:
+	filePath := "C:\path\to\your\file.txt"
+	ShellRun("OpenWith.exe", filePath) ; old way - ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " filePath)	
+*/
+ShellRun(prms*)
+{
+    shellWindows := ComObjCreate("Shell.Application").Windows
+    VarSetCapacity(_hwnd, 4, 0)
+    desktop := shellWindows.FindWindowSW(0, "", 8, ComObj(0x4003, &_hwnd), 1)
+   
+    ; Retrieve top-level browser object.
+    if ptlb := ComObjQuery(desktop
+        , "{4C96BE40-915C-11CF-99D3-00AA004AE837}"  ; SID_STopLevelBrowser
+        , "{000214E2-0000-0000-C000-000000000046}") ; IID_IShellBrowser
+    {
+        ; IShellBrowser.QueryActiveShellView -> IShellView
+        if DllCall(NumGet(NumGet(ptlb+0)+15*A_PtrSize), "ptr", ptlb, "ptr*", psv:=0) = 0
+        {
+            ; Define IID_IDispatch.
+            VarSetCapacity(IID_IDispatch, 16)
+            NumPut(0x46000000000000C0, NumPut(0x20400, IID_IDispatch, "int64"), "int64")
+           
+            ; IShellView.GetItemObject -> IDispatch (object which implements IShellFolderViewDual)
+            DllCall(NumGet(NumGet(psv+0)+15*A_PtrSize), "ptr", psv
+                , "uint", 0, "ptr", &IID_IDispatch, "ptr*", pdisp:=0)
+           
+            ; Get Shell object.
+            shell := ComObj(9,pdisp,1).Application
+           
+            ; IShellDispatch2.ShellExecute
+            shell.ShellExecute(prms*)
+           
+            ObjRelease(psv)
+        }
+        ObjRelease(ptlb)
+    }
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+BlockKeyboardInputs(state = "On")
+{
+	static keys
+	keys=Space,Enter,Tab,Esc,BackSpace,Del,Ins,Home,Up,Down,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock
+	,Pause,AppsKey,NumLock,Numpad0,Numpad1,Numpad2,Numpad3,Numpad4,Numpad5,Numpad6,Numpad7,Numpad8,Numpad9,NumpadDot
+	,NumpadDiv,NumpadMult,NumpadAdd,NumpadSub,NumpadEnter,NumpadIns,NumpadEnd,NumpadDown,NumpadPgDn,NumpadLeft,NumpadClear
+	,NumpadRight,NumpadHome,NumpadUp,NumpadPgUp,NumpadDel,Media_Next,Media_Play_Pause,Media_Prev,Media_Stop,Volume_Down,Volume_Up
+	,Volume_Mute,Browser_Back,Browser_Favorites,Browser_Home,Browser_Refresh,Browser_Search,Browser_Stop,Launch_App1,Launch_App2
+	,Launch_Mail,Launch_Media,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22
+	,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,x,y,z
+	,²,&,é,",',(,-,è,_,ç,à,),=,$,£,ù,*,~,#,{,[,|,``,\,^,@,],},;,:,!,?,.,/,§,<,>,vkBC
+	Loop,Parse,keys, `,
+		Hotkey, *%A_LoopField%, KeyboardDummyLabel, %state% UseErrorLevel
+	Return
+	KeyboardDummyLabel:
+	Return
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
 RSNotify(Text, ControlWidth=0, Timed=1250, BackgroundColor="157996", TextColor="ffffff") ;RSNotify
 {
 	global notifyDpi:=DpiFactor()
@@ -91,471 +686,6 @@ SHAutoComplete(hEdit)	; adds the ability to insert control characters from the A
 }
 
 ;--------------------------------------------------------------------------------------------------------------
-
-; WinHttp_DownloadToFile function by tmplinshi at autohotkey.com
-
-WinHttp_DownloadToFile(Url, FileName) {
-	whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	whr.Open("GET", Url, True)
-	whr.Send()
-	If whr.WaitForResponse()
-	{
-		ado := ComObjCreate("ADODB.Stream")
-		ado.Type := 1 ; adTypeBinary
-		ado.Open
-		ado.Write(whr.ResponseBody)
-		ado.SaveToFile(FileName, 2)
-		ado.Close
-	}
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-; VersionCompare function by boiler at ahkscript.org
-; Returns 1 if version1 is more recent, 2 if version 2 is more recent, 0 if they are the same.
-VersionCompare(version1, version2)
-{
-	StringSplit, verA, version1, .
-	StringSplit, verB, version2, .
-	Loop, % (verA0> verB0 ? verA0 : verB0)
-	{
-		if (verA0 < A_Index)
-			verA%A_Index% := "0"
-		if (verB0 < A_Index)
-			verB%A_Index% := "0"
-		if (verA%A_Index% > verB%A_Index%)
-			return 1
-		if (verB%A_Index% > verA%A_Index%)
-			return 2
-	}
-	return 0
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-HideFocusBorder(wParam, lParam := "", uMsg := "", hWnd := "") { ; credit to "just me" - https://autohotkey.com/boards/viewtopic.php?t=9919
-   ; WM_UPDATEUISTATE = 0x0128
-	Static Affected := [] ; affected controls / GUIs
-        , HideFocus := 0x00010001 ; UIS_SET << 16 | UISF_HIDEFOCUS
-	     , OnMsg := OnMessage(0x0128, Func("HideFocusBorder"))
-	If (uMsg = 0x0128) { ; called by OnMessage()
-      If (wParam = HideFocus)
-         Affected[hWnd] := True
-      Else If Affected[hWnd]
-         PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %hWnd%
-   }
-   Else If DllCall("IsWindow", "Ptr", wParam, "UInt")
-	  PostMessage, 0x0128, %HideFocus%, 0, , ahk_id %wParam%
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-SetEditCueBanner(HWND, Cue) {  ; requires AHL_L
-   Static EM_SETCUEBANNER := (0x1500 + 1)
-   Return DllCall("User32.dll\SendMessageW", "Ptr", HWND, "Uint", EM_SETCUEBANNER, "Ptr", True, "WStr", Cue)
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-DPIFactor()
-{
-RegRead, DPI_value, HKEY_CURRENT_USER, Control Panel\Desktop\WindowMetrics, AppliedDPI
-; the reg key was not found - it means default settings
-; 96 is the default font size setting
-if (errorlevel=1) OR (DPI_value=96 )
-	return 1
-else
-	Return  DPI_Value/96
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-LogTime(id)
-{
-    if(logging=1)
-	{
-        FormatTime, datenow,, MM-d-yyyy
-        FormatTime, timenow,, H:mm:ss
-        if(id=0)
-		{
-            FileAppend, `n[Program started. %datenow% %timenow%]`n, log.txt
-        }
-        else if(id=1)
-        {
-            FileAppend, Timeout lock at %timenow%.`n, log.txt
-        }
-        else if(id=2)
-        {
-            FileAppend, Forced lock at %timenow%.`n, log.txt
-        }
-		else if(id=3)
-		{
-			FileAppend, Locked after full screen at %timenow%.`n, log.txt
-		}
-        else if(id=4)
-        {
-            FileAppend, Attempted unlock at %timenow%.`n, log.txt
-        }
-        else if(id=5)
-		{
-            FileAppend, Successful unlock at %timenow%.`n, log.txt
-        }
-		else if(id=6)
-		{
-			FileAppend, Password cleared at %timenow%.`n, log.txt
-		}
-    }
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-RapidHotkey(keystroke, times="2", delay=0.2, IsLabel=0)
-{
-	Pattern := Morse(delay*1000)
-	If (StrLen(Pattern) < 2 and Chr(Asc(times)) != "1")
-		Return
-	If (times = "" and InStr(keystroke, """"))
-	{
-		Loop, Parse, keystroke,""
-			If (StrLen(Pattern) = A_Index+1)
-				continue := A_Index, times := StrLen(Pattern)
-	}
-	Else if (RegExMatch(times, "^\d+$") and InStr(keystroke, """"))
-	{
-		Loop, Parse, keystroke,""
-			If (StrLen(Pattern) = A_Index+times-1)
-				times := StrLen(Pattern), continue := A_Index
-	}
-	Else if InStr(times, """")
-	{
-		Loop, Parse, times,""
-			If (StrLen(Pattern) = A_LoopField)
-				continue := A_Index, times := A_LoopField
-	}
-	Else if (times = "")
-		continue := 1, times := 2
-	Else if (times = StrLen(Pattern))
-		continue = 1
-	If !continue
-		Return
-	Loop, Parse, keystroke,""
-		If (continue = A_Index)
-			keystr := A_LoopField
-	Loop, Parse, IsLabel,""
-		If (continue = A_Index)
-			IsLabel := A_LoopField
-	hotkey := RegExReplace(A_ThisHotkey, "[\*\~\$\#\+\!\^]")
-	IfInString, hotkey, %A_Space%
-		StringTrimLeft, hotkey,hotkey,% InStr(hotkey,A_Space,1,0)
-	backspace := "{BS " times "}"
-	keywait = Ctrl|Alt|Shift|LWin|RWin
-	Loop, Parse, keywait, |
-		KeyWait, %A_LoopField%
-	If ((!IsLabel or (IsLabel and IsLabel(keystr))) and InStr(A_ThisHotkey, "~") and !RegExMatch(A_ThisHotkey
-	, "i)\^[^\!\d]|![^\d]|#|Control|Ctrl|LCtrl|RCtrl|Shift|RShift|LShift|RWin|LWin|Alt|LAlt|RAlt|Escape|BackSpace|F\d\d?|"
-	. "Insert|Esc|Escape|BS|Delete|Home|End|PgDn|PgUp|Up|Down|Left|Right|ScrollLock|CapsLock|NumLock|AppsKey|"
-	. "PrintScreen|CtrlDown|Pause|Break|Help|Sleep|Browser_Back|Browser_Forward|Browser_Refresh|Browser_Stop|"
-	. "Browser_Search|Browser_Favorites|Browser_Home|Volume_Mute|Volume_Down|Volume_Up|MButton|RButton|LButton|"
-	. "Media_Next|Media_Prev|Media_Stop|Media_Play_Pause|Launch_Mail|Launch_Media|Launch_App1|Launch_App2"))
-		Send % backspace
-	If (WinExist("AHK_class #32768") and hotkey = "RButton")
-		WinClose, AHK_class #32768
-	If !IsLabel
-		Send % keystr
-	else if IsLabel(keystr)
-		Gosub, %keystr%
-	Return
-}
-Morse(timeout = 400) ;by Laszo -> http://www.autohotkey.com/forum/viewtopic.php?t=16951 (Modified to return: KeyWait %key%, T%tout%)
-{
-   tout := timeout/1000
-   key := RegExReplace(A_ThisHotKey,"[\*\~\$\#\+\!\^]")
-   IfInString, key, %A_Space%
-		StringTrimLeft, key, key,% InStr(key,A_Space,1,0)
-	If Key in Shift,Win,Ctrl,Alt
-		key1:="{L" key "}{R" key "}"
-   Loop
-   {
-      t := A_TickCount
-      KeyWait %key%, T%tout%
-		Pattern .= A_TickCount-t > timeout
-		If(ErrorLevel)
-			Return Pattern
-    If key in Capslock,LButton,RButton,MButton,ScrollLock,CapsLock,NumLock
-      KeyWait,%key%,T%tout% D
-    else if Asc(A_ThisHotkey)=36
-		KeyWait,%key%,T%tout% D
-    else
-      Input,pressed,T%tout% L1 V,{%key%}%key1%
-	If (ErrorLevel="Timeout" or ErrorLevel=1)
-		Return Pattern
-	else if (ErrorLevel="Max")
-		Return
-   }
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-ProcessExist(Name)
-{
-	Process,Exist,%Name%
-	return Errorlevel
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-PutUni(DataIn)
-{
-   SavedClip := ClipBoardAll
-
-   ClipBoard =
-   If RegExMatch(DataIn, "^[0-9a-fA-F]+$")
-   {
-      Loop % StrLen(DataIn) / 2
-         UTF8Code .= Chr("0x" . SubStr(DataIn, A_Index * 2 - 1, 2))
-   }
-   Else
-      UTF8Code := DataIn
-
-   Send %UTF8Code%
-
-   Sleep 50
-   ClipBoard := SavedClip
-   return
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-Browser() ; thanks to gt57 @ https://autohotkey.com/board/topic/84785-default-browser-path-and-executable/
-{
-    RegRead, BrowserKeyName, HKEY_CURRENT_USER, Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.html\UserChoice, Progid
-    RegRead, BrowserFullCommand, HKEY_CLASSES_ROOT, %BrowserKeyName%\shell\open\command
-    StringGetPos, pos, BrowserFullCommand, ",,1
-    pos := --pos
-    StringMid, BrowserPathandEXE, BrowserFullCommand, 2, %pos%
-    Return BrowserPathandEXE
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-RunAsAdmin()
-{
-	Loop, %0%  ; For each parameter:
-	{
-		param := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
-		params .= A_Space . param
-	}
-	ShellExecute := A_IsUnicode ? "shell32\ShellExecute":"shell32\ShellExecuteA"
-
-	if not A_IsAdmin
-	{
-		If A_IsCompiled
-			DllCall(ShellExecute, uint, 0, str, "RunAs", str, A_ScriptFullPath , str, params , str, A_WorkingDir, int, 1)
-		Else
-			DllCall(ShellExecute, uint, 0, str, "RunAs", str, A_AhkPath, str, """" . A_ScriptFullPath . """" . A_Space . params, str, A_WorkingDir, int, 1)
-		ExitApp
-  	}
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-/*
-	ShellRun by Lexikos
-	requires: AutoHotkey v1.1
-	license: http://creativecommons.org/publicdomain/zero/1.0/
-
-	Credit for explaining this method goes to BrandonLive:
-	http://brandonlive.com/2008/04/27/getting-the-shell-to-run-an-application-for-you-part-2-how/
-
-	Shell.ShellExecute(File [, Arguments, Directory, Operation, Show])
-	http://msdn.microsoft.com/en-us/library/windows/desktop/gg537745
-
-	Can be used to run scripts, exes and dlls without admin priviledge if your script is running as admin.
-
-	Example 1:
-	ShellRun("chrome.exe")
-
-	Example 2:
-	ShellRun("chrome.exe", "--new-window www.google.com")
-
-	Example 3:
-	ShellRun("https://google.com")
-
-	Example 4:
-	filePath := "C:\path\to\your\file.txt"
-	ShellRun("OpenWith.exe", filePath) ; old way - ShellRun("rundll32.exe", "shell32.dll,OpenAs_RunDLL " filePath)	
-*/
-ShellRun(prms*)
-{
-    shellWindows := ComObjCreate("Shell.Application").Windows
-    VarSetCapacity(_hwnd, 4, 0)
-    desktop := shellWindows.FindWindowSW(0, "", 8, ComObj(0x4003, &_hwnd), 1)
-   
-    ; Retrieve top-level browser object.
-    if ptlb := ComObjQuery(desktop
-        , "{4C96BE40-915C-11CF-99D3-00AA004AE837}"  ; SID_STopLevelBrowser
-        , "{000214E2-0000-0000-C000-000000000046}") ; IID_IShellBrowser
-    {
-        ; IShellBrowser.QueryActiveShellView -> IShellView
-        if DllCall(NumGet(NumGet(ptlb+0)+15*A_PtrSize), "ptr", ptlb, "ptr*", psv:=0) = 0
-        {
-            ; Define IID_IDispatch.
-            VarSetCapacity(IID_IDispatch, 16)
-            NumPut(0x46000000000000C0, NumPut(0x20400, IID_IDispatch, "int64"), "int64")
-           
-            ; IShellView.GetItemObject -> IDispatch (object which implements IShellFolderViewDual)
-            DllCall(NumGet(NumGet(psv+0)+15*A_PtrSize), "ptr", psv
-                , "uint", 0, "ptr", &IID_IDispatch, "ptr*", pdisp:=0)
-           
-            ; Get Shell object.
-            shell := ComObj(9,pdisp,1).Application
-           
-            ; IShellDispatch2.ShellExecute
-            shell.ShellExecute(prms*)
-           
-            ObjRelease(psv)
-        }
-        ObjRelease(ptlb)
-    }
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-ExplorerGetActiveFolderPath() {
-   WinGetClass, winClass, % "ahk_id" . hWnd := WinExist("A")
-   if !(winClass ~="Progman|WorkerW|(Cabinet|Explore)WClass")
-      Return
-   
-   shellWindows := ComObjCreate("Shell.Application").Windows
-   if (winClass ~= "Progman|WorkerW")  ; IShellWindows::Item:    https://goo.gl/ihW9Gm
-                                       ; IShellFolderViewDual:   https://goo.gl/gnntq3
-      shellFolderView := shellWindows.Item( ComObject(VT_UI4 := 0x13, SWC_DESKTOP := 0x8) ).Document
-   else {
-      for window in shellWindows       ; ShellFolderView object: https://goo.gl/MhcinH
-         if (hWnd = window.HWND) && (shellFolderView := window.Document)
-            break
-   }
-   Return shellFolderView.Folder.Self.Path
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-isWindowFullScreen( winTitle )
-{
-	;checks if the specified window is full screen
-
-	winID := WinExist( winTitle )
-
-	If ( !winID )
-		Return false
-
-	WinGet style, Style, ahk_id %WinID%
-	WinGetPos ,,,winW,winH, %winTitle%
-	; 0x800000 is WS_BORDER.
-	; 0x20000000 is WS_MINIMIZE.
-	; no border and not minimized
-	Return ((style & 0x20800000) or winH < A_ScreenHeight or winW < A_ScreenWidth) ? false : true
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-BlockKeyboardInputs(state = "On")
-{
-	static keys
-	keys=Space,Enter,Tab,Esc,BackSpace,Del,Ins,Home,Up,Down,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock
-	,Pause,AppsKey,NumLock,Numpad0,Numpad1,Numpad2,Numpad3,Numpad4,Numpad5,Numpad6,Numpad7,Numpad8,Numpad9,NumpadDot
-	,NumpadDiv,NumpadMult,NumpadAdd,NumpadSub,NumpadEnter,NumpadIns,NumpadEnd,NumpadDown,NumpadPgDn,NumpadLeft,NumpadClear
-	,NumpadRight,NumpadHome,NumpadUp,NumpadPgUp,NumpadDel,Media_Next,Media_Play_Pause,Media_Prev,Media_Stop,Volume_Down,Volume_Up
-	,Volume_Mute,Browser_Back,Browser_Favorites,Browser_Home,Browser_Refresh,Browser_Search,Browser_Stop,Launch_App1,Launch_App2
-	,Launch_Mail,Launch_Media,F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12,F13,F14,F15,F16,F17,F18,F19,F20,F21,F22
-	,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,x,y,z
-	,²,&,é,",',(,-,è,_,ç,à,),=,$,£,ù,*,~,#,{,[,|,``,\,^,@,],},;,:,!,?,.,/,§,<,>,vkBC
-	Loop,Parse,keys, `,
-		Hotkey, *%A_LoopField%, KeyboardDummyLabel, %state% UseErrorLevel
-	Return
-	KeyboardDummyLabel:
-	Return
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-FadeOut(id)
-{
-	IfWinExist, ahk_id %id%
-	{
-		localvar=240
-		Loop, 14
-			{
-				localvar:=localvar-18
-				WinSet, Transparent, %localvar%, ahk_id %id%
-				sleep 10
-
-			}
-		IfWinExist, ahk_id %id%
-			Gui %id%:Destroy
-	}
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-FadeIn(id)
-{
-	localvar=0
-	loop, 10
-	{
-		WinSet, Transparent, %localvar% , ahk_id %id%
-		sleep 10
-		localvar:=localvar+17
-	}
-	loop, 8
-	{
-		WinSet, Transparent, %localvar% , ahk_id %id%
-		sleep 20
-		localvar:=localvar+7
-	}
-	loop, 4
-	{
-		WinSet, Transparent, %localvar% , ahk_id %id%
-		sleep 20
-		localvar:=localvar+4
-	}
-	loop, 9
-	{
-		WinSet, Transparent, %localvar% , ahk_id %id%
-		sleep 20
-		localvar:=localvar+1
-	}
-	HideFocusBorder(id)
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-GetOSVersion()
-{
-    Return ((r := DllCall("GetVersion") & 0xFFFF) & 0xFF) "." (r >> 8)
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-MouseIsOver(WinTitle)
-{
-	MouseGetPos,,, Win
-	return WinExist(WinTitle . " ahk_id " . Win)
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
-FirstTimeOpenedAction(Window, Method)
-{
-	IniRead, %Window%FirstTime, settings.ini, settings, %Window%FirstTime, 1
-	IniWrite, 0, settings.ini, settings, %Window%FirstTime
-
-	If (%Window%FirstTime)=1
-		GoSub %Method%
-}
-
-;--------------------------------------------------------------------------------------------------------------
-
 class Plugin 
 {
 	static guicolor := "07868f"
@@ -586,12 +716,31 @@ class Plugin
 			FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
 		}
 	}
+	
+	StartWithWindowsOptional()
+	{
+		if (!A_IsCompiled)
+			return
+		
+		SplitPath, A_ScriptName, , , , OutNameNoExt
+		LinkFile=%A_Startup%\%OutNameNoExt%.lnk
+		
+		Menu, Tray, NoStandard
+		Menu, Tray, Add, Start with Windows, TogglePluginStartup
+		Menu, Tray, Add, Pause, PluginPause
+		Menu, Tray, Add, Exit, PluginExit
+		
+		if FileExist(LinkFile)
+			Menu, Tray, Check, Start with Windows
+		else
+			Menu, Tray, Uncheck, Start with Windows
+	}
 
 	TrayIcon()
 	{
 		Menu, Tray, Icon
 	}
-
+	
 	AssignHotkey() 
     {
 		global PluginName
@@ -613,7 +762,7 @@ class Plugin
 			}
 		}
 	}
-
+	
 	ChooseHotkey() 
     {
 		global ChooseHotkeyGUI
@@ -658,4 +807,25 @@ ChooseHotkeyGUIGuiEscape:
 	RSNotify("Canceled")
 	Sleep 1500
     ExitApp
+return
+TogglePluginStartup:
+	SplitPath, A_ScriptName, , , , OutNameNoExt
+	LinkFile=%A_Startup%\%OutNameNoExt%.lnk
+	
+	if FileExist(LinkFile)
+	{
+		FileDelete, %LinkFile%
+		Menu, Tray, Uncheck, Start with Windows
+	}
+	else
+	{
+		FileCreateShortcut, %A_ScriptFullPath%, %LinkFile%
+		Menu, Tray, Check, Start with Windows
+	}
+return
+PluginPause:
+	Pause,  Toggle
+return
+PluginExit:
+	ExitApp
 return

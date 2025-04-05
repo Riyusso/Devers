@@ -55,6 +55,8 @@ Config:
 	IniRead, hotkeysInFullscreen, settings.ini, settings, hotkeysInFullscreen, 1
 	IniRead, delaySeconds, settings.ini, settings, delaySeconds, 200
 	IniRead, PasswordExpiration, settings.ini, settings, PasswordExpiration, 3
+	IniRead, RepoSyncUrl, settings.ini, settings, RepoSyncUrl
+	IniRead, RepoSyncSetup, settings.ini, settings, RepoSyncSetup, 0
 
 	IniRead, AnimationWanted, settings.ini, settings, AnimationWanted, 2
 	If AnimationWanted!=1

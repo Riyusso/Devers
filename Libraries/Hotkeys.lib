@@ -315,6 +315,12 @@ return
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
 	Send {End}
 return
+~F1::
+	GoSub WebLClose
+	RSNotify("Opening Functions")
+	Sleep 500
+	OpenWithEditor(A_MyDocuments "/Devers/Libraries/Functions.lib")
+return
 #If
 
 #If (ItsLocked!=1) && (FastSearchWanted=1)

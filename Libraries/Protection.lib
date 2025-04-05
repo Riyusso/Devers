@@ -1,4 +1,5 @@
-﻿Lockscreen:
+﻿; DEPRECATED FUNCTION OF THE PROGRAM
+Lockscreen:
 	if (forcedLockAuthExpire) && (PasswordExpiration!=2)
 	{
 		GoSub AuthExpire

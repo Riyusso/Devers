@@ -199,12 +199,17 @@ ExtSettings:
 
 	Gui, Add, Text, % "x0 y+25 w" width " Center", -    Built in    -
 
-	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Lock Screen
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Extensions Sync
 	
 	Opt1 := [6, 0x373737, 0x373737, 0xD0D0D0, 10, 0x2e2e2e,, 4]
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
 	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
-	Gui, Add, Button, % "x" width*0.75-34 " yp-3 w63 h21 Section gProtectionSettings hwndButProtection +Center", Settings 
+	
+	if (RepoSyncSetup)
+		Gui, Add, Button, % "x" width*0.75-34 " yp-3 w63 h21 Section vSyncButtonVar gSyncWithRepoButton hwndButProtection +Center", Sync
+	else
+		Gui, Add, Button, % "x" width*0.75-34 " yp-3 w63 h21 Section gSetupRepoSyncGUI hwndButProtection +Center", Setup
+	
 	ImageButton.Create(ButProtection, Opt1, Opt2, "", Opt4)
 
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Fast Search
@@ -291,6 +296,84 @@ ExtSettings:
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, w%width%, Extensions
 	FadeIn(ExtHWND)
+return
+
+SetupRepoSyncGUI:
+	FadeOut(ExtHWND)
+
+	Gui, SetupRepoSyncGUI:New, +hwndSetupRepoSyncGUI +LastFound +ToolWindow +AlwaysOnTop
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 2b2b2a, 2b2b2a
+	Gui, Font, s10 Bold c00afaf, Tahoma
+	Gui, Add, Progress, % "x-1 y-1 w415 h26 Background1f1f1f Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w415 Center BackgroundTrans +0x200 cb1b1b1, Paste url to repository to sync with (git required)
+
+	Gui, Font, w700 s11 cD0D0D0, Segoe UI Black
+	Gui, Add, Edit, % "x0 y+15 w365 h25 hwndEdit265 vrepoName -E0x200 +Center -VScroll",
+
+	Gui, Font, w700 s11 ceeeeee, Segoe UI Black
+	Opt1 := [6, 0x2b2b2a, 0x2b2b2a, 0xD0D0D0]
+	Opt2 := [ , 0x2b2b2a, 0x2b2b2a, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+
+	Gui, Add, Button, x+0 w45 h25 +default gSetupRepoButton hwndBut1 +Center, Go
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+
+	scaledw:=415
+	scaledh:=70
+	SHAutoComplete(Edit265)
+	WinSet, Region, % "0-0 w" scaledw*dpi " h" scaledh*dpi " r12-12", ahk_id %SetupRepoSyncGUI%
+	; NoActivate fixes weird bug with not being able to switch language
+	Gui, Show, w%scaledw% h%scaledh% NoActivate, Authorization
+	WinActivate	
+	; -----------------
+	FadeIn(SetupRepoSyncGUI)
+return
+
+SetupRepoSyncGUIGuiEscape:
+	FadeOut(SetupRepoSyncGUI)
+	GoSub ExtSettings
+return
+
+ExtSettingsGUIContextMenu:
+	if (A_GuiControl!="SyncButtonVar")
+		return
+
+	GoSub SetupRepoSyncGUI
+return
+
+SetupRepoButton:
+	Gui, Submit, NoHide
+
+	if !repoName
+	{
+		RSNotify("Repo url required")
+		return
+	}
+
+	FadeOut(SetupRepoSyncGUI)
+	
+	RepoSyncUrl:=repoName
+	RepoSyncSetup:=true
+	IniWrite, %RepoSyncUrl%, settings.ini, settings, RepoSyncUrl
+	IniWrite, %RepoSyncSetup%, settings.ini, settings, RepoSyncSetup
+	
+	Sleep 100
+	GoSub ExtSettings
+return
+
+SyncWithRepoButton:
+	RSNotify("Syncing")
+	GuiControl, ExtSettings:Disable, SyncButtonVar
+	RepoSync.Sync(RepoSyncUrl)
+	GuiControl, ExtSettings:Enable, SyncButtonVar
+	
+	Sleep 500
+	GoSub extbutton
+	Sleep 500
+	GoSub ExtSettings
 return
 
 CreateExtensionGUI:

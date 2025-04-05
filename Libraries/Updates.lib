@@ -59,3 +59,197 @@ return
 
 Migrations:
 return
+
+class RepoSync
+{
+	STATIC syncFolder:=A_MyDocuments "\Devers\Extensions"
+	STATIC repoFolder:=A_Temp "\DeversRepo"
+	
+	Sync(repoUrl)
+	{
+		if (!FileExist(this.syncFolder "\.git"))
+		{
+			this.InitializeRepo(repoUrl)
+		}
+		else
+		{
+			this.PullAndMerge(repoUrl)
+		}
+	}
+
+	InitializeRepo(repoUrl)
+	{
+		if (!CmdCommandExists("git"))
+		{
+			MsgBox, Git is not installed or not added to PATH. Please install Git and try again.
+			return
+		}
+		
+		if (!InStr(FileExist("Extensions"), "D"))
+		{
+			FileDelete, Extensions
+			FileCreateDir, Extensions
+		}
+		
+		this.DownloadRepository(repoUrl, this.repoFolder)
+		emptyRepo:=this.IsRepositoryEmpty(this.repoFolder)
+		
+		FileRemoveDir, % this.syncFolder "\.git", 1
+		
+		if (emptyRepo)
+		{
+			if (this.IsEmpty(this.syncFolder))
+			{
+				MsgBox, Nothing to sync.
+				return
+			}
+			
+			MsgBox, 1
+			
+			this.UploadIntoEmptyRepoSync(repoUrl)
+			return
+		}
+		else if (this.IsEmpty(this.syncFolder))
+		{
+			this.CloneRepo(repoUrl)
+		}
+		else
+		{
+			this.SyncNonEmptyFolder(repoUrl)
+		}
+		
+		; MsgBox, Sync operations completed successfully for:`n`n%repoUrl%
+	}
+
+	UploadIntoEmptyRepoSync(repoUrl)
+	{
+		RunWait, git init, % this.syncFolder, Hide
+		RunWait, git add ., % this.syncFolder, Hide
+		RunWait, git commit -m "Automatic sync", % this.syncFolder, Hide
+		RunWait, git branch -M master, % this.syncFolder, Hide
+		RunWait, git remote add origin %repoUrl%, % this.syncFolder, Hide
+		RunWait, git push -u origin master, % this.syncFolder, Hide
+		; MsgBox, Uploaded extensions to empty repo:`n`n%repoUrl%
+	}
+
+	CloneRepo(repoUrl)
+	{
+		RunWait, git clone %repoUrl% ., % this.syncFolder, Hide
+		; MsgBox, Downloaded all extensions from repository:`n`n%repoUrl%
+	}
+
+	SyncNonEmptyFolder(repoUrl)
+	{
+		RunWait, git init, % this.syncFolder, Hide
+		RunWait, git remote add origin %repoUrl%, % this.syncFolder, Hide
+		RunWait, git fetch, % this.syncFolder, Hide
+		RunWait, git reset --mixed origin/master, % this.syncFolder, Hide
+		RunWait, git stash -u, % this.syncFolder, Hide
+		RunWait, git pull origin master, % this.syncFolder, Hide
+		RunWait, git stash pop, % this.syncFolder, Hide
+		
+		this.CopyFilesWithoutOverwrite(this.repoFolder, this.syncFolder)
+		
+		RunWait, git add ., % this.syncFolder, Hide
+		RunWait, git commit -m "Automatic sync(rewriting history)", % this.syncFolder, Hide
+		
+		if (this.CheckForMergeConflicts(this.syncFolder))
+			return
+		
+		RunWait, git push -u origin HEAD, % this.syncFolder, Hide
+		
+		; MsgBox, Merged your extensions with repository:`n`n%repoUrl%
+	}
+
+	PullAndMerge(repoUrl)
+	{
+		if (this.CheckForMergeConflicts(this.syncFolder))
+			return
+
+		RunWait, git add ., % this.syncFolder, Hide
+		RunWait, git commit -m "Automatic sync", % this.syncFolder, Hide
+		
+		RunWait, git branch --set-upstream-to=origin/master master, % this.syncFolder, Hide
+		RunWait, git fetch, % this.syncFolder, Hide
+		RunWait, git merge -m "Manual merge initiated", % this.syncFolder, Hide
+		
+		if (this.CheckForMergeConflicts(this.syncFolder))
+			return
+
+		RunWait, git push -u origin master, % this.syncFolder, Hide
+		; MsgBox, Sync operations completed successfully for:`n`n%repoUrl%
+	}
+
+	CopyFilesWithoutOverwrite(sourceFolder, destinationFolder)
+	{
+		Loop, Files, %sourceFolder%\*.*, F
+		{
+			if (A_LoopFileName = ".git")
+				continue
+			sourceFile := A_LoopFileFullPath
+			destFile := destinationFolder . "\" . A_LoopFileName
+			IfNotExist, %destFile%
+			{
+				FileCopy, %sourceFile%, %destFile%
+				MsgBox, Restored plugin: %A_LoopFileName%
+			}
+		}
+	}
+
+	DownloadRepository(repoUrl, repoFolder)
+	{
+		FileRemoveDir, %repoFolder%, 1
+		FileCreateDir, %repoFolder%
+		RunWait, git clone %repoUrl% ., %repoFolder%, Hide
+	}
+
+	IsRepositoryEmpty(repoFolder)
+	{
+		Loop, Files, % repoFolder . "\*", FD
+		{
+			if (A_LoopFileName != ".git")
+				return false
+		}
+		return true
+	}
+
+	CheckForMergeConflicts(folder)
+	{
+		conflictFiles := ""
+		Loop, Files, % folder . "\*.*", R
+		{
+			filePath := A_LoopFileFullPath
+
+			if (InStr(filePath, ".exe"))
+				continue
+
+			if (this.IsFileConflict(filePath)) {
+				conflictFiles .= A_LoopFileName . "`n"
+			}
+		}
+
+		if (conflictFiles != "")
+		{
+			MsgBox, 16, A merge conflict has occurred while syncing., Merge conflicts found in the following extensions:`n`n%conflictFiles%
+			return true
+		}
+
+		return false
+	}
+
+	IsFileConflict(filePath)
+	{
+		FileRead, fileContent, % filePath
+		if (InStr(fileContent, "<<<<<<<" " HEAD" )) {
+			return true
+		}
+		return false
+	}
+
+	IsEmpty(Dir)
+	{
+		Loop %Dir%\*.*, 0, 1
+			return false
+		return true
+	}
+}

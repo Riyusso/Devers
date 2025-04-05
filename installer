@@ -12,6 +12,10 @@ IfExist, %A_MyDocuments%\%ScriptName%\%ScriptName%.exe
 	IfExist, %A_ScriptDir%\Base.ahk
 	{
 		GoSub UpdateIt
+		
+		FileCreateDir, % A_MyDocuments "\" scriptname "\Libraries\backup"
+		Loop, % A_MyDocuments "\" scriptname "\Libraries\*.*"
+			FileMove, %A_LoopFileFullPath%, %A_LoopFileDir%\backup, 1
 
 		IfExist, % A_MyDocuments "\" scriptname "\" scriptname ".exe"
 		{

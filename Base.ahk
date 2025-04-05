@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.3.7
+FileVersion=2.5.3
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -49,8 +49,8 @@ IfExist, settings.ini
 	}
 	If (CreateATask=1 || !FirstRun) && (A_IsCompiled) && (A_IsAdmin)
 	{
-			Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%".exe, , HIDE
-			IniWrite, 0, settings.ini, settings, CreateATask
+		Run, %comspec% /c SchTasks /SC ONLOGON /F /Create /TN RSRunScript /RL HIGHEST /TR "%A_ScriptDir%\%ScriptName%".exe, , HIDE
+		IniWrite, 0, settings.ini, settings, CreateATask
 	}
 	
 	OnExit, ExitAppL
