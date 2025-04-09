@@ -78,18 +78,23 @@ GetSelectedFiles()
 
 ;--------------------------------------------------------------------------------------------------------------
 
-OpenWithEditor(filePath)
+OpenWithEditor(filePath, forceOpenWith = false)
 {
-	if (!CmdCommandExists("code"))
-	{
-		ShellRun("OpenWith.exe", filePath)
-		WinWaitActive, ahk_exe OpenWith.exe,, 3
-		Sleep 120
-		Send {Tab}
-		return
-	}
+    if (!CmdCommandExists("code") || forceOpenWith)
+    {
+        ShellRun("OpenWith.exe", """" . filePath . """")
+        WinWaitActive, ahk_exe OpenWith.exe,, 3
+        Sleep 120
+        Send {Tab}
+        return
+    }
 	
-	Run, "code" %filePath%,,Hide
+    SplitPath, filePath, file, location
+    
+    if (!FileExist(filePath))
+        file := "."
+    
+    Run, "code" %file%, %location%, Hide
 }
 
 ;--------------------------------------------------------------------------------------------------------------
