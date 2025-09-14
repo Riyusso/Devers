@@ -97,13 +97,15 @@ OpenWithEditor(filePath, forceOpenWith = false)
         Send {Tab}
         return
     }
-	
+
 	SplitPath, filePath, file, location
-    
     if (!FileExist(filePath))
-        file := "."
-		
-	Run, %ComSpec% /c code "%file%",, Hide
+	{
+		ShowNotification("File does not exist.")
+		return
+	}
+
+	Run, %ComSpec% /c code "%filePath%",, Hide
 }
 
 ;--------------------------------------------------------------------------------------------------------------
