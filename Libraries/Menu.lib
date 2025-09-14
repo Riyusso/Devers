@@ -436,7 +436,7 @@ CreateExtension:
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
-	ShellRun("OpenWith.exe", pluginPath)
+	ShellRun("OpenWith.exe", """" . pluginPath . """")
 	WinWaitActive, ahk_exe OpenWith.exe,, 3
 	Sleep 100
 	Send {Tab}
@@ -448,7 +448,7 @@ EditPlugin:
 	; DllCall("shell32\OpenAs_RunDLL" (A_IsUnicode ? "W" : ""),"UInt",0,"UInt",0,"Str", pluginPath)
 
 	; Used to run without admin priviledges
-	ShellRun("OpenWith.exe", pluginPath)
+	ShellRun("OpenWith.exe", """" . pluginPath . """")
 	WinWaitActive, ahk_exe OpenWith.exe,, 3
 	Sleep 100
 	Send {Tab}
