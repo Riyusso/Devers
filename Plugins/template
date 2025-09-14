@@ -7,7 +7,7 @@ return
 
 #Include *i %A_MyDocuments%\Devers\Libraries\Functions.lib
 
-; ----------- User functions here ------------
+; ----------- User functions and hotkeys here ------------
 
 
 
@@ -47,7 +47,7 @@ Try to keep the Plugin.Properties line at the beginning of the script. Everythin
 Head over to the Libraries folder within the installation folder(My Documents) to see what is available to you.
 I've included the Functions.lib file which consists of many integrating functions.
 
-You will find functions like RSNotify(text), which is basically notifications at the bottom of your screen.
+You will find functions like ShowNotification(text), which is basically notifications at the bottom of your screen.
 
 - Hotkey creation example -
 Let's register F7 as a hotkey that sets the active window to be always on top. 
@@ -57,9 +57,9 @@ F7::
     WinSet, AlwaysOnTop, Toggle, A
     WinGet, ExStyle, ExStyle, A
     if !(ExStyle & 0x8)
-        RSNotify("AlwaysOnTop: Off")
+        ShowNotification("AlwaysOnTop: Off")
     else
-        RSNotify("AlwaysOnTop: On")
+        ShowNotification("AlwaysOnTop: On")
 return
 
 Always reload the main program in order to start the plugins correctly.

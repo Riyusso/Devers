@@ -1,3 +1,12 @@
+;--------------------------------------------------------------------------------------------------------------
+
+ShowNotification(text)
+{
+	RSNotify(text)
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
 MouseIsOver(WinTitle)
 {
 	MouseGetPos,,, Win
@@ -89,7 +98,7 @@ OpenWithEditor(filePath)
 		return
 	}
 	
-	Run, "code" %filePath%,,Hide
+	Run, %ComSpec% /c code "%filePath%",, Hide
 }
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -115,32 +124,62 @@ ExecuteCmdCommand(command)
 
 ;--------------------------------------------------------------------------------------------------------------
 
-ChangeOrOpenDir(path)
+OpenFolder(path)
 {
     WinGet, hWnd, ID, A
 	
 	if (WinActive("ahk_class Shell_TrayWnd") || WinActive("ahk_class Progman") || WinActive("ahk_class WorkerW"))
 	{
-		Run, %path%
-	}
-	else if WinActive("ahk_exe explorer.exe")
-	{
-		Send ^{SC026}
-		Sleep 20
-		ControlSetText, Edit1, %path%, ahk_id %hWnd%
-		ControlSend, Edit1, {Enter}, ahk_id %hWnd%
+		Run, explorer.exe %path%
 	}
 	else if WinActive("ahk_class #32770")
 	{
-		Send ^{SC026}
+		fileselect_window := "ahk_class #32770"
+		ControlSend,, {Ctrl down}{l down}{l up}{Ctrl up}, % fileselect_window
 		Sleep 20
-		ControlSetText, Edit2, %path%, ahk_id %hWnd%
-		ControlSend, Edit2, {Enter}, ahk_id %hWnd%
+		ControlSetText, Edit2, % path, % fileselect_window
+		ControlSend, Edit2, {Enter}, % fileselect_window
+		ControlFocus, Edit1, % fileselect_window
+	}
+	else if WinActive("ahk_exe explorer.exe")
+	{
+		Explorer_Navigate(path)
 	}
 	else
 	{
-		Run, %path%
+		Run, explorer.exe  %path%
 	}
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+; https://www.autohotkey.com/boards/viewtopic.php?style=19&t=526&start=60
+Explorer_Navigate(vDir, hWnd="")
+{
+    hWnd := (hWnd="") ? WinExist("A") : hWnd
+    WinGetClass, vWinClass, % "ahk_id " hWnd
+    if !(vWinClass = "CabinetWClass") && !(vWinClass = "ExploreWClass")
+        return
+
+    DllCall("shell32\SHParseDisplayName", WStr,vDir, Ptr,0, PtrP,vPIDL, UInt,0, Ptr,0)
+    for oWin in ComObjCreate("Shell.Application").Windows
+        if (oWin.HWND = hWnd)
+        {
+            if !InStr(vDir, "#")
+                oWin.Navigate(vDir)
+            else
+            {
+                VarSetCapacity(SAFEARRAY, A_PtrSize=8?32:24, 0)
+                NumPut(1, SAFEARRAY, 0, "UShort")
+                NumPut(1, SAFEARRAY, 4, "UShort")
+                NumPut(vPIDL, SAFEARRAY, A_PtrSize=8?16:12, "Ptr")
+                NumPut(DllCall("shell32\ILGetSize", Ptr,vPIDL, UInt), SAFEARRAY, A_PtrSize=8?24:16, "Int")
+                oWin.Navigate2(ComObject(0x2011,&SAFEARRAY))
+                DllCall("shell32\ILFree", Ptr,vPIDL)
+            }
+            break
+        }
+    return
 }
 
 ;--------------------------------------------------------------------------------------------------------------

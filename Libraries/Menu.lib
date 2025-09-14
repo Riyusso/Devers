@@ -11,7 +11,7 @@
 	Gui, Margin, 0, 0
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 	Gui, Add, Progress, % "x-1 y-1 w" (width+2) " h30 Background1F2326 Disabled hwndHPROG"
-	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", Options
+	Gui, Add, Text, % "x0 y6 w" width " r1 BackgroundTrans Center 0x200 gGuiMove cD0D0D0", General Settings
 
 	Gui, Color, %guicolor%, 252525
 	Gui, Font, s9
@@ -23,7 +23,7 @@
 	Gui, Add, Text, % "x" labelsx " w137 y+12", Run As Admin
 	Gui, Add, DropDownList, % "x+0 w80 yp-3 Center vRunAsAdminTemp 0x200 Choose" RunAsAdmin+1 " AltSubmit" , No|Yes
 
-	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional:
+	Gui, Add, Text, % "x0 y+14 w" width " Center", Optional password manager:
 	Gui, Font, s9 cDFDFDF
 	Gui, Add, Text, % "x0 y+3 w" width " Center", (Use keys to output anywhere)
 	Gui, Font, s9 cFFFFFF
@@ -212,7 +212,7 @@ ExtSettings:
 	
 	ImageButton.Create(ButProtection, Opt1, Opt2, "", Opt4)
 
-	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Fast Search
+	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Search Bar
 	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center Section vFastSearchWanted Choose" FastSearchWanted " AltSubmit" , Enabled|Disabled
 	Gui, Add, Text, % "x5 y+15 w" (width/2) " Center ", Volume Over Tray
 	Gui, Add, DropDownList, % "xs+0 yp-3 w65 Center vVolumeOTWanted Choose" VolumeOTWanted " AltSubmit" , Enabled|Disabled
@@ -808,7 +808,7 @@ ScriptFunctions:
 	Gui, Add, Text, % "x0 y+0 w" width " h11 Center ",
 
 	Gui, Font, s8 c%darkerc%, Tahoma
-	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Fast Search
+	Gui, Add, Text, % "x0 y+8 w" (width/2) " Center ", Search Bar
 	Gui, Font, s8 c%lightc%, Tahoma
 	If FastSearchWanted=1
 		Gui, Add, Text, % "x+1 w" (width/2) " Center vRAltVar", Right Alt
@@ -1031,7 +1031,7 @@ LearnMore:
 
 	TabIndex=1
 	TabCount=6
-	LearnMoreLabels := ["Speed Dial", "Search Bar", "Volume Control", "Protection", "Extensions", "About Us"]
+	LearnMoreLabels := ["Speed Dial", "Search Bar", "Volume Control", "Media Control", "Extensions", "About Us"]
 
 	Opt1 := [6, 0x343434, 0x343434, 0xD0D0D0, 10, 0x2e2e2e]
 	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
@@ -1052,7 +1052,7 @@ LearnMore:
 	. "`n`nYou can open the Speed Dial interface by pressing the assigned hotkey. `n`nTo go to an item directly, without displaying the interface, just use a combination of your hotkey(" assignedKeyRSWeb ")"
 	. "+ a number from 1 to 8.`n`nTo edit a Speed Dial entry, right click`non it from the interface. Add files and folders as absolute paths(file explorer)."
 
-	Gui, Add, Text, % "x15 ys+35 r11 w" width-30 " Center +Hidden vTab21", % "The Fast Search bar can be" 
+	Gui, Add, Text, % "x15 ys+35 r11 w" width-30 " Center +Hidden vTab21", % "The Search Bar can be" 
 	. " accessed by pressing the Right Alt key. To search within Google.com just type directly into the search bar and press Enter. " 
 	. "To search elsewhere, you can use keywords at the beginning of your search query. Typing in a keyword, followed by pressing Space will display a label"
 	. " corresponding to the website. To clear it press Backspace."
@@ -1065,9 +1065,9 @@ LearnMore:
 	. "`n`nTo take advantage of this feature, put your mouse above the taskbar and scroll up or down to increase/decrease your sound volume.You will notice a bar that indicates the volume state."
 	. "`n`nNote:`n'Taskbar' is a strip, usually positioned the bottom of your screen, where all your windows go when minimized. It also holds your Start button and the system clock."
 
-	Gui, Add, Text, % "x15 ys+40 r16 w" width-30 " Center vTab41 +Hidden", % "Аdd a layer of protection to your personal computer. Being inactive for some period of time will result in your computer locking itself automatically."
-	. "`n`nTo set it up, head over to the Protection Settings menu. You can customize the amount of time it takes, your PIN and much more! Locking is not possible without setting up your PIN first.`n`n"
-	. "You can turn off the automatic locking by choosing 'Unprotected', but you will still be able to manually lock your PC if you have a hotkey set up."
+	Gui, Add, Text, % "x15 ys+47 r16 w" width-30 " Center vTab41 +Hidden", % "Control your player(Spotify etc.) over the taskbar via Mouse Middle Button."
+	. "`n`nClicking the button Pause/Plays the current song.`n`n"
+	. "Holding the button and dragging it across the taskbar left or right will play previous or skip to the next song. `n`nNote:`nThe Next/Previous function won't trigger if your mouse leaves the taskbar area while you're dragging."
 
 	Gui, Add, Text, % "x15 ys+40 r16 w" width-30 " Center vTab51 +Hidden", % "You can find extensions on our website. Most of them provide functionality which is very useful to some, but not necessary for the everyday user."
 	. "`n`nIn addition, you can create your own by heading over to the Extensions menu. `n`nThe library Functions.lib provides integrating functions like Notifications and more. Check out what is available to you in the files within 'Libraries'."
@@ -1076,19 +1076,25 @@ LearnMore:
 	Gui, Add, Text, % "x15 ys+40 w" (width/2) " vTab61 +Hidden Center c" darkerc, Version
 	InVersionVar:= (InstalledVersion=1.0) ? "Unknown" : "v" . InstalledVersion
 	Gui, Add, Text, % "x+0 w" (width/3.2) " vTab62 +Hidden Center c" lightc, %InVersionVar%
-	Gui, Add, Text, % "x15 y+9 w" (width/2) " vTab63 +Hidden Center c" darkerc, Newest
+	Gui, Add, Text, % "x15 y+6 w" (width/2) " vTab63 +Hidden Center c" darkerc, Newest
 	UpVersionVar:= (UpdateVersion=1.0) ? "Retrieving" : "v" . UpdateVersion
 	Gui, Add, Text, % "x+0 w" (width/3.2) " vTab64 +Hidden Center c" lightc, %UpVersionVar%
-	Gui, Add, Text, % "x15 y+25 w" (width/2) " vTab65 +Hidden Center c" darkerc, Creator
+	Gui, Add, Text, % "x15 y+15 w" (width/2) " vTab65 +Hidden Center c" darkerc, Creator
 	Gui, Add, Text, % "x+0 w" (width/3.2) " vTab66 +Hidden Center c" lightc, Riyusso
 	Gui, Add, Text, % "x15 y+9 w" (width/2) " vTab67 +Hidden Center c" darkerc, Tester
 	Gui, Add, Text, % "x+0 w" (width/3.2) " vTab68 +Hidden Center c" lightc, physic
-	Gui, Add, Text, % "x0 y+30 w" (width) " vTab69 +Hidden Center c" darkerc, Website
-	Gui, Add, Text, % "x0 w" (width) " vTab610 +Hidden y+8 Center c" lightc, Devers.app
-	Gui, Add, Text, % "x0 y+25 w" (width) " vTab611 +Hidden Center c" darkerc, Email
-	Gui, Add, Text, % "x0 w" (width) " vTab612 +Hidden y+8 Center c" lightc, Riyusso@gmx.us
+	Gui, Add, Text, % "x0 y+15 w" (width) " vTab611 +Hidden Center c" darkerc, Email
+	Gui, Add, Text, % "x0 w" (width) " vTab612 +Hidden y+6 Center c" lightc, Riyusso@gmx.us
+	Gui, Add, Text, % "x18 y+20 w" (width-30) " vTab69 +Hidden Center c" darkerc, This software is completely free. You can support the developer here.
+	; Gui, Add, Text, % "x0 w" (width) " vTab610 +Hidden y+8 Center c" lightc, Devers.app
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) " vTab610  y+18 h33 +Hidden gOpenDonationLink +hwndBut1 +Center", Donate
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-44 " h33 gLearnMoreExit +hwndExitButtonTab +Default", Close
+	Opt1 := [6, 0x333333, 0x333333, 0xD0D0D0, 10, 0x2e2e2e]
+	Opt2 := [ , 0x3f3f3f, 0x3f3f3f]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	
+	Gui, Add, Button, % "x" (width/2)-((width*0.64)/2) " w" (width*0.64) "  y" height-42 " h33 gLearnMoreExit +hwndExitButtonTab +Default", Close
 
 	Opt1 := [6, 0x2e2e2e, 0x2e2e2e, "White"]
 	Opt2 := [ , 0x2e2e2e, 0x3f3f3f, 0xffffff]
@@ -1148,6 +1154,10 @@ return
 
 LearnMoreExit:
 	FadeOut(LearnMore)
+return
+
+OpenDonationLink:
+	Run, https://www.paypal.com/donate/?hosted_button_id=BRDRRQFU8A2AA
 return
 
 ;--------------------------------------------------------------------------------------------------------------
@@ -1356,6 +1366,16 @@ DefaultMenu:
 				GoSub UpdatePrompt
 			else if !StillDownloading
 				RSNotify("Update Available")
+		}
+		
+		IniRead, AboutUsLastDisplayed, settings.ini, settings, AboutUsLastDisplayed, 0
+		currentTime := A_NowUTC
+		EnvSub, currentTime, %AboutUsLastDisplayed%, Days
+		
+		if (currentTime >= 30 || currentTime="")
+		{
+			GoSub OpenLearnMoreTabAbout
+			IniWrite, %A_NowUTC%, settings.ini, settings, AboutUsLastDisplayed
 		}
 	}
 Return

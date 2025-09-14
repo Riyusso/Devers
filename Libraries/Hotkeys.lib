@@ -277,7 +277,7 @@ return
 	If !DotTipDisplayed && !IsUsingCustomQuery && GoogleTipDisplayed<2
 	{
 		Tip := new Tip()
-		Tip.message:="Tip: You can type 'g ' at the beginning to search directly in Google.com"
+		Tip.message:="Tip: You can type 'y ' at the beginning to search directly in YouTube.com"
 		Tip.width:=RSWebGuiWidth-9
 		WinGetPos,, pos,,A
 		Tip.ypos:=pos-40
