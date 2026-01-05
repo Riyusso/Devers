@@ -23,7 +23,7 @@ The main goals of this project are:
 
   <p align="center"><img src="https://i.imgur.com/iK5fRps.gif"></p>
   
-  - Commands such as "cmd" can be added to the search, including commands with multiple parameters. Type "config" to edit the file with commands.
+  - Commands such as "cmd" can be added to the search, including commands with multiple parameters. Click the 3 dots for configuration.
   - Quick search prefixes can be added as well by clicking on the three dots.
   - By default it searches in Google.
   - **Advanced.** Use regex to setup commands with multiple parameters. An example is given with "ping github.com"

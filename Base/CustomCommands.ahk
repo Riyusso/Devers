@@ -9,26 +9,29 @@ return
 
 #Include *i Libraries\Functions.lib
 
-/* --------------- HELP --------------------
+/* --------------- INSTRUCTIONS --------------------
 Write your own commands which will be added to the search module. 
 Just add a new "else if commandName = YOUR_COMMAND_NAME"
 
-There are helper functions available in "My Documents\Devers\Libraries\Functions.lib" 
-Type help in the search to open the file and view them.
+There are some helper functions available to make your life easier as seen in the commands below.
+Type "help" to open a file which contains them, but please don't edit this file directly.
+For example OpenCmd(), OpenWithEditor(), ExecuteCmdCommand() etc. are all helper functions that are not available in regular Autohotkey.
+
+There are 5 example commands below:
+cmd - simple command that opens the command prompt. If File Explorer is open it will use the current directory as it's base.
+help - opens a file which contains helper functions that are available in here. Please don't edit this file directly.
+docs - Uses the helper function to open the folder My Documents. If your file explorer or a file dialog is open it will change it to the folder.
+gmail - Self explanatory, but opens the browser at the url for gmail.
+ping[\s] - This is an example command that enables you to pass an additional parameter. As you can see, regex is supported for commands. For example you can type "ping google.com" in your search bar.
 */
 
 AutoExecute:
 
 	if commandName = cmd
 	{
-		OpenCmd() ; This will open the cmd in the active directory if your file explorer is open.
+		OpenCmd()
 	}
-	else if commandName = config
-	{
-		 ; This opens this configuration file. You should keep it.
-		OpenWithEditor(A_ScriptFullPath)
-	}
-	else if commandName = help
+	else if commandName = help ; See INSTRUCTIONS
 	{
 		OpenWithEditor("Libraries/Functions.lib")
 	}
@@ -42,8 +45,7 @@ AutoExecute:
 	}
 	else if commandName = ping[\s]
 	{
-		; You can also use regex if you want to pass multiple parameters. See "ping[\s]".
 		ExecuteCmdCommand("ping " param1)
 	}
-	
+
 return
