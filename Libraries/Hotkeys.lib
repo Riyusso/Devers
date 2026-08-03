@@ -315,11 +315,9 @@ return
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
 	Send {End}
 return
-~F1::
+F1:: ; Opens the searchable list of every command in CustomCommands.ahk
 	GoSub WebLClose
-	RSNotify("Opening Functions")
-	Sleep 500
-	OpenWithEditor(A_MyDocuments "/Devers/Libraries/Functions.lib")
+	GoSub CommandsHelp
 return
 #If
 

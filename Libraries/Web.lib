@@ -497,6 +497,7 @@ SearchBasedTimer:
 	lastWebSearchVar:=webSearchVar
 	isCustomCommand := false
 	isCustomCommandExtended := false
+	isBuiltInCommand := false
 
 	for index, element in CustomCommands
 	{
@@ -513,7 +514,18 @@ SearchBasedTimer:
 		}
 	}
 
-	if (isCustomCommand && !IsUsingCustomQuery)
+	for index, element in BuiltInCommands ; built in commands work even without CustomCommands.ahk
+	{
+		if (webSearchVar = element)
+		{
+			isBuiltInCommand := true
+			builtInCommand := element
+			isCustomCommand := false
+			isCustomCommandExtended := false
+		}
+	}
+
+	if ((isCustomCommand || isBuiltInCommand) && !IsUsingCustomQuery)
 	{
 		searchTextColor = 7ab048
 		GuiControl, WebL:+c%searchTextColor%, webSearchVar
@@ -535,21 +547,36 @@ return
 
 LoadCustomCommands:
 	CustomCommands := []
+	BuiltInCommands := ["help"]
 
 	if !FileExist(A_WorkingDir "\CustomCommands.ahk")
     	return
 
+	inBlockComment := false
 	Loop, Read, % A_WorkingDir "\CustomCommands.ahk"
 	{
-		Loop, Parse, A_LoopReadLine, %A_Tab%
+		commandLine := Trim(A_LoopReadLine, " `t")
+
+		if (SubStr(commandLine, 1, 2) = "/*")
+			inBlockComment := true
+		if inBlockComment
 		{
-			if InStr(A_LoopField, "commandName")
-			{
-				StringGetPos, commandPos, A_LoopField, =, 1
-				customCommand := SubStr(A_LoopField, commandPos+2)
-				CustomCommands.Push(customCommand)
-			}
+			if InStr(commandLine, "*/")
+				inBlockComment := false
+			continue
 		}
+		if (SubStr(commandLine, 1, 1) = ";")
+			continue
+		if !RegExMatch(commandLine, "i)^(?:\}\s*)?(?:else\s+)?if\s*\(?\s*commandName\s*=\s*(.*)$", commandMatch)
+			continue
+
+		customCommand := commandMatch1
+		if (commentPos := InStr(customCommand, ";")) ; everything after a semicolon is the description of the command
+			customCommand := SubStr(customCommand, 1, commentPos-1)
+		customCommand := Trim(customCommand, " `t)" . Chr(34))
+
+		if (customCommand != "")
+			CustomCommands.Push(customCommand)
 	}
 
 return
@@ -574,7 +601,16 @@ StartSearch:
 		}
 	}
 
-	if (isCustomCommand && !IsUsingCustomQuery)
+	if (isBuiltInCommand && !IsUsingCustomQuery)
+	{
+		if (builtInCommand = "help")
+			GoSub CommandsHelp
+		
+		Gui, WebL:Destroy
+		GoSub WebLClose
+		return
+	}
+	else if (isCustomCommand && !IsUsingCustomQuery)
 	{
 		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %webSearchVar%,,, PIDCustomCommands
 		

@@ -1,4 +1,4 @@
-;--------------------------------------------------------------------------------------------------------------
+﻿;--------------------------------------------------------------------------------------------------------------
 
 ShowNotification(text)
 {
@@ -112,8 +112,21 @@ OpenWithEditor(filePath, forceOpenWith = false)
 
 OpenCmd()
 {
-	folderPath := ExplorerGetActiveFolderPath() ; this function is from Libraries/Functions. Press F1 to view more
+	folderPath := ExplorerGetActiveFolderPath() ; this function is from Libraries/Functions. Type "functions" to view more
 	run, %ComSpec%, % folderPath ? folderPath : "C:\Users\" A_UserName
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+OpenCmdNonAdmin(command = "", isHidden = false)
+{
+	folderPath := ExplorerGetActiveFolderPath()
+	workingDir := folderPath ? folderPath : "C:\Users\" A_UserName
+
+	if (isHidden)
+		ShellRun(ComSpec, "/c " command, workingDir, "open", 0)
+	else
+		ShellRun(ComSpec, command ? "/k " command : "", workingDir)
 }
 
 ;--------------------------------------------------------------------------------------------------------------

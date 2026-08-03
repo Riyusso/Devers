@@ -179,6 +179,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 #Include Libraries/Config.lib
 #Include Libraries/Functions.lib
+#Include Libraries/Help.lib
 #Include Libraries/Hotkeys.lib
 #Include Libraries/Labels.lib
 #Include Libraries/Menu.lib
