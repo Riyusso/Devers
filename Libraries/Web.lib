@@ -169,6 +169,27 @@
 	}
 return
 
+OpenSearchBar: ; Started with SetTimer by the search bar hotkey, so that the hotkey thread can stay
+	; inside Input and capture whatever gets typed while the bar is still being built.
+	GoSub RSWeb
+	Input ; Stops that capture. The search box owns the keyboard from here on.
+return
+
+FlushEarlyTyped: ; Replays the keystrokes that were typed before the search box became active.
+	If (!WebLT || !SearchBased)
+		earlyTyped=
+	If (earlyTyped!="")
+	{
+		SendMessage, 0xC2, 1, % &earlyTyped, , ahk_id %WebSearch% ; EM_REPLACESEL, inserts at the caret
+		earlyTyped=
+	}
+	If (earlyEndKey="EndKey:Enter")
+		GoSub StartSearch
+	else If (earlyEndKey="EndKey:Escape")
+		GoSub WebLClose
+	earlyEndKey=
+return
+
 WebLClose:
 WebLGuiEscape:
 	SetTimer, SearchBasedTimer, Off
