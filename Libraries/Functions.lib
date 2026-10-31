@@ -87,8 +87,11 @@ GetSelectedFiles()
 
 ;--------------------------------------------------------------------------------------------------------------
 
-OpenWithEditor(filePath, forceOpenWith = false)
+OpenWithEditor(filePath, forceOpenWith = false, runAsAdmin = false)
 {
+	if (filePath = "")
+		return
+
     if (!CmdCommandExists("code") || forceOpenWith)
     {
         ShellRun("OpenWith.exe", """" . filePath . """")
@@ -98,14 +101,16 @@ OpenWithEditor(filePath, forceOpenWith = false)
         return
     }
 
-	SplitPath, filePath, file, location
     if (!FileExist(filePath))
 	{
 		ShowNotification("File does not exist.")
 		return
 	}
 
-	Run, %ComSpec% /c code "%filePath%",, Hide
+	if (runAsAdmin)
+		Run, %ComSpec% /c code "%filePath%",, Hide
+	else
+		ShellRun(ComSpec, "/c code " Chr(34) filePath Chr(34), "", "open", 0)
 }
 
 ;--------------------------------------------------------------------------------------------------------------

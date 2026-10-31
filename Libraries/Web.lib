@@ -171,6 +171,7 @@ return
 
 OpenSearchBar: ; Started with SetTimer by the search bar hotkey, so that the hotkey thread can stay
 	; inside Input and capture whatever gets typed while the bar is still being built.
+	SwitchToEnglishLayout() ; Blocks until the layout has really changed, the bar is not built before that.
 	GoSub RSWeb
 	Input ; Stops that capture. The search box owns the keyboard from here on.
 return
@@ -655,4 +656,29 @@ SetSearchLabelText(newLabel = "", keyword = "" ,webSearchVar = "", guiw = 540)
 	GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
 	GuiControl, WebL:, SearchLabel, %searchLabelText%
 	GuiControl, WebL:Show, SearchLabel
+}
+
+SwitchToEnglishLayout(timeout:=500) ; Switches the active window and this script to the US English layout, waits for it to apply.
+{
+	static english:=0x409
+	hwnd:=WinExist("A")
+	threadId:=DllCall("GetWindowThreadProcessId", "Ptr", hwnd, "UInt*", 0, "UInt")
+	if ((DllCall("GetKeyboardLayout", "UInt", threadId, "Ptr") & 0xFFFF)=english)
+		return true
+
+	hkl:=DllCall("LoadKeyboardLayout", "Str", "00000409", "UInt", 1, "Ptr") ; KLF_ACTIVATE
+	if !hkl
+		return false
+
+	DllCall("ActivateKeyboardLayout", "Ptr", hkl, "UInt", 0) ; this script's own thread, so the search box starts in English
+	PostMessage, 0x50, 0, hkl, , ahk_id %hwnd% ; WM_INPUTLANGCHANGEREQUEST for the window that is active now
+
+	start:=A_TickCount
+	while ((DllCall("GetKeyboardLayout", "UInt", threadId, "Ptr") & 0xFFFF)!=english)
+	{
+		if (A_TickCount-start>timeout)
+			return false ; do not hang the bar forever on windows that ignore the request
+		Sleep 10
+	}
+	return true
 }

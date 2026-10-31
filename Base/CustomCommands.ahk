@@ -36,7 +36,7 @@ AutoExecute:
 	}
 	else if commandName = functions ; Open the list of helper functions available in CustomCommands.ahk
 	{
-		OpenWithEditor("Libraries/Functions.lib")
+		OpenWithEditor(A_MyDocuments "\Devers\Libraries\Functions.lib")
 	}
 	else if commandName = docs ; Open the My Documents folder
 	{
