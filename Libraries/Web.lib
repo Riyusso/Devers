@@ -2,11 +2,6 @@
 	If (ItsLocked=1) 
 		return
 
-	Loop, 8
-	{
-		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
-	}
-
 	webSearchVar=
 	IsUsingCustomQuery:=false
 	WebLT := WebLT ? false : true
@@ -547,11 +542,21 @@ SearchBasedTimer:
 return
 
 LoadCustomCommands:
-	CustomCommands := []
 	BuiltInCommands := ["help"]
 
 	if !FileExist(A_WorkingDir "\CustomCommands.ahk")
-    	return
+	{
+		CustomCommands := []
+		CustomCommandsStamp=
+		return
+	}
+
+	; Parsing the file on every open is wasted work when it has not been edited since the last one.
+	FileGetTime, currentStamp, % A_WorkingDir "\CustomCommands.ahk"
+	if (IsObject(CustomCommands) && currentStamp = CustomCommandsStamp)
+		return
+	CustomCommandsStamp := currentStamp
+	CustomCommands := []
 
 	inBlockComment := false
 	Loop, Read, % A_WorkingDir "\CustomCommands.ahk"
