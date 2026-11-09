@@ -6,7 +6,7 @@
 #MaxHotkeysPerInterval 99000000
 #HotkeyInterval 99000000
 #KeyHistory
-FileVersion=2.5.6
+FileVersion=2.5.8
 ScriptName=Devers
 StartTime:=A_TickCount
 IfNotExist, %A_MyDocuments%\%ScriptName%
@@ -179,6 +179,7 @@ return
 ;--------------------------------------------------------------------------------------------------------------
 #Include Libraries/Config.lib
 #Include Libraries/Functions.lib
+#Include Libraries/Help.lib
 #Include Libraries/Hotkeys.lib
 #Include Libraries/Labels.lib
 #Include Libraries/Menu.lib

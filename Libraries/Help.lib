@@ -1,0 +1,340 @@
+;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
+;=====------======------=====------======---BUILT IN COMMAND LIST---======------=====------======------=====------======------=====------
+;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
+; Shows every command of CustomCommands.ahk in a searchable list and runs the one that gets picked.
+; Opened with F1 while the search bar is up, so it runs inside the main script and must never exit it.
+
+CommandsHelp:
+	HelpWidth:=620
+	HelpHeight:=418
+	HelpDpi:=DPIFactor()
+	HelpAll:=ParseCustomCommands()
+	HelpShown:=[]
+
+	Gui, Help:New, +hwndHelpGui -Caption +AlwaysOnTop +ToolWindow +LastFound
+	WinSet, Transparent, 0
+	Gui, Help:Margin, 0, 0
+	Gui, Help:Color, 283437, 1F2326
+
+	Gui, Help:Add, Progress, % "x0 y0 w" HelpWidth " h34 Background1F2326 Disabled"
+	Gui, Help:Font, s11 Bold, Segoe UI
+	Gui, Help:Add, Text, x14 y7 w300 BackgroundTrans cf9f9f9 hwndHelpTitleHwnd, Commands
+	Gui, Help:Font, s9 Norm, Segoe UI
+	Gui, Help:Add, Text, % "x" HelpWidth-214 " y10 w200 Right BackgroundTrans cbfbfbf vHelpCount",
+
+	Gui, Help:Font, s11 Norm cf9f9f9, Segoe UI
+	Gui, Help:Add, Edit, % "x14 y48 w" HelpWidth-28 " h26 -E0x200 Background1F2326 vHelpFilter gHelpFilterChanged hwndHelpFilterHwnd"
+
+	Gui, Help:Font, s10 Norm cf9f9f9, Segoe UI
+	Gui, Help:Add, ListView, % "x14 y84 w" HelpWidth-28 " h268 -Multi -Hdr -E0x200 +LV0x10000 Background1F2326 gHelpListEvent hwndHelpListHwnd", Command|Description
+
+	Gui, Help:Font, s9 Norm cbfbfbf, Segoe UI
+	Gui, Help:Add, Text, % "x14 y+12 w" HelpWidth-28 " BackgroundTrans", Enter - run     Ctrl+E - edit commands     Ctrl+L - helper functions     Esc - close
+	Gui, Help:Add, Button, x-100 y-100 w1 h1 +Default gHelpRun
+
+	; the columns are kept inside the list, since a description reaching past it brings up a horizontal scroll bar.
+	; The vertical one is always left out, so the widths stay the same once the list is long enough for it to appear.
+	HelpColumnWidth:=HelpWidth-28-DllCall("User32\GetSystemMetrics", "Int", 2)-4 ; SM_CXVSCROLL and the border of the list
+	LV_ModifyCol(1, 150)
+	LV_ModifyCol(2, HelpColumnWidth-150)
+
+	HelpDarkenScrollBars(HelpListHwnd)
+	SetEditCueBanner(HelpFilterHwnd, "Search commands...")
+	ShAutoComplete(HelpFilterHwnd) ; the same call the search bar uses, it is what makes ctrl + backspace delete a word
+	GoSub HelpApplyFilter
+
+	OnMessage(0x201, "HelpDragWindow")
+	OnMessage(0x4E, "HelpDrawRow") ; WM_NOTIFY, used to keep the selected row dark
+	Hotkey, IfWinActive, ahk_id %HelpGui% ; the arrows have to reach the list while the search box has the caret
+	Hotkey, Up, HelpMoveUp, On
+	Hotkey, Down, HelpMoveDown, On
+	Hotkey, ^e, HelpEditCommands, On
+	Hotkey, ^l, HelpOpenFunctions, On
+	Hotkey, IfWinActive
+	WinSet, Region, % "0-0 w" HelpWidth*HelpDpi " h" HelpHeight*HelpDpi " r8-8", ahk_id %HelpGui%
+	Gui, Help:Show, w%HelpWidth% h%HelpHeight%, Commands
+	FadeIn(HelpGui)
+	WinSet, Transparent, Off, ahk_id %HelpGui% ; the list is meant to be read, so no see through once it is up
+	GuiControl, Help:Focus, HelpFilter
+return
+
+HelpFilterChanged:
+HelpApplyFilter:
+	Gui, Help:Submit, NoHide
+	Gui, Help:Default
+	Gui, ListView, %HelpListHwnd%
+
+	HelpShown:=FilterCustomCommands(HelpAll, HelpFilter)
+
+	GuiControl, Help:-Redraw, %HelpListHwnd%
+	LV_Delete()
+	for index, command in HelpShown
+		LV_Add("", command.label, command.desc)
+	if LV_GetCount()
+		LV_Modify(1, "Select Focus")
+	GuiControl, Help:+Redraw, %HelpListHwnd%
+
+	HelpTotal:=HelpAll.MaxIndex() ? HelpAll.MaxIndex() : 0
+	HelpCountText:=LV_GetCount() . " of " . HelpTotal . " commands"
+	GuiControl, Help:, HelpCount, %HelpCountText%
+return
+
+HelpListEvent:
+	if (A_GuiEvent = "DoubleClick")
+		GoSub HelpRun
+return
+
+HelpRun:
+	Gui, Help:Submit, NoHide
+	Gui, Help:Default
+	Gui, ListView, %HelpListHwnd%
+
+	HelpRow:=LV_GetNext(0, "F")
+	if !HelpRow
+		HelpRow:=1
+	HelpSelected:=HelpShown[HelpRow]
+	if !HelpSelected
+		return
+
+	HelpParam=
+	if (HelpSelected.takesParam)
+	{
+		; "ping google.com" typed in the filter runs the ping command with "google.com" as the parameter
+		if (SubStr(HelpFilter, 1, StrLen(HelpSelected.keyword)+1) = HelpSelected.keyword . A_Space)
+			HelpParam:=Trim(SubStr(HelpFilter, StrLen(HelpSelected.keyword)+2))
+		if (HelpParam = "")
+		{
+			Gui, Help:+OwnDialogs
+			InputBox, HelpParam, % HelpSelected.keyword, % "Enter the parameter for """ HelpSelected.keyword """:", , 330, 130
+			if (ErrorLevel || HelpParam = "")
+				return
+		}
+	}
+
+	GoSub HelpReleaseHooks
+	Gui, Help:Destroy
+
+	; the commands live in CustomCommands.ahk, so they are run the same way the search bar runs them
+	HelpCommandName:=HelpSelected.name
+	Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %HelpCommandName% %HelpParam%,,, PIDCustomCommands
+return
+
+HelpEditCommands:
+	GoSub HelpReleaseHooks
+	Gui, Help:Destroy
+	OpenWithEditor(A_MyDocuments . "\" . ScriptName . "\CustomCommands.ahk")
+return
+
+HelpOpenFunctions:
+	GoSub HelpReleaseHooks
+	Gui, Help:Destroy
+	OpenWithEditor(A_MyDocuments . "\" . ScriptName . "\Libraries\Functions.lib")
+return
+
+HelpGuiClose:
+HelpGuiEscape:
+	GoSub HelpReleaseHooks
+	FadeOut(HelpGui)
+	Gui, Help:Destroy
+return
+
+HelpReleaseHooks:
+	OnMessage(0x201, "")
+	OnMessage(0x4E, "")
+	Hotkey, IfWinActive, ahk_id %HelpGui%
+	Hotkey, Up, HelpMoveUp, Off
+	Hotkey, Down, HelpMoveDown, Off
+	Hotkey, ^e, HelpEditCommands, Off
+	Hotkey, ^l, HelpOpenFunctions, Off
+	Hotkey, IfWinActive
+return
+
+HelpMoveUp:
+	HelpMoveSelection(-1)
+return
+
+HelpMoveDown:
+	HelpMoveSelection(1)
+return
+
+; Reads CustomCommands.ahk and returns every command in it as {name, keyword, label, desc, takesParam}.
+; A command is a line such as "else if commandName = docs ; Open the My Documents folder".
+ParseCustomCommands()
+{
+	commands:=[]
+	sourceFile:=A_WorkingDir . "\CustomCommands.ahk" ; the working directory is the Devers folder of My Documents
+	if !FileExist(sourceFile)
+		sourceFile:=A_ScriptDir . "\CustomCommands.ahk"
+	if !FileExist(sourceFile)
+		return commands
+
+	inBlockComment:=false
+	Loop, Read, %sourceFile%
+	{
+		line:=Trim(A_LoopReadLine, " `t")
+
+		if (SubStr(line, 1, 2) = "/*")
+			inBlockComment:=true
+		if inBlockComment
+		{
+			if InStr(line, "*/")
+				inBlockComment:=false
+			continue
+		}
+		if (SubStr(line, 1, 1) = ";")
+			continue
+		if !RegExMatch(line, "i)^(?:\}\s*)?(?:else\s+)?if\s*\(?\s*commandName\s*=\s*(.*)$", match)
+			continue
+
+		name:=match1
+		desc=
+		if (commentPos:=InStr(name, ";"))
+		{
+			desc:=Trim(SubStr(name, commentPos+1))
+			name:=SubStr(name, 1, commentPos-1)
+		}
+		name:=Trim(name, " `t)" . Chr(34))
+		if (name = "")
+			continue
+
+		takesParam:=InStr(name, "[\s]") ? true : false
+		keyword:=StrReplace(name, "[\s]")
+		commands.Push({name: name, keyword: keyword, takesParam: takesParam, label: takesParam ? keyword . " <parameter>" : keyword, desc: desc})
+	}
+	return commands
+}
+
+; Keeps the commands matching every space separated word of the filter, best match first.
+FilterCustomCommands(commands, filter)
+{
+	filter:=Trim(filter)
+	exact:=[], starting:=[], rest:=[]
+
+	for index, command in commands
+	{
+		haystack:=command.keyword . " " . command.desc
+		matches:=true
+		Loop, Parse, filter, %A_Space%
+		{
+			if (A_LoopField != "" && !InStr(haystack, A_LoopField))
+			{
+				matches:=false
+				break
+			}
+		}
+		if !matches
+			continue
+
+		if (filter = "" || command.keyword = filter)
+			exact.Push(command)
+		else if (SubStr(command.keyword, 1, StrLen(filter)) = filter)
+			starting.Push(command)
+		else
+			rest.Push(command)
+	}
+
+	for index, command in starting
+		exact.Push(command)
+	for index, command in rest
+		exact.Push(command)
+	return exact
+}
+
+; Paints the rows, so that the selected and the hovered one stay in the dark theme
+; instead of the white bar Windows draws by default. Called for every WM_NOTIFY of the list.
+HelpDrawRow(wParam, lParam, msg, hwnd)
+{
+	global HelpListHwnd
+	static NM_CUSTOMDRAW:=-12, CDDS_PREPAINT:=0x1, CDDS_ITEMPREPAINT:=0x10001
+	static CDRF_NOTIFYITEMDRAW:=0x20, CDRF_NEWFONT:=0x2
+	static LVM_GETITEMSTATE:=0x102C, LVIS_SELECTED:=0x2, CDIS_SELECTED:=0x1, CDIS_FOCUS:=0x10
+	static SelectedBack:=0x453E24, SelectedText:=0xFFFFFF ; 0x00BBGGRR, so this is the 243e45 tint Devers uses for hovers
+	static RowBack:=0x26231F, RowText:=0xF9F9F9
+	static SelectedBrush:=DllCall("Gdi32\CreateSolidBrush", "UInt", 0x453E24, "Ptr")
+	static RowBrush:=DllCall("Gdi32\CreateSolidBrush", "UInt", 0x26231F, "Ptr")
+
+	; NMLVCUSTOMDRAW, laid out after the NMHDR of the notification
+	static StageOffset:=A_PtrSize=8 ? 24 : 12
+	static HdcOffset:=A_PtrSize=8 ? 32 : 16
+	static RectOffset:=A_PtrSize=8 ? 40 : 20
+	static ItemOffset:=A_PtrSize=8 ? 56 : 36
+	static StateOffset:=A_PtrSize=8 ? 64 : 40
+	static TextOffset:=A_PtrSize=8 ? 80 : 48
+
+	if (NumGet(lParam+0, 0, "Ptr") != HelpListHwnd || NumGet(lParam+0, A_PtrSize*2, "Int") != NM_CUSTOMDRAW)
+		return
+
+	stage:=NumGet(lParam+0, StageOffset, "UInt")
+	if (stage = CDDS_PREPAINT)
+		return CDRF_NOTIFYITEMDRAW
+	if (stage != CDDS_ITEMPREPAINT)
+		return
+
+	row:=NumGet(lParam+0, ItemOffset, "Ptr")
+	SendMessage, LVM_GETITEMSTATE, %row%, %LVIS_SELECTED%, , ahk_id %HelpListHwnd%
+	selected:=ErrorLevel & LVIS_SELECTED
+
+	; the control only paints as far as the columns reach, so the whole row is painted first.
+	; The device context is clipped to the list, which is why a right edge past its width is safe.
+	VarSetCapacity(rowRect, 16, 0)
+	NumPut(0, rowRect, 0, "Int")
+	NumPut(NumGet(lParam+0, RectOffset+4, "Int"), rowRect, 4, "Int")
+	NumPut(A_ScreenWidth, rowRect, 8, "Int")
+	NumPut(NumGet(lParam+0, RectOffset+12, "Int"), rowRect, 12, "Int")
+	DllCall("User32\FillRect", "Ptr", NumGet(lParam+0, HdcOffset, "Ptr"), "Ptr", &rowRect, "Ptr", selected ? SelectedBrush : RowBrush)
+
+	; the row is painted by the control unless its selected and focused states are taken out of the notification
+	NumPut(NumGet(lParam+0, StateOffset, "UInt") & ~(CDIS_SELECTED|CDIS_FOCUS), lParam+0, StateOffset, "UInt")
+	NumPut(selected ? SelectedText : RowText, lParam+0, TextOffset, "UInt")
+	NumPut(selected ? SelectedBack : RowBack, lParam+0, TextOffset+4, "UInt")
+	return CDRF_NEWFONT
+}
+
+; Puts the list in the dark mode of Windows, which is what its scroll bar is painted from.
+; Without it the bar is the white one of the classic theme, and the rows are painted by the theme
+; on top of what HelpDrawRow does, which is why the theme used to be taken off the list entirely.
+HelpDarkenScrollBars(listHwnd)
+{
+	static ForceDark:=2, Default:=0
+	; the dark mode of the shell is not exported by name, so the ordinals of uxtheme are used.
+	; They only exist from Windows 10 1809 on, which is why they are looked up before they are called.
+	uxtheme:=DllCall("Kernel32\LoadLibrary", "Str", "uxtheme", "Ptr") ; a handle is needed, and it stays loaded from here on
+	if (uxtheme && DllCall("Kernel32\GetProcAddress", "Ptr", uxtheme, "Ptr", 135, "Ptr"))
+	{
+		DllCall("uxtheme\#135", "Int", ForceDark) ; SetPreferredAppMode, the window can only go dark while the process is
+		DllCall("uxtheme\#133", "Ptr", listHwnd, "Int", true) ; AllowDarkModeForWindow
+		DllCall("uxtheme\SetWindowTheme", "Ptr", listHwnd, "WStr", "DarkMode_Explorer", "Ptr", 0)
+		DllCall("uxtheme\#135", "Int", Default) ; the rest of Devers keeps its own colours, so the process is put back
+		return
+	}
+	DllCall("uxtheme\SetWindowTheme", "Ptr", listHwnd, "WStr", "", "WStr", "") ; no dark mode, so the theme is taken off instead
+}
+
+; Lets the borderless window be dragged by its background or its title.
+HelpDragWindow(wParam, lParam, msg, hwnd)
+{
+	global HelpGui, HelpTitleHwnd
+	if (hwnd = HelpGui || hwnd = HelpTitleHwnd)
+		PostMessage, 0xA1, 2, , , ahk_id %HelpGui% ; WM_NCLBUTTONDOWN on the caption
+}
+
+HelpMoveSelection(direction)
+{
+	global HelpListHwnd
+	Gui, Help:Default
+	Gui, ListView, %HelpListHwnd%
+
+	total:=LV_GetCount()
+	if !total
+		return
+	current:=LV_GetNext(0, "F")
+	if !current
+		current:=1
+	next:=current+direction
+	if (next<1)
+		next:=total
+	if (next>total)
+		next:=1
+	LV_Modify(current, "-Select -Focus")
+	LV_Modify(next, "Select Focus Vis")
+}

@@ -2,11 +2,6 @@
 	If (ItsLocked=1) 
 		return
 
-	Loop, 8
-	{
-		IniRead, ws%A_Index% , settings.ini, Web, ws%A_Index%
-	}
-
 	webSearchVar=
 	IsUsingCustomQuery:=false
 	WebLT := WebLT ? false : true
@@ -64,7 +59,7 @@
 			Gui, Font, w1000 s12 c%searchTextColor%, Segoe UI Bold
 			Gui, Add, Edit, % "x14 y11 w" guiw-80 " h35 hwndWebSearch vwebSearchVar -E0x200 -VScroll", %webSearchVar%
 			Gui, Font, w700 s22 ceeeeee, Segoe UI Black
-			Gui, Add, Button, % "x+2 y-5 h45 w55 gAddCustomQuery hwndSearchBut1", •••
+			Gui, Add, Button, % "x+2 y-5 h45 w55 gSearchBarConfiguration hwndSearchBut1", •••
 			Gui, Add, Button, % "x0 h45 w55 gStartSearch +Hidden hwndSearchBut2 +Default", Default
 			Opt1 := [6, 0x172326, 0x172326, 0x909090]
 			Opt2 := [ , 0x172326, 0x172326, 0xffffff]
@@ -169,6 +164,28 @@
 	}
 return
 
+OpenSearchBar: ; Started with SetTimer by the search bar hotkey, so that the hotkey thread can stay
+	; inside Input and capture whatever gets typed while the bar is still being built.
+	SwitchToEnglishLayout() ; Blocks until the layout has really changed, the bar is not built before that.
+	GoSub RSWeb
+	Input ; Stops that capture. The search box owns the keyboard from here on.
+return
+
+FlushEarlyTyped: ; Replays the keystrokes that were typed before the search box became active.
+	If (!WebLT || !SearchBased)
+		earlyTyped=
+	If (earlyTyped!="")
+	{
+		SendMessage, 0xC2, 1, % &earlyTyped, , ahk_id %WebSearch% ; EM_REPLACESEL, inserts at the caret
+		earlyTyped=
+	}
+	If (earlyEndKey="EndKey:Enter")
+		GoSub StartSearch
+	else If (earlyEndKey="EndKey:Escape")
+		GoSub WebLClose
+	earlyEndKey=
+return
+
 WebLClose:
 WebLGuiEscape:
 	SetTimer, SearchBasedTimer, Off
@@ -182,9 +199,51 @@ WebLGuiEscape:
 	RSWebWithSearchFocused:=false
 return
 
+SearchBarConfiguration:
+	width=155
+	height=134
+	Gui, SearchBarConfiguration:New, +hwndSearchBarConfiguration
+	Gui, +LastFound +ToolWindow +AlwaysOnTop
+	WinSet, Transparent, 0
+	Gui, Margin, 0, 0
+	Gui, -Caption
+	Gui, Color, 283437
+	Gui, Font, s10 Bold, Tahoma
+	Opt1 := [6, 0x283437, 0x243e45, 0xc7c5c5]
+	Opt2 := [ , 0x283437, 0x27393e, 0xffffff]
+	Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+	Gui, Add, Progress, % "x-1 y-1 w" width " h26 Background1F2326 Disabled hwndHPROG"
+	Gui, Add, Text, x0 y4 w%width% Center BackgroundTrans +0x200 cbfbfbf, Configure Search Bar
+	Gui, Add, Button, x0 y+7 h33 w%width% +default gOpenCustomCommands hwndBut1 +Center, Commands
+
+	Gui, Add, Button, x0 y+2 h33 w%width% gAddCustomQuery hwndBut2 +Center, Add New Query
+
+	Gui, Add, Button, x0 y+2 h33 w%width% gCancelSearchBarConfiguration  hwndBut3 +Center, Cancel
+
+	ImageButton.Create(But1, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But2, Opt1, Opt2, "", Opt4)
+	ImageButton.Create(But3, Opt1, Opt2, "", Opt4)
+	WinSet, Region, % "0-0 w" width*dpi " h" height*dpi " r3-3", ahk_id %SearchBarConfiguration%
+	Gui, Show, w%width% h%height% , Search Bar Configuration
+	FadeIn(SearchBarConfiguration)
+return
+
+OpenCustomCommands:
+	GoSub CancelSearchBarConfiguration
+	customCommandsLocation:=A_MyDocuments . "\" . ScriptName . "\CustomCommands.ahk"
+	OpenWithEditor(customCommandsLocation)
+return
+
+SearchBarConfigurationGuiEscape:
+CancelSearchBarConfiguration:
+	FadeOut(SearchBarConfiguration)
+return
+
 AddCustomQuery:
 AddNewCustomQuery:=true
 WebLGuiContextMenu:
+	GoSub CancelSearchBarConfiguration
+	
 	if !A_GuiControl && !AddNewCustomQuery
 		return
 	
@@ -308,7 +367,8 @@ return
 
 ExitWebsites:
 	FadeOut(WebEdit)
-	WinActivate, ahk_class Shell_TrayWnd
+	if (!SearchBased)
+		WinActivate, ahk_class Shell_TrayWnd
 return
 
 EditWebsites:
@@ -420,7 +480,7 @@ DeleteCustomQuery:
 return
 
 SearchBasedTimer:
-	if !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit)
+	if !WinActive("ahk_id" . WebL) && !WinActive("ahk_id" . WebEdit) && !WinActive("ahk_id" . SearchBarConfiguration)
 	{
 		GoSub WebLClose
 		return
@@ -433,6 +493,7 @@ SearchBasedTimer:
 	lastWebSearchVar:=webSearchVar
 	isCustomCommand := false
 	isCustomCommandExtended := false
+	isBuiltInCommand := false
 
 	for index, element in CustomCommands
 	{
@@ -449,7 +510,18 @@ SearchBasedTimer:
 		}
 	}
 
-	if (isCustomCommand && !IsUsingCustomQuery)
+	for index, element in BuiltInCommands ; built in commands work even without CustomCommands.ahk
+	{
+		if (webSearchVar = element)
+		{
+			isBuiltInCommand := true
+			builtInCommand := element
+			isCustomCommand := false
+			isCustomCommandExtended := false
+		}
+	}
+
+	if ((isCustomCommand || isBuiltInCommand) && !IsUsingCustomQuery)
 	{
 		searchTextColor = 7ab048
 		GuiControl, WebL:+c%searchTextColor%, webSearchVar
@@ -470,22 +542,47 @@ SearchBasedTimer:
 return
 
 LoadCustomCommands:
-	CustomCommands := []
+	BuiltInCommands := ["help"]
 
 	if !FileExist(A_WorkingDir "\CustomCommands.ahk")
-    	return
+	{
+		CustomCommands := []
+		CustomCommandsStamp=
+		return
+	}
 
+	; Parsing the file on every open is wasted work when it has not been edited since the last one.
+	FileGetTime, currentStamp, % A_WorkingDir "\CustomCommands.ahk"
+	if (IsObject(CustomCommands) && currentStamp = CustomCommandsStamp)
+		return
+	CustomCommandsStamp := currentStamp
+	CustomCommands := []
+
+	inBlockComment := false
 	Loop, Read, % A_WorkingDir "\CustomCommands.ahk"
 	{
-		Loop, Parse, A_LoopReadLine, %A_Tab%
+		commandLine := Trim(A_LoopReadLine, " `t")
+
+		if (SubStr(commandLine, 1, 2) = "/*")
+			inBlockComment := true
+		if inBlockComment
 		{
-			if InStr(A_LoopField, "commandName")
-			{
-				StringGetPos, commandPos, A_LoopField, =, 1
-				customCommand := SubStr(A_LoopField, commandPos+2)
-				CustomCommands.Push(customCommand)
-			}
+			if InStr(commandLine, "*/")
+				inBlockComment := false
+			continue
 		}
+		if (SubStr(commandLine, 1, 1) = ";")
+			continue
+		if !RegExMatch(commandLine, "i)^(?:\}\s*)?(?:else\s+)?if\s*\(?\s*commandName\s*=\s*(.*)$", commandMatch)
+			continue
+
+		customCommand := commandMatch1
+		if (commentPos := InStr(customCommand, ";")) ; everything after a semicolon is the description of the command
+			customCommand := SubStr(customCommand, 1, commentPos-1)
+		customCommand := Trim(customCommand, " `t)" . Chr(34))
+
+		if (customCommand != "")
+			CustomCommands.Push(customCommand)
 	}
 
 return
@@ -510,7 +607,16 @@ StartSearch:
 		}
 	}
 
-	if (isCustomCommand && !IsUsingCustomQuery)
+	if (isBuiltInCommand && !IsUsingCustomQuery)
+	{
+		if (builtInCommand = "help")
+			GoSub CommandsHelp
+		
+		Gui, WebL:Destroy
+		GoSub WebLClose
+		return
+	}
+	else if (isCustomCommand && !IsUsingCustomQuery)
 	{
 		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %webSearchVar%,,, PIDCustomCommands
 		
@@ -555,4 +661,29 @@ SetSearchLabelText(newLabel = "", keyword = "" ,webSearchVar = "", guiw = 540)
 	GuiControl, WebL:Move, webSearchVar, % "x" searchLabelMeasured.W+24 " w" guiw-(searchLabelMeasured.W+22)-65
 	GuiControl, WebL:, SearchLabel, %searchLabelText%
 	GuiControl, WebL:Show, SearchLabel
+}
+
+SwitchToEnglishLayout(timeout:=500) ; Switches the active window and this script to the US English layout, waits for it to apply.
+{
+	static english:=0x409
+	hwnd:=WinExist("A")
+	threadId:=DllCall("GetWindowThreadProcessId", "Ptr", hwnd, "UInt*", 0, "UInt")
+	if ((DllCall("GetKeyboardLayout", "UInt", threadId, "Ptr") & 0xFFFF)=english)
+		return true
+
+	hkl:=DllCall("LoadKeyboardLayout", "Str", "00000409", "UInt", 1, "Ptr") ; KLF_ACTIVATE
+	if !hkl
+		return false
+
+	DllCall("ActivateKeyboardLayout", "Ptr", hkl, "UInt", 0) ; this script's own thread, so the search box starts in English
+	PostMessage, 0x50, 0, hkl, , ahk_id %hwnd% ; WM_INPUTLANGCHANGEREQUEST for the window that is active now
+
+	start:=A_TickCount
+	while ((DllCall("GetKeyboardLayout", "UInt", threadId, "Ptr") & 0xFFFF)!=english)
+	{
+		if (A_TickCount-start>timeout)
+			return false ; do not hang the bar forever on windows that ignore the request
+		Sleep 10
+	}
+	return true
 }

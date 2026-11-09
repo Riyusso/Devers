@@ -315,11 +315,9 @@ return
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
 	Send {End}
 return
-~F1::
+F1:: ; Opens the searchable list of every command in CustomCommands.ahk
 	GoSub WebLClose
-	RSNotify("Opening Functions")
-	Sleep 500
-	OpenWithEditor(A_MyDocuments "/Devers/Libraries/Functions.lib")
+	GoSub CommandsHelp
 return
 #If
 
@@ -327,7 +325,19 @@ return
 RAlt::
 LCtrl & RAlt::
 	SearchBased:=true
-	GoSub RSWeb
+	If WebLT ; The bar is open, so this press closes it. Nothing to capture.
+	{
+		GoSub RSWeb
+		return
+	}
+	; Building and activating the bar takes around 30ms, a lot more while the system is busy,
+	; and anything typed in the meantime would end up in the window that is still active.
+	; So open it from a timer and keep this thread in Input, collecting those keystrokes
+	; until OpenSearchBar stops the capture, then replay them into the search box.
+	SetTimer, OpenSearchBar, -1
+	Input, earlyTyped, T1, {Enter}{Escape}{Tab}
+	earlyEndKey:=ErrorLevel
+	GoSub FlushEarlyTyped
 return
 #If
 

@@ -1,4 +1,4 @@
-;--------------------------------------------------------------------------------------------------------------
+﻿;--------------------------------------------------------------------------------------------------------------
 
 ShowNotification(text)
 {
@@ -87,8 +87,11 @@ GetSelectedFiles()
 
 ;--------------------------------------------------------------------------------------------------------------
 
-OpenWithEditor(filePath, forceOpenWith = false)
+OpenWithEditor(filePath, forceOpenWith = false, runAsAdmin = false)
 {
+	if (filePath = "")
+		return
+
     if (!CmdCommandExists("code") || forceOpenWith)
     {
         ShellRun("OpenWith.exe", """" . filePath . """")
@@ -98,22 +101,37 @@ OpenWithEditor(filePath, forceOpenWith = false)
         return
     }
 
-	SplitPath, filePath, file, location
     if (!FileExist(filePath))
 	{
 		ShowNotification("File does not exist.")
 		return
 	}
 
-	Run, %ComSpec% /c code "%filePath%",, Hide
+	if (runAsAdmin)
+		Run, %ComSpec% /c code "%filePath%",, Hide
+	else
+		ShellRun(ComSpec, "/c code " Chr(34) filePath Chr(34), "", "open", 0)
 }
 
 ;--------------------------------------------------------------------------------------------------------------
 
 OpenCmd()
 {
-	folderPath := ExplorerGetActiveFolderPath() ; this function is from Libraries/Functions. Press F1 to view more
+	folderPath := ExplorerGetActiveFolderPath() ; this function is from Libraries/Functions. Type "functions" to view more
 	run, %ComSpec%, % folderPath ? folderPath : "C:\Users\" A_UserName
+}
+
+;--------------------------------------------------------------------------------------------------------------
+
+OpenCmdNonAdmin(command = "", isHidden = false)
+{
+	folderPath := ExplorerGetActiveFolderPath()
+	workingDir := folderPath ? folderPath : "C:\Users\" A_UserName
+
+	if (isHidden)
+		ShellRun(ComSpec, "/c " command, workingDir, "open", 0)
+	else
+		ShellRun(ComSpec, command ? "/k " command : "", workingDir)
 }
 
 ;--------------------------------------------------------------------------------------------------------------
