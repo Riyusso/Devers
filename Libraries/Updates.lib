@@ -44,7 +44,8 @@ UpdateFiles:
 	FileInstall, Base\Tip_medium.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_medium.png, 1
 	FileInstall, Base\Tip_large.png, %A_MyDocuments%\%ScriptName%\Assets\Tip_large.png, 1
 	FileInstall, Base\SinglePlugin.ico,  %A_MyDocuments%\%ScriptName%\Assets\SinglePlugin.ico, 1
-	FileInstall, Base\CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
+	FileInstall, Base\CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0 ; the user's commands, never overwritten
+	FileInstall, Base\DefaultCommands.ahk, %A_MyDocuments%\%ScriptName%\DefaultCommands.ahk, 1 ; the commands that ship with Devers, always replaced
 	
 	IfNotExist, Libraries
 		FileCreateDir, Libraries

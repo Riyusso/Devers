@@ -315,7 +315,7 @@ return
 	GuiControl, WebL:, webSearchVar, %webSearchVar%
 	Send {End}
 return
-F1:: ; Opens the searchable list of every command in CustomCommands.ahk
+F1:: ; Opens the searchable list of every command in CustomCommands.ahk and DefaultCommands.ahk
 	GoSub WebLClose
 	GoSub CommandsHelp
 return

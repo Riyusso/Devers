@@ -497,15 +497,17 @@ SearchBasedTimer:
 
 	for index, element in CustomCommands
 	{
-		com=%element%
+		com := element.name
 		if (com = webSearchVar)
 		{
 			isCustomCommand := true
+			customCommandFile := element.file
 		}
-		else if (InStr(com, "[\s]") && RegExMatch(webSearchVar, com))
+		else if (InStr(com, "[\s]") && RegExMatch(webSearchVar, "i)^" . com)) ; anchored, so "skill tree" does not run "kill[\s]"
 		{
 			isCustomCommandExtended := true
 			extendedCommand := com
+			extendedCommandFile := element.file
 			extendedCommandParam := SubStr(webSearchVar, InStr(webSearchVar, " ") + 1)
 		}
 	}
@@ -544,47 +546,16 @@ return
 LoadCustomCommands:
 	BuiltInCommands := ["help"]
 
-	if !FileExist(A_WorkingDir "\CustomCommands.ahk")
-	{
-		CustomCommands := []
-		CustomCommandsStamp=
-		return
-	}
-
-	; Parsing the file on every open is wasted work when it has not been edited since the last one.
-	FileGetTime, currentStamp, % A_WorkingDir "\CustomCommands.ahk"
+	; Parsing the files on every open is wasted work when neither has been edited since the last one.
+	customStamp=
+	defaultStamp=
+	FileGetTime, customStamp, % A_WorkingDir "\CustomCommands.ahk"
+	FileGetTime, defaultStamp, % A_WorkingDir "\DefaultCommands.ahk"
+	currentStamp := customStamp . "|" . defaultStamp
 	if (IsObject(CustomCommands) && currentStamp = CustomCommandsStamp)
 		return
 	CustomCommandsStamp := currentStamp
-	CustomCommands := []
-
-	inBlockComment := false
-	Loop, Read, % A_WorkingDir "\CustomCommands.ahk"
-	{
-		commandLine := Trim(A_LoopReadLine, " `t")
-
-		if (SubStr(commandLine, 1, 2) = "/*")
-			inBlockComment := true
-		if inBlockComment
-		{
-			if InStr(commandLine, "*/")
-				inBlockComment := false
-			continue
-		}
-		if (SubStr(commandLine, 1, 1) = ";")
-			continue
-		if !RegExMatch(commandLine, "i)^(?:\}\s*)?(?:else\s+)?if\s*\(?\s*commandName\s*=\s*(.*)$", commandMatch)
-			continue
-
-		customCommand := commandMatch1
-		if (commentPos := InStr(customCommand, ";")) ; everything after a semicolon is the description of the command
-			customCommand := SubStr(customCommand, 1, commentPos-1)
-		customCommand := Trim(customCommand, " `t)" . Chr(34))
-
-		if (customCommand != "")
-			CustomCommands.Push(customCommand)
-	}
-
+	CustomCommands := ParseCustomCommands() ; the user's commands and the default ones, each with the file it runs from
 return
 
 StartSearch:
@@ -618,7 +589,7 @@ StartSearch:
 	}
 	else if (isCustomCommand && !IsUsingCustomQuery)
 	{
-		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %webSearchVar%,,, PIDCustomCommands
+		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%customCommandFile% " %webSearchVar%,,, PIDCustomCommands
 		
 		Gui, WebL:Destroy
 		GoSub WebLClose
@@ -626,7 +597,7 @@ StartSearch:
 	}
 	else if (isCustomCommandExtended && !IsUsingCustomQuery)
 	{
-		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %extendedCommand%  %extendedCommandParam%,,, PIDCustomCommands
+		Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%extendedCommandFile% " %extendedCommand%  %extendedCommandParam%,,, PIDCustomCommands
 
 		Gui, WebL:Destroy
 		GoSub WebLClose

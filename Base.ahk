@@ -62,6 +62,7 @@ IfExist, settings.ini
 	FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 0
 	FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 0
 	FileInstall, Base/CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
+	FileInstall, Base/DefaultCommands.ahk, %A_MyDocuments%\%ScriptName%\DefaultCommands.ahk, 0
 	FileInstall, Base/ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 0
 
 	; How to use the plugin system :
@@ -167,6 +168,7 @@ InstallFiles:
 	FileInstall, Libraries/Packages.lib, %A_MyDocuments%\%ScriptName%\Libraries\Packages.lib, 0
 	FileInstall, Libraries/Gdip_All.lib, %A_MyDocuments%\%ScriptName%\Libraries\Gdip_All.lib, 0
 	FileInstall, Base/CustomCommands.ahk, %A_MyDocuments%\%ScriptName%\CustomCommands.ahk, 0
+	FileInstall, Base/DefaultCommands.ahk, %A_MyDocuments%\%ScriptName%\DefaultCommands.ahk, 0
 	FileInstall, Base/ExtensionsManager, %A_MyDocuments%\%ScriptName%\ExtensionsManager, 0
 
 	IniWrite, %FileVersion%, build.ini, build, FileVersion

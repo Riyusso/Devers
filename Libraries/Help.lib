@@ -1,7 +1,7 @@
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
 ;=====------======------=====------======---BUILT IN COMMAND LIST---======------=====------======------=====------======------=====------
 ;=====------======------=====------======------=====------======------=====------======------=====------======------=====------======------
-; Shows every command of CustomCommands.ahk in a searchable list and runs the one that gets picked.
+; Shows every command of CustomCommands.ahk and DefaultCommands.ahk in a searchable list and runs the one that gets picked.
 ; Opened with F1 while the search bar is up, so it runs inside the main script and must never exit it.
 
 CommandsHelp:
@@ -114,9 +114,10 @@ HelpRun:
 	GoSub HelpReleaseHooks
 	Gui, Help:Destroy
 
-	; the commands live in CustomCommands.ahk, so they are run the same way the search bar runs them
+	; the commands are run from the file they are written in, the same way the search bar runs them
 	HelpCommandName:=HelpSelected.name
-	Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%A_MyDocuments%\%ScriptName%\CustomCommands.ahk " %HelpCommandName% %HelpParam%,,, PIDCustomCommands
+	HelpCommandFile:=HelpSelected.file
+	Run, "%A_MyDocuments%\%ScriptName%\ExtensionsManager" "%HelpCommandFile% " %HelpCommandName% %HelpParam%,,, PIDCustomCommands
 return
 
 HelpEditCommands:
@@ -157,14 +158,34 @@ HelpMoveDown:
 	HelpMoveSelection(1)
 return
 
-; Reads CustomCommands.ahk and returns every command in it as {name, keyword, label, desc, takesParam}.
-; A command is a line such as "else if commandName = docs ; Open the My Documents folder".
+; Returns every command of CustomCommands.ahk and DefaultCommands.ahk as {name, keyword, label, desc, takesParam, file}.
+; CustomCommands.ahk belongs to the user and is never overwritten, DefaultCommands.ahk ships with Devers and is replaced on update.
+; The user's commands come first, and one with the same name as a default command replaces it.
 ParseCustomCommands()
 {
 	commands:=[]
-	sourceFile:=A_WorkingDir . "\CustomCommands.ahk" ; the working directory is the Devers folder of My Documents
+	seen:={}
+	for index, fileName in ["CustomCommands.ahk", "DefaultCommands.ahk"]
+	{
+		for i, command in ParseCommandsFile(fileName)
+		{
+			if seen.HasKey(command.name)
+				continue
+			seen[command.name]:=true
+			commands.Push(command)
+		}
+	}
+	return commands
+}
+
+; Reads one commands file and returns every command in it.
+; A command is a line such as "else if commandName = docs ; Open the My Documents folder".
+ParseCommandsFile(fileName)
+{
+	commands:=[]
+	sourceFile:=A_WorkingDir . "\" . fileName ; the working directory is the Devers folder of My Documents
 	if !FileExist(sourceFile)
-		sourceFile:=A_ScriptDir . "\CustomCommands.ahk"
+		sourceFile:=A_ScriptDir . "\" . fileName
 	if !FileExist(sourceFile)
 		return commands
 
@@ -199,7 +220,7 @@ ParseCustomCommands()
 
 		takesParam:=InStr(name, "[\s]") ? true : false
 		keyword:=StrReplace(name, "[\s]")
-		commands.Push({name: name, keyword: keyword, takesParam: takesParam, label: takesParam ? keyword . " <parameter>" : keyword, desc: desc})
+		commands.Push({name: name, keyword: keyword, takesParam: takesParam, label: takesParam ? keyword . " <parameter>" : keyword, desc: desc, file: sourceFile})
 	}
 	return commands
 }
