@@ -230,9 +230,39 @@ ExtSettings:
 		Opt4 := [0, 0xC0A0A0A0, , 0xC0606000]
 
 		CustomExtensionNames := {}
-		Gui, Add, Text, % "x0 y+25 w" width " Center", -   Others   -
+		Gui, Add, Text, % "x0 y+25 w" width " Center hwndOthersLabel", -   Others   -
+		GuiControlGet, Others, Pos, %OthersLabel%
+		ExtListTop := OthersY + OthersH
+
+		; A page holds ExtensionsPerPage rows (settings.ini), fewer if they don't fit
+		; on the screen. Each row is 39 high (14 gap + 25 button); the footer below
+		; the list is 108 high and the page switcher takes one more row.
+		ExtRowCount := 0
+		Loop, Files, Extensions/*.ahk
+			ExtRowCount++
+		SysGet, WorkArea, MonitorWorkArea
+		ExtListSpace := (WorkAreaBottom - WorkAreaTop) / dpi - 40 - ExtListTop - 108
+		ExtPerPageWanted := 7
+		if ExtensionsPerPage is integer
+			if (ExtensionsPerPage >= 1)
+				ExtPerPageWanted := ExtensionsPerPage
+		if (ExtRowCount <= ExtPerPageWanted && ExtRowCount * 39 <= ExtListSpace)
+			ExtPageSize := ExtRowCount
+		else
+		{
+			ExtPageSize := Floor((ExtListSpace - 39) / 39)
+			if (ExtPageSize < 3)
+				ExtPageSize := 3
+			if (ExtPageSize > ExtPerPageWanted)
+				ExtPageSize := ExtPerPageWanted
+		}
+		ExtPageCount := Ceil(ExtRowCount / ExtPageSize)
+		ExtPage := 1
+		ExtPageRows := []
+
 		Loop, Files, Extensions/*.ahk
 		{
+			ExtRowY := ExtListTop + 14 + Mod(A_Index - 1, ExtPageSize) * 39
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 
 			If RegExMatch(PluginName, "\W")
@@ -244,7 +274,7 @@ ExtSettings:
 
 			IniRead, PluginState, settings.ini, plugins, PluginState%PluginName%, 1
 			PluginNameNoUnderscores:=StrReplace(PluginName, "_", A_Space)
-			Gui, Add, Button, % "x" width/4-(width/6)+5 " y+14 h25 w" (width/2.5) " gEditPlugin hwndPluginEditButton Center -Wrap", %PluginNameNoUnderscores% ›
+			Gui, Add, Button, % "x" width/4-(width/6)+5 " y" ExtRowY " h25 w" (width/2.5) " gEditPlugin hwndPluginEditButton Center -Wrap", %PluginNameNoUnderscores% ›
 
 			; !POSITION IMPORTANT! Keep after the button creation. Get the last character of the variable EXTControls which is the number of the button created. 
 			WinGet, EXTControls, ControlList, ahk_id %ExtHWND%
@@ -257,7 +287,18 @@ ExtSettings:
 			ImageButton.Create(PluginEditButton, Opt1, Opt2, "", Opt4)
 
 			ExtensionButtonsExist := true
-			Gui, Add, DropDownList, % "xs+0 yp+0 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit" , On|Off|Delete
+			Gui, Add, DropDownList, % "xs+0 yp+0 w65 Center vPluginState" PluginName " Choose" PluginState " AltSubmit hwndPluginStateList" , On|Off|Delete
+			ExtPageRows.Push([PluginEditButton, PluginStateList])
+		}
+
+		if (ExtPageCount > 1)
+		{
+			Gui, Add, Button, % "x" (width/2)-70 " y" ExtListTop + ExtPageSize*39 + 14 " w30 h25 gExtPagePrevious hwndPagePreviousButton +Center", ‹
+			Gui, Add, Text, % "x+0 yp+0 w80 h25 Center 0x200 vExtPageText", % "1 / " ExtPageCount
+			Gui, Add, Button, % "x+0 yp+0 w30 h25 gExtPageNext hwndPageNextButton +Center", ›
+			ImageButton.Create(PagePreviousButton, Opt1, Opt2, "", Opt4)
+			ImageButton.Create(PageNextButton, Opt1, Opt2, "", Opt4)
+			GoSub ExtShowPage
 		}
 	}
 
@@ -296,6 +337,27 @@ ExtSettings:
 	WinSet, Region, % "0-0 w" width*dpi " h" H*dpi " r6-6"
 	Gui, Show, w%width%, Extensions
 	FadeIn(ExtHWND)
+return
+
+ExtPagePrevious:
+	ExtPage := ExtPage > 1 ? ExtPage - 1 : ExtPageCount
+	GoSub ExtShowPage
+return
+
+ExtPageNext:
+	ExtPage := ExtPage < ExtPageCount ? ExtPage + 1 : 1
+	GoSub ExtShowPage
+return
+
+; Hidden rows keep their values, so Apply still saves the state of every extension.
+ExtShowPage:
+	for RowNumber, Row in ExtPageRows
+	{
+		RowVisibility := Ceil(RowNumber / ExtPageSize) = ExtPage ? "Show" : "Hide"
+		GuiControl, ExtSettings:%RowVisibility%, % Row[1]
+		GuiControl, ExtSettings:%RowVisibility%, % Row[2]
+	}
+	GuiControl, ExtSettings:, ExtPageText, % ExtPage " / " ExtPageCount
 return
 
 SetupRepoSyncGUI:
