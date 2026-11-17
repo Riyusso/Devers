@@ -235,22 +235,22 @@ ExtSettings:
 		ExtListTop := OthersY + OthersH
 
 		; A page holds ExtensionsPerPage rows (settings.ini), fewer if they don't fit
-		; on the screen. Each row is 39 high (14 gap + 25 button); the footer below
+		; on the screen. Each row is 33 high (8 gap + 25 button), like the built in rows; the footer below
 		; the list is 108 high and the page switcher takes one more row.
 		ExtRowCount := 0
 		Loop, Files, Extensions/*.ahk
 			ExtRowCount++
 		SysGet, WorkArea, MonitorWorkArea
 		ExtListSpace := (WorkAreaBottom - WorkAreaTop) / dpi - 40 - ExtListTop - 108
-		ExtPerPageWanted := 7
+		ExtPerPageWanted := 6
 		if ExtensionsPerPage is integer
 			if (ExtensionsPerPage >= 1)
 				ExtPerPageWanted := ExtensionsPerPage
-		if (ExtRowCount <= ExtPerPageWanted && ExtRowCount * 39 <= ExtListSpace)
+		if (ExtRowCount <= ExtPerPageWanted && ExtRowCount * 33 <= ExtListSpace)
 			ExtPageSize := ExtRowCount
 		else
 		{
-			ExtPageSize := Floor((ExtListSpace - 39) / 39)
+			ExtPageSize := Floor((ExtListSpace - 33) / 33)
 			if (ExtPageSize < 3)
 				ExtPageSize := 3
 			if (ExtPageSize > ExtPerPageWanted)
@@ -262,7 +262,7 @@ ExtSettings:
 
 		Loop, Files, Extensions/*.ahk
 		{
-			ExtRowY := ExtListTop + 14 + Mod(A_Index - 1, ExtPageSize) * 39
+			ExtRowY := ExtListTop + 14 + Mod(A_Index - 1, ExtPageSize) * 33
 			SplitPath, A_LoopFileLongPath,,,, PluginName
 
 			If RegExMatch(PluginName, "\W")
@@ -293,18 +293,22 @@ ExtSettings:
 
 		if (ExtPageCount > 1)
 		{
-			Gui, Add, Button, % "x" (width/2)-70 " y" ExtListTop + ExtPageSize*39 + 14 " w30 h25 gExtPagePrevious hwndPagePreviousButton +Center", ‹
+			Gui, Add, Button, % "x" (width/2)-65 " y" ExtListTop + ExtPageSize*33 + 14 " w25 h25 gExtPagePrevious hwndPagePreviousButton +Center", ‹
 			Gui, Add, Text, % "x+0 yp+0 w80 h25 Center 0x200 vExtPageText", % "1 / " ExtPageCount
-			Gui, Add, Button, % "x+0 yp+0 w30 h25 gExtPageNext hwndPageNextButton +Center", ›
-			ImageButton.Create(PagePreviousButton, Opt1, Opt2, "", Opt4)
-			ImageButton.Create(PageNextButton, Opt1, Opt2, "", Opt4)
+			Gui, Add, Button, % "x+0 yp+0 w25 h25 gExtPageNext hwndPageNextButton +Center", ›
+			; Square buttons rounded by half their height, so they are drawn as circles.
+			ExtPageOpt1 := [6, 0x333333, 0x333333, 0xD0D0D0, "H", 0x2e2e2e,, 4]
+			ExtPageOpt2 := [ , 0x3f3f3f, 0x3f3f3f]
+			ExtPageOpt4 := [0, 0xC0A0A0A0, , 0xC0606000]
+			ImageButton.Create(PagePreviousButton, ExtPageOpt1, ExtPageOpt2, "", ExtPageOpt4)
+			ImageButton.Create(PageNextButton, ExtPageOpt1, ExtPageOpt2, "", ExtPageOpt4)
 			GoSub ExtShowPage
 		}
 	}
 
 	Gui, Font, s10 cFFFFFF Bold, Segoe UI
 
-	Gui, Add, Button, % "x" (width/2)-((width*0.55)/2) " y+" (20+!ExtensionButtonsExist*8) " w" (width*0.55) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
+	Gui, Add, Button, % "x" (width/2)-((width*0.55)/2) " y+" ((ExtensionButtonsExist && ExtPageCount > 1) ? 10 : (20+!ExtensionButtonsExist*8)) " w" (width*0.55) " h33 gCreateExtensionGUI hwndBut1 +Center", Create Extension
 
 	Gui, Add, Button, % "x" (width/2)-(width*0.38)-2 " y+" (10+!ExtensionButtonsExist*4) " w" (width*0.38) " h31 gextbutton hwndBut2 +Center +Default", Apply
 
